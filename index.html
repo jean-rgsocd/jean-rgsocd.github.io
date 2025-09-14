@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,301 +8,367 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --dark-navy: #0a192f;
-            --navy: #112240;
-            --light-slate: #a8b2d1;
-            --slate: #8892b0;
-            --white: #e6f1ff;
-            --accent: #64ffda; /* Neon Cyan/Green Accent */
-        }
-        html { scroll-behavior: smooth; }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--dark-navy);
-            color: var(--slate);
+            background-color: #0d1117; 
+            color: #c9d1d9;
         }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 450px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 350px;
+        .font-mono {
+            font-family: 'Roboto Mono', monospace;
         }
-        .glow-effect {
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent), 0 0 16px var(--accent), 0 0 24px var(--accent);
-            transition: box-shadow 0.3s ease-in-out;
+        .neon-glow {
+            box-shadow: 0 0 5px #00e6e6, 0 0 10px #00e6e6, 0 0 15px #00e6e6;
         }
-        .glow-effect:hover {
-             box-shadow: 0 0 12px var(--accent), 0 0 24px var(--accent), 0 0 36px var(--accent);
+        .text-glow {
+            text-shadow: 0 0 5px #00e6e6, 0 0 8px #00e6e6;
         }
-        .typed-cursor {
-            color: var(--accent);
-            animation: blink 0.7s infinite;
+        html {
+            scroll-behavior: smooth;
         }
-        @keyframes blink { 50% { opacity: 0; } }
-        
-        /* --- New Timeline Styles --- */
-        .timeline-container { position: relative; max-width: 1000px; margin: 0 auto; }
-        .timeline-container::after {
+        .timeline-item::after {
             content: '';
             position: absolute;
-            width: 4px;
-            background-color: var(--navy);
-            box-shadow: 0 0 10px var(--accent);
+            left: -33px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #0d1117;
+            border: 3px solid #00e6e6;
+            box-shadow: 0 0 10px #00e6e6;
+            z-index: 1;
+        }
+        .timeline-path {
+            position: absolute;
+            left: -26px;
             top: 0;
             bottom: 0;
-            left: 50%;
-            margin-left: -2px;
-            z-index: 0;
+            width: 2px;
+            background: #164e63;
         }
-        .timeline-block {
-            padding: 10px 40px;
-            position: relative;
-            background-color: inherit;
-            width: 50%;
+        .timeline-item-left .timeline-content {
+            text-align: right;
+            padding-right: 45px;
         }
-        .timeline-block::after { /* The circle on the timeline */
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            right: -10px;
-            background-color: var(--accent);
-            border: 4px solid var(--dark-navy);
-            top: 25px;
-            border-radius: 50%;
-            z-index: 1;
-            box-shadow: 0 0 15px var(--accent);
-            transition: transform 0.3s ease;
+        .timeline-item-right .timeline-content {
+            text-align: left;
+            padding-left: 45px;
         }
-        .timeline-left { left: 0; }
-        .timeline-right { left: 50%; }
-        .timeline-right::after { left: -10px; }
-        .timeline-content {
-            padding: 20px 30px;
-            background-color: var(--navy);
-            position: relative;
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid transparent;
+        .timeline-item-left::after {
+            left: auto;
+            right: -8px;
         }
-        .timeline-block:hover .timeline-content {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(100, 255, 218, 0.1);
-            border: 1px solid var(--accent);
+        .timeline-item-right::after {
+            left: -8px;
         }
-        .timeline-block:hover::after {
-            transform: scale(1.2);
+        .timeline-axis {
+             position: absolute;
+             left: 50%;
+             transform: translateX(-50%);
+             top: 0;
+             bottom: 0;
+             width: 2px;
+             background-color: #164e63;
         }
-
-        /* --- Section Reveal Animation --- */
-        .section-reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        .section-reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* --- Responsive Styles --- */
-        @media (min-width: 768px) { .chart-container { height: 400px; } }
-        @media screen and (max-width: 768px) {
-            .timeline-container::after { left: 31px; }
-            .timeline-block {
-                width: 100%;
-                padding-left: 70px;
-                padding-right: 25px;
+        @media (min-width: 768px) {
+            .timeline-item-left, .timeline-item-right {
+                width: 50%;
             }
-            .timeline-block::after { left: 21px; }
-            .timeline-left, .timeline-right { left: 0%; }
+            .timeline-item-left {
+                float: left;
+                clear: both;
+            }
+            .timeline-item-right {
+                float: right;
+                clear: both;
+            }
         }
     </style>
 </head>
 <body class="antialiased">
 
-    <header class="bg-navy/80 shadow-lg sticky top-0 z-50 backdrop-blur-sm">
+    <header class="bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-slate-800">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="text-xl font-bold text-accent">Jean Carlos R. da Silva</div>
-            <div class="hidden md:flex space-x-6">
-                <a href="#sobre" class="text-light-slate hover:text-accent transition-colors duration-300">Sobre</a>
-                <a href="#competencias" class="text-light-slate hover:text-accent transition-colors duration-300">Competências</a>
-                <a href="#jornada" class="text-light-slate hover:text-accent transition-colors duration-300">Jornada</a>
-                <a href="#projetos" class="text-light-slate hover:text-accent transition-colors duration-300">Projetos</a>
-                <a href="#contato" class="text-light-slate hover:text-accent transition-colors duration-300">Contato</a>
+            <div class="text-xl font-bold font-mono text-cyan-300 text-glow">JCRS</div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#sobre" class="text-slate-300 hover:text-cyan-300 transition">Sobre</a>
+                <a href="#competencias" class="text-slate-300 hover:text-cyan-300 transition">Competências</a>
+                <a href="#jornada" class="text-slate-300 hover:text-cyan-300 transition">Jornada</a>
+                <a href="#projetos" class="text-slate-300 hover:text-cyan-300 transition">Projetos</a>
+                <a href="#contato" class="text-slate-300 hover:text-cyan-300 transition">Contato</a>
             </div>
-            <div class="md:hidden">
-                <button id="menu-btn" class="text-light-slate focus:outline-none">
+             <div class="md:hidden">
+                <button id="menu-btn" class="text-slate-300 focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
         </nav>
-        <div id="mobile-menu" class="md:hidden hidden bg-navy px-6 pb-4 space-y-2">
-             <a href="#sobre" class="block text-light-slate hover:text-accent transition-colors duration-300">Sobre</a>
-             <a href="#competencias" class="block text-light-slate hover:text-accent transition-colors duration-300">Competências</a>
-             <a href="#jornada" class="block text-light-slate hover:text-accent transition-colors duration-300">Jornada</a>
-             <a href="#projetos" class="block text-light-slate hover:text-accent transition-colors duration-300">Projetos</a>
-             <a href="#contato" class="block text-light-slate hover:text-accent transition-colors duration-300">Contato</a>
+        <div id="mobile-menu" class="md:hidden hidden px-6 pb-4 space-y-2">
+             <a href="#sobre" class="block text-slate-300 hover:text-cyan-300 transition">Sobre</a>
+             <a href="#competencias" class="block text-slate-300 hover:text-cyan-300 transition">Competências</a>
+             <a href="#jornada" class="block text-slate-300 hover:text-cyan-300 transition">Jornada</a>
+             <a href="#projetos" class="block text-slate-300 hover:text-cyan-300 transition">Projetos</a>
+             <a href="#contato" class="block text-slate-300 hover:text-cyan-300 transition">Contato</a>
         </div>
     </header>
 
-    <main class="container mx-auto px-6">
-
-        <section id="sobre" class="pt-20 pb-20 md:pt-24 md:pb-28 flex items-center section-reveal">
+    <main class="container mx-auto px-6 py-12">
+        <section id="sobre" class="pt-12 pb-24">
             <div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
-                <div class="relative">
-                    <img class="w-48 h-48 rounded-full object-cover border-4 border-navy" src="perfil.jpg" alt="Foto de Jean Carlos">
-                    <div class="absolute inset-0 rounded-full glow-effect"></div>
+                <div class="relative w-48 h-48 md:w-56 md:h-56 flex-shrink-0">
+                    <div class="absolute inset-0 rounded-full bg-cyan-400/80 blur-2xl"></div>
+                    <img class="relative w-full h-full rounded-full object-cover border-4 border-slate-800" src="perfil.jpg" alt="Foto de Jean Carlos">
                 </div>
-                <div class="md:text-left text-center">
-                    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 h-24 md:h-auto"><span id="typing-effect"></span><span class="typed-cursor">|</span></h1>
-                    <p class="text-lg text-light-slate max-w-3xl mx-auto md:mx-0">
+                <div class="md:text-left text-center max-w-2xl">
+                    <h1 class="text-4xl md:text-5xl font-bold text-slate-100 mb-4">Profissional de Tecnologia e Segurança Cibernética</h1>
+                    <p class="text-lg text-slate-400">
                         Com base sólida em Gestão de Projetos, IA e Cybersecurity, busco aplicar minha visão estratégica para garantir a integridade, eficiência e segurança de sistemas. Minha experiência em operações e análise de dados me preparou para resolver problemas complexos e liderar com foco em resultados na área de tecnologia.
                     </p>
                 </div>
             </div>
         </section>
 
-        <section id="competencias" class="py-20 section-reveal">
-            <h2 class="text-3xl font-bold text-center text-white mb-2">Painel de Competências</h2>
-            <p class="text-center text-slate mb-12">Uma visão interativa das minhas habilidades na intersecção entre gestão, segurança e inovação.</p>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                <div class="chart-container">
+        <section id="competencias" class="py-24">
+            <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Painel de Competências</h2>
+            <p class="text-center text-slate-400 mb-12 max-w-3xl mx-auto">Uma visão interativa das minhas habilidades na intersecção entre gestão, segurança e inovação.</p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="relative w-full max-w-md mx-auto h-80 md:h-96">
                     <canvas id="skillsChart"></canvas>
                 </div>
-                <div class="bg-navy p-6 rounded-lg shadow-xl">
-                    <div class="mb-4 border-b border-white/10">
+                <div>
+                    <div class="mb-4 border-b border-slate-700">
                         <nav class="-mb-px flex space-x-6" aria-label="Tabs">
-                            <button data-tab="cybersecurity" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-accent border-accent">Cybersecurity</button>
-                            <button data-tab="gestao" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate border-transparent hover:text-light-slate hover:border-light-slate/50">Gestão</button>
-                            <button data-tab="tech" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate border-transparent hover:text-light-slate hover:border-light-slate/50">Tecnologias</button>
-                            <button data-tab="ia" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate border-transparent hover:text-light-slate hover:border-light-slate/50">IA</button>
+                            <button data-tab="cybersecurity" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-cyan-300 border-cyan-300">Cybersecurity</button>
+                            <button data-tab="gestao" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Gestão</button>
+                            <button data-tab="tech" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Tecnologias</button>
+                            <button data-tab="ia" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">IA</button>
                         </nav>
                     </div>
-                    <div class="tab-content" id="cybersecurity-content"><h3 class="font-bold text-lg mb-2 text-white">Ethical Hacking & Defesa Cibernética</h3><ul class="space-y-2 text-slate list-disc list-inside"><li>Análise de Segurança e Mitigação de Riscos (XSS, CSRF, SQLi).</li><li>Avaliação de Resiliência de Sistemas via Pentesting.</li><li>Automação para Defesa Cibernética com Linux e Scripting.</li><li>Arquitetura de Segurança de Aplicações Web e APIs.</li></ul></div>
-                    <div class="tab-content hidden" id="gestao-content"><h3 class="font-bold text-lg mb-2 text-white">Planejamento e Execução</h3><ul class="space-y-2 text-slate list-disc list-inside"><li>Planejamento, execução e controle de projetos de TI.</li><li>Metodologias Ágeis (Scrum, Kanban) e Tradicionais (PMBOK).</li><li>Gestão de escopo, orçamento e recursos.</li></ul></div>
-                    <div class="tab-content hidden" id="tech-content"><h3 class="font-bold text-lg mb-2 text-white">Linguagens e Ferramentas</h3><ul class="space-y-2 text-slate list-disc list-inside"><li><strong>Desenvolvimento:</strong> HTML, CSS, JavaScript, PHP, SQL</li><li><strong>Sistemas & Redes:</strong> Linux (terminal, CLI)</li><li><strong>Segurança:</strong> Burp Suite, Nmap</li></ul></div>
-                    <div class="tab-content hidden" id="ia-content"><h3 class="font-bold text-lg mb-2 text-white">Análise e Modelagem de Dados</h3><ul class="space-y-2 text-slate list-disc list-inside"><li>Machine Learning & Deep Learning</li><li>Desenvolvimento de modelos preditivos.</li></ul></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="jornada" class="py-20 section-reveal">
-            <h2 class="text-3xl font-bold text-center text-white mb-2">Jornada Profissional e Acadêmica</h2>
-            <p class="text-center text-slate mb-16 max-w-3xl mx-auto">A evolução da minha carreira e o investimento contínuo em competências para a transição para a área de tecnologia.</p>
-            
-            <div class="timeline-container">
-                <div class="timeline-block timeline-left"><div class="timeline-content"><p class="text-sm text-accent font-semibold">Junho/2025 – Em curso</p><h3 class="font-bold text-xl text-white mt-1">MBA em Cybersecurity</h3></div></div>
-                <div class="timeline-block timeline-right"><div class="timeline-content"><p class="text-sm text-accent font-semibold">Junho/2025 – Em curso</p><h3 class="font-bold text-xl text-white mt-1">MBA em Gestão de Projetos em TI</h3></div></div>
-                <div class="timeline-block timeline-left"><div class="timeline-content"><p class="text-sm text-accent font-semibold">Junho/2025 – Em curso</p><h3 class="font-bold text-xl text-white mt-1">Tecnólogo em Inteligência Artificial</h3></div></div>
-                <div class="timeline-block timeline-right"><div class="timeline-content"><p class="text-sm text-accent font-semibold">Setembro/2025</p><h3 class="font-bold text-xl text-white mt-1">Ethical Hacking</h3></div></div>
-                <div class="timeline-block timeline-left"><div class="timeline-content"><p class="text-sm text-accent font-semibold">Junho/2023 – Junho/2025</p><h3 class="font-bold text-xl text-white mt-1">Tecnólogo em Serviços Jurídicos</h3></div></div>
-                <div class="timeline-block timeline-right"><div class="timeline-content"><p class="text-sm text-accent font-semibold">Janeiro/2020 – Atual</p><h3 class="font-bold text-xl text-white mt-1">Analista Esportivo</h3><p class="text-slate">Autônomo - São Paulo, SP</p><p class="mt-2 text-sm text-light-slate">Desenvolvimento de modelos preditivos com análise de prognósticos e estatísticas.</p></div></div>
-                <div class="timeline-block timeline-left"><div class="timeline-content"><p class="text-sm text-accent font-semibold">Janeiro/2018 – Dezembro/2020</p><h3 class="font-bold text-xl text-white mt-1">Gerente Operacional</h3><p class="text-slate">CX Rastreadores - São Paulo, SP</p><p class="mt-2 text-sm text-light-slate">Gestão da operação, otimizando fluxos de trabalho e liderando a equipe.</p></div></div>
-            </div>
-        </section>
-
-        <section id="projetos" class="py-20 section-reveal">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center text-white mb-2">Projetos Destacados</h2>
-                <p class="text-center text-slate mb-12 max-w-3xl mx-auto">A aplicação prática das minhas competências em desenvolvimento e tecnologia.</p>
-                <div class="max-w-2xl mx-auto">
-                    <div class="bg-navy rounded-lg shadow-xl overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 hover:shadow-2xl hover:shadow-accent/20">
-                        <img src="https://placehold.co/800x400/0a192f/64ffda?text=Portf%C3%B3lio+Interativo" alt="Imagem do Projeto Portfólio Interativo" class="w-full h-auto object-cover">
-                        <div class="p-6">
-                            <h3 class="font-bold text-xl mb-2 text-white">Portfólio Interativo Pessoal</h3>
-                            <p class="text-slate mb-4">Desenvolvi este portfólio para apresentar minhas competências de forma moderna, com um gráfico de radar dinâmico e uma linha do tempo clara para contextualizar minha carreira.</p>
-                            <div class="mb-4 flex flex-wrap gap-2"><span class="bg-accent/10 text-accent text-xs font-semibold px-2.5 py-0.5 rounded-full">HTML</span><span class="bg-accent/10 text-accent text-xs font-semibold px-2.5 py-0.5 rounded-full">Tailwind CSS</span><span class="bg-accent/10 text-accent text-xs font-semibold px-2.5 py-0.5 rounded-full">JavaScript</span><span class="bg-accent/10 text-accent text-xs font-semibold px-2.5 py-0.5 rounded-full">Chart.js</span></div>
-                            <a href="https://jean-rgsocd.github.io" target="_blank" rel="noopener noreferrer" class="inline-block bg-accent text-dark-navy font-semibold py-2 px-4 rounded-lg hover:bg-opacity-80 transition-all">Ver Projeto Ao Vivo</a>
-                        </div>
+                    <div class="tab-content" id="cybersecurity-content">
+                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Ethical Hacking & Defesa Cibernética</h3>
+                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li>Análise de Segurança e Mitigação de Riscos (XSS, CSRF, SQL Injection).</li>
+                            <li>Avaliação de Resiliência de Sistemas via Pentesting.</li>
+                            <li>Automação para Defesa Cibernética com Linux e Scripting.</li>
+                            <li>Arquitetura de Segurança de Aplicações Web e APIs.</li>
+                            <li>Resposta a incidentes e forense digital.</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content hidden" id="gestao-content">
+                         <h3 class="font-bold text-lg mb-3 text-cyan-300">Planejamento e Execução</h3>
+                         <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li>Planejamento, execução e controle de projetos de TI.</li>
+                            <li>Gestão de cronogramas, escopo, orçamento e recursos.</li>
+                            <li>Metodologias Ágeis: Scrum e Kanban.</li>
+                            <li>Metodologias Tradicionais: PMBOK.</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content hidden" id="tech-content">
+                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Linguagens e Ferramentas</h3>
+                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li><strong>Front-End:</strong> HTML, CSS, JavaScript</li>
+                            <li><strong>Back-End:</strong> PHP, SQL</li>
+                            <li><strong>Sistemas & Redes:</strong> Linux (terminal, CLI)</li>
+                            <li><strong>Ferramentas de Segurança:</strong> Burp Suite, Nmap</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content hidden" id="ia-content">
+                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Análise e Modelagem de Dados</h3>
+                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li>Machine Learning & Deep Learning</li>
+                            <li>Desenvolvimento de modelos preditivos.</li>
+                            <li>Análise de dados para identificação de anomalias.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
 
+        <section id="jornada" class="py-24">
+            <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Jornada Profissional e Acadêmica</h2>
+            <p class="text-center text-slate-400 mb-16 max-w-3xl mx-auto">Uma linha do tempo que unifica minha experiência e formação, narrando minha transição e evolução na área de tecnologia.</p>
+            <div class="relative max-w-4xl mx-auto">
+                <div class="timeline-axis"></div>
+                <div class="timeline-item timeline-item-left">
+                    <div class="timeline-content bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                        <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
+                        <h3 class="font-bold text-xl text-slate-100">MBA em Cybersecurity</h3>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-item-right">
+                    <div class="timeline-content bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                        <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
+                        <h3 class="font-bold text-xl text-slate-100">MBA em Gestão de Projetos em TI</h3>
+                    </div>
+                </div>
+                 <div class="timeline-item timeline-item-left">
+                    <div class="timeline-content bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                        <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
+                        <h3 class="font-bold text-xl text-slate-100">Tecnólogo em Inteligência Artificial</h3>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-item-right">
+                    <div class="timeline-content bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                        <p class="text-sm text-cyan-300 font-semibold font-mono">Set/2025</p>
+                        <h3 class="font-bold text-xl text-slate-100">Ethical Hacking</h3>
+                    </div>
+                </div>
+                 <div class="timeline-item timeline-item-left">
+                    <div class="timeline-content bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                         <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2023 – Jun/2025</p>
+                        <h3 class="font-bold text-xl text-slate-100">Tecnólogo em Serviços Jurídicos</h3>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-item-right">
+                    <div class="timeline-content bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                        <p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2020 – Atual</p>
+                        <h3 class="font-bold text-xl text-slate-100">Analista Esportivo</h3>
+                        <p class="mt-2 text-slate-400 text-sm">Condução de análises de prognósticos e estatísticas para desenvolver modelos preditivos.</p>
+                    </div>
+                </div>
+                 <div class="timeline-item timeline-item-left">
+                    <div class="timeline-content bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                        <p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2018 – Dez/2020</p>
+                        <h3 class="font-bold text-xl text-slate-100">Gerente Operacional</h3>
+                        <p class="mt-2 text-slate-400 text-sm">Gestão da operação, otimizando fluxos de trabalho e liderando a equipe.</p>
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+        </section>
+
+        <section id="projetos" class="py-24">
+            <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Projetos Destacados</h2>
+            <p class="text-center text-slate-400 mb-12 max-w-3xl mx-auto">Uma amostra do meu trabalho, demonstrando a aplicação prática das minhas competências.</p>
+            
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400">
+                    <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Portf%C3%B3lio+Interativo" alt="Imagem do Projeto Portfólio Interativo" class="w-full h-auto object-cover border-b border-slate-700">
+                    <div class="p-8">
+                        <h3 class="font-bold text-xl mb-2 text-slate-100">Portfólio Interativo Pessoal</h3>
+                        <p class="text-slate-400 mb-6">
+                            Desenvolvi este portfólio para apresentar minhas competências e jornada de forma moderna e visualmente atraente, utilizando um gráfico de radar dinâmico e uma linha do tempo interativa.
+                        </p>
+                        <div class="mb-6">
+                            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span>
+                            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">TailwindCSS</span>
+                            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
+                            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Chart.js</span>
+                        </div>
+                        <a href="https://jean-rgsocd.github.io" target="_blank" rel="noopener noreferrer" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+                            Ver Projeto
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <footer id="contato" class="bg-dark-navy text-slate">
-        <div class="container mx-auto px-6 py-10 text-center">
-            <h2 class="text-2xl font-bold mb-4 text-white">Em que posso te ajudar?</h2>
-            <p class="mb-6">Estou aberto a novas oportunidades e desafios. Entre em contato.</p>
-            <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
-                <a href="mailto:jean.rgsocd@gmail.com" class="hover:text-accent transition-colors">jean.rgsocd@gmail.com</a>
-                <a href="https://www.instagram.com/jean.kcarlos/" target="_blank" class="hover:text-accent transition-colors">Instagram</a>
-                <a href="https://wa.me/5511984970539" target="_blank" class="hover:text-accent transition-colors">(11) 98497-0539</a>
+    <footer id="contato" class="bg-slate-900 text-slate-300 border-t border-slate-800">
+        <div class="container mx-auto px-6 py-12 text-center">
+            <h2 class="text-3xl font-bold mb-4 text-cyan-300">Em que posso te ajudar?</h2>
+            <p class="mb-8 text-slate-400">Estou aberto a novas oportunidades e desafios. Entre em contato.</p>
+            
+            <div class="flex justify-center items-center space-x-8">
+                 <a href="mailto:jean.rgsocd@gmail.com" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Email" title="Email">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
+                </a>
+                 <a href="https://www.instagram.com/jean.kcarlos/" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Instagram" title="Instagram">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+                </a>
+                <a href="https://wa.me/5511984970539" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="WhatsApp" title="WhatsApp">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.05 4.94A9.95 9.95 0 0 0 12 2C6.48 2 2 6.48 2 12c0 1.77.46 3.45 1.29 4.94L2 22l5.06-1.29A9.95 9.95 0 0 0 12 22c5.52 0 10-4.48 10-10a9.95 9.95 0 0 0-2.95-7.06zM12 20.25a8.25 8.25 0 0 1-4.2-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.69-8.23 8.23-8.23a8.23 8.23 0 0 1 8.23 8.23c0 4.54-3.69 8.23-8.23 8.23zm4.5-6.17c-.27-.13-1.61-.79-1.85-.88-.25-.09-.43-.13-.61.13-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.06-.27-.13-1.14-.42-2.17-1.33-.8-.72-1.34-1.61-1.5-1.89-.16-.27-.02-.42.12-.55.12-.12.27-.31.4-.46.13-.15.18-.25.27-.42.09-.17.05-.31-.02-.44s-.6-1.45-.82-1.98c-.22-.53-.44-.46-.6-.46-.16 0-.34-.02-.52-.02-.18 0-.47.07-.71.34-.24.27-.92.9-1.12 2.22-.2 1.32.22 2.57.25 2.75.03.18 1.14 1.75 2.76 2.44 1.62.69 2.89 1.1 3.28 1.29.39.19.74.16.99.1.29-.07.92-.37 1.05-.72.13-.35.13-.65.09-.72-.04-.07-.16-.11-.33-.18z"/></svg>
+                </a>
             </div>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            
             const menuBtn = document.getElementById('menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
-            menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-            mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+            const mobileLinks = mobileMenu.querySelectorAll('a');
 
-            const typingText = "Profissional de Tecnologia e Segurança Cibernética";
-            const typingElement = document.getElementById('typing-effect');
-            let i = 0;
-            function typeWriter() {
-                if (i < typingText.length) {
-                    typingElement.innerHTML += typingText.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, 50);
-                } else {
-                    document.querySelector('.typed-cursor').style.display = 'none';
-                }
-            }
-            typeWriter();
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
 
             const ctx = document.getElementById('skillsChart').getContext('2d');
-            new Chart(ctx, {
+            const skillsChart = new Chart(ctx, {
                 type: 'radar',
                 data: {
                     labels: ['Análise de Vulnerabilidades', 'Pentesting', 'Gestão Ágil', 'Liderança', 'Análise de Dados', 'Arquitetura de Segurança'],
                     datasets: [{
                         label: 'Nível de Proficiência',
                         data: [90, 85, 80, 95, 88, 75],
-                        backgroundColor: 'rgba(100, 255, 218, 0.2)',
-                        borderColor: 'rgba(100, 255, 218, 1)',
+                        backgroundColor: 'rgba(0, 230, 230, 0.2)',
+                        borderColor: 'rgba(0, 230, 230, 1)',
                         borderWidth: 2,
-                        pointBackgroundColor: 'rgba(100, 255, 218, 1)',
-                        pointBorderColor: '#fff',
+                        pointBackgroundColor: 'rgba(0, 230, 230, 1)',
+                        pointBorderColor: '#0d1117',
                         pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(100, 255, 218, 1)'
+                        pointHoverBorderColor: 'rgba(0, 230, 230, 1)'
                     }]
                 },
                 options: {
                     maintainAspectRatio: false,
-                    scales: { r: { angleLines: { color: 'rgba(255, 255, 255, 0.2)' }, grid: { color: 'rgba(255, 255, 255, 0.2)' }, pointLabels: { font: { size: 12, weight: 'bold' }, color: '#a8b2d1' }, ticks: { backdropColor: 'transparent', color: '#a8b2d1', stepSize: 20 }, suggestedMin: 0, suggestedMax: 100 } },
-                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => `${context.dataset.label || ''}: ${context.parsed.r}%` } } }
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(201, 209, 217, 0.1)' },
+                            grid: { color: 'rgba(201, 209, 217, 0.1)' },
+                            pointLabels: {
+                                font: { size: 12, weight: 'bold' },
+                                color: '#c9d1d9'
+                            },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                stepSize: 20,
+                                color: '#c9d1d9'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                             callbacks: {
+                                label: function(context) {
+                                    return (context.dataset.label || '') + ': ' + context.parsed.r + '%';
+                                }
+                            }
+                        }
+                    }
                 }
             });
 
             const tabs = document.querySelectorAll('.tab-btn');
             const contents = document.querySelectorAll('.tab-content');
+
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
-                    const target = tab.dataset.tab;
-                    tabs.forEach(t => { t.classList.remove('text-accent', 'border-accent'); t.classList.add('text-slate', 'border-transparent'); });
-                    tab.classList.add('text-accent', 'border-accent');
-                    tab.classList.remove('text-slate', 'border-transparent');
+                    const target = tab.getAttribute('data-tab');
+                    tabs.forEach(t => {
+                        t.classList.remove('text-cyan-300', 'border-cyan-300');
+                        t.classList.add('text-slate-400', 'border-transparent', 'hover:text-slate-300', 'hover:border-slate-500');
+                    });
+                    tab.classList.add('text-cyan-300', 'border-cyan-300');
+                    tab.classList.remove('text-slate-400', 'border-transparent');
+                    
                     contents.forEach(content => content.classList.add('hidden'));
                     document.getElementById(target + '-content').classList.remove('hidden');
                 });
             });
-
-            const sections = document.querySelectorAll('.section-reveal');
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } });
-            }, { threshold: 0.1 });
-            sections.forEach(section => revealObserver.observe(section));
         });
     </script>
 </body>
