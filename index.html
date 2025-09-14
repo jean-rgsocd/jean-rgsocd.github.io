@@ -6,6 +6,7 @@
     <title>Portfólio | Jean Carlos Ribeiro da Silva</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -18,72 +19,35 @@
         .font-mono {
             font-family: 'Roboto Mono', monospace;
         }
-        .neon-glow {
-            box-shadow: 0 0 5px #00e6e6, 0 0 10px #00e6e6, 0 0 15px #00e6e6;
-        }
         .text-glow {
             text-shadow: 0 0 5px #00e6e6, 0 0 8px #00e6e6;
         }
         html {
             scroll-behavior: smooth;
         }
-        .timeline-item::after {
+        .typed-cursor {
+            color: #00e6e6;
+            animation: typedjsBlink 0.7s infinite;
+        }
+        @keyframes typedjsBlink {
+            50% { opacity: 0.0; }
+        }
+        .jornada-card {
+            position: relative;
+        }
+        .jornada-card::before {
             content: '';
             position: absolute;
-            left: -33px;
-            top: 5px;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
             width: 16px;
             height: 16px;
-            border-radius: 50%;
-            background: #0d1117;
+            background-color: #0d1117;
             border: 3px solid #00e6e6;
+            border-radius: 50%;
             box-shadow: 0 0 10px #00e6e6;
             z-index: 1;
-        }
-        .timeline-path {
-            position: absolute;
-            left: -26px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #164e63;
-        }
-        .timeline-item-left .timeline-content {
-            text-align: right;
-            padding-right: 45px;
-        }
-        .timeline-item-right .timeline-content {
-            text-align: left;
-            padding-left: 45px;
-        }
-        .timeline-item-left::after {
-            left: auto;
-            right: -8px;
-        }
-        .timeline-item-right::after {
-            left: -8px;
-        }
-        .timeline-axis {
-             position: absolute;
-             left: 50%;
-             transform: translateX(-50%);
-             top: 0;
-             bottom: 0;
-             width: 2px;
-             background-color: #164e63;
-        }
-        @media (min-width: 768px) {
-            .timeline-item-left, .timeline-item-right {
-                width: 50%;
-            }
-            .timeline-item-left {
-                float: left;
-                clear: both;
-            }
-            .timeline-item-right {
-                float: right;
-                clear: both;
-            }
         }
     </style>
 </head>
@@ -105,26 +69,26 @@
                 </button>
             </div>
         </nav>
-        <div id="mobile-menu" class="md:hidden hidden px-6 pb-4 space-y-2">
-             <a href="#sobre" class="block text-slate-300 hover:text-cyan-300 transition">Sobre</a>
-             <a href="#competencias" class="block text-slate-300 hover:text-cyan-300 transition">Competências</a>
-             <a href="#jornada" class="block text-slate-300 hover:text-cyan-300 transition">Jornada</a>
-             <a href="#projetos" class="block text-slate-300 hover:text-cyan-300 transition">Projetos</a>
-             <a href="#contato" class="block text-slate-300 hover:text-cyan-300 transition">Contato</a>
+        <div id="mobile-menu" class="md:hidden hidden px-6 pb-4 space-y-2 bg-slate-900">
+             <a href="#sobre" class="block text-slate-300 hover:text-cyan-300 transition py-2">Sobre</a>
+             <a href="#competencias" class="block text-slate-300 hover:text-cyan-300 transition py-2">Competências</a>
+             <a href="#jornada" class="block text-slate-300 hover:text-cyan-300 transition py-2">Jornada</a>
+             <a href="#projetos" class="block text-slate-300 hover:text-cyan-300 transition py-2">Projetos</a>
+             <a href="#contato" class="block text-slate-300 hover:text-cyan-300 transition py-2">Contato</a>
         </div>
     </header>
 
-    <main class="container mx-auto px-6 py-12">
-        <section id="sobre" class="pt-12 pb-24">
+    <main class="container mx-auto px-6">
+        <section id="sobre" class="pt-20 pb-24">
             <div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
                 <div class="relative w-48 h-48 md:w-56 md:h-56 flex-shrink-0">
                     <div class="absolute inset-0 rounded-full bg-cyan-400/80 blur-2xl"></div>
                     <img class="relative w-full h-full rounded-full object-cover border-4 border-slate-800" src="perfil.jpg" alt="Foto de Jean Carlos">
                 </div>
                 <div class="md:text-left text-center max-w-2xl">
-                    <h1 class="text-4xl md:text-5xl font-bold text-slate-100 mb-4">Profissional de Tecnologia e Segurança Cibernética</h1>
-                    <p class="text-lg text-slate-400">
-                        Com base sólida em Gestão de Projetos, IA e Cybersecurity, busco aplicar minha visão estratégica para garantir a integridade, eficiência e segurança de sistemas. Minha experiência em operações e análise de dados me preparou para resolver problemas complexos e liderar com foco em resultados na área de tecnologia.
+                    <h1 class="text-4xl md:text-5xl font-bold text-slate-100 mb-4 h-24 md:h-auto"><span id="typed-headline"></span></h1>
+                    <p class="text-lg text-slate-400" id="intro-paragraph" style="opacity: 0; transition: opacity 0.5s ease-in;">
+                        <span id="typed-paragraph"></span>
                     </p>
                 </div>
             </div>
@@ -189,54 +153,51 @@
 
         <section id="jornada" class="py-24">
             <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Jornada Profissional e Acadêmica</h2>
-            <p class="text-center text-slate-400 mb-16 max-w-3xl mx-auto">Uma linha do tempo que unifica minha experiência e formação, narrando minha transição e evolução na área de tecnologia.</p>
-            <div class="relative max-w-4xl mx-auto">
-                <div class="timeline-axis"></div>
-                <div class="timeline-item timeline-item-left">
-                    <div class="timeline-content bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                        <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
-                        <h3 class="font-bold text-xl text-slate-100">MBA em Cybersecurity</h3>
-                    </div>
+            <p class="text-center text-slate-400 mb-16 max-w-3xl mx-auto">Uma visão organizada da minha experiência e formação, narrando minha transição e evolução na área de tecnologia.</p>
+            <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+                
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">MBA em Cybersecurity</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Foco em arquitetura de sistemas seguros, defesa contra ameaças digitais e gestão de riscos para proteger ativos de informação críticos.</p>
                 </div>
-                <div class="timeline-item timeline-item-right">
-                    <div class="timeline-content bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                        <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
-                        <h3 class="font-bold text-xl text-slate-100">MBA em Gestão de Projetos em TI</h3>
-                    </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">MBA em Gestão de Projetos em TI</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Especialização no planejamento e execução de projetos, aplicando metodologias ágeis e tradicionais para garantir entregas eficientes.</p>
                 </div>
-                 <div class="timeline-item timeline-item-left">
-                    <div class="timeline-content bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                        <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
-                        <h3 class="font-bold text-xl text-slate-100">Tecnólogo em Inteligência Artificial</h3>
-                    </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Tecnólogo em Inteligência Artificial</h3>
+                     <p class="mt-2 text-slate-400 text-sm">Desenvolvimento de soluções com machine learning e modelos preditivos para automação e análise de dados complexos.</p>
                 </div>
-                <div class="timeline-item timeline-item-right">
-                    <div class="timeline-content bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                        <p class="text-sm text-cyan-300 font-semibold font-mono">Set/2025</p>
-                        <h3 class="font-bold text-xl text-slate-100">Ethical Hacking</h3>
-                    </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Set/2025</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Ethical Hacking</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Simulação de ataques cibernéticos para identificar e corrigir vulnerabilidades, fortalecendo a segurança de forma proativa.</p>
                 </div>
-                 <div class="timeline-item timeline-item-left">
-                    <div class="timeline-content bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                         <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2023 – Jun/2025</p>
-                        <h3 class="font-bold text-xl text-slate-100">Tecnólogo em Serviços Jurídicos</h3>
-                    </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2023 – Jun/2025</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Tecnólogo em Serviços Jurídicos</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Base de conhecimento legal e regulatório, fundamental para a conformidade (compliance) em projetos de tecnologia.</p>
                 </div>
-                <div class="timeline-item timeline-item-right">
-                    <div class="timeline-content bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                        <p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2020 – Atual</p>
-                        <h3 class="font-bold text-xl text-slate-100">Analista Esportivo</h3>
-                        <p class="mt-2 text-slate-400 text-sm">Condução de análises de prognósticos e estatísticas para desenvolver modelos preditivos.</p>
-                    </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2020 – Atual</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Analista Esportivo</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Condução de análises de prognósticos e estatísticas para desenvolver modelos preditivos.</p>
                 </div>
-                 <div class="timeline-item timeline-item-left">
-                    <div class="timeline-content bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                        <p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2018 – Dez/2020</p>
-                        <h3 class="font-bold text-xl text-slate-100">Gerente Operacional</h3>
-                        <p class="mt-2 text-slate-400 text-sm">Gestão da operação, otimizando fluxos de trabalho e liderando a equipe.</p>
-                    </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300 md:col-span-2">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2018 – Dez/2020</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Gerente Operacional</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Gestão da operação, otimizando fluxos de trabalho e liderando a equipe.</p>
                 </div>
-                <div style="clear: both;"></div>
+
             </div>
         </section>
 
@@ -276,7 +237,7 @@
                  <a href="mailto:jean.rgsocd@gmail.com" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Email" title="Email">
                     <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
                 </a>
-                 <a href="https://www.instagram.com/jean.kcarlos/" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Instagram" title="Instagram">
+                 <a href="https://www.instagram.com/jcrds.7/" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Instagram" title="Instagram">
                     <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
                 </a>
                 <a href="https://wa.me/5511984970539" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="WhatsApp" title="WhatsApp">
@@ -301,6 +262,34 @@
                 link.addEventListener('click', () => {
                     mobileMenu.classList.add('hidden');
                 });
+            });
+
+            new Typed('#typed-headline', {
+                strings: ['Profissional de Tecnologia e Segurança Cibernética'],
+                typeSpeed: 50,
+                showCursor: true,
+                cursorChar: '_',
+                startDelay: 500,
+                onComplete: (self) => {
+                    self.cursor.style.display = 'none';
+                    const paragraphEl = document.getElementById('intro-paragraph');
+                    paragraphEl.style.opacity = 1;
+                    
+                    setTimeout(() => {
+                        new Typed('#typed-paragraph', {
+                            strings: [
+                                'Com base sólida em Gestão de Projetos, IA e Cybersecurity, busco aplicar minha visão estratégica para garantir a integridade, eficiência e segurança de sistemas. Minha experiência em operações e análise de dados me preparou para resolver problemas complexos e liderar com foco em resultados na área de tecnologia.'
+                            ],
+                            typeSpeed: 25,
+                            showCursor: true,
+                            cursorChar: '_',
+                            startDelay: 200,
+                            onComplete: (selfPara) => {
+                                selfPara.cursor.style.display = 'none';
+                            },
+                        });
+                    }, 300); 
+                }
             });
 
             const ctx = document.getElementById('skillsChart').getContext('2d');
