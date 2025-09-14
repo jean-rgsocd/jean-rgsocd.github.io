@@ -83,7 +83,7 @@
             <div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
                 <div class="relative w-48 h-48 md:w-56 md:h-56 flex-shrink-0">
                     <div class="absolute inset-0 rounded-full bg-cyan-400/80 blur-2xl"></div>
-                    <img class="relative w-full h-full rounded-full object-cover border-4 border-slate-800" src="perfil.jpg" alt="Foto de Jean Carlos">
+                    <img class="relative w-full h-full rounded-full object-cover border-4 border-slate-800" src="perfil.png" alt="Foto de Jean Carlos">
                 </div>
                 <div class="md:text-left text-center max-w-2xl">
                     <h1 class="text-4xl md:text-5xl font-bold text-slate-100 mb-4 min-h-[160px] md:min-h-0 md:h-auto"><span id="typed-headline"></span></h1>
@@ -104,11 +104,12 @@
                 </div>
                 <div>
                     <div class="mb-4 border-b border-slate-700">
-                        <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+                        <nav class="-mb-px flex space-x-6 overflow-x-auto" aria-label="Tabs">
                             <button data-tab="cybersecurity" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-cyan-300 border-cyan-300">Cybersecurity</button>
                             <button data-tab="gestao" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Gestão</button>
                             <button data-tab="tech" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Tecnologias</button>
                             <button data-tab="ia" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">IA</button>
+                            <button data-tab="juridico" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Jurídico</button>
                         </nav>
                     </div>
                     <div class="tab-content" id="cybersecurity-content">
@@ -122,29 +123,41 @@
                         </ul>
                     </div>
                     <div class="tab-content hidden" id="gestao-content">
-                         <h3 class="font-bold text-lg mb-3 text-cyan-300">Planejamento e Execução</h3>
+                         <h3 class="font-bold text-lg mb-3 text-cyan-300">Gestão de Projetos de TI</h3>
                          <ul class="space-y-2 text-slate-400 list-disc list-inside">
-                            <li>Planejamento, execução e controle de projetos de TI.</li>
-                            <li>Gestão de cronogramas, escopo, orçamento e recursos.</li>
-                            <li>Metodologias Ágeis: Scrum e Kanban.</li>
-                            <li>Metodologias Tradicionais: PMBOK.</li>
+                            <li>Planejamento Estratégico: Definição de escopo, cronograma e viabilidade.</li>
+                            <li>Metodologias: Aplicação de frameworks Ágeis (Scrum) e tradicionais (PMBOK).</li>
+                            <li>Gerenciamento de Riscos e Qualidade: Análise de riscos e garantia de entregas (QA).</li>
+                            <li>Gestão de Recursos: Alocação de orçamento, equipes e controle de custos.</li>
+                            <li>Liderança e Comunicação: Condução de equipes e gestão de stakeholders.</li>
                         </ul>
                     </div>
                     <div class="tab-content hidden" id="tech-content">
-                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Linguagens e Ferramentas</h3>
+                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Infraestrutura e Desenvolvimento</h3>
                         <ul class="space-y-2 text-slate-400 list-disc list-inside">
-                            <li><strong>Front-End:</strong> HTML, CSS, JavaScript</li>
-                            <li><strong>Back-End:</strong> PHP, SQL</li>
-                            <li><strong>Sistemas & Redes:</strong> Linux (terminal, CLI)</li>
-                            <li><strong>Ferramentas de Segurança:</strong> Burp Suite, Nmap</li>
+                            <li><strong>Desenvolvimento:</strong> HTML, CSS, JavaScript, PHP, SQL.</li>
+                            <li><strong>Sistemas Operacionais:</strong> Gerenciamento de ambientes Windows e Linux.</li>
+                            <li><strong>Redes:</strong> Configuração e análise de protocolos TCP/IP.</li>
+                            <li><strong>Cloud:</strong> Fundamentos de AWS e Azure.</li>
+                            <li><strong>Ferramentas de Segurança:</strong> Burp Suite, Nmap, Wireshark, Metasploit.</li>
                         </ul>
                     </div>
                     <div class="tab-content hidden" id="ia-content">
-                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Análise e Modelagem de Dados</h3>
+                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Inteligência Artificial e Dados</h3>
                         <ul class="space-y-2 text-slate-400 list-disc list-inside">
-                            <li>Machine Learning & Deep Learning</li>
-                            <li>Desenvolvimento de modelos preditivos.</li>
-                            <li>Análise de dados para identificação de anomalias.</li>
+                            <li>Machine Learning: Modelos de classificação, regressão e clusterização.</li>
+                            <li>Deep Learning: Construção e treinamento de redes neurais para tarefas complexas.</li>
+                            <li>Processamento de Linguagem Natural (NLP) para análise de texto.</li>
+                            <li>Visão Computacional para reconhecimento de padrões em imagens.</li>
+                        </ul>
+                    </div>
+                     <div class="tab-content hidden" id="juridico-content">
+                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Serviços Jurídicos, Notariais e de Registro</h3>
+                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li>Gestão e organização de documentos legais e processos judiciais.</li>
+                            <li>Conhecimento das rotinas de cartórios de notas, protestos e registro de imóveis.</li>
+                            <li>Elaboração de relatórios e suporte administrativo para escritórios e departamentos jurídicos.</li>
+                            <li>Base para automação de tarefas e implementação de tecnologia no setor (Legal Tech).</li>
                         </ul>
                     </div>
                 </div>
@@ -230,7 +243,7 @@
 
     <footer id="contato" class="bg-slate-900 text-slate-300 border-t border-slate-800">
         <div class="container mx-auto px-6 py-12 text-center">
-            <h2 class="text-3xl font-bold mb-4 text-cyan-300">Em que posso te ajudar?</h2>
+            <h2 class="text-3xl font-bold mb-4 text-cyan-300">No que posso te ajudar?</h2>
             <p class="mb-8 text-slate-400">Estou aberto a novas oportunidades e desafios. Entre em contato.</p>
             
             <div class="flex justify-center items-center space-x-8">
@@ -362,5 +375,4 @@
     </script>
 </body>
 </html>
-
 
