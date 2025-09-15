@@ -1,7 +1,3 @@
-<!-- Chosen Palette: O design original do Jean (fundo escuro e detalhes em ciano/verde neon) foi mantido. -->
-<!-- Application Structure Plan: A SPA é projetada como um portfólio de uma única página com seções temáticas para dados pessoais, um resumo de qualificações, formação acadêmica, experiência e projetos. A arquitetura de informação é linear, guiando o usuário de uma visão geral para detalhes. A navegação interna é funcional e rápida. A estrutura utiliza um layout responsivo centralizado para garantir uma visualização agradável em todos os dispositivos. O projeto "Analisador de Segurança Web" é integrado diretamente na seção de projetos, com interação de 'mostrar/esconder' para evitar um site longo. -->
-<!-- Visualization & Content Choices: O portfólio usa uma mistura de texto, ícones Unicode e cores para apresentar o conteúdo de forma clara e profissional. Não há gráficos complexos, pois o foco é a clareza textual e a organização da informação. A seção "Projetos Destacados" utiliza caixas de destaque clicáveis para cada projeto, direcionando o usuário para a próxima etapa. O design é minimalista e alinhado com a paleta de cores. A ausência de gráficos SVG e o uso de classes Tailwind garantem um carregamento rápido e uma experiência de usuário fluida. -->
-<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 <head>
@@ -76,6 +72,11 @@
         }
         .progress-bar-fill {
             background-color: #00e6e6;
+        }
+        /* Estilos do Gerador de Prompts */
+        .tab-button.active {
+            border-color: #00e6e6; 
+            color: #00e6e6;
         }
     </style>
 </head>
@@ -246,8 +247,7 @@
             <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Projetos Destacados</h2>
             <p class="text-center text-slate-400 mb-12 max-w-3xl mx-auto">Uma amostra do meu trabalho, demonstrando a aplicação prática das minhas competências.</p>
             
-            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8" id="project-list-container">
-                <!-- Primeiro Projeto: Portfólio Interativo -->
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="project-list-container">
                 <div id="portfolio-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
                     <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Portf%C3%B3lio+Interativo" alt="Imagem do Projeto Portfólio Interativo" class="w-full h-auto object-cover border-b border-slate-700">
                     <div class="p-8">
@@ -267,7 +267,25 @@
                     </div>
                 </div>
                 
-                <!-- Segundo Projeto: Analisador de Segurança Web -->
+                <div id="prompts-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
+                    <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Gerador+de+Prompts" alt="Imagem do projeto Gerador de Prompts" class="w-full h-auto object-cover border-b border-slate-700">
+                    <div class="p-8">
+                        <h3 class="font-bold text-xl mb-2 text-slate-100">Gerador de Prompts Interativo</h3>
+                        <p class="text-slate-400 mb-6">
+                            Ferramenta para otimizar prompts para diferentes IAs, como ChatGPT e geradores de imagens e vídeos, com opções personalizadas e exemplos prontos.
+                        </p>
+                        <div class="mb-6">
+                            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span>
+                            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">TailwindCSS</span>
+                            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
+                            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">IA</span>
+                        </div>
+                        <button id="showPromptsButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+                            Ver Projeto
+                        </button>
+                    </div>
+                </div>
+
                 <div id="scanner-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
                     <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Analisador+de+Seguran%C3%A7a+Web" alt="Imagem do projeto Analisador de Segurança Web" class="w-full h-auto object-cover border-b border-slate-700">
                     <div class="p-8">
@@ -288,7 +306,6 @@
                 </div>
             </div>
             
-            <!-- Conteúdo do Analisador de Segurança Web (inicialmente oculto) -->
             <div id="analisador-seguranca-web" class="hidden py-12">
                  <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 rounded-lg shadow-lg border border-slate-700">
                      <div class="flex justify-between items-center mb-6">
@@ -320,8 +337,7 @@
                          </div>
                          <div id="vulnerabilitiesResults" class="space-y-4">
                              <h3 class="font-bold text-xl text-cyan-300">Detalhes das Verificações</h3>
-                             <!-- Vulnerability checks will be rendered here -->
-                         </div>
+                             </div>
                          <div id="cta-section" class="text-center mt-8 p-6 bg-slate-900 rounded-lg border border-slate-700">
                              <h3 class="text-lg font-bold text-slate-100">Quer resolver essas vulnerabilidades e manter seu sistema seguro?</h3>
                              <p class="mt-2 text-slate-400">Entre em contato para uma varredura minuciosa e um plano de segurança personalizado.</p>
@@ -329,6 +345,249 @@
                          </div>
                      </div>
                  </div>
+            </div>
+
+            <div id="prompt-generator-section" class="hidden py-12">
+                 <div class="max-w-4xl mx-auto bg-slate-800/50 rounded-lg shadow-lg border border-slate-700 p-8">
+                     <div class="flex justify-between items-center mb-6">
+                         <h3 class="font-bold text-xl text-slate-100">Gerador de Prompts Interativo</h3>
+                         <button id="hidePromptsButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+                             Retornar
+                         </button>
+                     </div>
+                     
+                    <div class="flex border-b border-slate-700 mb-8">
+                        <button id="tab-profissoes" class="tab-button active py-3 px-6 text-sm font-medium text-cyan-300 border-b-2 border-cyan-300 hover:text-cyan-200 transition-colors duration-200">
+                            Prompt de Profissões (ChatGPT)
+                        </button>
+                        <button id="tab-imagens" class="tab-button py-3 px-6 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-slate-200 hover:border-slate-500 transition-colors duration-200">
+                            Prompt de Imagens (IA)
+                        </button>
+                        <button id="tab-veo3" class="tab-button py-3 px-6 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-slate-200 hover:border-slate-500 transition-colors duration-200">
+                            Prompts de Vídeos (VEO3)
+                        </button>
+                    </div>
+
+                    <div id="content-profissoes" class="tab-content">
+                        <h2 class="text-2xl font-bold text-slate-100 mb-6">Gerador de Prompts de Profissões para o ChatGPT</h2>
+                        
+                        <p class="text-slate-400 mb-8">
+                            Gere aqui seu prompt com a sua profissão desejada, copie o prompt, cole em algum chat de inteligência artificial (como o ChatGPT) e ele atuará como um profissional da área para atender suas dúvidas e solicitações. **Use essa ferramenta para obter orientações e tirar dúvidas antes de fazer contato com um profissional da vida real.**
+                        </p>
+
+                        <div class="mb-6">
+                            <label for="categoria-profissao" class="block text-slate-300 text-sm font-bold mb-2">Selecione uma Categoria:</label>
+                            <select id="categoria-profissao" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500">
+                                <option value="">Escolha uma categoria...</option>
+                                <option value="advocacia">Advocacia</option>
+                                <option value="copywriters">Copywriters</option>
+                                <option value="criativos">Criativos</option>
+                                <option value="desenvolvedores-e-ti">Desenvolvedores e TI</option>
+                                <option value="educacao">Educação</option>
+                                <option value="empreendedorismo">Empreendedorismo</option>
+                                <option value="financas">Finanças</option>
+                                <option value="marketing">Marketing</option>
+                                <option value="programacao">Programação</option>
+                                <option value="redes-sociais">Redes Sociais</option>
+                                <option value="saude">Saúde</option>
+                                <option value="tecnologia">Tecnologia</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="profissao" class="block text-slate-300 text-sm font-bold mb-2">Selecione uma Profissão:</label>
+                            <select id="profissao" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500" disabled>
+                                <option value="">Selecione uma categoria primeiro...</option>
+                            </select>
+                        </div>
+
+                        <button id="gerar-prompt-profissao" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+                            Gerar Prompt de Profissão
+                        </button>
+
+                        <div class="mt-8 p-4 bg-slate-900 border border-slate-700 rounded-lg">
+                            <h3 class="text-xl font-bold text-slate-100 mb-3">Prompt Gerado:</h3>
+                            <textarea id="prompt-profissao-output" rows="8" class="font-mono w-full p-3 bg-transparent border-none focus:outline-none resize-none text-slate-300" readonly>Seu prompt aparecerá aqui.</textarea>
+                            <button id="copiar-prompt-profissao" class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                Copiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="content-imagens" class="tab-content hidden">
+                        <h2 class="text-2xl font-bold text-slate-100 mb-6">Gerador de Prompts de Imagens (com base em uma foto)</h2>
+                        
+                        <p class="text-slate-400 mb-8">
+                            Descreva a imagem que você deseja e escolha um estilo. A ferramenta irá gerar um prompt otimizado para IAs de criação de imagens (como Midjourney, DALL-E, **Gemini** ou Leonardo AI) que permite a edição ou a criação de novas imagens a partir de uma foto de referência.
+                        </p>
+
+                        <div class="mb-6">
+                            <label for="descricao-imagem" class="block text-slate-300 text-sm font-bold mb-2">Descreva a cena desejada:</label>
+                            <textarea id="descricao-imagem" rows="4" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500" placeholder="Ex: Eu na Torre Eiffel ao pôr do sol, ou Eu com o Neymar e Messi sorrindo em uma balada luxuosa."></textarea>
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="estilo-imagem" class="block text-slate-300 text-sm font-bold mb-2">Estilo da imagem:</label>
+                            <select id="estilo-imagem" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500">
+                                <option value="photorealistic">Fotorrealista</option>
+                                <option value="digital art">Arte Digital</option>
+                                <option value="cartoon">Desenho Animado</option>
+                                <option value="fantasy art">Arte Fantástica</option>
+                                <option value="impressionist">Impressionista</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="qualidade-imagem" class="block text-slate-300 text-sm font-bold mb-2">Qualidade/Detalhe:</label>
+                            <select id="qualidade-imagem" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500">
+                                <option value=", ultra detailed, 8K">Ultra detalhada, 8K</option>
+                                <option value=", high quality, sharp focus">Alta qualidade, foco nítido</option>
+                                <option value=", good resolution">Boa resolução</option>
+                            </select>
+                        </div>
+
+                         <button id="gerar-prompt-imagem" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+                            Gerar Prompt de Imagem
+                        </button>
+
+                        <div class="mt-8 p-4 bg-slate-900 border border-slate-700 rounded-lg">
+                            <h3 class="text-xl font-bold text-slate-100 mb-3">Prompt Gerado:</h3>
+                            <textarea id="prompt-imagem-output" rows="8" class="font-mono w-full p-3 bg-transparent border-none focus:outline-none resize-none text-slate-300" readonly>Seu prompt aparecerá aqui. Lembre-se de fazer o upload da sua imagem para a IA e, se possível, indicar o uso dela no prompt (ex: "utilize a imagem fornecida como referência principal").</textarea>
+                            <button id="copiar-prompt-imagem" class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                Copiar
+                            </button>
+                        </div>
+                        
+                        <div class="mt-12">
+                            <h3 class="text-2xl font-bold text-slate-100 mb-6">Prompts Prontos para Uso</h3>
+                            <p class="text-slate-400 mb-6">
+                                Copie e use esses prompts otimizados para gerar imagens de alta qualidade em diversas IAs.
+                            </p>
+
+                            <div class="space-y-6">
+                                <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Retrato Fashion em Preto e Branco</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>Black and white fashion portrait of a handsome young man looking over his shoulder. He is wearing a stylish black leather jacket and modern rectangular red sunglasses. The background is a seamless, minimalist white studio backdrop with blue circle ring. The lighting is dramatic high-contrast studio lighting, creating sharp focus and highlighting the texture of the leather jacket. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+                                
+                                <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Retrato Surreal e Detalhado com Efeito Glitch</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>A surreal, ultra-detailed portrait of a young man holding a vibrant red rose close to his face. He is wearing a plain oversized white sweatshirt and a thin silver chain necklace. His fingers are adorned with rings, the background is minimalistic and shadowy, emphasizing his presence. The portrait is styled with a digital glitch effect, parts of his face and body are fragmented into horizontal pixel streaks in. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+
+                                <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Retrato Cinematográfico com Dupla Exposição</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>Hyper-realistic cinematic tall vertical portrait in 9:16 of a man with black sunglasses, reflecting a futuristic city skyline. A surreal double exposure blends his silhouette with gleaming skyscrapers and a luxury Porsche 911 in the foreground. Inspired by the noir style, it's elegant and powerful. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+                                
+                                <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Fotografia de Dupla Exposição (Litoral)</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>Create a double exposure photo with a man in profile. Incorporate into his silhouette a wild seascape with cliffs, a person sitting looking out to sea, and a flock of birds flying in the sky. Use black and white style to highlight the emotion and composition, realistic 4k image quality. 9:16 aspect ratio. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+
+                                <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Homem Confiante em Carro de Luxo</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>A confident man in a luxury car, wearing a stylish black suit with a bow tie, looking cool and powerful. The photo has a cinematic tone with moody contrast, light rain on the car's surface, and a shallow depth of field. Enhance colors subtly, sharpen facial details, and add a soft vignette for a dramatic effect. Maintain a classy, high-end look a picture should be realistic (f/2.8), ratio 9:16. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+
+                                <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Fotografia Editorial em Filme 35mm</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>A hyper-realistic 35mm film editorial photograph of a young man (curly dark hair, trimmed beard and goatee, natural Mediterranean skin tone, strong jawline). He is sitting on a sleek black-and-red sport motorcycle. One leg casually rests on the bike's frame while the other supports him on the ground. His outfit: fully buttoned crisp white dress shirt with a black-and-gray striped tie, layered with a gray inner jacket, and topped with an oversized dark brown leather coat. He also wears glossy black leather pants and fitted black leather gloves. His posture is confident yet relaxed, leaning slightly forward with one hand resting on his thigh, the other hand on the motorcycle frame near a black helmet. Expression: calm, powerful, stylish, looking straight ahead. Background: metallic silver-gray industrial mesh panels. Lighting: cinematic white-and-blue studio lighting from above, creating a cool luxurious fashion mood. The photo has fine 35mm film grain, natural skin textures, authentic colors, and a high-fashion editorial cinematic atmosphere - completely natural, without any artificial or plastic AI look. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+
+                                <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Cena Noturna Urbana com Luzes de Néon</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>Ultra-realistic 8K half-body shot of the subject in a moody urban night scene, framed against a blurred cityscape awash in electric blues and hot pinks. Neon streaks slash diagonally across the frame — as though caught mid-exposure — painting soft colored highlights across his jacket, cheekbones, and hair. He wears a black bomber jacket with subtle quilted paneling, a plain white tee visible beneath. Around his neck, a slim black cord necklace with a polished steel pendant rests lightly. The shallow depth of field isolates his face in crystal clarity while the city lights melt into an abstract, glowing bokeh. High shutter speed captures the crisp textures of skin pores, hair strands, and fabric stitching. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+
+                                 <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Retrato Vertical Dramático (Filme Noir)</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>Ultra-realistic 8K, vertical portrait 9:16 of a man in a dark coat. A white light coming from above illuminates only a part of his face, creating intense shadows and a dramatic film noir atmosphere. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+                                
+                                <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Cena Noturna Cinematográfica com Chuva</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>Cinematic vertical portrait 9:16 of a man leaning against a luxury car under red neon lights. Rain on the ground creating shiny reflections, elegant and dark atmosphere. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+
+                                 <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Foco nas Mãos em Oração</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>Hyper-realistic 8K, close-up on hands joined in prayer in front of a face half-hidden by shadow. Spiritual and mysterious atmosphere. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+
+                                <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Homem em Cenário com Fumaça</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>Vertical portrait 9:16 of a man sitting on a metal chair, surrounded by smoke. Hard, cold studio lighting, intense and dramatic atmosphere. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+
+                                 <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Rosto com Luz Contraste em Azul e Vermelho</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>Hyper-detailed close-up in 8K of a face partially covered by a hand. Red and blue light projected in contrast, mysterious and elegant atmosphere, cinematic style. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+
+                                <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Retrato de Homem na Chuva (Noir)</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>Black and white editorial portrait 9:16 of a man in a drenched suit, water drops streaming down his face and hair. Dramatic Vogue style, hard and contrasting light. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+                                
+                                 <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Homem em Deserto com Pôr do Sol</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>Wide shot 9:16 of a man walking alone in an infinite desert, footsteps behind him, orange setting sun illuminating the horizon. Symbolic and inspiring atmosphere, personal transformation mood. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+                                
+                                 <div class="p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                                    <h4 class="font-bold text-lg mb-2 text-cyan-300">Homem em Rua Chuvosa com Néon</h4>
+                                    <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="5" readonly>Ultra-realistic 8K, vertical portrait 9:16 of a man in a black suit, standing in pouring rain on a street lit by blue and pink neon lights. Water runs down his face and coat, creating a dramatic and powerful atmosphere. --ar 9:16 --v 6.0</textarea>
+                                    <button class="copiar-prompt-static bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                        Copiar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -463,11 +722,42 @@
                 });
             });
 
-            // Lógica para o Analisador de Segurança Web
+            // Lógica para os projetos integrados
             const projectListContainer = document.getElementById('project-list-container');
-            const scannerCard = document.getElementById('scanner-project-card');
             const showScannerButton = document.getElementById('showScannerButton');
             const analyzerSection = document.getElementById('analisador-seguranca-web');
+            const hideScannerButton = document.getElementById('hideScannerButton');
+            const showPromptsButton = document.getElementById('showPromptsButton');
+            const promptsSection = document.getElementById('prompt-generator-section');
+            const hidePromptsButton = document.getElementById('hidePromptsButton');
+            
+            showScannerButton.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                projectListContainer.classList.add('hidden');
+                promptsSection.classList.add('hidden'); // Esconde o gerador de prompts se estiver visível
+                analyzerSection.classList.remove('hidden');
+            });
+            
+            hideScannerButton.addEventListener('click', () => {
+                analyzerSection.classList.add('hidden');
+                projectListContainer.classList.remove('hidden');
+                window.location.href = '#projetos';
+            });
+
+            showPromptsButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                projectListContainer.classList.add('hidden');
+                analyzerSection.classList.add('hidden'); // Esconde o analisador se estiver visível
+                promptsSection.classList.remove('hidden');
+            });
+
+            hidePromptsButton.addEventListener('click', () => {
+                promptsSection.classList.add('hidden');
+                projectListContainer.classList.remove('hidden');
+                window.location.href = '#projetos';
+            });
+
+            // Lógica para o Analisador de Segurança Web (mantida)
             const urlInput = document.getElementById('urlInput');
             const scanButton = document.getElementById('scanButton');
             const scanStatus = document.getElementById('scanStatus');
@@ -478,25 +768,7 @@
             const analyzedUrlSpan = document.getElementById('analyzedUrl');
             const overallStatusSpan = document.getElementById('overallStatus');
             const vulnerabilitiesResults = document.getElementById('vulnerabilitiesResults');
-            const hideScannerButton = document.getElementById('hideScannerButton');
             
-            showScannerButton.addEventListener('click', (e) => {
-                e.preventDefault(); 
-                projectListContainer.classList.add('hidden');
-                analyzerSection.classList.remove('hidden');
-            });
-            
-            hideScannerButton.addEventListener('click', () => {
-                analyzerSection.classList.add('hidden');
-                projectListContainer.classList.remove('hidden');
-                window.location.href = '#projetos';
-                scanStatus.classList.add('hidden');
-                resultsDiv.classList.add('hidden');
-                urlInput.value = '';
-                progressBar.style.width = '0%';
-            });
-
-
             const vulnerabilities = [
                 { name: 'Injeção de SQL', risk: 'high', description: 'Permite que um atacante manipule consultas ao banco de dados.' },
                 { name: 'Cross-Site Scripting (XSS)', risk: 'high', description: 'Permite que um atacante injete scripts maliciosos em páginas web.' },
@@ -600,6 +872,203 @@
                         overallStatusSpan.textContent = 'Criticamente Vulnerável';
                     }
                 }
+            });
+
+            // Lógica para o Gerador de Prompts (integrada)
+            const promptsData = {
+                "advocacia": {
+                    "Mestre em Direito Trabalhista": `Atue como um Mestre em Direito Trabalhista brasileiro. Sua função é fornecer análise e interpretação de leis trabalhistas, consultoria em relações de trabalho e representação em litígios. Seu tom deve ser formal e técnico, baseado em referências da CLT, jurisprudência e doutrinas.
+            Sua primeira tarefa é:`,
+                    "Mestre em Direito Civil Brasileiro": `Atue como um Mestre em Direito Civil brasileiro. Sua função é fornecer análise e interpretação de leis civis, consultoria em matérias de direito privado, e representação em litígios. Seu tom deve ser formal e técnico, utilizando referências do Código Civil, jurisprudência e doutrinas.
+            Sua primeira tarefa é:`,
+                    "Mestre em Direito Penal Brasileiro": `Atue como um Mestre em Direito Penal brasileiro. Sua função é fornecer análise e interpretação do Código Penal e de leis penais complementares. Seu tom deve ser formal e técnico, utilizando referências do Código Penal, jurisprudência do STJ e STF, e doutrinas relevantes.
+            Sua primeira tarefa é:`,
+                },
+                "copywriters": {
+                    "Copywriter de Vendas Diretas": `Atue como um copywriter especializado em vendas diretas. Sua função é escrever textos persuasivos para landing pages, e-mails de vendas e anúncios, focando em gatilhos mentais e benefícios claros para o cliente. Seu tom é persuasivo, direto e focado em resultados.
+            Sua primeira tarefa é:`,
+                    "Copywriter de Branding": `Atue como um copywriter de branding. Sua função é criar a voz e a identidade de uma marca, desenvolvendo conteúdo para sites, blogs e mídias sociais que reforce os valores e a personalidade da empresa. Seu tom é consistente e alinhado com a marca.
+            Sua primeira tarefa é:`,
+                },
+                "criativos": {
+                    "Designer de Experiência do Usuário (UX)": `Atue como um Designer de Experiência do Usuário (UX). Sua função é projetar interfaces intuitivas e agradáveis, realizando pesquisas, criando wireframes e protótipos para garantir que o produto digital seja fácil de usar e atenda às necessidades do usuário. Seu tom é analítico e focado na usabilidade.
+            Sua primeira tarefa é:`,
+                    "Estrategista de Marketing Criativo": `Atue como um Estrategista de Marketing Criativo. Sua função é desenvolver campanhas de marketing inovadoras e memoráveis, usando narrativas visuais e emocionais para engajar o público e diferenciar a marca no mercado. Seu tom é original e inspirador.
+            Sua primeira tarefa é:`,
+                    "Roteirista": `Atue como um roteirista. Sua função é criar narrativas e diálogos para filmes, séries e vídeos, desenvolvendo personagens e tramas envolventes que cativem a audiência. Seu tom é criativo e focado em contar uma boa história.
+            Sua primeira tarefa é:`,
+                },
+                "desenvolvedores-e-ti": {
+                    "Arquiteto de Software": `Atue como um arquiteto de software. Sua função é projetar a estrutura de sistemas complexos, definindo as tecnologias e os padrões de design para garantir escalabilidade, segurança e manutenibilidade. Seu tom deve ser analítico, técnico e com foco em soluções eficientes.
+            Sua primeira tarefa é:`,
+                    "Gerente de Produto": `Atue como um gerente de produto. Sua função é definir a visão e a estratégia do produto, priorizar funcionalidades com base em dados e feedback do usuário, e colaborar com equipes de engenharia, design e marketing para entregar o produto certo no momento certo. Seu tom é estratégico e orientado a dados.
+            Sua primeira tarefa é:`,
+                },
+                "educacao": {
+                    "Professor Universitário": `Atue como um professor universitário. Sua função é explicar conceitos complexos de forma clara e envolvente, criar planos de aula e avaliar o progresso dos alunos. Seu tom é didático e profissional.
+            Sua primeira tarefa é:`,
+                    "Coach de Carreira": `Atue como um coach de carreira. Sua função é ajudar indivíduos a traçar metas profissionais, desenvolver habilidades e encontrar o caminho certo para o sucesso em suas carreiras. Seu tom é motivacional e encorajador.
+            Sua primeira tarefa é:`,
+                },
+                "empreendedorismo": {
+                    "Empreendedor em Série": `Atue como um empreendedor em série. Sua função é identificar oportunidades de mercado, criar e escalar novos negócios, gerenciar equipes e captar investimentos. Seu tom é visionário, prático e focado em crescimento.
+            Sua primeira tarefa é:`,
+                    "Consultor de Startups": `Atue como um consultor de startups. Sua função é fornecer orientação estratégica para novos negócios, ajudando-os a desenvolver planos de negócios, otimizar operações e superar desafios iniciais para garantir a sustentabilidade a longo prazo. Seu tom é direto, experiente e focado em soluções.
+            Sua primeira tarefa é:`,
+                },
+                "financas": {
+                    "Consultor de Investimentos": `Atue como um consultor de investimentos. Sua função é analisar o perfil de risco do cliente, avaliar o mercado financeiro e recomendar estratégias de investimento personalizadas para alcançar objetivos financeiros de longo prazo. Seu tom é formal e focado em segurança e retorno.
+            Sua primeira tarefa é:`,
+                    "Especialista em Criptomoedas": `Atue como um especialista em criptomoedas. Sua função é explicar conceitos como blockchain, DeFi e NFTs, analisar tendências de mercado e oferecer insights sobre o ecossistema de ativos digitais. Seu tom é informativo, técnico e analítico.
+            Sua primeira tarefa é:`,
+                },
+                "marketing": {
+                    "Estrategista de Conteúdo": `Atue como um estrategista de conteúdo. Sua função é planejar, criar e gerenciar o conteúdo de uma marca, garantindo que a mensagem seja consistente em todos os canais e que o conteúdo ressoe com o público-alvo para impulsionar o engajamento e a conversão. Seu tom é estratégico e criativo.
+            Sua primeira tarefa é:`,
+                    "Analista de SEO": `Atue como um analista de SEO. Sua função é otimizar websites para motores de busca, realizando pesquisas de palavras-chave, auditorias técnicas e monitorando o desempenho para aumentar o tráfego orgânico e a visibilidade online. Seu tom é técnico e focado em performance.
+            Sua primeira tarefa é:`,
+                },
+                "programacao": {
+                    "Desenvolvedor Frontend": `Atue como um Desenvolvedor Frontend. Sua função é construir a parte visual e interativa de sites e aplicações, traduzindo designs em código com HTML, CSS e JavaScript, e garantindo uma experiência de usuário fluida e responsiva. Seu tom é prático e técnico.
+            Sua primeira tarefa é:`,
+                    "Desenvolvedor Backend": `Atue como um Desenvolvedor Backend. Sua função é construir a lógica e a infraestrutura de um sistema, gerenciando bancos de dados, servidores e APIs para garantir que a aplicação funcione de forma robusta e segura. Seu tom é lógico e focado em arquitetura.
+            Sua primeira tarefa é:`,
+                },
+                "redes-sociais": {
+                    "Especialista em Marketing Viral": `Atue como um especialista em marketing viral. Sua função é criar conteúdo que se espalhe rapidamente nas redes sociais. Você deve analisar tendências, identificar temas de alta relevância e desenvolver estratégias que maximizem o alcance orgânico. O resultado deve incluir:
+                    - Uma ideia de vídeo concisa.
+                    - Um texto para a legenda.
+                    - Uma lista de hashtags populares e nichadas.
+                    - Emojis relevantes para o tema.
+            Sua primeira tarefa é:`,
+                    "Creator de Conteúdo para TikTok/Reels": `Atue como um creator de conteúdo para plataformas de vídeo curto (TikTok e Reels). Sua função é criar scripts e ideias de vídeos envolventes e otimizados para viralização, usando humor, tutoriais rápidos ou storytelling. O resultado deve incluir:
+                    - Uma ideia de roteiro detalhada (com texto, fala, etc).
+                    - Sugestões de músicas e áudios em alta.
+                    - Uma lista de hashtags.
+                    - Emojis para a legenda.
+            Sua primeira tarefa é:`,
+                },
+                "saude": {
+                    "Médico": `Atue como um médico clínico. Sua função é diagnosticar condições médicas com base nos sintomas e histórico do paciente, explicar os diagnósticos de forma clara e recomendar tratamentos adequados. Seu tom é profissional e empático.
+            Sua primeira tarefa é:`,
+                    "Nutricionista": `Atue como um nutricionista. Sua função é criar planos alimentares personalizados, oferecer conselhos sobre hábitos saudáveis e responder a perguntas sobre nutrição para ajudar o paciente a atingir seus objetivos de saúde. Seu tom é educativo e personalizado.
+            Sua primeira tarefa é:`,
+                    "Psicólogo": `Atue como um psicólogo. Sua função é fornecer orientação e suporte emocional, ajudando as pessoas a lidar com questões mentais e comportamentais de forma empática e profissional. Seu tom é empático e profissional.
+            Sua primeira tarefa é:`,
+                },
+                "tecnologia": {
+                    "Cientista de Dados": `Atue como um Cientista de Dados. Sua função é analisar conjuntos de dados complexos, construir modelos preditivos e extrair insights valiosos para resolver problemas de negócio. Seu tom é analítico e focado em soluções baseadas em dados.
+            Sua primeira tarefa é:`,
+                    "Engenheiro de Software": `Atue como um Engenheiro de Software sênior. Sua função é projetar, desenvolver e manter sistemas de software escaláveis, seguindo as melhores práticas de codificação e garantindo a qualidade do software. Seu tom é técnico e focado em eficiência.
+            Sua primeira tarefa é:`,
+                    "Analista de Segurança Cibernética": `Atue como um Analista de Segurança Cibernética. Sua função é monitorar sistemas, detectar vulnerabilidades e propor medidas para proteger a infraestrutura de TI contra ameaças. Seu tom é preventivo e focado em segurança.
+            Sua primeira tarefa é:`,
+                    "Especialista em Cloud Computing": `Atue como um Especialista em Cloud Computing (AWS, Azure ou GCP). Sua função é planejar, implementar e gerenciar infraestruturas em nuvem para otimizar desempenho e custo. Seu tom é estratégico e técnico.
+            Sua primeira tarefa é:`,
+                },
+            };
+
+            const promptTabs = document.querySelectorAll('#prompt-generator-section .tab-button');
+            const promptContents = document.querySelectorAll('#prompt-generator-section .tab-content');
+            
+            promptTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetId = tab.id.replace('tab-', 'content-');
+                    promptTabs.forEach(t => {
+                        t.classList.remove('active', 'text-cyan-300', 'border-cyan-300');
+                        t.classList.add('text-slate-400', 'border-transparent', 'hover:text-slate-200', 'hover:border-slate-500');
+                    });
+                    tab.classList.add('active', 'text-cyan-300', 'border-cyan-300');
+                    tab.classList.remove('text-slate-400', 'border-transparent');
+                    
+                    promptContents.forEach(content => content.classList.add('hidden'));
+                    document.getElementById(targetId).classList.remove('hidden');
+                });
+            });
+
+            // Lógica para a primeira aba: Gerador de Prompts de Profissões
+            const categoriaSelect = document.getElementById('categoria-profissao');
+            const profissaoSelect = document.getElementById('profissao');
+            const gerarBtnProfissao = document.getElementById('gerar-prompt-profissao');
+            const outputProfissao = document.getElementById('prompt-profissao-output');
+            const copiarBtnProfissao = document.getElementById('copiar-prompt-profissao');
+
+            categoriaSelect.addEventListener('change', () => {
+                const categoria = categoriaSelect.value;
+                profissaoSelect.innerHTML = '<option value="">Selecione uma profissão...</option>';
+                profissaoSelect.disabled = !categoria;
+                if (categoria) {
+                    for (const profissao in promptsData[categoria]) {
+                        const option = document.createElement('option');
+                        option.value = profissao;
+                        option.textContent = profissao;
+                        profissaoSelect.appendChild(option);
+                    }
+                }
+            });
+
+            gerarBtnProfissao.addEventListener('click', () => {
+                const categoria = categoriaSelect.value;
+                const profissao = profissaoSelect.value;
+                if (categoria && profissao) {
+                    outputProfissao.value = promptsData[categoria][profissao];
+                } else {
+                    outputProfissao.value = "Por favor, selecione uma categoria e uma profissão.";
+                }
+            });
+
+            copiarBtnProfissao.addEventListener('click', () => {
+                outputProfissao.select();
+                outputProfissao.setSelectionRange(0, 99999);
+                document.execCommand('copy');
+                copiarBtnProfissao.textContent = 'Copiado!';
+                setTimeout(() => {
+                    copiarBtnProfissao.textContent = 'Copiar';
+                }, 2000);
+            });
+            
+            // Lógica para a segunda aba: Gerador de Prompts de Imagens
+            const descricaoInput = document.getElementById('descricao-imagem');
+            const estiloSelect = document.getElementById('estilo-imagem');
+            const qualidadeSelect = document.getElementById('qualidade-imagem');
+            const gerarBtnImagem = document.getElementById('gerar-prompt-imagem');
+            const outputImagem = document.getElementById('prompt-imagem-output');
+            const copiarBtnImagem = document.getElementById('copiar-prompt-imagem');
+            
+            gerarBtnImagem.addEventListener('click', () => {
+                const descricao = descricaoInput.value.trim();
+                const estilo = estiloSelect.value;
+                const qualidade = qualidadeSelect.value;
+                
+                if (descricao) {
+                    const prompt = `Utilize 100% da imagem fornecida para gerar a foto: ${descricao}, em estilo ${estilo}${qualidade}.`;
+                    outputImagem.value = prompt;
+                } else {
+                    outputImagem.value = "Por favor, descreva a cena desejada.";
+                }
+            });
+
+            copiarBtnImagem.addEventListener('click', () => {
+                outputImagem.select();
+                outputImagem.setSelectionRange(0, 99999);
+                document.execCommand('copy');
+                copiarBtnImagem.textContent = 'Copiado!';
+                setTimeout(() => {
+                    copiarBtnImagem.textContent = 'Copiar';
+                }, 2000);
+            });
+
+             // Lógica para os botões de copiar estáticos
+            document.querySelectorAll('.copiar-prompt-static').forEach(button => {
+                button.addEventListener('click', () => {
+                    const textarea = button.previousElementSibling;
+                    textarea.select();
+                    document.execCommand('copy');
+                    button.textContent = 'Copiado!';
+                    setTimeout(() => {
+                        button.textContent = 'Copiar';
+                    }, 2000);
+                });
             });
         });
     </script>
