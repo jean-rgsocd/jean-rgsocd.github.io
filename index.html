@@ -1,7 +1,3 @@
-<!-- Chosen Palette: O design original do Jean (fundo escuro e detalhes em ciano/verde neon) foi mantido. -->
-<!-- Application Structure Plan: A SPA é projetada como um portfólio de uma única página com seções temáticas para dados pessoais, um resumo de qualificações, formação acadêmica, experiência e projetos. A arquitetura de informação é linear, guiando o usuário de uma visão geral para detalhes. A navegação interna é funcional e rápida. A estrutura utiliza um layout responsivo centralizado para garantir uma visualização agradável em todos os dispositivos. O projeto "Analisador de Segurança Web" é integrado diretamente na seção de projetos, com interação de 'mostrar/esconder' para evitar um site longo. -->
-<!-- Visualization & Content Choices: O portfólio usa uma mistura de texto, ícones Unicode e cores para apresentar o conteúdo de forma clara e profissional. Não há gráficos complexos, pois o foco é a clareza textual e a organização da informação. A seção "Projetos Destacados" utiliza caixas de destaque clicáveis para cada projeto, direcionando o usuário para a próxima etapa. O design é minimalista e alinhado com a paleta de cores. A ausência de gráficos SVG e o uso de classes Tailwind garantem um carregamento rápido e uma experiência de usuário fluida. -->
-<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 <head>
@@ -17,7 +13,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0d1117;
+            background-color: #0d1117; 
             color: #c9d1d9;
         }
         .font-mono {
@@ -52,30 +48,6 @@
             border-radius: 50%;
             box-shadow: 0 0 10px #00e6e6;
             z-index: 1;
-        }
-        .vulnerable-status {
-            color: #ef4444;
-        }
-        .secure-status {
-            color: #34d399;
-        }
-        .scan-status-low {
-            background-color: #1a222c;
-            border-color: #34d399;
-        }
-        .scan-status-medium {
-            background-color: #1a222c;
-            border-color: #fbbf24;
-        }
-        .scan-status-high {
-            background-color: #1a222c;
-            border-color: #ef4444;
-        }
-        .progress-bar {
-            background-color: #1a222c;
-        }
-        .progress-bar-fill {
-            background-color: #00e6e6;
         }
     </style>
 </head>
@@ -151,14 +123,14 @@
                         </ul>
                     </div>
                     <div class="tab-content hidden" id="gestao-content">
-                         <h3 class="font-bold text-lg mb-3 text-cyan-300">Gestão de Projetos de TI</h3>
-                         <ul class="space-y-2 text-slate-400 list-disc list-inside">
-                            <li>Planejamento Estratégico: Definição de escopo, cronograma e viabilidade.</li>
-                            <li>Metodologias: Aplicação de frameworks Ágeis (Scrum) e tradicionais (PMBOK).</li>
-                            <li>Gerenciamento de Riscos e Qualidade: Análise de riscos e garantia de entregas (QA).</li>
-                            <li>Gestão de Recursos: Alocação de orçamento, equipes e controle de custos.</li>
-                            <li>Liderança e Comunicação: Condução de equipes e gestão de stakeholders.</li>
-                         </ul>
+                           <h3 class="font-bold text-lg mb-3 text-cyan-300">Gestão de Projetos de TI</h3>
+                           <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                               <li>Planejamento Estratégico: Definição de escopo, cronograma e viabilidade.</li>
+                               <li>Metodologias: Aplicação de frameworks Ágeis (Scrum) e tradicionais (PMBOK).</li>
+                               <li>Gerenciamento de Riscos e Qualidade: Análise de riscos e garantia de entregas (QA).</li>
+                               <li>Gestão de Recursos: Alocação de orçamento, equipes e controle de custos.</li>
+                               <li>Liderança e Comunicação: Condução de equipes e gestão de stakeholders.</li>
+                           </ul>
                     </div>
                     <div class="tab-content hidden" id="tech-content">
                         <h3 class="font-bold text-lg mb-3 text-cyan-300">Infraestrutura e Desenvolvimento</h3>
@@ -246,12 +218,16 @@
             <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Projetos Destacados</h2>
             <p class="text-center text-slate-400 mb-12 max-w-3xl mx-auto">Uma amostra do meu trabalho, demonstrando a aplicação prática das minhas competências.</p>
             
-            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8" id="project-list-container">
-                <!-- Primeiro Projeto: Portfólio Interativo -->
-                <div id="portfolio-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
-                    <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Portf%C3%B3lio+Interativo" alt="Imagem do Projeto Portfólio Interativo" class="w-full h-auto object-cover border-b border-slate-700">
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400">
+                    <a href="https://jean-rgsocd.github.io" target="_blank" rel="noopener noreferrer">
+                        <div class="relative w-full h-48 bg-slate-900/50 flex items-center justify-center border-b border-slate-700">
+                            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Portf%C3%B3lio+Interativo" alt="Imagem do Projeto Portfólio Interativo" class="w-full h-full object-cover opacity-50">
+                            <h3 class="absolute font-bold text-xl text-slate-100 p-4 z-10">Portfólio Interativo Pessoal</h3>
+                        </div>
+                    </a>
                     <div class="p-8">
-                        <h3 class="font-bold text-xl mb-2 text-slate-100">Portfólio Interativo Pessoal</h3>
                         <p class="text-slate-400 mb-6">
                             Desenvolvi este portfólio para apresentar minhas competências e jornada de forma moderna e visualmente atraente, utilizando um gráfico de radar dinâmico e uma linha do tempo interativa.
                         </p>
@@ -266,12 +242,37 @@
                         </a>
                     </div>
                 </div>
-                
-                <!-- Segundo Projeto: Analisador de Segurança Web -->
-                <div id="scanner-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
-                    <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Analisador+de+Seguran%C3%A7a+Web" alt="Imagem do projeto Analisador de Segurança Web" class="w-full h-auto object-cover border-b border-slate-700">
+
+                <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400">
+                    <a href="SEU_LINK_DO_PROJETO_DE_PROMPTS.html" target="_blank" rel="noopener noreferrer">
+                        <div class="relative w-full h-48 bg-slate-900/50 flex items-center justify-center border-b border-slate-700">
+                            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Gerador+de+Prompts" alt="Imagem do Projeto Gerador de Prompts Interativo" class="w-full h-full object-cover opacity-50">
+                            <h3 class="absolute font-bold text-xl text-slate-100 p-4 z-10">Gerador de Prompts Interativo</h3>
+                        </div>
+                    </a>
                     <div class="p-8">
-                        <h3 class="font-bold text-xl mb-2 text-slate-100">Analisador de Segurança Web</h3>
+                        <p class="text-slate-400 mb-6">
+                            Uma ferramenta web que ajuda a criar prompts para IA, permitindo a geração de textos com personas de profissionais e prompts detalhados para criação de imagens e vídeos.
+                        </p>
+                        <div class="mb-6">
+                            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span>
+                            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">TailwindCSS</span>
+                            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
+                        </div>
+                        <a href="SEU_LINK_DO_PROJETO_DE_PROMPTS.html" target="_blank" rel="noopener noreferrer" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+                            Ver Projeto
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400">
+                     <a href="SEU_LINK_DO_ANALISADOR.html" target="_blank" rel="noopener noreferrer">
+                        <div class="relative w-full h-48 bg-slate-900/50 flex items-center justify-center border-b border-slate-700">
+                            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Analisador+de+Seguran%C3%A7a+Web" alt="Imagem do Projeto Analisador de Segurança Web" class="w-full h-full object-cover opacity-50">
+                            <h3 class="absolute font-bold text-xl text-slate-100 p-4 z-10">Analisador de Segurança Web</h3>
+                        </div>
+                    </a>
+                    <div class="p-8">
                         <p class="text-slate-400 mb-6">
                             Ferramenta de demonstração que simula uma análise de segurança profissional. Ideal para identificar vulnerabilidades e demonstrar expertise em Ethical Hacking e programação segura.
                         </p>
@@ -281,54 +282,12 @@
                             <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
                             <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Ethical Hacking</span>
                         </div>
-                        <button id="showScannerButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+                        <a href="SEU_LINK_DO_ANALISADOR.html" target="_blank" rel="noopener noreferrer" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
                             Ver Projeto
-                        </button>
+                        </a>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Conteúdo do Analisador de Segurança Web (inicialmente oculto) -->
-            <div id="analisador-seguranca-web" class="hidden py-12">
-                 <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 rounded-lg shadow-lg border border-slate-700">
-                     <div class="flex justify-between items-center mb-6">
-                         <h3 class="font-bold text-xl text-slate-100">Analisador de Segurança Web</h3>
-                         <button id="hideScannerButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
-                             Retornar
-                         </button>
-                     </div>
-                     <p class="text-slate-400 mb-6">Este Analisador de Segurança Web é uma ferramenta de demonstração de conceito. As vulnerabilidades exibidas são baseadas em uma simulação de possíveis falhas. O objetivo é apresentar minhas competências na área de segurança cibernética e não deve ser considerado um relatório de segurança definitivo. Para uma varredura minuciosa e real, entre em contato para um serviço profissional.</p>
-                     <div class="space-y-4">
-                         <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                             <input type="text" id="urlInput" placeholder="Digite uma URL para análise (ex: https://www.vulneravel.com)" class="flex-grow px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
-                             <button id="scanButton" class="w-full sm:w-auto px-6 py-2 rounded-lg bg-cyan-500 text-slate-900 font-bold hover:bg-cyan-400 transition-colors">
-                                 🔍 Iniciar Análise
-                             </button>
-                         </div>
-                     </div>
-                     <div id="scanStatus" class="mt-8 hidden">
-                         <p id="statusMessage" class="text-center text-lg text-slate-400">Iniciando análise...</p>
-                         <div id="progressBarContainer" class="mt-4 h-2 rounded-full overflow-hidden bg-slate-700">
-                             <div id="progressBar" class="h-full bg-cyan-500" style="width: 0%;"></div>
-                         </div>
-                     </div>
-                     <div id="results" class="mt-8 space-y-6 hidden">
-                         <div id="generalResults" class="p-6 border rounded-lg border-slate-700">
-                             <h3 class="font-bold text-xl mb-2 text-cyan-300">Resumo da Análise</h3>
-                             <p class="text-slate-400">URL Analisada: <span id="analyzedUrl"></span></p>
-                             <p class="text-slate-400">Status Geral: <span id="overallStatus" class="font-bold"></span></p>
-                         </div>
-                         <div id="vulnerabilitiesResults" class="space-y-4">
-                             <h3 class="font-bold text-xl text-cyan-300">Detalhes das Verificações</h3>
-                             <!-- Vulnerability checks will be rendered here -->
-                         </div>
-                         <div id="cta-section" class="text-center mt-8 p-6 bg-slate-900 rounded-lg border border-slate-700">
-                             <h3 class="text-lg font-bold text-slate-100">Quer resolver essas vulnerabilidades e manter seu sistema seguro?</h3>
-                             <p class="mt-2 text-slate-400">Entre em contato para uma varredura minuciosa e um plano de segurança personalizado.</p>
-                             <a href="https://wa.me/5511984970539?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20a%20an%C3%A1lise%20de%20seguran%C3%A7a%20para%20o%20meu%20site." target="_blank" class="inline-block mt-4 bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Fale Comigo</a>
-                         </div>
-                     </div>
-                 </div>
+
             </div>
         </section>
     </main>
@@ -336,7 +295,7 @@
     <footer id="contato" class="bg-slate-900 text-slate-300 border-t border-slate-800">
         <div class="container mx-auto px-6 py-12 text-center">
             <h2 class="text-3xl font-bold mb-4 text-cyan-300">Em que posso te ajudar?</h2>
-            <p class="text-center text-slate-400 mb-8 max-w-3xl mx-auto">Estou aberto a novas oportunidades e desafios. Entre em contato.</p>
+            <p class="mb-8 text-slate-400">Estou aberto a novas oportunidades e desafios. Entre em contato.</p>
             
             <div class="flex justify-center items-center space-x-8">
                 <a href="mailto:jean.rgsocd@gmail.com" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Email" title="Email">
@@ -349,11 +308,12 @@
                     <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.05 4.94A9.95 9.95 0 0 0 12 2C6.48 2 2 6.48 2 12c0 1.77.46 3.45 1.29 4.94L2 22l5.06-1.29A9.95 9.95 0 0 0 12 22c5.52 0 10-4.48 10-10a9.95 9.95 0 0 0-2.95-7.06zM12 20.25a8.25 8.25 0 0 1-4.2-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.69-8.23 8.23-8.23a8.23 8.23 0 0 1 8.23 8.23c0 4.54-3.69 8.23-8.23 8.23zm4.5-6.17c-.27-.13-1.61-.79-1.85-.88-.25-.09-.43-.13-.61.13-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.06-.27-.13-1.14-.42-2.17-1.33-.8-.72-1.34-1.61-1.5-1.89-.16-.27-.02-.42.12-.55.12-.12.27-.31.4-.46.13-.15.18-.25.27-.42.09-.17.05-.31-.02-.44s-.6-1.45-.82-1.98c-.22-.53-.44-.46-.6-.46-.16 0-.34-.02-.52-.02-.18 0-.47.07-.71.34-.24.27-.92.9-1.12 2.22-.2 1.32.22 2.57.25 2.75.03.18 1.14 1.75 2.76 2.44 1.62.69 2.89 1.1 3.28 1.29.39.19.74.16.99.1.29-.07.92-.37 1.05-.72.13-.35.13-.65.09-.72-.04-.07-.16-.11-.33-.18z"/></svg>
                 </a>
             </div>
-        </section>
+        </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            
             const menuBtn = document.getElementById('menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
             const mobileLinks = mobileMenu.querySelectorAll('a');
@@ -392,7 +352,7 @@
                                 selfPara.cursor.style.display = 'none';
                             },
                         });
-                    }, 300);
+                    }, 300);    
                 }
             });
 
@@ -439,7 +399,7 @@
                                  label: function(context) {
                                      return (context.dataset.label || '') + ': ' + context.parsed.r + '%';
                                  }
-                             }
+                            }
                         }
                     }
                 }
@@ -461,145 +421,6 @@
                     contents.forEach(content => content.classList.add('hidden'));
                     document.getElementById(target + '-content').classList.remove('hidden');
                 });
-            });
-
-            // Lógica para o Analisador de Segurança Web
-            const projectListContainer = document.getElementById('project-list-container');
-            const scannerCard = document.getElementById('scanner-project-card');
-            const showScannerButton = document.getElementById('showScannerButton');
-            const analyzerSection = document.getElementById('analisador-seguranca-web');
-            const urlInput = document.getElementById('urlInput');
-            const scanButton = document.getElementById('scanButton');
-            const scanStatus = document.getElementById('scanStatus');
-            const statusMessage = document.getElementById('statusMessage');
-            const progressBarContainer = document.getElementById('progressBarContainer');
-            const progressBar = document.getElementById('progressBar');
-            const resultsDiv = document.getElementById('results');
-            const analyzedUrlSpan = document.getElementById('analyzedUrl');
-            const overallStatusSpan = document.getElementById('overallStatus');
-            const vulnerabilitiesResults = document.getElementById('vulnerabilitiesResults');
-            const hideScannerButton = document.getElementById('hideScannerButton');
-            
-            showScannerButton.addEventListener('click', (e) => {
-                e.preventDefault(); 
-                projectListContainer.classList.add('hidden');
-                analyzerSection.classList.remove('hidden');
-            });
-            
-            hideScannerButton.addEventListener('click', () => {
-                analyzerSection.classList.add('hidden');
-                projectListContainer.classList.remove('hidden');
-                window.location.href = '#projetos';
-                scanStatus.classList.add('hidden');
-                resultsDiv.classList.add('hidden');
-                urlInput.value = '';
-                progressBar.style.width = '0%';
-            });
-
-
-            const vulnerabilities = [
-                { name: 'Injeção de SQL', risk: 'high', description: 'Permite que um atacante manipule consultas ao banco de dados.' },
-                { name: 'Cross-Site Scripting (XSS)', risk: 'high', description: 'Permite que um atacante injete scripts maliciosos em páginas web.' },
-                { name: 'Exposição de Dados Sensíveis', risk: 'high', description: 'Dados confidenciais são expostos sem criptografia adequada (senhas, informações de cartão de crédito, etc.).' },
-                { name: 'Quebra de Autenticação', risk: 'high', description: 'Permite que atacantes roubem senhas, chaves ou tokens de sessão para se passar por usuários legítimos.' },
-                { name: 'Falsificação de Requisição entre Sites (CSRF)', risk: 'high', description: 'Força o navegador de um usuário a enviar uma requisição maliciosa para uma aplicação web vulnerável.' },
-                { name: 'Upload de Arquivos Não-restrito', risk: 'high', description: 'Permite que atacantes enviem arquivos executáveis ou maliciosos para o servidor, comprometendo o sistema.' },
-                { name: 'Vulnerabilidades em Componentes Desatualizados', risk: 'medium', description: 'Bibliotecas e frameworks com falhas de segurança conhecidas, que precisam ser atualizadas.' },
-                { name: 'Configuração Incorreta de Segurança', risk: 'medium', description: 'Muitas vezes causada por configurações padrão do servidor, erros no código ou portas abertas indevidamente.' },
-                { name: 'Falta de HTTPS', risk: 'medium', description: 'Comunicação entre cliente e servidor não é criptografada, expondo dados a interceptação.' },
-                { name: 'Inclusão de Arquivos Remotos (RFI/LFI)', risk: 'medium', description: 'Permite que um atacante leia ou execute arquivos no servidor, acessando informações sigilosas.' },
-                { name: 'Gerenciamento de Sessão Inseguro', risk: 'low', description: 'O atacante pode roubar a sessão de um usuário (cookie) e se passar por ele.' },
-                { name: 'Exposição de Informações do Servidor', risk: 'low', description: 'Informações detalhadas sobre o servidor, como versões de software, são expostas.' },
-            ];
-            
-            scanButton.addEventListener('click', () => {
-                const url = urlInput.value.trim();
-                if (!url) {
-                    alert('Por favor, digite uma URL válida.');
-                    return;
-                }
-
-                scanStatus.classList.remove('hidden');
-                statusMessage.textContent = 'Iniciando varredura minuciosa...';
-                progressBarContainer.classList.remove('hidden');
-                resultsDiv.classList.add('hidden');
-                progressBar.style.width = '0%';
-
-                const totalSteps = 100;
-                const progressIncrement = 100 / (totalSteps * 3);
-                let progress = 0;
-                let step = 0;
-
-                const progressInterval = setInterval(() => {
-                    progress += Math.random() * progressIncrement + 0.5;
-                    if (progress >= 100) {
-                        progress = 100;
-                        clearInterval(progressInterval);
-                        setTimeout(showResults, 1000);
-                    }
-                    progressBar.style.width = progress + '%';
-                }, 100);
-
-                function showResults() {
-                    statusMessage.textContent = 'Análise concluída com sucesso!';
-                    resultsDiv.classList.remove('hidden');
-                    analyzedUrlSpan.textContent = url;
-                    
-                    vulnerabilitiesResults.innerHTML = '';
-                    const foundVulnerabilities = [];
-                    let hasHighRisk = false;
-
-                    const highRiskVulns = vulnerabilities.filter(v => v.risk === 'high');
-                    const mediumRiskVulns = vulnerabilities.filter(v => v.risk === 'medium');
-                    const lowRiskVulns = vulnerabilities.filter(v => v.risk === 'low');
-                    
-                    // Garantir pelo menos 2 vulnerabilidades de alto risco para o impacto
-                    const numHigh = Math.min(2 + Math.floor(Math.random() * 2), highRiskVulns.length);
-                    const numMedium = Math.min(2 + Math.floor(Math.random() * 2), mediumRiskVulns.length);
-                    const numLow = Math.min(1 + Math.floor(Math.random() * 2), lowRiskVulns.length);
-
-                    const selectedVulns = [
-                        ...highRiskVulns.sort(() => 0.5 - Math.random()).slice(0, numHigh),
-                        ...mediumRiskVulns.sort(() => 0.5 - Math.random()).slice(0, numMedium),
-                        ...lowRiskVulns.sort(() => 0.5 - Math.random()).slice(0, numLow)
-                    ].sort(() => 0.5 - Math.random());
-
-                    selectedVulns.forEach(vuln => {
-                        const icon = (vuln.risk === 'high') ? '🚨' : (vuln.risk === 'medium' ? '⚠️' : '✅');
-                        const riskClass = (vuln.risk === 'high') ? 'vulnerable-status' : (vuln.risk === 'medium' ? 'text-yellow-400' : 'secure-status');
-                        const borderClass = (vuln.risk === 'high') ? 'border-red-600' : (vuln.risk === 'medium' ? 'border-yellow-400' : 'border-green-400');
-                        
-                        if (vuln.risk === 'high') hasHighRisk = true;
-
-                        const vulnerabilityElement = document.createElement('div');
-                        vulnerabilityElement.className = `p-4 rounded-lg border ${borderClass} flex items-center space-x-4`;
-                        vulnerabilityElement.innerHTML = `
-                            <span class="text-2xl">${icon}</span>
-                            <div>
-                                <p class="font-bold text-slate-100">${vuln.name}</p>
-                                <p class="text-sm text-slate-400">${vuln.description}</p>
-                                <p class="text-xs font-bold mt-1 ${riskClass}">Risco: ${vuln.risk.charAt(0).toUpperCase() + vuln.risk.slice(1)}</p>
-                            </div>
-                        `;
-                        vulnerabilitiesResults.appendChild(vulnerabilityElement);
-                    });
-
-                    if (foundVulnerabilities.length > 0) {
-                        overallStatusSpan.textContent = 'Vulnerável';
-                        overallStatusSpan.classList.remove('secure-status');
-                        overallStatusSpan.classList.add('vulnerable-status');
-                        document.getElementById('cta-section').classList.remove('hidden');
-                    } else {
-                        overallStatusSpan.textContent = 'Seguro';
-                        overallStatusSpan.classList.remove('vulnerable-status');
-                        overallStatusSpan.classList.add('secure-status');
-                        document.getElementById('cta-section').classList.add('hidden');
-                    }
-
-                    if (hasHighRisk) {
-                        overallStatusSpan.textContent = 'Criticamente Vulnerável';
-                    }
-                }
             });
         });
     </script>
