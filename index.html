@@ -870,4 +870,437 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
                     setTimeout(() => {
                         new Typed('#typed-paragraph', {
                             strings: [
-                                'Com base sólida
+                                'Com base sólida em Gestão de Projetos, IA e Cybersecurity, busco aplicar minha visão estratégica para garantir a integridade, eficiência e segurança de sistemas. Minha experiência em operações e análise de dados me preparou para resolver problemas complexos e liderar com foco em resultados na área de tecnologia.'
+                            ],
+                            typeSpeed: 25,
+                            showCursor: true,
+                            cursorChar: '_',
+                            startDelay: 200,
+                            onComplete: (selfPara) => {
+                                selfPara.cursor.style.display = 'none';
+                            },
+                        });
+                    }, 300);    
+                }
+            });
+
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            const skillsChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Análise de Vulnerabilidades', 'Pentesting', 'Gestão Ágil', 'Liderança', 'Análise de Dados', 'Arquitetura de Segurança'],
+                    datasets: [{
+                        label: 'Nível de Proficiência',
+                        data: [90, 85, 80, 95, 88, 75],
+                        backgroundColor: 'rgba(0, 230, 230, 0.2)',
+                        borderColor: 'rgba(0, 230, 230, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(0, 230, 230, 1)',
+                        pointBorderColor: '#0d1117',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(0, 230, 230, 1)'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(201, 209, 217, 0.1)' },
+                            grid: { color: 'rgba(201, 209, 217, 0.1)' },
+                            pointLabels: {
+                                font: { size: 12, weight: 'bold' },
+                                color: '#c9d1d9'
+                            },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                stepSize: 20,
+                                color: '#c9d1d9'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                             callbacks: {
+                                 label: function(context) {
+                                     return (context.dataset.label || '') + ': ' + context.parsed.r + '%';
+                                 }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.getAttribute('data-tab');
+                    tabs.forEach(t => {
+                        t.classList.remove('text-cyan-300', 'border-cyan-300');
+                        t.classList.add('text-slate-400', 'border-transparent', 'hover:text-slate-300', 'hover:border-slate-500');
+                    });
+                    tab.classList.add('text-cyan-300', 'border-cyan-300');
+                    tab.classList.remove('text-slate-400', 'border-transparent');
+                    
+                    contents.forEach(content => content.classList.add('hidden'));
+                    document.getElementById(target + '-content').classList.remove('hidden');
+                });
+            });
+
+            // Lógica para alternar entre os projetos na seção de Projetos
+            const projectListContainer = document.getElementById('project-list-container');
+            const promptsSection = document.getElementById('gerador-de-prompts');
+            const hidePromptsButton = document.getElementById('hidePromptsButton');
+            const promptsProjectLink = document.querySelector('a[href="#gerador-de-prompts"]');
+            
+            promptsProjectLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                projectListContainer.classList.add('hidden');
+                promptsSection.classList.remove('hidden');
+                window.location.href = '#projetos';
+            });
+
+            hidePromptsButton.addEventListener('click', () => {
+                promptsSection.classList.add('hidden');
+                projectListContainer.classList.remove('hidden');
+                window.location.href = '#projetos';
+            });
+
+            const scannerSection = document.getElementById('analisador-seguranca-web');
+            const hideScannerButton = document.getElementById('hideScannerButton');
+            const scannerProjectLink = document.querySelector('a[href="#analisador-seguranca-web"]');
+            
+            scannerProjectLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                projectListContainer.classList.add('hidden');
+                scannerSection.classList.remove('hidden');
+                window.location.href = '#projetos';
+            });
+
+            hideScannerButton.addEventListener('click', () => {
+                scannerSection.classList.add('hidden');
+                projectListContainer.classList.remove('hidden');
+                window.location.href = '#projetos';
+            });
+
+            // Lógica do Gerador de Prompts (JS)
+            const promptsData = {
+                "advocacia": {
+                    "Mestre em Direito Trabalhista": `Atue como um Mestre em Direito Trabalhista brasileiro. Sua função é fornecer análise e interpretação de leis trabalhistas, consultoria em relações de trabalho e representação em litígios. Seu tom deve ser formal e técnico, baseado em referências da CLT, jurisprudência e doutrinas.
+        Sua primeira tarefa é:`,
+                    "Mestre em Direito Civil Brasileiro": `Atue como um Mestre em Direito Civil brasileiro. Sua função é fornecer análise e interpretação de leis civis, consultoria em matérias de direito privado, e representação em litígios. Seu tom deve ser formal e técnico, utilizando referências do Código Civil, jurisprudência e doutrinas.
+        Sua primeira tarefa é:`,
+                    "Mestre em Direito Penal Brasileiro": `Atue como um Mestre em Direito Penal brasileiro. Sua função é fornecer análise e interpretação do Código Penal e de leis penais complementares. Seu tom deve ser formal e técnico, utilizando referências do Código Penal, jurisprudência do STJ e STF, e doutrinas relevantes.
+        Sua primeira tarefa é:`,
+                },
+                "copywriters": {
+                    "Copywriter de Vendas Diretas": `Atue como um copywriter especializado em vendas diretas. Sua função é escrever textos persuasivos para landing pages, e-mails de vendas e anúncios, focando em gatilhos mentais e benefícios claros para o cliente. Seu tom é persuasivo, direto e focado em resultados.
+        Sua primeira tarefa é:`,
+                    "Copywriter de Branding": `Atue como um copywriter de branding. Sua função é criar a voz e a identidade de uma marca, desenvolvendo conteúdo para sites, blogs e mídias sociais que reforce os valores e a personalidade da empresa. Seu tom é consistente e alinhado com a marca.
+        Sua primeira tarefa é:`,
+                },
+                "criativos": {
+                    "Designer de Experiência do Usuário (UX)": `Atue como um Designer de Experiência do Usuário (UX). Sua função é projetar interfaces intuitivas e agradáveis, realizando pesquisas, criando wireframes e protótipos para garantir que o produto digital seja fácil de usar e atenda às necessidades do usuário. Seu tom é analítico e focado na usabilidade.
+        Sua primeira tarefa é:`,
+                    "Estrategista de Marketing Criativo": `Atue como um Estrategista de Marketing Criativo. Sua função é desenvolver campanhas de marketing inovadoras e memoráveis, usando narrativas visuais e emocionais para engajar o público e diferenciar a marca no mercado. Seu tom é original e inspirador.
+        Sua primeira tarefa é:`,
+                    "Roteirista": `Atue como um roteirista. Sua função é criar narrativas e diálogos para filmes, séries e vídeos, desenvolvendo personagens e tramas envolventes que cativem a audiência. Seu tom é criativo e focado em contar uma boa história.
+        Sua primeira tarefa é:`,
+                },
+                "desenvolvedores-e-ti": {
+                    "Arquiteto de Software": `Atue como um arquiteto de software. Sua função é projetar a estrutura de sistemas complexos, definindo as tecnologias e os padrões de design para garantir escalabilidade, segurança e manutenibilidade. Seu tom deve ser analítico, técnico e com foco em soluções eficientes.
+        Sua primeira tarefa é:`,
+                    "Gerente de Produto": `Atue como um gerente de produto. Sua função é definir a visão e a estratégia do produto, priorizar funcionalidades com base em dados e feedback do usuário, e colaborar com equipes de engenharia, design e marketing para entregar o produto certo no momento certo. Seu tom é estratégico e orientado a dados.
+        Sua primeira tarefa é:`,
+                },
+                "educacao": {
+                    "Professor Universitário": `Atue como um professor universitário. Sua função é explicar conceitos complexos de forma clara e envolvente, criar planos de aula e avaliar o progresso dos alunos. Seu tom é didático e profissional.
+        Sua primeira tarefa é:`,
+                    "Coach de Carreira": `Atue como um coach de carreira. Sua função é ajudar indivíduos a traçar metas profissionais, desenvolver habilidades e encontrar o caminho certo para o sucesso em suas carreiras. Seu tom é motivacional e encorajador.
+        Sua primeira tarefa é:`,
+                },
+                "empreendedorismo": {
+                    "Empreendedor em Série": `Atue como um empreendedor em série. Sua função é identificar oportunidades de mercado, criar e escalar novos negócios, gerenciar equipes e captar investimentos. Seu tom é visionário, prático e focado em crescimento.
+        Sua primeira tarefa é:`,
+                    "Consultor de Startups": `Atue como um consultor de startups. Sua função é fornecer orientação estratégica para novos negócios, ajudando-os a desenvolver planos de negócios, otimizar operações e superar desafios iniciais para garantir a sustentabilidade a longo prazo. Seu tom é direto, experiente e focado em soluções.
+        Sua primeira tarefa é:`,
+                },
+                "financas": {
+                    "Consultor de Investimentos": `Atue como um consultor de investimentos. Sua função é analisar o perfil de risco do cliente, avaliar o mercado financeiro e recomendar estratégias de investimento personalizadas para alcançar objetivos financeiros de longo prazo. Seu tom é formal e focado em segurança e retorno.
+        Sua primeira tarefa é:`,
+                    "Especialista em Criptomoedas": `Atue como um especialista em criptomoedas. Sua função é explicar conceitos como blockchain, DeFi e NFTs, analisar tendências de mercado e oferecer insights sobre o ecossistema de ativos digitais. Seu tom é informativo, técnico e analítico.
+        Sua primeira tarefa é:`,
+                },
+                "marketing": {
+                    "Estrategista de Conteúdo": `Atue como um estrategista de conteúdo. Sua função é planejar, criar e gerenciar o conteúdo de uma marca, garantindo que a mensagem seja consistente em todos os canais e que o conteúdo ressoe com o público-alvo para impulsionar o engajamento e a conversão. Seu tom é estratégico e criativo.
+        Sua primeira tarefa é:`,
+                    "Analista de SEO": `Atue como um analista de SEO. Sua função é otimizar websites para motores de busca, realizando pesquisas de palavras-chave, auditorias técnicas e monitorando o desempenho para aumentar o tráfego orgânico e a visibilidade online. Seu tom é técnico e focado em performance.
+        Sua primeira tarefa é:`,
+                },
+                "programacao": {
+                    "Desenvolvedor Frontend": `Atue como um Desenvolvedor Frontend. Sua função é construir a parte visual e interativa de sites e aplicações, traduzindo designs em código com HTML, CSS e JavaScript, e garantindo uma experiência de usuário fluida e responsiva. Seu tom é prático e técnico.
+        Sua primeira tarefa é:`,
+                    "Desenvolvedor Backend": `Atue como um Desenvolvedor Backend. Sua função é construir a lógica e a infraestrutura de um sistema, gerenciando bancos de dados, servidores e APIs para garantir que a aplicação funcione de forma robusta e segura. Seu tom é lógico e focado em arquitetura.
+        Sua primeira tarefa é:`,
+                },
+                "redes-sociais": {
+                    "Especialista em Marketing Viral": `Atue como um especialista em marketing viral. Sua função é criar conteúdo que se espalhe rapidamente nas redes sociais. Você deve analisar tendências, identificar temas de alta relevância e desenvolver estratégias que maximizem o alcance orgânico. O resultado deve incluir:
+                    - Uma ideia de vídeo concisa.
+                    - Um texto para a legenda.
+                    - Uma lista de hashtags populares e nichadas.
+                    - Emojis relevantes para o tema.
+        Sua primeira tarefa é:`,
+                    "Creator de Conteúdo para TikTok/Reels": `Atue como um creator de conteúdo para plataformas de vídeo curto (TikTok e Reels). Sua função é criar scripts e ideias de vídeos envolventes e otimizados para viralização, usando humor, tutoriais rápidos ou storytelling. O resultado deve incluir:
+                    - Uma ideia de roteiro detalhada (com texto, fala, etc).
+                    - Sugestões de músicas e áudios em alta.
+                    - Uma lista de hashtags.
+                    - Emojis para a legenda.
+        Sua primeira tarefa é:`,
+                },
+                "saude": {
+                    "Médico": `Atue como um médico clínico. Sua função é diagnosticar condições médicas com base nos sintomas e histórico do paciente, explicar os diagnósticos de forma clara e recomendar tratamentos adequados. Seu tom é profissional e empático.
+        Sua primeira tarefa é:`,
+                    "Nutricionista": `Atue como um nutricionista. Sua função é criar planos alimentares personalizados, oferecer conselhos sobre hábitos saudáveis e responder a perguntas sobre nutrição para ajudar o paciente a atingir seus objetivos de saúde. Seu tom é educativo e personalizado.
+        Sua primeira tarefa é:`,
+                    "Psicólogo": `Atue como um psicólogo. Sua função é fornecer orientação e suporte emocional, ajudando as pessoas a lidar com questões mentais e comportamentais de forma empática e profissional. Seu tom é empático e profissional.
+        Sua primeira tarefa é:`,
+                },
+                "tecnologia": {
+                    "Cientista de Dados": `Atue como um Cientista de Dados. Sua função é analisar conjuntos de dados complexos, construir modelos preditivos e extrair insights valiosos para resolver problemas de negócio. Seu tom é analítico e focado em soluções baseadas em dados.
+        Sua primeira tarefa é:`,
+                    "Engenheiro de Software": `Atue como um Engenheiro de Software sênior. Sua função é projetar, desenvolver e manter sistemas de software escaláveis, seguindo as melhores práticas de codificação e garantindo a qualidade do software. Seu tom é técnico e focado em eficiência.
+        Sua primeira tarefa é:`,
+                    "Analista de Segurança Cibernética": `Atue como um Analista de Segurança Cibernética. Sua função é monitorar sistemas, detectar vulnerabilidades e propor medidas para proteger a infraestrutura de TI contra ameaças. Seu tom é preventivo e focado em segurança.
+        Sua primeira tarefa é:`,
+                    "Especialista em Cloud Computing": `Atue como um Especialista em Cloud Computing (AWS, Azure ou GCP). Sua função é planejar, implementar e gerenciar infraestruturas em nuvem para otimizar desempenho e custo. Seu tom é estratégico e técnico.
+        Sua primeira tarefa é:`,
+                },
+            };
+
+            // Lógica do Gerador de Prompts (JS)
+            document.addEventListener('DOMContentLoaded', function () {
+                const tabs = document.querySelectorAll('.tab-button');
+                const contents = document.querySelectorAll('.tab-content');
+                
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        tabs.forEach(t => {
+                            t.classList.remove('active', 'text-cyan-300', 'border-cyan-300');
+                            t.classList.add('text-slate-400', 'border-transparent', 'hover:text-slate-200', 'hover:border-slate-500');
+                        });
+                        tab.classList.remove('text-slate-400', 'border-transparent');
+                        tab.classList.add('active', 'text-cyan-300', 'border-cyan-300');
+                        
+                        contents.forEach(content => content.classList.add('hidden'));
+                        const target = tab.id.replace('tab-', 'content-');
+                        document.getElementById(target).classList.remove('hidden');
+                    });
+                });
+
+                const categoriaSelect = document.getElementById('categoria-profissao');
+                const profissaoSelect = document.getElementById('profissao');
+                const gerarBtnProfissao = document.getElementById('gerar-prompt-profissao');
+                const outputProfissao = document.getElementById('prompt-profissao-output');
+                const copiarBtnProfissao = document.getElementById('copiar-prompt-profissao');
+
+                categoriaSelect.addEventListener('change', () => {
+                    const categoria = categoriaSelect.value;
+                    profissaoSelect.innerHTML = '<option value="">Selecione uma profissão...</option>';
+                    profissaoSelect.disabled = !categoria;
+                    if (categoria) {
+                        for (const profissao in promptsData[categoria]) {
+                            const option = document.createElement('option');
+                            option.value = profissao;
+                            option.textContent = profissao;
+                            profissaoSelect.appendChild(option);
+                        }
+                    }
+                });
+
+                gerarBtnProfissao.addEventListener('click', () => {
+                    const categoria = categoriaSelect.value;
+                    const profissao = profissaoSelect.value;
+                    if (categoria && profissao) {
+                        outputProfissao.value = promptsData[categoria][profissao];
+                    } else {
+                        outputProfissao.value = "Por favor, selecione uma categoria e uma profissão.";
+                    }
+                });
+
+                copiarBtnProfissao.addEventListener('click', () => {
+                    outputProfissao.select();
+                    outputProfissao.setSelectionRange(0, 99999);
+                    document.execCommand('copy');
+                    copiarBtnProfissao.textContent = 'Copiado!';
+                    setTimeout(() => {
+                        copiarBtnProfissao.textContent = 'Copiar';
+                    }, 2000);
+                });
+                
+                const descricaoInput = document.getElementById('descricao-imagem');
+                const estiloSelect = document.getElementById('estilo-imagem');
+                const qualidadeSelect = document.getElementById('qualidade-imagem');
+                const gerarBtnImagem = document.getElementById('gerar-prompt-imagem');
+                const outputImagem = document.getElementById('prompt-imagem-output');
+                const copiarBtnImagem = document.getElementById('copiar-prompt-imagem');
+                
+                if (gerarBtnImagem) {
+                    gerarBtnImagem.addEventListener('click', () => {
+                        const descricao = descricaoInput.value.trim();
+                        const estilo = estiloSelect.value;
+                        const qualidade = qualidadeSelect.value;
+                        
+                        if (descricao) {
+                            const prompt = `Utilize 100% da imagem fornecida para gerar a foto: ${descricao}, em estilo ${estilo}${qualidade}.`;
+                            outputImagem.value = prompt;
+                        } else {
+                            outputImagem.value = "Por favor, descreva a cena desejada.";
+                        }
+                    });
+                }
+                if (copiarBtnImagem) {
+                    copiarBtnImagem.addEventListener('click', () => {
+                        outputImagem.select();
+                        outputImagem.setSelectionRange(0, 99999);
+                        document.execCommand('copy');
+                        copiarBtnImagem.textContent = 'Copiado!';
+                        setTimeout(() => {
+                            copiarBtnImagem.textContent = 'Copiar';
+                        }, 2000);
+                    });
+                }
+
+                document.querySelectorAll('.copiar-prompt-static').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const textarea = button.previousElementSibling;
+                        textarea.select();
+                        document.execCommand('copy');
+                        button.textContent = 'Copiado!';
+                        setTimeout(() => {
+                            button.textContent = 'Copiar';
+                        }, 2000);
+                    });
+                });
+            
+                // Lógica do Analisador de Segurança Web (JS)
+                const urlInput = document.getElementById('urlInput');
+                const scanButton = document.getElementById('scanButton');
+                const scanStatus = document.getElementById('scanStatus');
+                const statusMessage = document.getElementById('statusMessage');
+                const progressBarContainer = document.getElementById('progressBarContainer');
+                const progressBar = document.getElementById('progressBar');
+                const resultsDiv = document.getElementById('results');
+                const analyzedUrlSpan = document.getElementById('analyzedUrl');
+                const overallStatusSpan = document.getElementById('overallStatus');
+                const vulnerabilitiesResults = document.getElementById('vulnerabilitiesResults');
+                const hideScannerButton = document.getElementById('hideScannerButton');
+
+                const vulnerabilities = [
+                    { name: 'Injeção de SQL', risk: 'high', description: 'Permite que um atacante manipule consultas ao banco de dados.' },
+                    { name: 'Cross-Site Scripting (XSS)', risk: 'high', description: 'Permite que um atacante injete scripts maliciosos em páginas web.' },
+                    { name: 'Exposição de Dados Sensíveis', risk: 'high', description: 'Dados confidenciais são expostos sem criptografia adequada (senhas, informações de cartão de crédito, etc.).' },
+                    { name: 'Quebra de Autenticação', risk: 'high', description: 'Permite que atacantes roubem senhas, chaves ou tokens de sessão para se passar por usuários legítimos.' },
+                    { name: 'Falsificação de Requisição entre Sites (CSRF)', risk: 'high', description: 'Força o navegador de um usuário a enviar uma requisição maliciosa para uma aplicação web vulnerável.' },
+                    { name: 'Upload de Arquivos Não-restrito', risk: 'high', description: 'Permite que atacantes enviem arquivos executáveis ou maliciosos para o servidor, comprometendo o sistema.' },
+                    { name: 'Vulnerabilidades em Componentes Desatualizados', risk: 'medium', description: 'Bibliotecas e frameworks com falhas de segurança conhecidas, que precisam ser atualizadas.' },
+                    { name: 'Configuração Incorreta de Segurança', risk: 'medium', description: 'Muitas vezes causada por configurações padrão do servidor, erros no código ou portas abertas indevidamente.' },
+                    { name: 'Falta de HTTPS', risk: 'medium', description: 'Comunicação entre cliente e servidor não é criptografada, expondo dados a interceptação.' },
+                    { name: 'Inclusão de Arquivos Remotos (RFI/LFI)', risk: 'medium', description: 'Permite que um atacante leia ou execute arquivos no servidor, acessando informações sigilosas.' },
+                    { name: 'Gerenciamento de Sessão Inseguro', risk: 'low', description: 'O atacante pode roubar a sessão de um usuário (cookie) e se passar por ele.' },
+                    { name: 'Exposição de Informações do Servidor', risk: 'low', description: 'Informações detalhadas sobre o servidor, como versões de software, são expostas.' },
+                ];
+                
+                if (scanButton) {
+                    scanButton.addEventListener('click', () => {
+                        const url = urlInput.value.trim();
+                        if (!url) {
+                            alert('Por favor, digite uma URL válida.');
+                            return;
+                        }
+
+                        scanStatus.classList.remove('hidden');
+                        statusMessage.textContent = 'Iniciando varredura minuciosa...';
+                        progressBarContainer.classList.remove('hidden');
+                        resultsDiv.classList.add('hidden');
+                        progressBar.style.width = '0%';
+
+                        const totalSteps = 100;
+                        const progressIncrement = 100 / (totalSteps * 3);
+                        let progress = 0;
+                        let step = 0;
+
+                        const progressInterval = setInterval(() => {
+                            progress += Math.random() * progressIncrement + 0.5;
+                            if (progress >= 100) {
+                                progress = 100;
+                                clearInterval(progressInterval);
+                                setTimeout(showResults, 1000);
+                            }
+                            progressBar.style.width = progress + '%';
+                        }, 100);
+
+                        function showResults() {
+                            statusMessage.textContent = 'Análise concluída com sucesso!';
+                            resultsDiv.classList.remove('hidden');
+                            analyzedUrlSpan.textContent = url;
+                            
+                            vulnerabilitiesResults.innerHTML = '';
+                            let hasHighRisk = false;
+
+                            const highRiskVulns = vulnerabilities.filter(v => v.risk === 'high');
+                            const mediumRiskVulns = vulnerabilities.filter(v => v.risk === 'medium');
+                            const lowRiskVulns = vulnerabilities.filter(v => v.risk === 'low');
+                            
+                            const numHigh = Math.min(2 + Math.floor(Math.random() * 2), highRiskVulns.length);
+                            const numMedium = Math.min(2 + Math.floor(Math.random() * 2), mediumRiskVulns.length);
+                            const numLow = Math.min(1 + Math.floor(Math.random() * 2), lowRiskVulns.length);
+
+                            const selectedVulns = [
+                                ...highRiskVulns.sort(() => 0.5 - Math.random()).slice(0, numHigh),
+                                ...mediumRiskVulns.sort(() => 0.5 - Math.random()).slice(0, numMedium),
+                                ...lowRiskVulns.sort(() => 0.5 - Math.random()).slice(0, numLow)
+                            ].sort(() => 0.5 - Math.random());
+
+                            selectedVulns.forEach(vuln => {
+                                const icon = (vuln.risk === 'high') ? '🚨' : (vuln.risk === 'medium' ? '⚠️' : '✅');
+                                const riskClass = (vuln.risk === 'high') ? 'vulnerable-status' : (vuln.risk === 'medium' ? 'text-yellow-400' : 'secure-status');
+                                const borderClass = (vuln.risk === 'high') ? 'border-red-600' : (vuln.risk === 'medium' ? 'border-yellow-400' : 'border-green-400');
+                                
+                                if (vuln.risk === 'high') hasHighRisk = true;
+
+                                const vulnerabilityElement = document.createElement('div');
+                                vulnerabilityElement.className = `p-4 rounded-lg border ${borderClass} flex items-center space-x-4`;
+                                vulnerabilityElement.innerHTML = `
+                                    <span class="text-2xl">${icon}</span>
+                                    <div>
+                                        <p class="font-bold text-slate-100">${vuln.name}</p>
+                                        <p class="text-sm text-slate-400">${vuln.description}</p>
+                                        <p class="text-xs font-bold mt-1 ${riskClass}">Risco: ${vuln.risk.charAt(0).toUpperCase() + vuln.risk.slice(1)}</p>
+                                    </div>
+                                `;
+                                vulnerabilitiesResults.appendChild(vulnerabilityElement);
+                            });
+
+                            if (selectedVulns.length > 0) {
+                                overallStatusSpan.textContent = hasHighRisk ? 'Criticamente Vulnerável' : 'Vulnerável';
+                                overallStatusSpan.classList.remove('secure-status');
+                                overallStatusSpan.classList.add('vulnerable-status');
+                                document.getElementById('cta-section').classList.remove('hidden');
+                            } else {
+                                overallStatusSpan.textContent = 'Seguro';
+                                overallStatusSpan.classList.remove('vulnerable-status');
+                                overallStatusSpan.classList.add('secure-status');
+                                document.getElementById('cta-section').classList.add('hidden');
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
