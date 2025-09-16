@@ -356,8 +356,8 @@
                         </button>
                     </div>
                     
-                    <div class="flex border-b border-slate-700 mb-8">
-                        <button id="tab-profissoes" class="tab-button active py-3 px-6 text-sm font-medium text-cyan-300 border-b-2 border-cyan-300 hover:text-cyan-200 transition-colors duration-200">
+                    <div class="flex border-b border-slate-700 mb-8 overflow-x-auto">
+                        <button id="tab-profissoes" class="tab-button py-3 px-6 text-sm font-medium text-cyan-300 border-b-2 border-cyan-300 hover:text-cyan-200 transition-colors duration-200 active">
                             Prompt de Profissões (ChatGPT)
                         </button>
                         <button id="tab-imagens" class="tab-button py-3 px-6 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-slate-200 hover:border-slate-500 transition-colors duration-200">
@@ -366,15 +366,16 @@
                         <button id="tab-veo3" class="tab-button py-3 px-6 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-slate-200 hover:border-slate-500 transition-colors duration-200">
                             Prompts de Vídeos (VEO3)
                         </button>
+                        <button id="tab-ai-tools" class="tab-button py-3 px-6 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-slate-200 hover:border-slate-500 transition-colors duration-200">
+                            Ferramentas de IA
+                        </button>
                     </div>
 
                     <div id="content-profissoes" class="tab-content">
                         <h2 class="text-2xl font-bold text-slate-100 mb-6">Gerador de Prompts de Profissões para o ChatGPT</h2>
-                        
                         <p class="text-slate-400 mb-8">
                             Gere aqui seu prompt com a sua profissão desejada, copie o prompt, cole em algum chat de inteligência artificial (como o ChatGPT) e ele atuará como um profissional da área para atender suas dúvidas e solicitações. Use essa ferramenta para obter orientações e tirar dúvidas antes de fazer contato com um profissional da vida real.
                         </p>
-
                         <div class="mb-6">
                             <label for="categoria-profissao" class="block text-slate-300 text-sm font-bold mb-2">Selecione uma Categoria:</label>
                             <select id="categoria-profissao" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500">
@@ -393,18 +394,15 @@
                                 <option value="tecnologia">Tecnologia</option>
                             </select>
                         </div>
-
                         <div class="mb-6">
                             <label for="profissao" class="block text-slate-300 text-sm font-bold mb-2">Selecione uma Profissão:</label>
                             <select id="profissao" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500" disabled>
                                 <option value="">Selecione uma categoria primeiro...</option>
                             </select>
                         </div>
-
                         <button id="gerar-prompt-profissao" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
                             Gerar Prompt de Profissão
                         </button>
-
                         <div class="mt-8 p-4 bg-slate-900 border border-slate-700 rounded-lg">
                             <h3 class="text-xl font-bold text-slate-100 mb-3">Prompt Gerado:</h3>
                             <textarea id="prompt-profissao-output" rows="8" class="font-mono w-full p-3 bg-transparent border-none focus:outline-none resize-none text-slate-300" readonly>Seu prompt aparecerá aqui.</textarea>
@@ -416,11 +414,9 @@
 
                     <div id="content-imagens" class="tab-content hidden">
                         <h2 class="text-2xl font-bold text-slate-100 mb-6">Gerador de Prompts de Imagens (com base em uma foto)</h2>
-                        
                         <p class="text-slate-400 mb-8">
                             Descreva a imagem que você deseja e escolha um estilo. A ferramenta irá gerar um prompt otimizado para IAs de criação de imagens (como Midjourney, DALL-E, Gemini ou Leonardo AI) que permite a edição ou a criação de novas imagens a partir de uma foto de referência.
                         </p>
-
                         <div class="mb-6">
                             <label for="estilo-imagem" class="block text-slate-300 text-sm font-bold mb-2">Estilo da imagem:</label>
                             <select id="estilo-imagem" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500">
@@ -432,7 +428,6 @@
                                 <option value="prompts-prontos">Prompts Prontos</option>
                             </select>
                         </div>
-
                         <div class="mb-6">
                             <label for="qualidade-imagem" class="block text-slate-300 text-sm font-bold mb-2">Qualidade/Detalhe:</label>
                             <select id="qualidade-imagem" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500">
@@ -441,16 +436,13 @@
                                 <option value=", good resolution">Boa resolução</option>
                             </select>
                         </div>
-                        
                         <div class="mb-6">
                             <label for="descricao-imagem" class="block text-slate-300 text-sm font-bold mb-2">Descreva a cena desejada:</label>
                             <textarea id="descricao-imagem" rows="4" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500" placeholder="Ex: Utilize 100% da minha imagem para gerar uma foto minha nas ruas de Times Square ."></textarea>
                         </div>
-
                         <button id="gerar-prompt-imagem" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
                             Gerar Prompt de Imagem
                         </button>
-
                         <div class="mt-8 p-4 bg-slate-900 border border-slate-700 rounded-lg">
                             <h3 class="text-xl font-bold text-slate-100 mb-3">Prompt Gerado:</h3>
                             <textarea id="prompt-imagem-output" rows="8" class="font-mono w-full p-3 bg-transparent border-none focus:outline-none resize-none text-slate-300" readonly>Seu prompt aparecerá aqui. Lembre-se de fazer o upload da sua imagem para a IA e, se possível, indicar o uso dela no prompt (ex: "utilize a imagem fornecida como referência principal").</textarea>
@@ -465,7 +457,6 @@
                         <p class="text-slate-400 mb-8">
                             Aqui você pode copiar prompts complexos e detalhados para gerar vídeos com IA, otimizados para plataformas como o TikTok e Instagram Reels.
                         </p>
-
                         <div class="mb-10 p-6 bg-slate-900 border border-slate-700 rounded-lg">
                             <h3 class="text-xl font-bold text-slate-100 mb-4">1º Opção: Prompt Mestre</h3>
                             <p class="text-sm text-slate-400 mb-4">
@@ -714,29 +705,173 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
 </textarea>
                         </div>
                     </div>
+
+                    <div id="content-ai-tools" class="tab-content hidden">
+                        <h2 class="text-2xl font-bold text-slate-100 mb-6">Compilado de Ferramentas de IA</h2>
+                        <p class="text-slate-400 mb-8">
+                            Explore e acesse rapidamente uma lista de ferramentas de Inteligência Artificial organizadas por categoria, de chatbots a geradores de imagens e vídeos.
+                        </p>
+
+                        <section class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-cyan-300">💡 Ideias / Chatbots</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <a href="[https://chat.openai.com](https://chat.openai.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">
+                                    <svg class="w-5 h-5 text-purple-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                                    ChatGPT
+                                </a>
+                                <a href="[https://gemini.google.com](https://gemini.google.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">
+                                    <svg class="w-5 h-5 text-indigo-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                                    Gemini
+                                </a>
+                                <a href="[https://www.anthropic.com/claude](https://www.anthropic.com/claude)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">
+                                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l-10 20h20L12 2zm0 17l-6-12h12L12 19z"/></svg>
+                                    Claude
+                                </a>
+                                <a href="[https://www.perplexity.ai](https://www.perplexity.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">
+                                    <svg class="w-5 h-5 text-blue-700" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L3 22h18L12 2zm0 17.5L5.5 9.5h13L12 19.5z"/></svg>
+                                    Perplexity
+                                </a>
+                                <a href="[https://www.bing.com/chat](https://www.bing.com/chat)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">
+                                    <svg class="w-5 h-5 text-cyan-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+                                    Bing Chat
+                                </a>
+                            </div>
+                        </section>
+                        <section class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-cyan-300">✍️ Escrita</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <a href="[https://www.jasper.ai](https://www.jasper.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Jasper</a>
+                                <a href="[https://rytr.me](https://rytr.me)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Rytr</a>
+                                <a href="[https://writesonic.com](https://writesonic.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Writesonic</a>
+                                <a href="[https://blaze.today](https://blaze.today)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">TextBlaze</a>
+                                <a href="[https://www.sudowrite.com](https://www.sudowrite.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Sudowrite</a>
+                            </div>
+                        </section>
+                        <section class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-cyan-300">📝 Conteúdo e Revisão</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <a href="[https://katteb.com](https://katteb.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Kattéb</a>
+                                <a href="[https://www.journalistai.com](https://www.journalistai.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Journalist AI</a>
+                                <a href="[https://www.rewording.ai](https://www.rewording.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Rewording</a>
+                                <a href="[https://junia.ai](https://junia.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Junia AI</a>
+                                <a href="[https://elephas.app](https://elephas.app)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Elephas</a>
+                            </div>
+                        </section>
+                        <section class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-cyan-300">🖼️ Gerar Imagens</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <a href="[https://www.freepik.com](https://www.freepik.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Freepik</a>
+                                <a href="[https://dzine.ai](https://dzine.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Dzine</a>
+                                <a href="[https://www.bing.com/create](https://www.bing.com/create)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Bing Create</a>
+                                <a href="[https://phygital.ai](https://phygital.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Phygital+</a>
+                                <a href="[https://leonardo.ai](https://leonardo.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Leonardo.AI</a>
+                                <a href="[https://gemini.google.com](https://gemini.google.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Gemini (Imagens)</a>
+                            </div>
+                        </section>
+                        <section class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-cyan-300">🎨 Designs</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <a href="[https://designs.ai](https://designs.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Designs AI</a>
+                                <a href="[https://autodraw.com](https://autodraw.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">AutoDraw</a>
+                                <a href="[https://clipdrop.co](https://clipdrop.co)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">ClipDrop</a>
+                                <a href="[https://vanceai.com](https://vanceai.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Vance AI</a>
+                                <a href="[https://looka.com](https://looka.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Looka</a>
+                            </div>
+                        </section>
+                        <section class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-cyan-300">🌐 Criar Sites</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <a href="[https://dora.ai](https://dora.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Dora</a>
+                                <a href="[https://durable.co](https://durable.co)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Durable</a>
+                                <a href="[https://10web.io](https://10web.io)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">10Web</a>
+                                <a href="[https://framer.com](https://framer.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Framer</a>
+                                <a href="[https://www.wegic.com](https://www.wegic.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Wegic</a>
+                            </div>
+                        </section>
+                        <section class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-cyan-300">📊 Apresentações</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <a href="[https://gamma.app](https://gamma.app)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Gamma</a>
+                                <a href="[https://tome.app](https://tome.app)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Tome</a>
+                                <a href="[https://slidebean.com](https://slidebean.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Slidebean</a>
+                                <a href="[https://pitch.com](https://pitch.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Pitch</a>
+                                <a href="[https://www.beautiful.ai](https://www.beautiful.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Beautiful.ai</a>
+                            </div>
+                        </section>
+                        <section class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-cyan-300">🎥 Vídeos</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <a href="[https://gemini.google.com](https://gemini.google.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Gemini (Vídeos)</a>
+                                <a href="[https://runwayml.com](https://runwayml.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Runway</a>
+                                <a href="[https://heygen.com](https://heygen.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">HeyGen</a>
+                                <a href="[https://www.synthesia.io](https://www.synthesia.io)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Synthesia</a>
+                                <a href="[https://pictory.ai](https://pictory.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Pictory</a>
+                            </div>
+                        </section>
+                        <section class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-cyan-300">🎤 Narração</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <a href="[https://elevenlabs.io](https://elevenlabs.io)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">ElevenLabs</a>
+                                <a href="[https://suno.ai](https://suno.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Suno AI</a>
+                                <a href="[https://udio.ai](https://udio.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Udio</a>
+                                <a href="[https://deepgram.com](https://deepgram.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Deepgram</a>
+                                <a href="[https://www.descript.com](https://www.descript.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Descript</a>
+                            </div>
+                        </section>
+                        <section class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-cyan-300">💻 Reuniões</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <a href="[https://tldv.io](https://tldv.io)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">TL;DV</a>
+                                <a href="[https://fireflies.ai](https://fireflies.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Fireflies</a>
+                                <a href="[https://otter.ai](https://otter.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Otter</a>
+                                <a href="[https://krisp.ai](https://krisp.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Krisp</a>
+                                <a href="[https://www.avoma.com](https://www.avoma.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Avoma</a>
+                            </div>
+                        </section>
+                        <section class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-cyan-300">✅ Tarefas</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <a href="[https://clickup.com](https://clickup.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">ClickUp</a>
+                                <a href="[https://drift.com](https://drift.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Drift</a>
+                                <a href="[https://www.useoutreach.com](https://www.useoutreach.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Outreach</a>
+                                <a href="[https://www.bardeen.ai](https://www.bardeen.ai)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Bardeen</a>
+                                <a href="[https://www.empifi.com](https://www.empifi.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Empifi</a>
+                            </div>
+                        </section>
+                        <section class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-cyan-300">🔍 Detectar IA</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <a href="[https://gptzero.me](https://gptzero.me)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">GPTZero</a>
+                                <a href="[https://www.wordtune.com](https://www.wordtune.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Wordtune</a>
+                                <a href="[https://copyleaks.com](https://copyleaks.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Copyleaks</a>
+                                <a href="[https://bypassgpt.com](https://bypassgpt.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">BypassGPT</a>
+                                <a href="[https://www.grammarly.com](https://www.grammarly.com)" target="_blank" rel="noopener noreferrer" class="bg-slate-900 shadow p-3 rounded flex items-center gap-2 hover:bg-slate-700 transition-colors duration-200">Grammarly</a>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
     <footer id="contato" class="bg-slate-900 text-slate-300 border-t border-slate-800">
-    <div class="container mx-auto px-6 py-12 text-center">
-        <h2 class="text-3xl font-bold mb-4 text-cyan-300">Em que posso te ajudar?</h2>
-        <p class="text-center text-slate-400 mb-8 max-w-3xl mx-auto">Entre em contato.</p>
-        
-        <div class="flex justify-center items-center space-x-8">
-            <a href="mailto:jean.rgsocd@gmail.com" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Email" title="Email">
-                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
-            </a>
-            <a href="https://www.instagram.com/jcrs.7/" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Instagram" title="Instagram">
-                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
-            </a>
-            <a href="https://wa.me/5511984970539" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="WhatsApp" title="WhatsApp">
-                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.05 4.94A9.95 9.95 0 0 0 12 2C6.48 2 2 6.48 2 12c0 1.77.46 3.45 1.29 4.94L2 22l5.06-1.29A9.95 9.95 0 0 0 12 22c5.52 0 10-4.48 10-10a9.95 9.95 0 0 0-2.95-7.06zM12 20.25a8.25 8.25 0 0 1-4.2-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.69-8.23 8.23-8.23a8.23 8.23 0 0 1 8.23 8.23c0 4.54-3.69 8.23-8.23 8.23zm4.5-6.17c-.27-.13-1.61-.79-1.85-.88-.25-.09-.43-.13-.61.13-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.06-.27-.13-1.14-.42-2.17-1.33-.8-.72-1.34-1.61-1.5-1.89-.16-.27-.02-.42.12-.55.12-.12.27-.31.4-.46.13-.15.18-.25.27-.42.09-.17.05-.31-.02-.44s-.6-1.45-.82-1.98c-.22-.53-.44-.46-.6-.46-.16 0-.34-.02-.52-.02-.18 0-.47.07-.71.34-.24.27-.92.9-1.12 2.22-.2 1.32.22 2.57.25 2.75.03.18 1.14 1.75 2.76 2.44 1.62.69 2.89 1.1 3.28 1.29.39.19.74.16.99.1.29-.07.92-.37 1.05-.72.13-.35.13-.65.09-.72-.04-.07-.16-.11-.33-.18z"/></svg>
-            </a>
+        <div class="container mx-auto px-6 py-12 text-center">
+            <h2 class="text-3xl font-bold mb-4 text-cyan-300">Em que posso te ajudar?</h2>
+            <p class="text-center text-slate-400 mb-8 max-w-3xl mx-auto">Entre em contato.</p>
+            
+            <div class="flex justify-center items-center space-x-8">
+                <a href="mailto:jean.rgsocd@gmail.com" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Email" title="Email">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
+                </a>
+                <a href="[https://www.instagram.com/jcrs.7/](https://www.instagram.com/jcrs.7/)" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Instagram" title="Instagram">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+                </a>
+                <a href="[https://wa.me/5511984970539](https://wa.me/5511984970539)" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="WhatsApp" title="WhatsApp">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path d="M19.05 4.94A9.95 9.95 0 0 0 12 2C6.48 2 2 6.48 2 12c0 1.77.46 3.45 1.29 4.94L2 22l5.06-1.29A9.95 9.95 0 0 0 12 22c5.52 0 10-4.48 10-10a9.95 9.95 0 0 0-2.95-7.06zM12 20.25a8.25 8.25 0 0 1-4.2-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.69-8.23 8.23-8.23a8.23 8.23 0 0 1 8.23 8.23c0 4.54-3.69 8.23-8.23 8.23zm4.5-6.17c-.27-.13-1.61-.79-1.85-.88-.25-.09-.43-.13-.61.13-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.06-.27-.13-1.14-.42-2.17-1.33-.8-.72-1.34-1.61-1.5-1.89-.16-.27-.02-.42.12-.55.12-.12.27-.31.4-.46.13-.15.18-.25.27-.42.09-.17.05-.31-.02-.44s-.6-1.45-.82-1.98c-.22-.53-.44-.46-.6-.46-.16 0-.34-.02-.52-.02-.18 0-.47.07-.71.34-.24.27-.92.9-1.12 2.22-.2 1.32.22 2.57.25 2.75.03.18 1.14 1.75 2.76 2.44 1.62.69 2.89 1.1 3.28 1.29.39.19.74.16.99.1.29-.07.92-.37 1.05-.72.13-.35.13-.65.09-.72-.04-.07-.16-.11-.33-.18z"/></svg>
+                </a>
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -1095,73 +1230,6 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
                 },
             };
 
-            const promptTabs = document.querySelectorAll('#prompt-generator-section .tab-button');
-            const promptContents = document.querySelectorAll('#prompt-generator-section .tab-content');
-            
-            promptTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const targetId = tab.id.replace('tab-', 'content-');
-                    promptTabs.forEach(t => {
-                        t.classList.remove('active', 'text-cyan-300', 'border-cyan-300');
-                        t.classList.add('text-slate-400', 'border-transparent', 'hover:text-slate-200', 'hover:border-slate-500');
-                    });
-                    tab.classList.add('active', 'text-cyan-300', 'border-cyan-300');
-                    tab.classList.remove('text-slate-400', 'border-transparent');
-                    
-                    promptContents.forEach(content => content.classList.add('hidden'));
-                    document.getElementById(targetId).classList.remove('hidden');
-                });
-            });
-
-            // Lógica para a primeira aba: Gerador de Prompts de Profissões
-            const categoriaSelect = document.getElementById('categoria-profissao');
-            const profissaoSelect = document.getElementById('profissao');
-            const gerarBtnProfissao = document.getElementById('gerar-prompt-profissao');
-            const outputProfissao = document.getElementById('prompt-profissao-output');
-            const copiarBtnProfissao = document.getElementById('copiar-prompt-profissao');
-
-            categoriaSelect.addEventListener('change', () => {
-                const categoria = categoriaSelect.value;
-                profissaoSelect.innerHTML = '<option value="">Selecione uma profissão...</option>';
-                profissaoSelect.disabled = !categoria;
-                if (categoria) {
-                    for (const profissao in promptsData[categoria]) {
-                        const option = document.createElement('option');
-                        option.value = profissao;
-                        option.textContent = profissao;
-                        profissaoSelect.appendChild(option);
-                    }
-                }
-            });
-
-            gerarBtnProfissao.addEventListener('click', () => {
-                const categoria = categoriaSelect.value;
-                const profissao = profissaoSelect.value;
-                if (categoria && profissao) {
-                    outputProfissao.value = promptsData[categoria][profissao];
-                } else {
-                    outputProfissao.value = "Por favor, selecione uma categoria e uma profissão.";
-                }
-            });
-
-            copiarBtnProfissao.addEventListener('click', () => {
-                outputProfissao.select();
-                outputProfissao.setSelectionRange(0, 99999);
-                document.execCommand('copy');
-                copiarBtnProfissao.textContent = 'Copiado!';
-                setTimeout(() => {
-                    copiarBtnProfissao.textContent = 'Copiar';
-                }, 2000);
-            });
-            
-            // Lógica para a segunda aba: Gerador de Prompts de Imagens
-            const descricaoInput = document.getElementById('descricao-imagem');
-            const estiloSelect = document.getElementById('estilo-imagem');
-            const qualidadeSelect = document.getElementById('qualidade-imagem');
-            const gerarBtnImagem = document.getElementById('gerar-prompt-imagem');
-            const outputImagem = document.getElementById('prompt-imagem-output');
-            const copiarBtnImagem = document.getElementById('copiar-prompt-imagem');
-
             const promptsPorEstilo = {
                 "photorealistic": (descricao, qualidade) => `Hyper-realistic, cinematic portrait of a person with ${descricao}, 8K photo, with dramatic studio lighting, soft shadows, sharp focus, capturing fine details and natural skin textures. No filter, no blur, high resolution. --ar 9:16 --v 6.0`,
                 "digital art": (descricao, qualidade) => `Digital art of a person with ${descricao}, in a magical atmosphere, with glowing elements and vibrant colors. Highly detailed, artistic lighting, concept art style. ${qualidade}.`,
@@ -1170,48 +1238,52 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
                 "impressionist": (descricao, qualidade) => `Impressionist style painting of a person with ${descricao}. Soft, visible brushstrokes, luminous colors, vibrant lighting, emotional mood. ${qualidade}.`,
             };
             
-         const promptsProntos = {
-    "Retrato Fashion em Preto e Branco": "Black and white fashion portrait of a handsome young man looking over his shoulder. He is wearing a stylish black leather jacket and modern rectangular red sunglasses. The background is a seamless, minimalist white studio backdrop with blue circle ring. The lighting is dramatic high-contrast studio lighting, creating sharp focus and highlighting the texture of the leather jacket. --ar 9:16 --v 6.0",
-    "Retrato Surreal e Detalhado com Efeito Glitch": "A surreal, ultra-detailed portrait of a young man holding a vibrant red rose close to his face. He is wearing a plain oversized white sweatshirt and a thin silver chain necklace. His fingers are adorned with rings, the background is minimalistic and shadowy, emphasizing his presence. The portrait is styled with a digital glitch effect, parts of his face and body are fragmented into horizontal pixel streaks in. --ar 9:16 --v 6.0",
-    "Retrato Cinematográfico com Dupla Exposição": "Hyper-realistic cinematic tall vertical portrait in 9:16 of a man with black sunglasses, reflecting a futuristic city skyline. A surreal double exposure blends his silhouette with gleaming skyscrapers and a luxury Porsche 911 in the foreground. Inspired by the noir style, it's elegant and powerful. --ar 9:16 --v 6.0",
-    "Fotografia de Dupla Exposição (Litoral)": "Create a double exposure photo with a man in profile. Incorporate into his silhouette a wild seascape with cliffs, a person sitting looking out to sea, and a flock of birds flying in the sky. Use black and white style to highlight the emotion and composition, realistic 4k image quality. 9:16 aspect ratio. --ar 9:16 --v 6.0",
-    "Homem Confiante em Carro de Luxo": "A confident man in a luxury car, wearing a stylish black suit with a bow tie, looking cool and powerful. The photo has a cinematic tone with moody contrast, light rain on the car's surface, and a shallow depth of field. Enhance colors subtly, sharpen facial details, and add a soft vignette for a dramatic effect. Maintain a classy, high-end look a picture should be realistic (f/2.8), ratio 9:16. --ar 9:16 --v 6.0",
-    "Fotografia Editorial em Filme 35mm": "A hyper-realistic 35mm film editorial photograph of a young man (curly dark hair, trimmed beard and goatee, natural Mediterranean skin tone, strong jawline). He is sitting on a sleek black-and-red sport motorcycle. One leg casually rests on the bike's frame while the other supports him on the ground. His outfit: fully buttoned crisp white dress shirt with a black-and-gray striped tie, layered with a gray inner jacket, and topped with an oversized dark brown leather coat. He also wears glossy black leather pants and fitted black leather gloves. His posture is confident yet relaxed, leaning slightly forward with one hand resting on his thigh, the other hand on the motorcycle frame near a black helmet. Expression: calm, powerful, stylish, looking straight ahead. Background: metallic silver-gray industrial mesh panels. Lighting: cinematic white-and-blue studio lighting from above, creating a cool luxurious fashion mood. The photo has fine 35mm film grain, natural skin textures, authentic colors, and a high-fashion editorial cinematic atmosphere - completely natural, without any artificial or plastic AI look. --ar 9:16 --v 6.0",
-    "Cena Noturna Urbana com Luzes de Néon": "Ultra-realistic 8K half-body shot of the subject in a moody urban night scene, framed against a blurred cityscape awash in electric blues and hot pinks. Neon streaks slash diagonally across the frame — as though caught mid-exposure — painting soft colored highlights across his jacket, cheekbones, and hair. He wears a black bomber jacket with subtle quilted paneling, a plain white tee visible beneath. Around his neck, a slim black cord necklace with a polished steel pendant rests lightly. The shallow depth of field isolates his face in crystal clarity while the city lights melt into an abstract, glowing bokeh. High shutter speed captures the crisp textures of skin pores, hair strands, and fabric stitching. --ar 9:16 --v 6.0",
-    "Retrato Vertical Dramático (Filme Noir)": "Ultra-realistic 8K, vertical portrait 9:16 of a man in a dark coat. A white light coming from above illuminates only a part of his face, creating intense shadows and a dramatic film noir atmosphere. --ar 9:16 --v 6.0",
-    "Cena Noturna Cinematográfica com Chuva": "Cinematic vertical portrait 9:16 of a man leaning against a luxury car under red neon lights. Rain on the ground creating shiny reflections, elegant and dark atmosphere. --ar 9:16 --v 6.0",
-    "Foco nas Mãos em Oração": "Hyper-realistic 8K, close-up on hands joined in prayer in front of a face half-hidden by shadow. Spiritual and mysterious atmosphere. --ar 9:16 --v 6.0",
-    "Homem em Cenário com Fumaça": "Vertical portrait 9:16 of a man sitting on a metal chair, surrounded by smoke. Hard, cold studio lighting, intense and dramatic atmosphere. --ar 9:16 --v 6.0",
-    "Rosto com Luz Contraste em Azul e Vermelho": "Hyper-detailed close-up in 8K of a face partially covered by a hand. Red and blue light projected in contrast, mysterious and elegant atmosphere, cinematic style. --ar 9:16 --v 6.0",
-    "Retrato de Homem na Chuva (Noir)": "Black and white editorial portrait 9:16 of a man in a drenched suit, water drops streaming down his face and hair. Dramatic Vogue style, hard and contrasting light. --ar 9:16 --v 6.0",
-    "Homem em Deserto com Pôr do Sol": "Wide shot 9:16 of a man walking alone in an infinite desert, footsteps behind him, orange setting sun illuminating the horizon. Symbolic and inspiring atmosphere, personal transformation mood. --ar 9:16 --v 6.0",
-    "Homem em Rua Chuvosa com Néon": "Ultra-realistic 8K, vertical portrait 9:16 of a man in a black suit, standing in pouring rain on a street lit by blue and pink neon lights. Water runs down his face and coat, creating a dramatic and powerful atmosphere. --ar 9:16 --v 6.0",
-    "Retrato Cinematográfico Feminino com Halo Dourado": "Retrato pessoal de alta gama, ultra realista da pessoa na foto fornecida, preservando sua fisionomia, idade aparente, gênero, tom de pele, cabelo, olhos e expressão única. Texturas fotorrealistas de pele, cabelo e tecido. Sujeito principal: Uma mulher com cabelo solto e levemente desordenado, tonalidade castanha escura, iluminada por trás criando um halo dourado sobre fundo escuro. Expressão e pose: rosto girado para a câmera, mirada direta, parcialmente coberta por sombras. Contraluz potente e cálido, luz secundária fria (azul/verde) iluminando o rosto e ombro. Fundo escuro realçando os brilhos do cabelo. Lente fixa 50-85mm, abertura f/1.4-f/2.8. Estilo cinematográfico e dramático. --ar 9:16 --v 6.0",
-    "Retrato Cinematográfico Solitário na Chuva": "Tomada cinematográfica 3:4 de um homem parado em uma calçada chuvosa da cidade. Vestindo camiseta preta grande, calças largas e tênis. Segurando guarda-chuva, chuva intensa ao redor. Iluminação sombria, profundidade de campo rasa, reflexos no pavimento molhado, halo de luz de fundo suave. Aparência de filme estático, cores ligeiramente dessaturadas, foco na emoção e solidão. --ar 3:4 --v 6.0",
-    "Retrato Cinematográfico Estilo Sala de Aula": "Retrato cinematográfico com toque sombrio, jovem asiático em sala de aula vintage mal iluminada. Luz suave amarelo-dourada refletida de uma fresta, criando linhas diagonais sobre o rosto. Sentado sozinho, expressão relaxada, cabelos bagunçados estilo coreano Comma. Suéter verde-militar oversized, calças cargo creme, tênis Converse, fones vermelhos. Fundo com parede off-white, post-its e decoração típica de sala de aula. Atmosfera nostálgica e contemplativa, tons suaves de luz dourada misturados a sombras escuras, sem efeito bokeh, granulação de filme 35mm, ISO 1600, abertura f/5.6, obturador 1/60s. --ar 3:4 --v 6.0",
-    "Selfie Realista com Ação de Hollywood (É necessário fazer o upload do famoso e sua foto)": 
-    "Crie uma selfie realista combinando as imagens enviadas (usuário + figuras de referência). As pessoas podem estar segurando bebida, sorrindo ou abraçando-se. Fundo natural ou urbano, rostos levemente desfocados, iluminação cinematográfica, vertical 9:16. --ar 9:16 --v 6.0",
-    "Selfie Olho de Peixe com Estrelas (É necessário fazer o upload do famoso e sua foto)": 
-    "Selfie olho de peixe vertical 9:16, ultrarrealista 3D combinando imagens enviadas. Pessoas sorrindo, algumas interagindo com o usuário (beliscando rosto, fazendo caretas). Dentro de um elevador ou espaço fechado, iluminação realista, rosto do usuário em destaque, fundo levemente desfocado. --ar 9:16 --v 6.0",
-    "Foto Polaroid com Famosos (É necessário fazer o upload do famoso e sua foto)":
-    "Crie uma imagem estilo Polaroid combinando a foto do usuário e a(s) figura(s) enviada(s). Pessoas podem estar abraçando-se, sorrindo ou interagindo de forma natural. Fundo levemente desfocado, luz suave de flash, atmosfera realista. --ar 3:4 --v 6.0",
-    "Selfie em Festa de Gala (É necessário fazer o upload do famoso e sua foto)": 
-    "Selfie vertical 9:16 do usuário junto com figuras enviadas. Pessoas sorrindo, vestindo trajes elegantes, fundo desfocado com iluminação cinematográfica. --ar 9:16 --v 6.0",
-    "Selfie Urbana com Reflexos Neon (É necessário fazer o upload do famoso e sua foto)": 
-    "Selfie vertical 9:16 do usuário e figuras enviadas em ambiente urbano noturno. Luzes neon refletindo em poças, rostos levemente desfocados, cores vibrantes, atmosfera cinematográfica. --ar 9:16 --v 6.0",
-    "Selfie Dreamy com Luz Suave (É necessário fazer o upload do famoso e sua foto)": 
-    "Selfie vertical 9:16 do usuário e figuras enviadas com iluminação difusa e fundo levemente embaçado. Rostos levemente desfocados, cores suaves, atmosfera etérea, estilo cinematográfico. --ar 9:16 --v 6.0",
-    "Selfie com Luz de Contraluz Dramática (É necessário fazer o upload do famoso e sua foto)": 
-    "Selfie vertical 9:16 do usuário com figuras enviadas, luz intensa atrás criando halo, rostos levemente desfocados, cores quentes, atmosfera cinematográfica. --ar 9:16 --v 6.0"
-};
+            const promptsProntos = {
+                "Retrato Fashion em Preto e Branco": "Black and white fashion portrait of a handsome young man looking over his shoulder. He is wearing a stylish black leather jacket and modern rectangular red sunglasses. The background is a seamless, minimalist white studio backdrop with blue circle ring. The lighting is dramatic high-contrast studio lighting, creating sharp focus and highlighting the texture of the leather jacket. --ar 9:16 --v 6.0",
+                "Retrato Surreal e Detalhado com Efeito Glitch": "A surreal, ultra-detailed portrait of a young man holding a vibrant red rose close to his face. He is wearing a plain oversized white sweatshirt and a thin silver chain necklace. His fingers are adorned with rings, the background is minimalistic and shadowy, emphasizing his presence. The portrait is styled with a digital glitch effect, parts of his face and body are fragmented into horizontal pixel streaks in. --ar 9:16 --v 6.0",
+                "Retrato Cinematográfico com Dupla Exposição": "Hyper-realistic cinematic tall vertical portrait in 9:16 of a man with black sunglasses, reflecting a futuristic city skyline. A surreal double exposure blends his silhouette with gleaming skyscrapers and a luxury Porsche 911 in the foreground. Inspired by the noir style, it's elegant and powerful. --ar 9:16 --v 6.0",
+                "Fotografia de Dupla Exposição (Litoral)": "Create a double exposure photo with a man in profile. Incorporate into his silhouette a wild seascape with cliffs, a person sitting looking out to sea, and a flock of birds flying in the sky. Use black and white style to highlight the emotion and composition, realistic 4k image quality. 9:16 aspect ratio. --ar 9:16 --v 6.0",
+                "Homem Confiante em Carro de Luxo": "A confident man in a luxury car, wearing a stylish black suit with a bow tie, looking cool and powerful. The photo has a cinematic tone with moody contrast, light rain on the car's surface, and a shallow depth of field. Enhance colors subtly, sharpen facial details, and add a soft vignette for a dramatic effect. Maintain a classy, high-end look a picture should be realistic (f/2.8), ratio 9:16. --ar 9:16 --v 6.0",
+                "Fotografia Editorial em Filme 35mm": "A hyper-realistic 35mm film editorial photograph of a young man (curly dark hair, trimmed beard and goatee, natural Mediterranean skin tone, strong jawline). He is sitting on a sleek black-and-red sport motorcycle. One leg casually rests on the bike's frame while the other supports him on the ground. His outfit: fully buttoned crisp white dress shirt with a black-and-gray striped tie, layered with a gray inner jacket, and topped with an oversized dark brown leather coat. He also wears glossy black leather pants and fitted black leather gloves. His posture is confident yet relaxed, leaning slightly forward with one hand resting on his thigh, the other hand on the motorcycle frame near a black helmet. Expression: calm, powerful, stylish, looking straight ahead. Background: metallic silver-gray industrial mesh panels. Lighting: cinematic white-and-blue studio lighting from above, creating a cool luxurious fashion mood. The photo has fine 35mm film grain, natural skin textures, authentic colors, and a high-fashion editorial cinematic atmosphere - completely natural, without any artificial or plastic AI look. --ar 9:16 --v 6.0",
+                "Cena Noturna Urbana com Luzes de Néon": "Ultra-realistic 8K half-body shot of the subject in a moody urban night scene, framed against a blurred cityscape awash in electric blues and hot pinks. Neon streaks slash diagonally across the frame — as though caught mid-exposure — painting soft colored highlights across his jacket, cheekbones, and hair. He wears a black bomber jacket with subtle quilted paneling, a plain white tee visible beneath. Around his neck, a slim black cord necklace with a polished steel pendant rests lightly. The shallow depth of field isolates his face in crystal clarity while the city lights melt into an abstract, glowing bokeh. High shutter speed captures the crisp textures of skin pores, hair strands, and fabric stitching. --ar 9:16 --v 6.0",
+                "Retrato Vertical Dramático (Filme Noir)": "Ultra-realistic 8K, vertical portrait 9:16 of a man in a dark coat. A white light coming from above illuminates only a part of his face, creating intense shadows and a dramatic film noir atmosphere. --ar 9:16 --v 6.0",
+                "Cena Noturna Cinematográfica com Chuva": "Cinematic vertical portrait 9:16 of a man leaning against a luxury car under red neon lights. Rain on the ground creating shiny reflections, elegant and dark atmosphere. --ar 9:16 --v 6.0",
+                "Foco nas Mãos em Oração": "Hyper-realistic 8K, close-up on hands joined in prayer in front of a face half-hidden by shadow. Spiritual and mysterious atmosphere. --ar 9:16 --v 6.0",
+                "Homem em Cenário com Fumaça": "Vertical portrait 9:16 of a man sitting on a metal chair, surrounded by smoke. Hard, cold studio lighting, intense and dramatic atmosphere. --ar 9:16 --v 6.0",
+                "Rosto com Luz Contraste em Azul e Vermelho": "Hyper-detailed close-up in 8K of a face partially covered by a hand. Red and blue light projected in contrast, mysterious and elegant atmosphere, cinematic style. --ar 9:16 --v 6.0",
+                "Retrato de Homem na Chuva (Noir)": "Black and white editorial portrait 9:16 of a man in a drenched suit, water drops streaming down his face and hair. Dramatic Vogue style, hard and contrasting light. --ar 9:16 --v 6.0",
+                "Homem em Deserto com Pôr do Sol": "Wide shot 9:16 of a man walking alone in an infinite desert, footsteps behind him, orange setting sun illuminating the horizon. Symbolic and inspiring atmosphere, personal transformation mood. --ar 9:16 --v 6.0",
+                "Homem em Rua Chuvosa com Néon": "Ultra-realistic 8K, vertical portrait 9:16 of a man in a black suit, standing in pouring rain on a street lit by blue and pink neon lights. Water runs down his face and coat, creating a dramatic and powerful atmosphere. --ar 9:16 --v 6.0",
+                "Retrato Cinematográfico Feminino com Halo Dourado": "Retrato pessoal de alta gama, ultra realista da pessoa na foto fornecida, preservando sua fisionomia, idade aparente, gênero, tom de pele, cabelo, olhos e expressão única. Texturas fotorrealistas de pele, cabelo e tecido. Sujeito principal: Uma mulher com cabelo solto e levemente desordenado, tonalidade castanha escura, iluminada por trás criando um halo dourado sobre fundo escuro. Expressão e pose: rosto girado para a câmera, mirada direta, parcialmente coberta por sombras. Contraluz potente e cálido, luz secundária fria (azul/verde) iluminando o rosto e ombro. Fundo escuro realçando os brilhos do cabelo. Lente fixa 50-85mm, abertura f/1.4-f/2.8. Estilo cinematográfico e dramático. --ar 9:16 --v 6.0",
+                "Retrato Cinematográfico Solitário na Chuva": "Tomada cinematográfica 3:4 de um homem parado em uma calçada chuvosa da cidade. Vestindo camiseta preta grande, calças largas e tênis. Segurando guarda-chuva, chuva intensa ao redor. Iluminação sombria, profundidade de campo rasa, reflexos no pavimento molhado, halo de luz de fundo suave. Aparência de filme estático, cores ligeiramente dessaturadas, foco na emoção e solidão. --ar 3:4 --v 6.0",
+                "Retrato Cinematográfico Estilo Sala de Aula": "Retrato cinematográfico com toque sombrio, jovem asiático em sala de aula vintage mal iluminada. Luz suave amarelo-dourada refletida de uma fresta, criando linhas diagonais sobre o rosto. Sentado sozinho, expressão relaxada, cabelos bagunçados estilo coreano Comma. Suéter verde-militar oversized, calças cargo creme, tênis Converse, fones vermelhos. Fundo com parede off-white, post-its e decoração típica de sala de aula. Atmosfera nostálgica e contemplativa, tons suaves de luz dourada misturados a sombras escuras, sem efeito bokeh, granulação de filme 35mm, ISO 1600, abertura f/5.6, obturador 1/60s. --ar 3:4 --v 6.0",
+                "Selfie Realista com Ação de Hollywood (É necessário fazer o upload do famoso e sua foto)": 
+                "Crie uma selfie realista combinando as imagens enviadas (usuário + figuras de referência). As pessoas podem estar segurando bebida, sorrindo ou abraçando-se. Fundo natural ou urbano, rostos levemente desfocados, iluminação cinematográfica, vertical 9:16. --ar 9:16 --v 6.0",
+                "Selfie Olho de Peixe com Estrelas (É necessário fazer o upload do famoso e sua foto)": 
+                "Selfie olho de peixe vertical 9:16, ultrarrealista 3D combinando imagens enviadas. Pessoas sorrindo, algumas interagindo com o usuário (beliscando rosto, fazendo caretas). Dentro de um elevador ou espaço fechado, iluminação realista, rosto do usuário em destaque, fundo levemente desfocado. --ar 9:16 --v 6.0",
+                "Foto Polaroid com Famosos (É necessário fazer o upload do famoso e sua foto)":
+                "Crie uma imagem estilo Polaroid combinando a foto do usuário e a(s) figura(s) enviada(s). Pessoas podem estar abraçando-se, sorrindo ou interagindo de forma natural. Fundo levemente desfocado, luz suave de flash, atmosfera realista. --ar 3:4 --v 6.0",
+                "Selfie em Festa de Gala (É necessário fazer o upload do famoso e sua foto)": 
+                "Selfie vertical 9:16 do usuário junto com figuras enviadas. Pessoas sorrindo, vestindo trajes elegantes, fundo desfocado com iluminação cinematográfica. --ar 9:16 --v 6.0",
+                "Selfie Urbana com Reflexos Neon (É necessário fazer o upload do famoso e sua foto)": 
+                "Selfie vertical 9:16 do usuário e figuras enviadas em ambiente urbano noturno. Luzes neon refletindo em poças, rostos levemente desfocados, cores vibrantes, atmosfera cinematográfica. --ar 9:16 --v 6.0",
+                "Selfie Dreamy com Luz Suave (É necessário fazer o upload do famoso e sua foto)": 
+                "Selfie vertical 9:16 do usuário e figuras enviadas com iluminação difusa e fundo levemente embaçado. Rostos levemente desfocados, cores suaves, atmosfera etérea, estilo cinematográfico. --ar 9:16 --v 6.0",
+                "Selfie com Luz de Contraluz Dramática (É necessário fazer o upload do famoso e sua foto)": 
+                "Selfie vertical 9:16 do usuário com figuras enviadas, luz intensa atrás criando halo, rostos levemente desfocados, cores quentes, atmosfera cinematográfica. --ar 9:16 --v 6.0"
+            };
 
-
-
+            const estiloSelect = document.getElementById('estilo-imagem');
+            const descricaoInput = document.getElementById('descricao-imagem');
+            const qualidadeSelect = document.getElementById('qualidade-imagem');
+            const gerarBtnImagem = document.getElementById('gerar-prompt-imagem');
+            const outputImagem = document.getElementById('prompt-imagem-output');
+            const copiarBtnImagem = document.getElementById('copiar-prompt-imagem');
+            const descricaoWrapper = descricaoInput.closest('.mb-6');
+            const qualidadeWrapper = qualidadeSelect.closest('.mb-6');
 
             estiloSelect.addEventListener('change', () => {
                 const estilo = estiloSelect.value;
-                const descricaoWrapper = descricaoInput.closest('.mb-6');
-                const qualidadeWrapper = qualidadeSelect.closest('.mb-6');
                 
                 qualidadeSelect.innerHTML = '';
                 qualidadeSelect.disabled = true;
@@ -1232,7 +1304,6 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
                         option.textContent = titulo;
                         qualidadeSelect.appendChild(option);
                     }
-                    
                 } else {
                     descricaoWrapper.classList.remove('hidden');
                     qualidadeWrapper.classList.remove('hidden');
@@ -1303,8 +1374,6 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
                 }, 2000);
             });
             
-            // Lógica para os botões de copiar estáticos (agora que foram removidos do HTML, este bloco não é mais necessário)
-            // Mantendo a compatibilidade, caso você queira adicioná-los novamente.
             document.querySelectorAll('.copiar-prompt-static').forEach(button => {
                 button.addEventListener('click', () => {
                     const textarea = button.previousElementSibling;
@@ -1316,9 +1385,65 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
                     }, 2000);
                 });
             });
+
+            const promptTabs = document.querySelectorAll('#prompt-generator-section .tab-button');
+            const promptContents = document.querySelectorAll('#prompt-generator-section .tab-content');
+            
+            promptTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetId = tab.id.replace('tab-', 'content-');
+                    
+                    promptTabs.forEach(t => {
+                        t.classList.remove('active', 'text-cyan-300', 'border-cyan-300');
+                        t.classList.add('text-slate-400', 'border-transparent', 'hover:text-slate-200', 'hover:border-slate-500');
+                    });
+                    
+                    tab.classList.add('active', 'text-cyan-300', 'border-cyan-300');
+                    tab.classList.remove('text-slate-400', 'border-transparent');
+                    
+                    promptContents.forEach(content => content.classList.add('hidden'));
+                    document.getElementById(targetId).classList.remove('hidden');
+                });
+            });
+
+            const categoriaSelect = document.getElementById('categoria-profissao');
+            const profissaoSelect = document.getElementById('profissao');
+            const gerarBtnProfissao = document.getElementById('gerar-prompt-profissao');
+            const outputProfissao = document.getElementById('prompt-profissao-output');
+            const copiarBtnProfissao = document.getElementById('copiar-prompt-profissao');
+
+            categoriaSelect.addEventListener('change', () => {
+                const categoria = categoriaSelect.value;
+                profissaoSelect.innerHTML = '<option value="">Selecione uma profissão...</option>';
+                profissaoSelect.disabled = !categoria;
+                if (categoria) {
+                    for (const profissao in promptsData[categoria]) {
+                        const option = document.createElement('option');
+                        option.value = profissao;
+                        option.textContent = profissao;
+                        profissaoSelect.appendChild(option);
+                    }
+                }
+            });
+
+            gerarBtnProfissao.addEventListener('click', () => {
+                const categoria = categoriaSelect.value;
+                const profissao = profissaoSelect.value;
+                if (categoria && profissao) {
+                    outputProfissao.value = promptsData[categoria][profissao];
+                } else {
+                    outputProfissao.value = "Por favor, selecione uma categoria e uma profissão.";
+                }
+            });
+
+            copiarBtnProfissao.addEventListener('click', () => {
+                outputProfissao.select();
+                outputProfissao.setSelectionRange(0, 99999);
+                document.execCommand('copy');
+                copiarBtnProfissao.textContent = 'Copiado!';
+                setTimeout(() => {
+                    copiarBtnProfissao.textContent = 'Copiar';
+                }, 2000);
+            });
         });
-    </script>
-</body>
-</html>
-
-
+</script>
