@@ -423,7 +423,7 @@
 
                         <div class="mb-6">
                             <label for="descricao-imagem" class="block text-slate-300 text-sm font-bold mb-2">Descreva a cena desejada:</label>
-                            <textarea id="descricao-imagem" rows="4" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500" placeholder="Ex: Eu na Torre Eiffel ao pôr do sol, ou Eu com o Neymar e Messi sorrindo em uma balada luxuosa."></textarea>
+                            <textarea id="descricao-imagem" rows="4" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500" placeholder="Ex: Utilize 100% da minha imagem para gerar uma foto minha nas ruas de Times Square ."></textarea>
                         </div>
 
                         <div class="mb-6">
@@ -1284,36 +1284,50 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
                 }, 2000);
             });
             
-            // Lógica para a segunda aba: Gerador de Prompts de Imagens
-            const descricaoInput = document.getElementById('descricao-imagem');
-            const estiloSelect = document.getElementById('estilo-imagem');
-            const qualidadeSelect = document.getElementById('qualidade-imagem');
-            const gerarBtnImagem = document.getElementById('gerar-prompt-imagem');
-            const outputImagem = document.getElementById('prompt-imagem-output');
-            const copiarBtnImagem = document.getElementById('copiar-prompt-imagem');
-            
-            gerarBtnImagem.addEventListener('click', () => {
-                const descricao = descricaoInput.value.trim();
-                const estilo = estiloSelect.value;
-                const qualidade = qualidadeSelect.value;
-                
-                if (descricao) {
-                    const prompt = `Utilize 100% da imagem fornecida para gerar a foto: ${descricao}, em estilo ${estilo}${qualidade}.`;
-                    outputImagem.value = prompt;
-                } else {
-                    outputImagem.value = "Por favor, descreva a cena desejada.";
-                }
-            });
+          // Lógica para a segunda aba: Gerador de Prompts de Imagens
+const descricaoInput = document.getElementById('descricao-imagem');
+const estiloSelect = document.getElementById('estilo-imagem');
+const qualidadeSelect = document.getElementById('qualidade-imagem');
+const gerarBtnImagem = document.getElementById('gerar-prompt-imagem');
+const outputImagem = document.getElementById('prompt-imagem-output');
+const copiarBtnImagem = document.getElementById('copiar-prompt-imagem');
 
-            copiarBtnImagem.addEventListener('click', () => {
-                outputImagem.select();
-                outputImagem.setSelectionRange(0, 99999);
-                document.execCommand('copy');
-                copiarBtnImagem.textContent = 'Copiado!';
-                setTimeout(() => {
-                    copiarBtnImagem.textContent = 'Copiar';
-                }, 2000);
-            });
+// Dicionário com modelos de prompts para cada estilo
+const promptsPorEstilo = {
+    "photorealistic": (descricao, qualidade) => `Hyper-realistic, cinematic portrait of a person with ${descricao}, 8K photo, with dramatic studio lighting, soft shadows, sharp focus, capturing fine details and natural skin textures. No filter, no blur, high resolution. --ar 9:16 --v 6.0`,
+    "digital art": (descricao, qualidade) => `Digital art of a person with ${descricao}, in a magical atmosphere, with glowing elements and vibrant colors. Highly detailed, artistic lighting, concept art style. ${qualidade}.`,
+    "cartoon": (descricao, qualidade) => `Animated portrait of a person with ${descricao}, in a vibrant cartoon style. 2D animation, clean lines, colorful, minimalist background, playful expression. ${qualidade}.`,
+    "fantasy art": (descricao, qualidade) => `Epic fantasy art portrait of a person with ${descricao}, in a majestic setting. Dynamic pose, flowing clothes, dramatic lighting, rich colors, intricate details. ${qualidade}.`,
+    "impressionist": (descricao, qualidade) => `Impressionist style painting of a person with ${descricao}. Soft, visible brushstrokes, luminous colors, vibrant lighting, emotional mood. ${qualidade}.`,
+};
+
+gerarBtnImagem.addEventListener('click', () => {
+    const descricao = descricaoInput.value.trim();
+    const estilo = estiloSelect.value;
+    const qualidade = qualidadeSelect.value;
+    
+    if (descricao) {
+        const promptTemplate = promptsPorEstilo[estilo];
+        if (promptTemplate) {
+            const prompt = promptTemplate(descricao, qualidade);
+            outputImagem.value = prompt;
+        } else {
+            outputImagem.value = "Estilo não encontrado. Por favor, selecione um estilo válido.";
+        }
+    } else {
+        outputImagem.value = "Por favor, descreva a cena desejada.";
+    }
+});
+
+copiarBtnImagem.addEventListener('click', () => {
+    outputImagem.select();
+    outputImagem.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+    copiarBtnImagem.textContent = 'Copiado!';
+    setTimeout(() => {
+        copiarBtnImagem.textContent = 'Copiar';
+    }, 2000);
+});
 
              // Lógica para os botões de copiar estáticos
             document.querySelectorAll('.copiar-prompt-static').forEach(button => {
@@ -1331,4 +1345,5 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
     </script>
 </body>
 </html>
+
 
