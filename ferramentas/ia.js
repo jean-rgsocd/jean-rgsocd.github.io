@@ -3,7 +3,7 @@ function runAITool() {
   const text = document.getElementById('ai-input').value;
   let result = "";
   if (tool === "Summarizer") {
-    result = "Summary: " + text.split(" ").slice(0, 12).join(" ") + "...";
+    result = "Summary: " + text.split(" ").slice(0, 20).join(" ") + "...";
   } else if (tool === "Translator") {
     result = "[Translated to English] " + text;
   } else if (tool === "Creative Rewriter") {
