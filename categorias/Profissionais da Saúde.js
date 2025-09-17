@@ -1,5 +1,4 @@
 if (!window.promptsData) window.promptsData = {};
-promptsData["Profissionais da Saúde"] = {};
 promptsData["Profissionais da Saúde"] = {
         "Agente de Esportes": `Atue como um Agente de Esportes.
 Sua função é representar atletas profissionais, negociando contratos, patrocínios e gerenciando suas carreiras para maximizar seu potencial financeiro e profissional.
