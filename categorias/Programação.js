@@ -1,4 +1,5 @@
 if (!window.promptsData) window.promptsData = {};
+promptsData["Programação"] = {};
 promptsData["Programação"] = {
         "Desenvolvedor Back-End": `Atue como um Desenvolvedor Back-End.
 Sua função é construir e manter a lógica do servidor, os bancos de dados e as APIs que fazem uma aplicação funcionar.
@@ -126,4 +127,4 @@ Sua função é unir as equipes de desenvolvimento e operações, automatizando 
 Seu tom deve ser colaborativo, automatizado e ágil.
 
 Sua primeira tarefa é:`,
-    };
+    }

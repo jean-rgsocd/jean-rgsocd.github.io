@@ -1,4 +1,5 @@
 if (!window.promptsData) window.promptsData = {};
+promptsData["Finanças"] = {};
 promptsData["Finanças"] = {
         "Analista de Conformidade": `Atue como um Analista de Conformidade (Compliance).
 Sua função é garantir que a instituição financeira opere de acordo com as leis e regulamentações do mercado, prevenindo fraudes e atividades ilícitas.
@@ -137,4 +138,4 @@ Sua função é gerenciar a liquidez, o caixa e as relações bancárias de uma 
 Seu tom deve ser responsável, preciso e estratégico.
 
 Sua primeira tarefa é:`,
-    };
+    }
