@@ -1,56 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Prompt Generators</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfólio Interativo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <header>
-    <h1>Interactive Prompt Hub</h1>
+<body class="bg-slate-900 text-white">
+  <header class="p-6 bg-slate-800 shadow-md">
+    <h1 class="text-3xl font-bold">Portfólio Interativo</h1>
   </header>
 
-  <main>
+  <main class="p-6">
     <section id="projects">
-      <h2>Available Tools</h2>
-      <div class="project-card" onclick="showSection('profissoes')">
-        <h3>Professions Prompt Generator</h3>
-        <p>Create prompts for different professions (ChatGPT).</p>
-      </div>
-      <div class="project-card" onclick="showSection('imagens')">
-        <h3>Image Prompt Generator</h3>
-        <p>Create prompts for AI image generation (MidJourney, DALL·E).</p>
-      </div>
-      <div class="project-card" onclick="showSection('videos')">
-        <h3>Video Prompt Generator</h3>
-        <p>Create prompts for AI video generation (Runway, Pictory, VEED).</p>
-      </div>
-      <div class="project-card" onclick="showSection('seguranca')">
-        <h3>Web Security Analyzer</h3>
-        <p>Simulated checklist of web security best practices.</p>
-      </div>
-      <div class="project-card" onclick="showSection('ia')">
-        <h3>AI Tools Hub</h3>
-        <p>Summarizer, Translator, and Creative Rewriter.</p>
+      <h2 class="text-2xl font-bold mb-4">Projetos</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="project-card bg-slate-700 p-4 rounded-lg shadow" onclick="showSection('profissoes')">
+          <h3 class="text-xl font-semibold">Gerador de Prompts Profissionais</h3>
+          <p>Crie prompts para diferentes profissões.</p>
+        </div>
+        <div class="project-card bg-slate-700 p-4 rounded-lg shadow" onclick="showSection('imagens')">
+          <h3 class="text-xl font-semibold">Image Prompt Generator</h3>
+          <p>Crie prompts para geração de imagens (MidJourney, DALL·E).</p>
+        </div>
+        <div class="project-card bg-slate-700 p-4 rounded-lg shadow" onclick="showSection('videos')">
+          <h3 class="text-xl font-semibold">Video Prompt Generator</h3>
+          <p>Crie prompts para geração de vídeos (Runway, Pictory, VEED).</p>
+        </div>
+        <div class="project-card bg-slate-700 p-4 rounded-lg shadow" onclick="showSection('seguranca')">
+          <h3 class="text-xl font-semibold">Web Security Analyzer</h3>
+          <p>Checklist simulado de boas práticas de segurança.</p>
+        </div>
+        <div class="project-card bg-slate-700 p-4 rounded-lg shadow" onclick="showSection('ia')">
+          <h3 class="text-xl font-semibold">AI Tools Hub</h3>
+          <p>Summarizer, Translator e Creative Rewriter.</p>
+        </div>
       </div>
     </section>
 
-    <!-- Sections -->
-    <section id="profissoes" class="tool-section hidden">
-      <h2>Professions Prompt Generator</h2>
-      <label>Select a Category:</label>
-      <select id="category"></select>
-      <label>Select a Profession:</label>
-      <select id="profession"></select>
-      <button onclick="generatePrompt()">Generate Prompt</button>
-      <pre id="profession-result"></pre>
+    <!-- Seções -->
+    <section id="profissoes" class="tool-section hidden mt-8">
+      <h2 class="text-2xl font-bold mb-2">Gerador de Prompts Profissionais</h2>
+      <label>Categoria:</label>
+      <select id="category" class="text-black"></select>
+      <label>Profissão:</label>
+      <select id="profession" class="text-black"></select>
+      <button onclick="generatePrompt()" class="bg-blue-500 px-4 py-2 rounded">Gerar</button>
+      <pre id="profession-result" class="bg-slate-800 p-4 mt-2 rounded"></pre>
     </section>
 
-    <section id="imagens" class="tool-section hidden">
-      <h2>Image Prompt Generator</h2>
+    <section id="imagens" class="tool-section hidden mt-8">
+      <h2 class="text-2xl font-bold mb-2">Image Prompt Generator</h2>
       <label>Style:</label>
-      <select id="img-style">
+      <select id="img-style" class="text-black">
         <option>Realistic</option>
         <option>Cartoon</option>
         <option>Cyberpunk</option>
@@ -59,21 +61,21 @@
         <option>Surrealism</option>
       </select>
       <label>Subject:</label>
-      <select id="img-subject">
+      <select id="img-subject" class="text-black">
         <option>Landscape</option>
         <option>Character</option>
         <option>Object</option>
         <option>Sci-Fi Scene</option>
         <option>Architecture</option>
       </select>
-      <button onclick="generateImagePrompt()">Generate Prompt</button>
-      <pre id="img-result"></pre>
+      <button onclick="generateImagePrompt()" class="bg-blue-500 px-4 py-2 rounded">Generate</button>
+      <pre id="img-result" class="bg-slate-800 p-4 mt-2 rounded"></pre>
     </section>
 
-    <section id="videos" class="tool-section hidden">
-      <h2>Video Prompt Generator</h2>
+    <section id="videos" class="tool-section hidden mt-8">
+      <h2 class="text-2xl font-bold mb-2">Video Prompt Generator</h2>
       <label>Type:</label>
-      <select id="vid-type">
+      <select id="vid-type" class="text-black">
         <option>Commercial</option>
         <option>Educational</option>
         <option>Storytelling</option>
@@ -81,38 +83,38 @@
         <option>Documentary</option>
       </select>
       <label>Tone:</label>
-      <select id="vid-tone">
+      <select id="vid-tone" class="text-black">
         <option>Professional</option>
         <option>Inspiring</option>
         <option>Fun</option>
         <option>Dramatic</option>
       </select>
-      <button onclick="generateVideoPrompt()">Generate Prompt</button>
-      <pre id="vid-result"></pre>
+      <button onclick="generateVideoPrompt()" class="bg-blue-500 px-4 py-2 rounded">Generate</button>
+      <pre id="vid-result" class="bg-slate-800 p-4 mt-2 rounded"></pre>
     </section>
 
-    <section id="seguranca" class="tool-section hidden">
-      <h2>Web Security Analyzer</h2>
-      <input type="text" id="sec-url" placeholder="Enter website URL" />
-      <button onclick="analyzeSecurity()">Analyze</button>
-      <pre id="sec-result"></pre>
+    <section id="seguranca" class="tool-section hidden mt-8">
+      <h2 class="text-2xl font-bold mb-2">Web Security Analyzer</h2>
+      <input type="text" id="sec-url" class="text-black" placeholder="Enter website URL" />
+      <button onclick="analyzeSecurity()" class="bg-blue-500 px-4 py-2 rounded">Analyze</button>
+      <pre id="sec-result" class="bg-slate-800 p-4 mt-2 rounded"></pre>
     </section>
 
-    <section id="ia" class="tool-section hidden">
-      <h2>AI Tools Hub</h2>
+    <section id="ia" class="tool-section hidden mt-8">
+      <h2 class="text-2xl font-bold mb-2">AI Tools Hub</h2>
       <label>Tool:</label>
-      <select id="ai-tool">
+      <select id="ai-tool" class="text-black">
         <option>Summarizer</option>
         <option>Translator</option>
         <option>Creative Rewriter</option>
       </select>
-      <textarea id="ai-input" placeholder="Enter your text here"></textarea>
-      <button onclick="runAITool()">Run</button>
-      <pre id="ai-result"></pre>
+      <textarea id="ai-input" class="text-black w-full h-24 mt-2"></textarea>
+      <button onclick="runAITool()" class="bg-blue-500 px-4 py-2 rounded">Run</button>
+      <pre id="ai-result" class="bg-slate-800 p-4 mt-2 rounded"></pre>
     </section>
   </main>
 
-  <!-- JS imports -->
+  <!-- Imports -->
   <script src="categorias/profissoes.js"></script>
   <script src="ferramentas/imagens.js"></script>
   <script src="ferramentas/videos.js"></script>
