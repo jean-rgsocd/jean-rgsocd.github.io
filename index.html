@@ -1828,7 +1828,7 @@ gameSelect.addEventListener('change', () => {
                 });
             });
         });
-       // --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO DINÂMICA) ---
+      // --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO OTIMIZADA) ---
 
 const showBettingButton = document.getElementById('showBettingButton');
 const hideBettingButton = document.getElementById('hideBettingButton');
@@ -1847,21 +1847,30 @@ let allGamesData = {};
 
 // Função para buscar os jogos da nossa API
 async function fetchGames() {
+    // Evita buscar novamente se já tivermos os dados
+    if (Object.keys(allGamesData).length > 0 && !allGamesData.Erro) {
+        return;
+    }
+    
     const apiUrl = 'https://analisador-apostas.onrender.com/jogos-do-dia';
+    leagueSelect.innerHTML = '<option value="">Carregando ligas...</option>'; // Mostra mensagem de carregamento
     try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
-            throw new Error('Não foi possível conectar ao servidor de análise.');
+            throw new Error('Falha ao buscar dados da API.');
         }
         const data = await response.json();
-        allGamesData = data; // Guarda os dados globalmente
 
-        // Limpa o menu de ligas
+        if (data.Erro || data.Info) {
+            const errorMessage = data.Erro ? data.Erro[0].home : data.Info[0].home;
+            throw new Error(errorMessage);
+        }
+        
+        allGamesData = data;
         leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
 
-        // Preenche o menu com os nomes das ligas
         for (const leagueName in data) {
-            if (data.hasOwnProperty(leagueName)) {
+            if (data.hasOwnProperty(leagueName) && data[leagueName].length > 0) {
                 const option = document.createElement('option');
                 option.value = leagueName;
                 option.textContent = leagueName;
@@ -1869,31 +1878,34 @@ async function fetchGames() {
             }
         }
     } catch (error) {
-        leagueSelect.innerHTML = `<option value="">${error.message}</option>`;
+        leagueSelect.innerHTML = `<option value="">Erro: ${error.message}</option>`;
     }
 }
 
-// Quando o botão "Ver Projeto" do Analisador de Apostas é clicado
+// Quando o botão "Ver Projeto" é clicado, ele APENAS MOSTRA o módulo.
 showBettingButton.addEventListener('click', (e) => {
     e.preventDefault();
     projectListContainer.classList.add('hidden');
     bettingAnalyzer.classList.remove('hidden');
     window.location.href = '#analisador-apostas';
-    fetchGames(); // Chama a função para buscar os jogos
+    // A chamada fetchGames() foi REMOVIDA daqui.
 });
+
+// **A MÁGICA ACONTECE AQUI**
+// Adiciona um listener que só roda UMA ÚNICA VEZ na primeira vez que o usuário clica no menu.
+leagueSelect.addEventListener('click', fetchGames, { once: true });
 
 // Quando o usuário seleciona uma LIGA
 leagueSelect.addEventListener('change', () => {
     const selectedLeague = leagueSelect.value;
-    gameSelect.innerHTML = '<option value="">Selecione um jogo</option>'; // Limpa o menu de jogos
-    bettingResultsDiv.classList.add('hidden'); // Esconde resultados antigos
+    gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
+    bettingResultsDiv.classList.add('hidden');
 
     if (selectedLeague && allGamesData[selectedLeague]) {
         gameSelect.disabled = false;
-        // Preenche o menu de jogos com as partidas da liga selecionada
         allGamesData[selectedLeague].forEach((game, index) => {
             const option = document.createElement('option');
-            option.value = index; // Usa o índice do jogo como valor
+            option.value = index;
             option.textContent = `${game.home} vs ${game.away} (${game.time})`;
             gameSelect.appendChild(option);
         });
@@ -1909,13 +1921,9 @@ gameSelect.addEventListener('change', () => {
 
     if (selectedLeague && selectedGameIndex !== "") {
         const selectedGame = allGamesData[selectedLeague][selectedGameIndex];
-        
-        // Simulação de análise para o jogo selecionado
-        // (No futuro, poderíamos chamar o endpoint /analyze aqui)
         bettingStatusDiv.classList.add('hidden');
         bettingResultsDiv.classList.remove('hidden');
         
-        // Gera dicas "padrão" baseadas nos nomes dos times
         let htmlResult = `<h3 class="font-bold text-xl text-cyan-300">Análise Rápida para: ${selectedGame.home} vs ${selectedGame.away}</h3>`;
         htmlResult += `
             <div class="p-4 border rounded-lg border-slate-700 bg-slate-900">
