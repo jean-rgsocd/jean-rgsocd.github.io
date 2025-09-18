@@ -1644,7 +1644,7 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
                 });
             });
 
-           // Lógica para mostrar/esconder os projetos integrados
+  // Lógica para mostrar/esconder os projetos integrados
 const projectListContainer = document.getElementById('project-list-container');
 const analyzerSection = document.getElementById('analisador-seguranca-web');
 const promptsSection = document.getElementById('prompt-generator-section');
@@ -1657,49 +1657,34 @@ const hidePromptsButton = document.getElementById('hidePromptsButton');
 const showBettingButton = document.getElementById('showBettingButton');
 const hideBettingButton = document.getElementById('hideBettingButton');
 
-// Lógica para o Analisador de Segurança
-showScannerButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    projectListContainer.classList.add('hidden');
-    analyzerSection.classList.remove('hidden');
-    window.location.href = '#analisador-seguranca-web';
-});
+showScannerButton.addEventListener('click', (e) => { e.preventDefault(); projectListContainer.classList.add('hidden'); analyzerSection.classList.remove('hidden'); window.location.href = '#analisador-seguranca-web'; });
+hideScannerButton.addEventListener('click', () => { analyzerSection.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
+showPromptsButton.addEventListener('click', (e) => { e.preventDefault(); projectListContainer.classList.add('hidden'); promptsSection.classList.remove('hidden'); window.location.href = '#prompt-generator-section'; });
+hidePromptsButton.addEventListener('click', () => { promptsSection.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
+showBettingButton.addEventListener('click', (e) => { e.preventDefault(); projectListContainer.classList.add('hidden'); bettingAnalyzer.classList.remove('hidden'); window.location.href = '#analisador-apostas'; });
+hideBettingButton.addEventListener('click', () => { bettingAnalyzer.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
 
-hideScannerButton.addEventListener('click', () => {
-    analyzerSection.classList.add('hidden');
-    projectListContainer.classList.remove('hidden');
-    window.location.href = '#projetos';
-});
 
-// Lógica para o Gerador de Prompts
-showPromptsButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    projectListContainer.classList.add('hidden');
-    promptsSection.classList.remove('hidden');
-    window.location.href = '#prompt-generator-section';
-});
-
-hidePromptsButton.addEventListener('click', () => {
-    promptsSection.classList.add('hidden');
-    projectListContainer.classList.remove('hidden');
-    window.location.href = '#projetos';
-});
-
-// --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO DINÂMICA) ---
+// --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO MULTI-ESPORTIVA) ---
+const sportSelect = document.getElementById('sport-select');
 const leagueSelect = document.getElementById('league-select');
 const gameSelect = document.getElementById('game-select');
-const bettingStatusDiv = document.getElementById('bettingScanStatus');
 const bettingResultsDiv = document.getElementById('bettingResults');
 let allGamesData = {};
 
-async function fetchGames() {
-    const apiUrl = 'https://analisador-apostas.onrender.com/jogos-do-dia';
-    leagueSelect.innerHTML = '<option value="">Carregando ligas...</option>'; // Mostra mensagem de carregamento
+async function fetchGamesBySport(sport) {
+    if (!sport) return;
+    
+    const apiUrl = `https://analisador-apostas.onrender.com/jogos-do-dia?esporte=${sport}`;
+    leagueSelect.innerHTML = '<option value="">Carregando ligas...</option>';
+    leagueSelect.disabled = true;
+    gameSelect.innerHTML = '<option value="">Selecione uma liga primeiro</option>';
+    gameSelect.disabled = true;
+    bettingResultsDiv.classList.add('hidden');
+
     try {
         const response = await fetch(apiUrl);
-        if (!response.ok) {
-            throw new Error('Falha ao buscar dados da API.');
-        }
+        if (!response.ok) throw new Error('Falha na API.');
         const data = await response.json();
 
         if (data.Erro || data.Info) {
@@ -1709,7 +1694,6 @@ async function fetchGames() {
         
         allGamesData = data;
         leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
-
         for (const leagueName in data) {
             if (data.hasOwnProperty(leagueName) && data[leagueName].length > 0) {
                 const option = document.createElement('option');
@@ -1718,26 +1702,19 @@ async function fetchGames() {
                 leagueSelect.appendChild(option);
             }
         }
+        leagueSelect.disabled = false;
     } catch (error) {
         leagueSelect.innerHTML = `<option value="">Erro: ${error.message}</option>`;
     }
 }
 
-showBettingButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    projectListContainer.classList.add('hidden');
-    bettingAnalyzer.classList.remove('hidden');
-    window.location.href = '#analisador-apostas';
-    fetchGames();
+// Quando o usuário seleciona um ESPORTE
+sportSelect.addEventListener('change', () => {
+    const selectedSport = sportSelect.value;
+    fetchGamesBySport(selectedSport);
 });
 
-hideBettingButton.addEventListener('click', () => {
-    bettingAnalyzer.classList.add('hidden');
-    projectListContainer.classList.remove('hidden');
-    window.location.href = '#projetos';
-});
-
-
+// Quando o usuário seleciona uma LIGA
 leagueSelect.addEventListener('change', () => {
     const selectedLeague = leagueSelect.value;
     gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
@@ -1756,13 +1733,13 @@ leagueSelect.addEventListener('change', () => {
     }
 });
 
+// Quando o usuário seleciona um JOGO
 gameSelect.addEventListener('change', () => {
     const selectedLeague = leagueSelect.value;
     const selectedGameIndex = gameSelect.value;
 
     if (selectedLeague && selectedGameIndex !== "") {
         const selectedGame = allGamesData[selectedLeague][selectedGameIndex];
-        bettingStatusDiv.classList.add('hidden');
         bettingResultsDiv.classList.remove('hidden');
         
         let htmlResult = `<h3 class="font-bold text-xl text-cyan-300">Análise Rápida para: ${selectedGame.home} vs ${selectedGame.away}</h3>`;
@@ -1781,7 +1758,6 @@ gameSelect.addEventListener('change', () => {
         bettingResultsDiv.classList.add('hidden');
     }
 });
-            
             // Lógica do Gerador de Prompts (Profissões)
             const categoriaSelect = document.getElementById('categoria-profissao');
             const profissaoSelect = document.getElementById('profissao');
