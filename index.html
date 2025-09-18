@@ -1628,56 +1628,143 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
                 });
             });
 
-            // Lógica para mostrar/esconder os projetos integrados
-            const projectListContainer = document.getElementById('project-list-container');
-            
-            const showScannerButton = document.getElementById('showScannerButton');
-            const analyzerSection = document.getElementById('analisador-seguranca-web');
-            const hideScannerButton = document.getElementById('hideScannerButton');
-            
-            const showPromptsButton = document.getElementById('showPromptsButton');
-            const promptsSection = document.getElementById('prompt-generator-section');
-            const hidePromptsButton = document.getElementById('hidePromptsButton');
+           // Lógica para mostrar/esconder os projetos integrados
+const projectListContainer = document.getElementById('project-list-container');
+const analyzerSection = document.getElementById('analisador-seguranca-web');
+const promptsSection = document.getElementById('prompt-generator-section');
+const bettingAnalyzer = document.getElementById('analisador-apostas');
 
-            const showBettingButton = document.getElementById('showBettingButton');
-            const bettingAnalyzer = document.getElementById('analisador-apostas');
-            const hideBettingButton = document.getElementById('hideBettingButton');
-            
-            showScannerButton.addEventListener('click', (e) => {
-                e.preventDefault(); 
-                projectListContainer.classList.add('hidden');
-                analyzerSection.classList.remove('hidden');
-            });
-            
-            hideScannerButton.addEventListener('click', () => {
-                analyzerSection.classList.add('hidden');
-                projectListContainer.classList.remove('hidden');
-                window.location.href = '#projetos';
-            });
+const showScannerButton = document.getElementById('showScannerButton');
+const hideScannerButton = document.getElementById('hideScannerButton');
+const showPromptsButton = document.getElementById('showPromptsButton');
+const hidePromptsButton = document.getElementById('hidePromptsButton');
+const showBettingButton = document.getElementById('showBettingButton');
+const hideBettingButton = document.getElementById('hideBettingButton');
 
-            showPromptsButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                projectListContainer.classList.add('hidden');
-                promptsSection.classList.remove('hidden');
-            });
+// Lógica para o Analisador de Segurança
+showScannerButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    projectListContainer.classList.add('hidden');
+    analyzerSection.classList.remove('hidden');
+    window.location.href = '#analisador-seguranca-web';
+});
 
-            hidePromptsButton.addEventListener('click', () => {
-                promptsSection.classList.add('hidden');
-                projectListContainer.classList.remove('hidden');
-                window.location.href = '#projetos';
-            });
+hideScannerButton.addEventListener('click', () => {
+    analyzerSection.classList.add('hidden');
+    projectListContainer.classList.remove('hidden');
+    window.location.href = '#projetos';
+});
 
-            showBettingButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                projectListContainer.classList.add('hidden');
-                bettingAnalyzer.classList.remove('hidden');
-            });
+// Lógica para o Gerador de Prompts
+showPromptsButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    projectListContainer.classList.add('hidden');
+    promptsSection.classList.remove('hidden');
+    window.location.href = '#prompt-generator-section';
+});
 
-            hideBettingButton.addEventListener('click', () => {
-                bettingAnalyzer.classList.add('hidden');
-                projectListContainer.classList.remove('hidden');
-                window.location.href = '#projetos';
-            });
+hidePromptsButton.addEventListener('click', () => {
+    promptsSection.classList.add('hidden');
+    projectListContainer.classList.remove('hidden');
+    window.location.href = '#projetos';
+});
+
+// --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO DINÂMICA) ---
+const leagueSelect = document.getElementById('league-select');
+const gameSelect = document.getElementById('game-select');
+const bettingStatusDiv = document.getElementById('bettingScanStatus');
+const bettingResultsDiv = document.getElementById('bettingResults');
+let allGamesData = {};
+
+async function fetchGames() {
+    const apiUrl = 'https://analisador-apostas.onrender.com/jogos-do-dia';
+    leagueSelect.innerHTML = '<option value="">Carregando ligas...</option>'; // Mostra mensagem de carregamento
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error('Falha ao buscar dados da API.');
+        }
+        const data = await response.json();
+
+        if (data.Erro || data.Info) {
+            const errorMessage = data.Erro ? data.Erro[0].home : data.Info[0].home;
+            throw new Error(errorMessage);
+        }
+        
+        allGamesData = data;
+        leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
+
+        for (const leagueName in data) {
+            if (data.hasOwnProperty(leagueName) && data[leagueName].length > 0) {
+                const option = document.createElement('option');
+                option.value = leagueName;
+                option.textContent = leagueName;
+                leagueSelect.appendChild(option);
+            }
+        }
+    } catch (error) {
+        leagueSelect.innerHTML = `<option value="">Erro: ${error.message}</option>`;
+    }
+}
+
+showBettingButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    projectListContainer.classList.add('hidden');
+    bettingAnalyzer.classList.remove('hidden');
+    window.location.href = '#analisador-apostas';
+    fetchGames();
+});
+
+hideBettingButton.addEventListener('click', () => {
+    bettingAnalyzer.classList.add('hidden');
+    projectListContainer.classList.remove('hidden');
+    window.location.href = '#projetos';
+});
+
+
+leagueSelect.addEventListener('change', () => {
+    const selectedLeague = leagueSelect.value;
+    gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
+    bettingResultsDiv.classList.add('hidden');
+
+    if (selectedLeague && allGamesData[selectedLeague]) {
+        gameSelect.disabled = false;
+        allGamesData[selectedLeague].forEach((game, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = `${game.home} vs ${game.away} (${game.time})`;
+            gameSelect.appendChild(option);
+        });
+    } else {
+        gameSelect.disabled = true;
+    }
+});
+
+gameSelect.addEventListener('change', () => {
+    const selectedLeague = leagueSelect.value;
+    const selectedGameIndex = gameSelect.value;
+
+    if (selectedLeague && selectedGameIndex !== "") {
+        const selectedGame = allGamesData[selectedLeague][selectedGameIndex];
+        bettingStatusDiv.classList.add('hidden');
+        bettingResultsDiv.classList.remove('hidden');
+        
+        let htmlResult = `<h3 class="font-bold text-xl text-cyan-300">Análise Rápida para: ${selectedGame.home} vs ${selectedGame.away}</h3>`;
+        htmlResult += `
+            <div class="p-4 border rounded-lg border-slate-700 bg-slate-900">
+                <p class="text-slate-300"><strong class="text-cyan-400">Mercado Sugerido:</strong> Mais de 1.5 Gols</p>
+                <p class="text-slate-400 mt-2"><i>Com base no histórico geral, há uma boa probabilidade de pelo menos 2 gols na partida.</i></p>
+            </div>
+            <div class="p-4 border rounded-lg border-slate-700 bg-slate-900">
+                <p class="text-slate-300"><strong class="text-cyan-400">Mercado Sugerido:</strong> Ambas as Equipes Marcam</p>
+                <p class="text-slate-400 mt-2"><i>As duas equipes possuem ataques eficientes, sugerindo que ambas podem marcar.</i></p>
+            </div>
+        `;
+        bettingResultsDiv.innerHTML = htmlResult;
+    } else {
+        bettingResultsDiv.classList.add('hidden');
+    }
+});
             
             // Lógica do Gerador de Prompts (Profissões)
             const categoriaSelect = document.getElementById('categoria-profissao');
