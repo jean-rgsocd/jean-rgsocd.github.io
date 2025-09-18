@@ -346,7 +346,64 @@
                     </div>
                 </div>
             </div>
+<div id="betting-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
+    <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Analisador+de+Apostas" alt="Imagem do projeto Analisador de Apostas" class="w-full h-auto object-cover border-b border-slate-700">
+    <div class="p-8">
+        <h3 class="font-bold text-xl mb-2 text-slate-100">Analisador de Apostas Esportivas</h3>
+        <p class="text-slate-400 mb-6">
+            Ferramenta que utiliza uma API em Python para fornecer insights e dicas de apostas baseadas em dados simulados de partidas, demonstrando integração front-end com back-end.
+        </p>
+        <div class="mb-6">
+            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span>
+            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">TailwindCSS</span>
+            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
+            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Python</span>
+            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">FastAPI</span>
+        </div>
+        <button id="showBettingButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+            Ver Projeto
+        </button>
+    </div>
+</div>
+<div id="analisador-apostas" class="hidden py-12">
+    <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 rounded-lg shadow-lg border border-slate-700">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="font-bold text-xl text-slate-100">Analisador de Apostas Esportivas</h3>
+            <button id="hideBettingButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+                Retornar
+            </button>
+        </div>
+        <p class="text-slate-400 mb-6">Esta ferramenta é uma demonstração de integração de um frontend (HTML/JS) com um backend (Python/FastAPI). Os dados e probabilidades são simulados para fins educacionais.</p>
+        
+        <div class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" id="home_team" value="Newcastle" class="px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
+                <input type="text" id="away_team" value="Barcelona" class="px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
+            </div>
+             <input type="text" id="competition" value="UEFA Champions League" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+               <select id="status" class="px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
+                    <option value="Pre-game">Pré-Jogo</option>
+                    <option value="1st Half" selected>1º Tempo</option>
+                    <option value="2nd Half">2º Tempo</option>
+                </select>
+                <input type="number" id="minute" value="28" class="px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
+            </div>
+            <button id="analyzeBetsButton" class="w-full px-6 py-2 rounded-lg bg-cyan-500 text-slate-900 font-bold hover:bg-cyan-400 transition-colors">
+                📊 Iniciar Análise
+            </button>
+        </div>
 
+        <div id="bettingScanStatus" class="mt-8 hidden">
+            <p id="bettingStatusMessage" class="text-center text-lg text-slate-400">Analisando... 🧠</p>
+        </div>
+        <div id="bettingResults" class="mt-8 space-y-4 hidden">
+            </div>
+    </div>
+</div>
+            
+            
+            
             <div id="prompt-generator-section" class="hidden py-12">
                 <div class="max-w-4xl mx-auto bg-slate-800/50 rounded-lg shadow-lg border border-slate-700 p-8">
                     <div class="flex justify-between items-center mb-6">
@@ -1676,6 +1733,86 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
                 });
             });
         });
+        // --- LÓGICA PARA O ANALISADOR DE APOSTAS ---
+
+// Botões para mostrar/esconder
+const showBettingButton = document.getElementById('showBettingButton');
+const hideBettingButton = document.getElementById('hideBettingButton');
+const bettingAnalyzer = document.getElementById('analisador-apostas');
+
+// Cards dos projetos
+const scannerCard = document.getElementById('scanner-project-card');
+const bettingCard = document.getElementById('betting-project-card');
+
+
+showBettingButton.addEventListener('click', () => {
+    bettingAnalyzer.classList.remove('hidden');
+    scannerCard.classList.add('hidden');
+    bettingCard.classList.add('hidden');
+});
+
+hideBettingButton.addEventListener('click', () => {
+    bettingAnalyzer.classList.add('hidden');
+    scannerCard.classList.remove('hidden');
+    bettingCard.classList.remove('hidden');
+});
+
+// Botão de análise
+const analyzeBetsButton = document.getElementById('analyzeBetsButton');
+
+analyzeBetsButton.addEventListener('click', async () => {
+    const apiUrl = 'https://analisador-apostas.onrender.com/analyze';
+
+    const statusDiv = document.getElementById('bettingScanStatus');
+    const resultsDiv = document.getElementById('bettingResults');
+    
+    statusDiv.classList.remove('hidden');
+    resultsDiv.classList.add('hidden');
+    resultsDiv.innerHTML = ''; // Limpa resultados anteriores
+
+    const matchData = {
+        home_team: document.getElementById("home_team").value,
+        away_team: document.getElementById("away_team").value,
+        competition: document.getElementById("competition").value,
+        status: document.getElementById("status").value,
+        minute: parseInt(document.getElementById("minute").value)
+    };
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(matchData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro de comunicação com a API: ' + response.status);
+        }
+
+        const data = await response.json();
+        
+        let htmlResult = `<h3 class="font-bold text-xl text-cyan-300">${data.match_title}</h3>`;
+        
+        data.top_tips.forEach(tip => {
+            htmlResult += `
+                <div class="p-4 border rounded-lg border-slate-700 bg-slate-900">
+                    <p class="text-slate-300"><strong class="text-cyan-400">Mercado:</strong> ${tip.market}</p>
+                    <p class="text-slate-300"><strong class="text-cyan-400">Probabilidade:</strong> ${tip.probability_pct}%</p>
+                    <p class="text-slate-400 mt-2"><i>${tip.justification}</i></p>
+                </div>
+            `;
+        });
+
+        resultsDiv.innerHTML = htmlResult;
+        resultsDiv.classList.remove('hidden');
+
+    } catch (error) {
+        resultsDiv.innerHTML = `<p class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300"><strong>Falha na análise:</strong> ${error.message}</p>`;
+        resultsDiv.classList.remove('hidden');
+    } finally {
+        statusDiv.classList.add('hidden');
+    }
+});
     </script>
 </body>
 </html>
