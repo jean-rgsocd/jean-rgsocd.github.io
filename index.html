@@ -368,25 +368,35 @@
                 Retornar
             </button>
         </div>
-        <p class="text-slate-400 mb-6">Selecione uma liga para ver os jogos disponíveis para hoje. A análise utiliza dados de uma API em tempo real para fornecer insights.</p>
+        <p class="text-slate-400 mb-6">Selecione um esporte e uma liga para ver os jogos disponíveis para hoje. A análise utiliza dados de uma API em tempo real.</p>
         
         <div class="space-y-4">
             
             <div class="form-group">
-                <label for="league-select" class="block text-slate-300 text-sm font-bold mb-2">1. Escolha a Liga:</label>
-                <select id="league-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
-                    <option value="">Carregando ligas...</option>
+                <label for="sport-select" class="block text-slate-300 text-sm font-bold mb-2">1. Escolha o Esporte:</label>
+                <select id="sport-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
+                    <option value="">Selecione um esporte</option>
+                    <option value="futebol">Futebol</option>
+                    <option value="basquete">Basquete</option>
+                    <option value="nfl">Futebol Americano (NFL)</option>
+                    </select>
+            </div>
+
+            <div class="form-group">
+                <label for="league-select" class="block text-slate-300 text-sm font-bold mb-2">2. Escolha a Liga:</label>
+                <select id="league-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
+                    <option value="">Selecione um esporte primeiro</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="game-select" class="block text-slate-300 text-sm font-bold mb-2">2. Escolha o Jogo:</label>
+                <label for="game-select" class="block text-slate-300 text-sm font-bold mb-2">3. Escolha o Jogo:</label>
                 <select id="game-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
                     <option value="">Selecione uma liga primeiro</option>
                 </select>
             </div>
             
-            </div>
+        </div>
 
         <div id="bettingScanStatus" class="mt-8 hidden">
             <p id="bettingStatusMessage" class="text-center text-lg text-slate-400">Analisando... 🧠</p>
