@@ -418,51 +418,58 @@
         <p class="text-slate-400 mb-6">Selecione um esporte e uma liga para ver os jogos disponíveis para hoje. A análise utiliza dados de uma API em tempo real.</p>
         
         <div class="space-y-4">
-            
-            <div class="form-group">
-                <label for="sport-select" class="block text-slate-300 text-sm font-bold mb-2">1. Escolha o Esporte:</label>
-                <select id="sport-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
-                    <option value="">Selecione um esporte</option>
-                    <option value="football">Futebol</option>
-                    <option value="basketball">Basquete (Outras Ligas)</option>
-                    <option value="nba">Basquete (NBA)</option>
-                    <option value="nfl">Futebol Americano (NFL)</option>
-                    <option value="baseball">Baseball</option>
-                    <option value="formula-1">Fórmula 1</option>
-                    <option value="handball">Handebol</option>
-                    <option value="hockey">Hóquei</option>
-                    <option value="mma">MMA</option>
-                    <option value="rugby">Rugby</option>
-                    <option value="volleyball">Vôlei</option>
-                </select>
-            </div>
-            <div id="country-selector-group" class="form-group">
-    <label for="country-select" class="block text-slate-300 text-sm font-bold mb-2">2. Escolha o País:</label>
-    <select id="country-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
-        <option value="">Selecione um esporte primeiro</option>
-    </select>
+        <div class="form-group">
+  <label for="sport-select" class="block text-slate-300 text-sm font-bold mb-2">1. Escolha o Esporte:</label>
+  <select id="sport-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
+      <option value="">Selecione um esporte</option>
+      <option value="football">Futebol</option>
+      <option value="basketball">Basquete (Outras Ligas)</option>
+      <option value="nba">Basquete (NBA)</option>
+      <option value="nfl">Futebol Americano (NFL)</option>
+      <option value="baseball">Baseball</option>
+      <option value="formula-1">Fórmula 1</option>
+      <option value="handball">Handebol</option>
+      <option value="hockey">Hóquei</option>
+      <option value="mma">MMA</option>
+      <option value="rugby">Rugby</option>
+      <option value="volleyball">Vôlei</option>
+  </select>
 </div>
 
-            <div id="league-selector-group" class="form-group">
-                <label for="league-select" class="block text-slate-300 text-sm font-bold mb-2">2. Escolha a Liga:</label>
-                <select id="league-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
-                    <option value="">Selecione um esporte primeiro</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="game-select" class="block text-slate-300 text-sm font-bold mb-2">3. Escolha o Jogo:</label>
-                <select id="game-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
-                    <option value="">Selecione uma liga primeiro</option>
-                </select>
-            </div>
-            
-        </div>
-
-        <div id="bettingResults" class="mt-8 space-y-4 hidden"></div>
-    </div>
+<div id="country-selector-group" class="form-group">
+  <label for="country-select" class="block text-slate-300 text-sm font-bold mb-2">2. Escolha o País:</label>
+  <select id="country-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
+      <option value="">Selecione um esporte primeiro</option>
+  </select>
 </div>
-          
+
+<div id="league-selector-group" class="form-group">
+  <label for="league-select" class="block text-slate-300 text-sm font-bold mb-2">2. Escolha a Liga:</label>
+  <select id="league-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
+      <option value="">Selecione um esporte primeiro</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label for="game-select" class="block text-slate-300 text-sm font-bold mb-2">3. Escolha o Jogo:</label>
+
+  <!-- campo de busca para filtrar jogos -->
+  <input
+    type="text"
+    id="searchGame"
+    placeholder="Digite parte do nome do time ou jogo..."
+    class="w-full px-4 py-2 mb-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400"
+    autocomplete="off"
+  />
+
+  <!-- dropdown único de jogos -->
+  <select id="game-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
+    <option value="">Selecione uma liga primeiro</option>
+  </select>
+</div>
+
+<div id="bettingResults" class="mt-8 space-y-4 hidden"></div>
+
             <div id="prompt-generator-section" class="hidden py-12">
                 <div class="max-w-4xl mx-auto bg-slate-800/50 rounded-lg shadow-lg border border-slate-700 p-8">
                     <div class="flex justify-between items-center mb-6">
@@ -1941,6 +1948,56 @@ gameSelect.addEventListener('change', () => {
         });
     });
 });
+  // ===== Filtro/Autocomplete simples para o select de jogos =====
+(function () {
+  const searchInput = document.getElementById('searchGame');
+  const gameSelect = document.getElementById('game-select');
+
+  if (!searchInput || !gameSelect) return;
+
+  // filtrar opções exibidas ao digitar
+  searchInput.addEventListener('input', () => {
+    const filter = searchInput.value.trim().toLowerCase();
+
+    for (let i = 0; i < gameSelect.options.length; i++) {
+      const opt = gameSelect.options[i];
+      const txt = (opt.text || '').toLowerCase();
+      opt.style.display = (filter === '' || txt.includes(filter)) ? '' : 'none';
+    }
+
+    // selecionar automaticamente o primeiro visível (se houver) e disparar change
+    const firstVisible = [...gameSelect.options].find(o => o.style.display !== 'none' && o.value);
+    if (firstVisible) {
+      gameSelect.value = firstVisible.value;
+      gameSelect.dispatchEvent(new Event('change')); // atualiza análise automaticamente
+    }
+  });
+
+  // quando a lista de jogos for atualizada pelo backend (loadGamesByLeague), é bom limpar o filtro
+  try {
+    if (typeof leagueSelect !== 'undefined' && leagueSelect) {
+      leagueSelect.addEventListener('change', () => {
+        searchInput.value = '';
+        for (let opt of gameSelect.options) opt.style.display = '';
+      });
+    }
+    if (typeof countrySelect !== 'undefined' && countrySelect) {
+      countrySelect.addEventListener('change', () => {
+        searchInput.value = '';
+        for (let opt of gameSelect.options) opt.style.display = '';
+      });
+    }
+    if (typeof sportSelect !== 'undefined' && sportSelect) {
+      sportSelect.addEventListener('change', () => {
+        searchInput.value = '';
+        for (let opt of gameSelect.options) opt.style.display = '';
+      });
+    }
+  } catch (e) {
+    // não faz nada se as variáveis não existirem no escopo
+  }
+})();
+   
     </script>
  </body>
 </html>
