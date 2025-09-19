@@ -1981,12 +1981,12 @@ function attachFilter(inputId, selectId, extraResetSelectors = []) {
       opt.style.display = (filter === '' || txt.includes(filter)) ? '' : 'none';
     }
 
-    // Selecionar automaticamente o primeiro visível
-    const firstVisible = [...selectEl.options].find(o => o.style.display !== 'none' && o.value);
-    if (firstVisible) {
-      selectEl.value = firstVisible.value;
-      selectEl.dispatchEvent(new Event('change'));
-    }
+   // Apenas seleciona o primeiro visível, mas NÃO dispara change automaticamente
+const firstVisible = [...selectEl.options].find(o => o.style.display !== 'none' && o.value);
+if (firstVisible) {
+  selectEl.value = firstVisible.value;
+}
+
   });
 
   // Resetar filtro quando mudar um seletor pai (ex: esporte, país)
