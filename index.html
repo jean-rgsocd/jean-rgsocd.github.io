@@ -1829,117 +1829,102 @@ gameSelect.addEventListener('change', () => fetchAndDisplayAnalysis(gameSelect.v
                 });
             });
         });
-      // --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO OTIMIZADA) ---
-
-const showBettingButton = document.getElementById('showBettingButton');
-const hideBettingButton = document.getElementById('hideBettingButton');
-const bettingAnalyzer = document.getElementById('analisador-apostas');
-
-// Menus de seleção
+    // --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO FINAL CORRIGIDA) ---
+const sportSelect = document.getElementById('sport-select');
 const leagueSelect = document.getElementById('league-select');
 const gameSelect = document.getElementById('game-select');
-
-// Divs de status e resultados
-const bettingStatusDiv = document.getElementById('bettingScanStatus');
 const bettingResultsDiv = document.getElementById('bettingResults');
-
-// Variável para guardar os dados dos jogos vindos da API
 let allGamesData = {};
 
-// Função para buscar os jogos da nossa API
-async function fetchGames() {
-    // Evita buscar novamente se já tivermos os dados
-    if (Object.keys(allGamesData).length > 0 && !allGamesData.Erro) {
-        return;
+async function fetchLeaguesBySport(sport) {
+    if (!sport || sport !== 'football') {
+        leagueSelect.innerHTML = `<option value="">Análise disponível apenas para Futebol</option>`;
+        leagueSelect.disabled = true; return;
     }
-    
-    const apiUrl = 'https://analisador-apostas.onrender.com/jogos-do-dia';
-    leagueSelect.innerHTML = '<option value="">Carregando ligas...</option>'; // Mostra mensagem de carregamento
+    const apiUrl = `https://analisador-apostas.onrender.com/jogos-do-dia?esporte=${sport}`;
+    leagueSelect.innerHTML = '<option value="">Carregando ligas...</option>';
     try {
         const response = await fetch(apiUrl);
-        if (!response.ok) {
-            throw new Error('Falha ao buscar dados da API.');
-        }
+        if (!response.ok) throw new Error('Falha na API de jogos.');
         const data = await response.json();
-
-        if (data.Erro || data.Info) {
-            const errorMessage = data.Erro ? data.Erro[0].home : data.Info[0].home;
-            throw new Error(errorMessage);
-        }
-        
+        if (data.Erro || !data || Object.keys(data).length === 0) throw new Error(data.Erro ? data.Erro[0].home : 'Nenhuma liga encontrada.');
         allGamesData = data;
         leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
-
         for (const leagueName in data) {
-            if (data.hasOwnProperty(leagueName) && data[leagueName].length > 0) {
-                const option = document.createElement('option');
-                option.value = leagueName;
-                option.textContent = leagueName;
-                leagueSelect.appendChild(option);
+            if (Object.prototype.hasOwnProperty.call(data, leagueName) && data[leagueName].length > 0) {
+                const option = new Option(leagueName, leagueName);
+                leagueSelect.add(option);
             }
         }
+        leagueSelect.disabled = false;
     } catch (error) {
-        leagueSelect.innerHTML = `<option value="">Erro: ${error.message}</option>`;
+        leagueSelect.innerHTML = `<option value="">${error.message}</option>`;
     }
 }
 
-// Quando o botão "Ver Projeto" é clicado, ele APENAS MOSTRA o módulo.
-showBettingButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    projectListContainer.classList.add('hidden');
-    bettingAnalyzer.classList.remove('hidden');
-    window.location.href = '#analisador-apostas';
-    // A chamada fetchGames() foi REMOVIDA daqui.
-});
+async function fetchAndDisplayAnalysis(gameId, status) {
+    if (!gameId) { bettingResultsDiv.classList.add('hidden'); return; }
+    bettingResultsDiv.classList.remove('hidden');
+    bettingResultsDiv.innerHTML = `<p class="text-slate-400 text-center">Analisando estatísticas... 🧠</p>`;
+    
+    // CORREÇÃO DA LÓGICA AO VIVO: Lista mais completa de status que indicam jogo em andamento.
+    const liveStatusList = ['1H', 'HT', '2H', 'ET', 'BT', 'P', 'LIVE', 'INT'];
+    const isLive = liveStatusList.includes(status);
+    
+    const endpoint = isLive ? 'analisar-ao-vivo' : 'analisar-pre-jogo';
+    const analyzeUrl = `https://analisador-apostas.onrender.com/${endpoint}?game_id=${gameId}`;
+    
+    try {
+        const response = await fetch(analyzeUrl);
+        if (!response.ok) throw new Error('O servidor de análise retornou um erro.');
+        const tips = await response.json();
+        const selectedLeague = leagueSelect.value;
+        const selectedGame = allGamesData[selectedLeague].find(g => g.game_id == gameId);
 
-// **A MÁGICA ACONTECE AQUI**
-// Adiciona um listener que só roda UMA ÚNICA VEZ na primeira vez que o usuário clica no menu.
-leagueSelect.addEventListener('click', fetchGames, { once: true });
+        let htmlResult = `<h3 class="font-bold text-xl text-cyan-300">${isLive ? 'Análise Ao Vivo' : 'Análise Pré-Jogo'} para: ${selectedGame.home} vs ${selectedGame.away}</h3>`;
+        if (tips.length === 0 || tips[0].confidence === 0) {
+             htmlResult += `<div class="p-4 border rounded-lg border-slate-700 bg-slate-900"><p class="text-slate-400">${tips[0].justification || 'Sem dicas de alta confiança.'}</p></div>`;
+        } else {
+            tips.forEach(tip => {
+                htmlResult += `
+                    <div class="p-4 border rounded-lg border-slate-700 bg-slate-900">
+                        <p class="text-slate-300"><strong class="text-cyan-400">Mercado:</strong> ${tip.market}</p>
+                        <p class="text-slate-300"><strong class="text-cyan-400">Sugestão:</strong> ${tip.suggestion}</p>
+                        <p class="text-slate-400 mt-2"><i>${tip.justification}</i></p>
+                        <div class="w-full bg-slate-700 rounded-full h-2.5 mt-3"><div class="bg-cyan-500 h-2.5 rounded-full" style="width: ${tip.confidence}%"></div></div>
+                        <p class="text-xs text-slate-500 text-right mt-1">Confiança: ${tip.confidence}%</p>
+                    </div>`;
+            });
+        }
+        bettingResultsDiv.innerHTML = htmlResult;
+    } catch (error) {
+        bettingResultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300"><strong>Erro na Análise:</strong> ${error.message}</div>`;
+    }
+}
 
-// Quando o usuário seleciona uma LIGA
+// Listeners
+sportSelect.addEventListener('change', () => fetchLeaguesBySport(sportSelect.value));
 leagueSelect.addEventListener('change', () => {
     const selectedLeague = leagueSelect.value;
     gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
     bettingResultsDiv.classList.add('hidden');
-
     if (selectedLeague && allGamesData[selectedLeague]) {
         gameSelect.disabled = false;
-        allGamesData[selectedLeague].forEach((game, index) => {
-            const option = document.createElement('option');
-            option.value = index;
-            option.textContent = `${game.home} vs ${game.away} (${game.time})`;
-            gameSelect.appendChild(option);
+        allGamesData[selectedLeague].forEach(game => {
+            const statusText = game.status !== 'NS' ? ` (${game.status})` : '';
+            const option = new Option(`${game.home} vs ${game.away} (${game.time})${statusText}`, game.game_id);
+            option.dataset.status = game.status; 
+            gameSelect.add(option);
         });
     } else {
         gameSelect.disabled = true;
     }
 });
-
-// Quando o usuário seleciona um JOGO
 gameSelect.addEventListener('change', () => {
-    const selectedLeague = leagueSelect.value;
-    const selectedGameIndex = gameSelect.value;
-
-    if (selectedLeague && selectedGameIndex !== "") {
-        const selectedGame = allGamesData[selectedLeague][selectedGameIndex];
-        bettingStatusDiv.classList.add('hidden');
-        bettingResultsDiv.classList.remove('hidden');
-        
-        let htmlResult = `<h3 class="font-bold text-xl text-cyan-300">Análise Rápida para: ${selectedGame.home} vs ${selectedGame.away}</h3>`;
-        htmlResult += `
-            <div class="p-4 border rounded-lg border-slate-700 bg-slate-900">
-                <p class="text-slate-300"><strong class="text-cyan-400">Mercado Sugerido:</strong> Mais de 1.5 Gols</p>
-                <p class="text-slate-400 mt-2"><i>Com base no histórico geral, há uma boa probabilidade de pelo menos 2 gols na partida.</i></p>
-            </div>
-            <div class="p-4 border rounded-lg border-slate-700 bg-slate-900">
-                <p class="text-slate-300"><strong class="text-cyan-400">Mercado Sugerido:</strong> Ambas as Equipes Marcam</p>
-                <p class="text-slate-400 mt-2"><i>As duas equipes possuem ataques eficientes, sugerindo que ambas podem marcar.</i></p>
-            </div>
-        `;
-        bettingResultsDiv.innerHTML = htmlResult;
-    } else {
-        bettingResultsDiv.classList.add('hidden');
-    }
+    const selectedOption = gameSelect.options[gameSelect.selectedIndex];
+    const gameId = selectedOption.value;
+    const gameStatus = selectedOption.dataset.status;
+    fetchAndDisplayAnalysis(gameId, gameStatus);
 });
 
 // A lógica do botão de retornar continua a mesma que já temos no seu outro script
