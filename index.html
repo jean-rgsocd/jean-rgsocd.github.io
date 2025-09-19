@@ -1665,7 +1665,7 @@ showBettingButton.addEventListener('click', (e) => { e.preventDefault(); project
 hideBettingButton.addEventListener('click', () => { bettingAnalyzer.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
 
 
-// --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO MULTI-ESPORTIVA) ---
+// --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO MULTI-ESPORTIVA CORRIGIDA) ---
 const sportSelect = document.getElementById('sport-select');
 const leagueSelect = document.getElementById('league-select');
 const gameSelect = document.getElementById('game-select');
@@ -1673,7 +1673,14 @@ const bettingResultsDiv = document.getElementById('bettingResults');
 let allGamesData = {};
 
 async function fetchGamesBySport(sport) {
-    if (!sport) return;
+    if (!sport) {
+        // Limpa e desabilita os menus se nenhum esporte for selecionado
+        leagueSelect.innerHTML = '<option value="">Selecione um esporte primeiro</option>';
+        leagueSelect.disabled = true;
+        gameSelect.innerHTML = '<option value="">Selecione uma liga primeiro</option>';
+        gameSelect.disabled = true;
+        return;
+    }
     
     const apiUrl = `https://analisador-apostas.onrender.com/jogos-do-dia?esporte=${sport}`;
     leagueSelect.innerHTML = '<option value="">Carregando ligas...</option>';
