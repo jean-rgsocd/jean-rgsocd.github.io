@@ -1731,7 +1731,7 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
         countrySelect.innerHTML = '<option value="">Carregando países...</option>';
         countrySelect.disabled = false;
         try {
-            const response = await fetch(`${BASE_URL}/paises?sport=football`);
+            const response = await fetch(`${BASE_URL}/paises/football`);
             if (!response.ok) throw new Error('Falha ao buscar países.');
             const countries = await response.json();
             countrySelect.innerHTML = '<option value="">Selecione um País</option>';
