@@ -1662,7 +1662,7 @@ showBettingButton.addEventListener('click', (e) => { e.preventDefault(); project
 hideBettingButton.addEventListener('click', () => { bettingAnalyzer.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
 
 
-// --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO TIPSTER IA FINAL) ---
+// --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO FINAL COM ANÁLISE AO VIVO) ---
 const sportSelect = document.getElementById('sport-select');
 const leagueSelect = document.getElementById('league-select');
 const gameSelect = document.getElementById('game-select');
@@ -1670,23 +1670,17 @@ const bettingResultsDiv = document.getElementById('bettingResults');
 let allGamesData = {};
 
 async function fetchLeaguesBySport(sport) {
-    if (!sport || sport !== 'football') { // Por enquanto, a análise só funciona para futebol
+    if (!sport || sport !== 'football') {
         leagueSelect.innerHTML = `<option value="">Análise disponível apenas para Futebol</option>`;
-        leagueSelect.disabled = true;
-        gameSelect.innerHTML = '<option value="">Selecione uma liga primeiro</option>';
-        gameSelect.disabled = true;
-        return;
+        leagueSelect.disabled = true; return;
     }
-    
     const apiUrl = `https://analisador-apostas.onrender.com/jogos-do-dia?esporte=${sport}`;
     leagueSelect.innerHTML = '<option value="">Carregando ligas...</option>';
-    leagueSelect.disabled = true;
     try {
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error('Falha na API de jogos.');
         const data = await response.json();
         if (data.Erro || !data || Object.keys(data).length === 0) throw new Error(data.Erro ? data.Erro[0].home : 'Nenhuma liga encontrada.');
-        
         allGamesData = data;
         leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
         for (const leagueName in data) {
@@ -1701,28 +1695,24 @@ async function fetchLeaguesBySport(sport) {
     }
 }
 
-async function fetchAndDisplayAnalysis(gameId) {
-    if (!gameId) {
-        bettingResultsDiv.classList.add('hidden');
-        return;
-    }
-
+async function fetchAndDisplayAnalysis(gameId, status) {
+    if (!gameId) { bettingResultsDiv.classList.add('hidden'); return; }
     bettingResultsDiv.classList.remove('hidden');
     bettingResultsDiv.innerHTML = `<p class="text-slate-400 text-center">Analisando estatísticas... 🧠</p>`;
-
-    const analyzeUrl = `https://analisador-apostas.onrender.com/analisar-jogo?game_id=${gameId}`;
-
+    
+    // Decide qual endpoint chamar com base no status do jogo
+    const isLive = ['1H', 'HT', '2H', 'ET', 'BT', 'P', 'LIVE'].includes(status);
+    const endpoint = isLive ? 'analisar-ao-vivo' : 'analisar-pre-jogo';
+    const analyzeUrl = `https://analisador-apostas.onrender.com/${endpoint}?game_id=${gameId}`;
+    
     try {
         const response = await fetch(analyzeUrl);
         if (!response.ok) throw new Error('O servidor de análise retornou um erro.');
-        
         const tips = await response.json();
-        
         const selectedLeague = leagueSelect.value;
         const selectedGame = allGamesData[selectedLeague].find(g => g.game_id == gameId);
 
-        let htmlResult = `<h3 class="font-bold text-xl text-cyan-300">Análise Inteligente para: ${selectedGame.home} vs ${selectedGame.away}</h3>`;
-        
+        let htmlResult = `<h3 class="font-bold text-xl text-cyan-300">${isLive ? 'Análise Ao Vivo' : 'Análise Pré-Jogo'} para: ${selectedGame.home} vs ${selectedGame.away}</h3>`;
         if (tips.length === 0 || tips[0].confidence === 0) {
              htmlResult += `<div class="p-4 border rounded-lg border-slate-700 bg-slate-900"><p class="text-slate-400">${tips[0].justification || 'Sem dicas de alta confiança.'}</p></div>`;
         } else {
@@ -1732,22 +1722,18 @@ async function fetchAndDisplayAnalysis(gameId) {
                         <p class="text-slate-300"><strong class="text-cyan-400">Mercado:</strong> ${tip.market}</p>
                         <p class="text-slate-300"><strong class="text-cyan-400">Sugestão:</strong> ${tip.suggestion}</p>
                         <p class="text-slate-400 mt-2"><i>${tip.justification}</i></p>
-                        <div class="w-full bg-slate-700 rounded-full h-2.5 mt-3">
-                           <div class="bg-cyan-500 h-2.5 rounded-full" style="width: ${tip.confidence}%"></div>
-                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-2.5 mt-3"><div class="bg-cyan-500 h-2.5 rounded-full" style="width: ${tip.confidence}%"></div></div>
                         <p class="text-xs text-slate-500 text-right mt-1">Confiança: ${tip.confidence}%</p>
-                    </div>
-                `;
+                    </div>`;
             });
         }
         bettingResultsDiv.innerHTML = htmlResult;
-
     } catch (error) {
         bettingResultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300"><strong>Erro na Análise:</strong> ${error.message}</div>`;
     }
 }
 
-// Listeners dos menus
+// Listeners
 sportSelect.addEventListener('change', () => fetchLeaguesBySport(sportSelect.value));
 leagueSelect.addEventListener('change', () => {
     const selectedLeague = leagueSelect.value;
@@ -1756,12 +1742,23 @@ leagueSelect.addEventListener('change', () => {
     if (selectedLeague && allGamesData[selectedLeague]) {
         gameSelect.disabled = false;
         allGamesData[selectedLeague].forEach(game => {
-            const option = new Option(`${game.home} vs ${game.away} (${game.time})`, game.game_id);
+            // Adiciona o status do jogo ao texto da opção
+            const statusText = game.status !== 'NS' ? ` (${game.status})` : '';
+            const option = new Option(`${game.home} vs ${game.away} (${game.time})${statusText}`, game.game_id);
+            // Guarda o status no próprio elemento da opção para uso posterior
+            option.dataset.status = game.status; 
             gameSelect.add(option);
         });
     } else {
         gameSelect.disabled = true;
     }
+});
+
+gameSelect.addEventListener('change', () => {
+    const selectedOption = gameSelect.options[gameSelect.selectedIndex];
+    const gameId = selectedOption.value;
+    const gameStatus = selectedOption.dataset.status;
+    fetchAndDisplayAnalysis(gameId, gameStatus);
 });
 
 gameSelect.addEventListener('change', () => fetchAndDisplayAnalysis(gameSelect.value));
