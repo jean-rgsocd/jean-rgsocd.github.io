@@ -1749,7 +1749,7 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
         leagueSelect.innerHTML = '<option value="">Carregando ligas...</option>';
         leagueSelect.disabled = false;
         try {
-            const response = await fetch(`${BASE_URL}/ligas?sport=football&country_code=${countryCode}`);
+            const response = await fetch(`${BASE_URL}/ligas/football/${countryCode}`)
             if (!response.ok) throw new Error('Falha ao buscar ligas.');
             const leagues = await response.json();
             leagueSelect.innerHTML = '<option value="">Selecione uma Liga</option>';
@@ -1765,7 +1765,7 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
         gameSelect.innerHTML = '<option value="">Carregando jogos...</option>';
         gameSelect.disabled = false;
         try {
-            const response = await fetch(`${BASE_URL}/jogos-por-liga?sport=football&league_id=${leagueId}`);
+            const response = await fetch(`${BASE_URL}/partidas/football/${leagueId}`)
             if (!response.ok) throw new Error('Falha ao buscar jogos.');
             const games = await response.json();
             gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
