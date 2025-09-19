@@ -1964,98 +1964,46 @@ gameSelect.addEventListener('change', () => {
         });
     });
 });
-  // ===== Filtro/Autocomplete simples para o select de jogos =====
-(function () {
-  const searchInput = document.getElementById('searchGame');
-  const gameSelect = document.getElementById('game-select');
+// ===== Função genérica de filtro/autocomplete =====
+function attachFilter(inputId, selectId, extraResetSelectors = []) {
+  const searchInput = document.getElementById(inputId);
+  const selectEl = document.getElementById(selectId);
 
-  if (!searchInput || !gameSelect) return;
+  if (!searchInput || !selectEl) return;
 
-  // filtrar opções exibidas ao digitar
+  // Filtrar opções exibidas ao digitar
   searchInput.addEventListener('input', () => {
     const filter = searchInput.value.trim().toLowerCase();
 
-    for (let i = 0; i < gameSelect.options.length; i++) {
-      const opt = gameSelect.options[i];
+    for (let i = 0; i < selectEl.options.length; i++) {
+      const opt = selectEl.options[i];
       const txt = (opt.text || '').toLowerCase();
       opt.style.display = (filter === '' || txt.includes(filter)) ? '' : 'none';
     }
 
-    // selecionar automaticamente o primeiro visível (se houver) e disparar change
-    const firstVisible = [...gameSelect.options].find(o => o.style.display !== 'none' && o.value);
+    // Selecionar automaticamente o primeiro visível
+    const firstVisible = [...selectEl.options].find(o => o.style.display !== 'none' && o.value);
     if (firstVisible) {
-      gameSelect.value = firstVisible.value;
-      gameSelect.dispatchEvent(new Event('change')); // atualiza análise automaticamente
+      selectEl.value = firstVisible.value;
+      selectEl.dispatchEvent(new Event('change'));
     }
   });
 
-  // quando a lista de jogos for atualizada pelo backend (loadGamesByLeague), é bom limpar o filtro
-  try {
-    if (typeof leagueSelect !== 'undefined' && leagueSelect) {
-      leagueSelect.addEventListener('change', () => {
+  // Resetar filtro quando mudar um seletor pai (ex: esporte, país)
+  extraResetSelectors.forEach(selId => {
+    const sel = document.getElementById(selId);
+    if (sel) {
+      sel.addEventListener('change', () => {
         searchInput.value = '';
-        for (let opt of gameSelect.options) opt.style.display = '';
+        for (let opt of selectEl.options) opt.style.display = '';
       });
-    }
-    if (typeof countrySelect !== 'undefined' && countrySelect) {
-      countrySelect.addEventListener('change', () => {
-        searchInput.value = '';
-        for (let opt of gameSelect.options) opt.style.display = '';
-      });
-    }
-    if (typeof sportSelect !== 'undefined' && sportSelect) {
-      sportSelect.addEventListener('change', () => {
-        searchInput.value = '';
-        for (let opt of gameSelect.options) opt.style.display = '';
-      });
-    }
-  } catch (e) {
-    // não faz nada se as variáveis não existirem no escopo
-  }
-})();
-   // ===== Filtro/Autocomplete simples para o select de ligas =====
-(function () {
-  const searchLeagueInput = document.getElementById('searchLeague');
-  const leagueSelect = document.getElementById('league-select');
-
-  if (!searchLeagueInput || !leagueSelect) return;
-
-  // filtrar opções exibidas ao digitar
-  searchLeagueInput.addEventListener('input', () => {
-    const filter = searchLeagueInput.value.trim().toLowerCase();
-
-    for (let i = 0; i < leagueSelect.options.length; i++) {
-      const opt = leagueSelect.options[i];
-      const txt = (opt.text || '').toLowerCase();
-      opt.style.display = (filter === '' || txt.includes(filter)) ? '' : 'none';
-    }
-
-    // selecionar automaticamente o primeiro visível (se houver) e disparar change
-    const firstVisible = [...leagueSelect.options].find(o => o.style.display !== 'none' && o.value);
-    if (firstVisible) {
-      leagueSelect.value = firstVisible.value;
-      leagueSelect.dispatchEvent(new Event('change')); // dispara carregamento de jogos
     }
   });
+}
 
-  // quando mudar país ou esporte, limpa filtro
-  try {
-    if (typeof countrySelect !== 'undefined' && countrySelect) {
-      countrySelect.addEventListener('change', () => {
-        searchLeagueInput.value = '';
-        for (let opt of leagueSelect.options) opt.style.display = '';
-      });
-    }
-    if (typeof sportSelect !== 'undefined' && sportSelect) {
-      sportSelect.addEventListener('change', () => {
-        searchLeagueInput.value = '';
-        for (let opt of leagueSelect.options) opt.style.display = '';
-      });
-    }
-  } catch (e) {
-    // ignora erro se variáveis não existirem
-  }
-})();
+// ===== Ativar filtros =====
+attachFilter('searchLeague', 'league-select', ['sport-select', 'country-select']);
+attachFilter('searchGame', 'game-select', ['sport-select', 'country-select', 'league-select']);
 
     </script>
  </body>
