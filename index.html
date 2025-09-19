@@ -1788,7 +1788,7 @@ async function loadGamesBySport(sport) {
     gameSelect.innerHTML = '<option value="">Carregando jogos...</option>';
     gameSelect.disabled = false;
     try {
-        const response = await fetch(`${BASE_URL}/partidas/${sport}`);
+        const response = await fetch(`${BASE_URL/partidas-por-esporte/${sport}).
         if (!response.ok) throw new Error('Falha ao buscar jogos.');
         const games = await response.json();
         gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
