@@ -444,11 +444,27 @@
 </div>
 
 <div id="league-selector-group" class="form-group">
-  <label for="league-select" class="block text-slate-300 text-sm font-bold mb-2">2. Escolha a Liga:</label>
-  <select id="league-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
-      <option value="">Selecione um esporte primeiro</option>
+  <label for="league-select" class="block text-slate-300 text-sm font-bold mb-2">
+    2. Escolha a Liga:
+  </label>
+
+  <!-- Campo de busca para filtrar ligas -->
+  <input
+    type="text"
+    id="searchLeague"
+    placeholder="Digite parte do nome da liga..."
+    class="w-full px-4 py-2 mb-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400"
+    autocomplete="off"
+  />
+
+  <!-- Dropdown de ligas -->
+  <select id="league-select" 
+          class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" 
+          disabled>
+    <option value="">Selecione um esporte primeiro</option>
   </select>
 </div>
+
 
 <div class="form-group">
   <label for="game-select" class="block text-slate-300 text-sm font-bold mb-2">3. Escolha o Jogo:</label>
@@ -1997,7 +2013,50 @@ gameSelect.addEventListener('change', () => {
     // não faz nada se as variáveis não existirem no escopo
   }
 })();
-   
+   // ===== Filtro/Autocomplete simples para o select de ligas =====
+(function () {
+  const searchLeagueInput = document.getElementById('searchLeague');
+  const leagueSelect = document.getElementById('league-select');
+
+  if (!searchLeagueInput || !leagueSelect) return;
+
+  // filtrar opções exibidas ao digitar
+  searchLeagueInput.addEventListener('input', () => {
+    const filter = searchLeagueInput.value.trim().toLowerCase();
+
+    for (let i = 0; i < leagueSelect.options.length; i++) {
+      const opt = leagueSelect.options[i];
+      const txt = (opt.text || '').toLowerCase();
+      opt.style.display = (filter === '' || txt.includes(filter)) ? '' : 'none';
+    }
+
+    // selecionar automaticamente o primeiro visível (se houver) e disparar change
+    const firstVisible = [...leagueSelect.options].find(o => o.style.display !== 'none' && o.value);
+    if (firstVisible) {
+      leagueSelect.value = firstVisible.value;
+      leagueSelect.dispatchEvent(new Event('change')); // dispara carregamento de jogos
+    }
+  });
+
+  // quando mudar país ou esporte, limpa filtro
+  try {
+    if (typeof countrySelect !== 'undefined' && countrySelect) {
+      countrySelect.addEventListener('change', () => {
+        searchLeagueInput.value = '';
+        for (let opt of leagueSelect.options) opt.style.display = '';
+      });
+    }
+    if (typeof sportSelect !== 'undefined' && sportSelect) {
+      sportSelect.addEventListener('change', () => {
+        searchLeagueInput.value = '';
+        for (let opt of leagueSelect.options) opt.style.display = '';
+      });
+    }
+  } catch (e) {
+    // ignora erro se variáveis não existirem
+  }
+})();
+
     </script>
  </body>
 </html>
