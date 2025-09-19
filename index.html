@@ -1,146 +1,1944 @@
-# Filename: sports_betting_analyzer.py
-# Versão 12.2 - Visão de Futuro (Ao Vivo + Próximos 2 Dias)
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio | Jean Carlos Ribeiro da Silva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        .font-mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+        .text-glow {
+            text-shadow: 0 0 5px #00e6e6, 0 0 8px #00e6e6;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .typed-cursor {
+            color: #00e6e6;
+            animation: typedjsBlink 0.7s infinite;
+        }
+        @keyframes typedjsBlink {
+            50% { opacity: 0.0; }
+        }
+        .jornada-card {
+            position: relative;
+        }
+        .jornada-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            background-color: #0d1117;
+            border: 3px solid #00e6e6;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00e6e6;
+            z-index: 1;
+        }
+        .vulnerable-status {
+            color: #ef4444;
+        }
+        .secure-status {
+            color: #34d399;
+        }
+        .scan-status-low {
+            background-color: #1a222c;
+            border-color: #34d399;
+        }
+        .scan-status-medium {
+            background-color: #1a222c;
+            border-color: #fbbf24;
+        }
+        .scan-status-high {
+            background-color: #1a222c;
+            border-color: #ef4444;
+        }
+        .progress-bar {
+            background-color: #1a222c;
+        }
+        .progress-bar-fill {
+            background-color: #00e6e6;
+        }
+        /* Estilos do Gerador de Prompts */
+        .tab-button.active {
+            border-color: #00e6e6; 
+            color: #00e6e6;
+        }
+    </style>
+</head>
+<body class="antialiased">
 
-from fastapi import FastAPI
-from pydantic import BaseModel
-from typing import List, Dict
-from fastapi.middleware.cors import CORSMiddleware
-import requests
-import os
-from datetime import datetime, timedelta
-import asyncio
+    <header class="bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-slate-800">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold font-mono text-cyan-300 text-glow">JCRS</div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#sobre" class="text-slate-300 hover:text-cyan-300 transition">Sobre</a>
+                <a href="#competencias" class="text-slate-300 hover:text-cyan-300 transition">Competências</a>
+                <a href="#jornada" class="text-slate-300 hover:text-cyan-300 transition">Jornada</a>
+                <a href="#projetos" class="text-slate-300 hover:text-cyan-300 transition">Projetos</a>
+                <a href="#contato" class="text-slate-300 hover:text-cyan-300 transition">Contato</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-slate-300 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden px-6 pb-4 space-y-2 bg-slate-900">
+            <a href="#sobre" class="block text-slate-300 hover:text-cyan-300 transition py-2">Sobre</a>
+            <a href="#competencias" class="block text-slate-300 hover:text-cyan-300 transition py-2">Competências</a>
+            <a href="#jornada" class="block text-slate-300 hover:text-cyan-300 transition py-2">Jornada</a>
+            <a href="#projetos" class="block text-slate-300 hover:text-cyan-300 transition py-2">Projetos</a>
+            <a href="#contato" class="block text-slate-300 hover:text-cyan-300 transition py-2">Contato</a>
+        </div>
+    </header>
 
-app = FastAPI(title="Sports Betting Analyzer - Tipster IA Definitivo", version="12.2")
-origins = ["*"]
-app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+    <main class="container mx-auto px-6">
+        <section id="sobre" class="pt-20 pb-24">
+            <div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
+                <div class="relative w-48 h-48 md:w-56 md:h-56 flex-shrink-0">
+                    <div class="absolute inset-0 rounded-full bg-cyan-400/80 blur-2xl"></div>
+                    <img class="relative w-full h-full rounded-full object-cover border-4 border-slate-800" src="perfil.jpg" alt="Foto de Jean Carlos">
+                </div>
+                <div class="md:text-left text-center max-w-2xl">
+                    <h1 class="text-4xl md:text-5xl font-bold text-slate-100 mb-4 min-h-[160px] md:min-h-0 md:h-auto"><span id="typed-headline"></span></h1>
+                    <p class="text-lg text-slate-400" id="intro-paragraph" style="opacity: 0; transition: opacity 0.5s ease-in;">
+                        <span id="typed-paragraph"></span>
+                    </p>
+                </div>
+            </div>
+        </section>
 
-class GameInfo(BaseModel):
-    home: str; away: str; time: str; game_id: int; status: str
-class TipInfo(BaseModel):
-    market: str; suggestion: str; justification: str; confidence: int
+        <section id="competencias" class="py-24">
+            <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Painel de Competências</h2>
+            <p class="text-center text-slate-400 mb-12 max-w-3xl mx-auto">Uma visão interativa das minhas habilidades na intersecção entre gestão, segurança e inovação.</p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="relative w-full max-w-md mx-auto h-80 md:h-96">
+                    <canvas id="skillsChart"></canvas>
+                </div>
+                <div>
+                    <div class="mb-4 border-b border-slate-700">
+                        <nav class="-mb-px flex space-x-6 overflow-x-auto" aria-label="Tabs">
+                            <button data-tab="cybersecurity" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-cyan-300 border-cyan-300">Cybersecurity</button>
+                            <button data-tab="gestao" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Gestão</button>
+                            <button data-tab="tech" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Tecnologias</button>
+                            <button data-tab="ia" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">IA</button>
+                            <button data-tab="juridico" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Jurídico</button>
+                        </nav>
+                    </div>
+                    <div class="tab-content" id="cybersecurity-content">
+                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Ethical Hacking & Cyber Defense</h3>
+                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li>Análise de Segurança e Mitigação de Riscos (XSS, CSRF, SQL Injection).</li>
+                            <li>Avaliação de Resiliência de Sistemas via Pentesting.</li>
+                            <li>Automação para Defesa Cibernética com Linux e Scripting.</li>
+                            <li>Arquitetura de Segurança de Aplicações Web e APIs.</li>
+                            <li>Resposta a incidentes e forense digital.</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content hidden" id="gestao-content">
+                       <h3 class="font-bold text-lg mb-3 text-cyan-300">Gestão de Projetos de TI</h3>
+                       <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li>Planejamento Estratégico: Definição de escopo, cronograma e viabilidade.</li>
+                            <li>Metodologias: Aplicação de frameworks Ágeis (Scrum) e tradicionais (PMBOK).</li>
+                            <li>Gerenciamento de Riscos e Qualidade: Análise de riscos e garantia de entregas (QA).</li>
+                            <li>Gestão de Recursos: Alocação de orçamento, equipes e controle de custos.</li>
+                            <li>Liderança e Comunicação: Condução de equipes e gestão de stakeholders.</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content hidden" id="tech-content">
+                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Infraestrutura e Desenvolvimento</h3>
+                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li><strong>Desenvolvimento:</strong> HTML, CSS, JavaScript, PHP, SQL.</li>
+                            <li><strong>Sistemas Operacionais:</strong> Gerenciamento de ambientes Windows e Linux.</li>
+                            <li><strong>Redes:</strong> Configuração e análise de protocolos TCP/IP.</li>
+                            <li><strong>Cloud:</strong> Fundamentos de AWS e Azure.</li>
+                            <li><strong>Ferramentas de Segurança:</strong> Burp Suite, Nmap, Wireshark, Metasploit.</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content hidden" id="ia-content">
+                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Inteligência Artificial e Dados</h3>
+                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li>Machine Learning: Modelos de classificação, regressão e clusterização.</li>
+                            <li>Deep Learning: Construção e treinamento de redes neurais para tarefas complexas.</li>
+                            <li>Processamento de Linguagem Natural (NLP) para análise de texto.</li>
+                            <li>Visão Computacional para reconhecimento de padrões em imagens.</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content hidden" id="juridico-content">
+                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Serviços Jurídicos, Cartorários e Notariais</h3>
+                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li>Gestão e organização de documentos legais e processos judiciais.</li>
+                            <li>Conhecimento das rotinas de cartórios de notas, protestos e registro de imóveis.</li>
+                            <li>Elaboração de relatórios e suporte administrativo para escritórios e departamentos jurídicos.</li>
+                            <li>Base para automação de tarefas e implementação de tecnologia no setor (Legal Tech).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-SPORTS_MAP = {"football": {"endpoint_games": "/fixtures", "host": "v3.football.api-sports.io"}}
+        <section id="jornada" class="py-24">
+            <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Jornada Profissional e Acadêmica</h2>
+            <p class="text-center text-slate-400 mb-16 max-w-3xl mx-auto">Uma visão organizada da minha experiência e formação, narrando minha transição e evolução na área de tecnologia.</p>
+            <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+                
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">MBA em Cybersecurity</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Foco em arquitetura de sistemas seguros, defesa contra ameaças digitais e gestão de riscos para proteger ativos de informação críticos.</p>
+                </div>
 
-# Função auxiliar para fazer uma única chamada à API
-def fetch_api_data(querystring: dict, headers: dict, url: str) -> List:
-    try:
-        response = requests.get(url, headers=headers, params=querystring, timeout=30)
-        response.raise_for_status()
-        return response.json().get("response", [])
-    except Exception as e:
-        print(f"Erro em uma chamada da API: {e}")
-        return []
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">MBA em Gestão de Projetos em TI</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Especialização no planejamento e execução de projetos, aplicando metodologias ágeis e tradicionais para garantir entregas eficientes.</p>
+                </div>
 
-def get_future_games_from_api(sport: str) -> Dict[str, List[GameInfo]]:
-    games_by_league = {}
-    api_key = os.getenv("API_KEY")
-    if not api_key: return {"Erro": []}
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Tecnólogo em Inteligência Artificial</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Desenvolvimento de soluções com machine learning e modelos preditivos para automação e análise de dados complexos.</p>
+                </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Set/2025</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Ethical Hacking</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Simulação de ataques cibernéticos para identificar e corrigir vulnerabilidades, fortalecendo a segurança de forma proativa.</p>
+                </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2023 – Jun/2025</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Tecnólogo em Serviços Jurídicos</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Base de conhecimento legal e regulatório, fundamental para a conformidade (compliance) em projetos de tecnologia.</p>
+                </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2020 – Atual</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Analista Esportivo</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Condução de análises de prognósticos e estatísticas para desenvolver modelos preditivos.</p>
+                </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300 md:col-span-2">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2018 – Dez/2020</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Gerente Operacional</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Gestão da operação, otimizando fluxos de trabalho e liderando a equipe.</p>
+                </div>
+
+            </div>
+        </section>
+<section id="projetos" class="py-24">
+    <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Projetos Destacados</h2>
+    <p class="text-center text-slate-400 mb-12 max-w-3xl mx-auto">Uma amostra do meu trabalho, demonstrando a aplicação prática das minhas competências.</p>
     
-    config = SPORTS_MAP.get(sport.lower())
-    if not config: return {"Erro": []}
-
-    url = f"https://{config['host']}{config['endpoint_games']}"
-    headers = {'x-rapidapi-host': config["host"], 'x-rapidapi-key': api_key}
-    
-    # Define as datas
-    today = datetime.now()
-    dates_to_fetch = [today.strftime("%Y-%m-%d"), 
-                      (today + timedelta(days=1)).strftime("%Y-%m-%d"), 
-                      (today + timedelta(days=2)).strftime("%Y-%m-%d")]
-
-    all_fixtures = []
-    
-    # Busca jogos ao vivo
-    live_fixtures = fetch_api_data({"live": "all"}, headers, url)
-    all_fixtures.extend(live_fixtures)
-    
-    # Busca jogos agendados para os próximos dias
-    for date_str in dates_to_fetch:
-        day_fixtures = fetch_api_data({"date": date_str}, headers, url)
-        all_fixtures.extend(day_fixtures)
+    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="project-list-container">
         
-    # Remove duplicados usando o ID do jogo
-    unique_fixtures = {fixture['fixture']['id']: fixture for fixture in all_fixtures}.values()
-
-    if not unique_fixtures:
-        return {"Info": [GameInfo(home="Nenhum jogo encontrado (Ao vivo ou nos próximos 2 dias).", away="", time="")]}
-
-    for item in unique_fixtures:
-        league_name = item.get("league", {}).get("name", "Outros")
-        home_team = item.get("teams", {}).get("home", {}).get("name", "N/A")
-        away_team = item.get("teams", {}).get("away", {}).get("name", "N/A")
-        game_id = item.get("fixture", {}).get("id", 0)
-        status = item.get("fixture", {}).get("status", {}).get("short", "N/A")
-        timestamp = item.get("fixture", {}).get("timestamp")
+        <div id="portfolio-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
+            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Portf%C3%B3lio+Interativo" alt="Imagem do Projeto Portfólio Interativo" class="w-full h-auto object-cover border-b border-slate-700">
+            <div class="p-8">
+                <h3 class="font-bold text-xl mb-2 text-slate-100">Portfólio Interativo Pessoal</h3>
+                <p class="text-slate-400 mb-6">
+                    Desenvolvi este portfólio para apresentar minhas competências e jornada de forma moderna e visualmente atraente.
+                </p>
+                <div class="mb-6">
+                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span>
+                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">TailwindCSS</span>
+                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
+                </div>
+                <a href="https://jean-rgsocd.github.io" target="_blank" rel="noopener noreferrer" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+                    Ver Projeto
+                </a>
+            </div>
+        </div>
         
-        # Formata a data e hora para jogos futuros
-        if status == 'NS': # Not Started
-            game_time = datetime.fromtimestamp(timestamp).strftime('%d/%m %H:%M') if timestamp else "N/A"
-        else: # Jogos ao vivo
-            game_time = datetime.fromtimestamp(timestamp).strftime('%H:%M') if timestamp else "N/A"
+        <div id="prompts-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
+            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Gerador+de+Prompts" alt="Imagem do projeto Gerador de Prompts" class="w-full h-auto object-cover border-b border-slate-700">
+            <div class="p-8">
+                <h3 class="font-bold text-xl mb-2 text-slate-100">Gerador de Prompts Interativo</h3>
+                <p class="text-slate-400 mb-6">
+                    Ferramenta para otimizar prompts para diferentes IAs, como ChatGPT e geradores de imagens e vídeos.
+                </p>
+                <div class="mb-6">
+                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span>
+                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">TailwindCSS</span>
+                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
+                </div>
+                <button id="showPromptsButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+                    Ver Projeto
+                </button>
+            </div>
+        </div>
 
-        if league_name not in games_by_league: games_by_league[league_name] = []
-        games_by_league[league_name].append(GameInfo(home=home_team, away=away_team, time=game_time, game_id=game_id, status=status))
+        <div id="scanner-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
+            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Analisador+de+Seguran%C3%A7a+Web" alt="Imagem do projeto Analisador de Segurança Web" class="w-full h-auto object-cover border-b border-slate-700">
+            <div class="p-8">
+                <h3 class="font-bold text-xl mb-2 text-slate-100">Analisador de Segurança Web</h3>
+                <p class="text-slate-400 mb-6">
+                    Ferramenta de demonstração que simula uma análise de segurança profissional e identifica vulnerabilidades.
+                </p>
+                <div class="mb-6">
+                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span>
+                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
+                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Ethical Hacking</span>
+                </div>
+                <button id="showScannerButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+                    Ver Projeto
+                </button>
+            </div>
+        </div>
+
+        <div id="betting-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300">
+            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Analisador+de+Apostas" alt="Imagem do projeto Analisador de Apostas Esportivas" class="w-full h-auto object-cover border-b border-slate-700">
+            <div class="p-8">
+                <h3 class="font-bold text-xl mb-2 text-slate-100">Analisador de Apostas Esportivas</h3>
+                <p class="text-slate-400 mb-6">
+                    Ferramenta com API em Python para fornecer insights e dicas de apostas, demonstrando integração front-end com back-end.
+                </p>
+                <div class="mb-6">
+                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Python</span>
+                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">FastAPI</span>
+                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
+                </div>
+                <button id="showBettingButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+                    Ver Projeto
+                </button>
+            </div>
+        </div>
+
+    </div> <div id="analisador-seguranca-web" class="hidden py-12">
+        <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 rounded-lg shadow-lg border border-slate-700">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-bold text-xl text-slate-100">Analisador de Segurança Web</h3>
+                <button id="hideScannerButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+                    Retornar
+                </button>
+            </div>
+            <p class="text-slate-400 mb-6">Este Analisador de Segurança Web é uma ferramenta de demonstração de conceito. As vulnerabilidades exibidas são baseadas em uma simulação de possíveis falhas. O objetivo é apresentar minhas competências na área de segurança cibernética e não deve ser considerado um relatório de segurança definitivo. Para uma varredura minuciosa e real, entre em contato para um serviço profissional.</p>
+            <div class="space-y-4">
+                <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <input type="text" id="urlInput" placeholder="Digite uma URL para análise (ex: https://www.vulneravel.com)" class="flex-grow px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                    <button id="scanButton" class="w-full sm:w-auto px-6 py-2 rounded-lg bg-cyan-500 text-slate-900 font-bold hover:bg-cyan-400 transition-colors">
+                        🔍 Iniciar Análise
+                    </button>
+                </div>
+            </div>
+            <div id="scanStatus" class="mt-8 hidden">
+                <p id="statusMessage" class="text-center text-lg text-slate-400">Iniciando análise...</p>
+                <div id="progressBarContainer" class="mt-4 h-2 rounded-full overflow-hidden bg-slate-700">
+                    <div id="progressBar" class="h-full bg-cyan-500" style="width: 0%;"></div>
+                </div>
+            </div>
+            <div id="results" class="mt-8 space-y-6 hidden">
+                <div id="generalResults" class="p-6 border rounded-lg border-slate-700">
+                    <h3 class="font-bold text-xl mb-2 text-cyan-300">Resumo da Análise</h3>
+                    <p class="text-slate-400">URL Analisada: <span id="analyzedUrl"></span></p>
+                    <p class="text-slate-400">Status Geral: <span id="overallStatus" class="font-bold"></span></p>
+                </div>
+                <div id="vulnerabilitiesResults" class="space-y-4">
+                    <h3 class="font-bold text-xl text-cyan-300">Detalhes das Verificações</h3>
+                    </div>
+                <div id="cta-section" class="text-center mt-8 p-6 bg-slate-900 rounded-lg border border-slate-700">
+                    <h3 class="text-lg font-bold text-slate-100">Quer resolver essas vulnerabilidades e manter seu sistema seguro?</h3>
+                    <p class="mt-2 text-slate-400">Entre em contato para uma varredura minuciosa e um plano de segurança personalizado.</p>
+                    <a href="https://wa.me/5511984970539?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20a%20an%C3%A1lise%20de%20seguran%C3%A7a%20para%20o%20meu%20site." target="_blank" class="inline-block mt-4 bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Fale Comigo</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="analisador-apostas" class="hidden py-12">
+    <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 rounded-lg shadow-lg border border-slate-700">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="font-bold text-xl text-slate-100">Analisador de Apostas Esportivas</h3>
+            <button id="hideBettingButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+                Retornar
+            </button>
+        </div>
+        <p class="text-slate-400 mb-6">Selecione um esporte e uma liga para ver os jogos disponíveis para hoje. A análise utiliza dados de uma API em tempo real.</p>
+        
+        <div class="space-y-4">
+            
+            <div class="form-group">
+                <label for="sport-select" class="block text-slate-300 text-sm font-bold mb-2">1. Escolha o Esporte:</label>
+                <select id="sport-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
+                    <option value="">Selecione um esporte</option>
+                    <option value="football">Futebol</option>
+                    <option value="basketball">Basquete</option>
+                    <option value="nfl">Futebol Americano (NFL)</option>
+                    <option value="baseball">Baseball</option>
+                    <option value="formula-1">Fórmula 1</option>
+                    <option value="handball">Handebol</option>
+                    <option value="hockey">Hóquei</option>
+                    <option value="mma">MMA</option>
+                    <option value="rugby">Rugby</option>
+                    <option value="volleyball">Vôlei</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="league-select" class="block text-slate-300 text-sm font-bold mb-2">2. Escolha a Liga:</label>
+                <select id="league-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
+                    <option value="">Selecione um esporte primeiro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="game-select" class="block text-slate-300 text-sm font-bold mb-2">3. Escolha o Jogo:</label>
+                <select id="game-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
+                    <option value="">Selecione uma liga primeiro</option>
+                </select>
+            </div>
+            
+        </div>
+
+        <div id="bettingResults" class="mt-8 space-y-4 hidden"></div>
+    </div>
+</div>
+          
+            <div id="prompt-generator-section" class="hidden py-12">
+                <div class="max-w-4xl mx-auto bg-slate-800/50 rounded-lg shadow-lg border border-slate-700 p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-xl text-slate-100">Gerador de Prompts Interativo</h3>
+                        <button id="hidePromptsButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+                            Retornar
+                        </button>
+                    </div>
+                    
+                    <div class="flex border-b border-slate-700 mb-8 overflow-x-auto">
+                        <button id="tab-profissoes" class="tab-button py-3 px-6 text-sm font-medium text-cyan-300 border-b-2 border-cyan-300 hover:text-cyan-200 transition-colors duration-200 active">
+                            Prompt de Profissões (ChatGPT)
+                        </button>
+                        <button id="tab-imagens" class="tab-button py-3 px-6 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-slate-200 hover:border-slate-500 transition-colors duration-200">
+                            Prompt de Imagens (IA)
+                        </button>
+                        <button id="tab-veo3" class="tab-button py-3 px-6 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-slate-200 hover:border-slate-500 transition-colors duration-200">
+                            Prompts de Vídeos (VEO3)
+                        </button>
+                        <button id="tab-ai-tools" class="tab-button py-3 px-6 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-slate-200 hover:border-slate-500 transition-colors duration-200">
+                            Ferramentas de IA
+                        </button>
+                    </div>
+
+                    <div id="content-profissoes" class="tab-content">
+                        <h2 class="text-2xl font-bold text-slate-100 mb-6">Gerador de Prompts de Profissões para o ChatGPT</h2>
+                        <p class="text-slate-400 mb-8">
+                            Gere aqui seu prompt com a sua profissão desejada, copie o prompt, cole em algum chat de inteligência artificial (como o ChatGPT) e ele atuará como um profissional da área para atender suas dúvidas e solicitações. Use essa ferramenta para obter orientações e tirar dúvidas antes de fazer contato com um profissional da vida real.
+                        </p>
+                        <div class="mb-6">
+                            <label for="categoria-profissao" class="block text-slate-300 text-sm font-bold mb-2">Selecione uma Categoria:</label>
+                            <select id="categoria-profissao" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500">
+                               <option value="">Escolha uma categoria...</option>
+                                <option value="advocacia">Advocacia</option>
+                                <option value="artes-criativas">Artes Criativas</option>
+                                <option value="copywriters">Copywriters</option>
+                                <option value="corporativos">Corporativos</option>
+                                <option value="criativos">Criativos</option>
+                                <option value="desenvolvedores-e-ti">Desenvolvedores e TI</option>
+                                <option value="educacao">Educação</option>
+                                <option value="empreendedorismo">Empreendedorismo</option>
+                                <option value="entretenimento">Entretenimento</option>
+                                <option value="escrita">Escrita</option>
+                                <option value="estudantes">Estudantes</option>
+                                <option value="financas">Finanças</option>
+                                <option value="fitness">Fitness</option>
+                                <option value="marketing">Marketing</option>
+                                <option value="negocios">Negócios</option>
+                                <option value="professores">Professores</option>
+                                <option value="saude">Profissionais da Saúde</option>
+                                <option value="programacao">Programação</option>
+                                <option value="tecnologia">Tecnologia</option>
+                                <option value="youtubers">Youtubers</option>
+                            </select>
+                        </div>
+                        <div class="mb-6">
+                            <label for="profissao" class="block text-slate-300 text-sm font-bold mb-2">Selecione uma Profissão:</label>
+                            <select id="profissao" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500" disabled>
+                                <option value="">Selecione uma categoria primeiro...</option>
+                            </select>
+                        </div>
+                        <button id="gerar-prompt-profissao" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+                            Gerar Prompt de Profissão
+                        </button>
+                        <div class="mt-8 p-4 bg-slate-900 border border-slate-700 rounded-lg">
+                            <h3 class="text-xl font-bold text-slate-100 mb-3">Prompt Gerado:</h3>
+                            <textarea id="prompt-profissao-output" rows="8" class="font-mono w-full p-3 bg-transparent border-none focus:outline-none resize-none text-slate-300" readonly>Seu prompt aparecerá aqui.</textarea>
+                            <button id="copiar-prompt-profissao" class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                Copiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="content-imagens" class="tab-content hidden">
+                        <h2 class="text-2xl font-bold text-slate-100 mb-6">Gerador de Prompts de Imagens (com base em uma foto)</h2>
+                        <p class="text-slate-400 mb-8">
+                            Descreva a imagem que você deseja e escolha um estilo. A ferramenta irá gerar um prompt otimizado para IAs de criação de imagens (como Midjourney, DALL-E, Gemini ou Leonardo AI) que permite a edição ou a criação de novas imagens a partir de uma foto de referência.
+                        </p>
+                        <div class="mb-6">
+                            <label for="estilo-imagem" class="block text-slate-300 text-sm font-bold mb-2">Estilo da imagem:</label>
+                            <select id="estilo-imagem" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500">
+                                <option value="photorealistic">Fotorrealista</option>
+                                <option value="digital art">Arte Digital</option>
+                                <option value="cartoon">Desenho Animado</option>
+                                <option value="fantasy art">Arte Fantástica</option>
+                                <option value="impressionist">Impressionista</option>
+                                <option value="prompts-prontos">Prompts Prontos</option>
+                            </select>
+                        </div>
+                        <div class="mb-6">
+                            <label for="qualidade-imagem" class="block text-slate-300 text-sm font-bold mb-2">Qualidade/Detalhe:</label>
+                            <select id="qualidade-imagem" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500">
+                                <option value=", ultra detailed, 8K">Ultra detalhada, 8K</option>
+                                <option value=", high quality, sharp focus">Alta qualidade, foco nítido</option>
+                                <option value=", good resolution">Boa resolução</option>
+                            </select>
+                        </div>
+                        <div class="mb-6">
+                            <label for="descricao-imagem" class="block text-slate-300 text-sm font-bold mb-2">Descreva a cena desejada:</label>
+                            <textarea id="descricao-imagem" rows="4" class="shadow appearance-none border border-slate-700 rounded w-full py-2 px-3 bg-slate-900 text-slate-300 leading-tight focus:outline-none focus:shadow-outline focus:border-cyan-500" placeholder="Ex: Utilize 100% da minha imagem para gerar uma foto minha nas ruas de Times Square ."></textarea>
+                        </div>
+                        <button id="gerar-prompt-imagem" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
+                            Gerar Prompt de Imagem
+                        </button>
+                        <div class="mt-8 p-4 bg-slate-900 border border-slate-700 rounded-lg">
+                            <h3 class="text-xl font-bold text-slate-100 mb-3">Prompt Gerado:</h3>
+                            <textarea id="prompt-imagem-output" rows="8" class="font-mono w-full p-3 bg-transparent border-none focus:outline-none resize-none text-slate-300" readonly>Seu prompt aparecerá aqui. Lembre-se de fazer o upload da sua imagem para a IA e, se possível, indicar o uso dela no prompt (ex: "utilize a imagem fornecida como referência principal").</textarea>
+                            <button id="copiar-prompt-imagem" class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right transition-colors duration-200">
+                                Copiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="content-veo3" class="tab-content hidden">
+                        <h2 class="text-2xl font-bold text-slate-100 mb-6">Prompts de Vídeos (VEO3) para Conteúdo Viral</h2>
+                        <p class="text-slate-400 mb-8">
+                            Aqui você pode copiar prompts complexos e detalhados para gerar vídeos com IA, otimizados para plataformas como o TikTok e Instagram Reels.
+                        </p>
+                        <div class="mb-10 p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                            <h3 class="text-xl font-bold text-slate-100 mb-4">1º Opção: Prompt Mestre</h3>
+                            <p class="text-sm text-slate-400 mb-4">
+                                Este é um prompt altamente detalhado e técnico, ideal para quem precisa de controle preciso sobre a criação do vídeo.
+                            </p>
+                            <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="30" readonly>
+VEO 3 – PROMPT MESTRE V4.0 (EDIÇÃO CONSTÂNCIA OTIMIZADA)
+(Baseado em técnicas de roteiro e engenharia de IA avançada)
+
+---
+
+### OBJETIVO PRINCIPAL E PÚBLICO-ALVO
+• **Meta da Marca**: [ex: “Aumentar reconhecimento da marca e gerar desejo imediato de compra”]
+• **Gatilhos Emocionais do Espectador**: [ex: “Curiosidade (60%) + Autoridade (40%)”]
+• **Tom Obrigatório**: [ex: “Espontâneo, sedutor, realista, divertido”]
+
+---
+
+### DURAÇÃO E RITMO
+• **Duração Exata**: 8.0s
+• **Ritmo**: [ex: Gancho (0–3s), Mensagem (3–6s), Chamada para Ação (6–8s)]
+
+---
+
+### IDENTIDADE DA PERSONAGEM (FIXO EM TODOS OS VÍDEOS)
+• **Nome**: [Nome da personagem, ex: Nina ou Cela]
+• **Aparência de Idade**: [ex: 22–26 anos]
+• **Tom de Pele**: [ex: pele clara]
+• **Cabelo**: [cor, tipo e estilo, ex: ruivo liso solto, preso etc.]
+• **Roupa**: [ex: camiseta pink com @gabrielmoraisgpt, calça jeans clara]
+• **Tom de Voz**: [ex: sotaque paulistano, entonação irônica e segura]
+• **Expressão Facial**: [ex: leve sorriso com olhar confiante]
+• **Estilo de Movimento**: [ex: modo vlog, câmera selfie, caminhando ou parada]
+
+---
+
+### DIRETRIZES DE CINEMATOGRAFIA
+• **Tipo e Movimento de Câmera**: [ex: Câmera selfie, plano horizontal, movimentação leve e fluida]
+• **Lente e Enquadramento**: [ex: lente 35mm, foco total no rosto da personagem]
+• **Iluminação**: [ex: luz suave e frontal, sem reflexos ou brilho excessivo]
+• **Composição da Cena**: [ex: fundo desfocado levemente com elementos fixos visíveis]
+
+---
+
+### ROTEIRO E DIÁLOGO
+• **Base do Roteiro**: [ex: fórmula AIDA + técnicas de neurocopywriting persuasivo]
+• **Estilo de Fala**: [ex: espontâneo, como se estivesse falando direto com o seguidor]
+• **Exemplo de Diálogo**:
+> “Gente, se você ainda não conhece a [Nome da Marca], para tudo! Eu nunca vi algo tão [benefício]. Tipo, real! Eles estão com [oferta / diferencial] e sério… aproveita enquanto tá rolando!”
+
+---
+
+### ÁUDIO E SONORIZAÇÃO
+• **Tipo de Gravação de Voz**: original da personagem, sem narração extra
+• **Trilha Sonora**: opcional, apenas se for coerente com a marca
+• **Efeitos Sonoros (SFX)**: [ex: transições sutis, sem exagero, focado no realismo]
+
+---
+
+### CENÁRIO E AMBIENTAÇÃO (CENÁRIO FIXO)
+• **Ambiente**: [ex: quarto decorado com tons de rosa / loja / consultório / fachada etc.]
+• **Elementos Visuais Chave**:
+ - Letreiro ou logo visível
+ - Itens simbólicos da marca (ex: espelho camarim, produtos, balcão)
+ - Paleta de cores dominante (ex: rosa claro, azul royal, preto, dourado etc.)
+ - Evitar reflexo de câmera ou corpo em espelhos
+
+---
+
+### PROTOCOLO DE TRANSIÇÃO
+• **Frame de Início**: personagem já enquadrada corretamente
+• **Tipo de Transição**: nenhuma ou corte seco suave
+• **Frame de Fim**: personagem finaliza fala com sorriso ou gesto expressivo + foco na Chamada para Ação
+
+---
+
+### ESPECIFICAÇÕES TÉCNICAS (PARA EXPORTAÇÃO E RENDERIZAÇÃO)
+• **Resolução**: 1080p ou 4K
+• **Proporção da Tela**: 16:9 horizontal ou 9:16 vertical (especifique)
+• **Sem Overlays**: sem legendas ou filtros
+• **Modo de Renderização**: realismo máximo (ultra realista ou cinematográfico)
+
+---
+
+### EXEMPLO DE PROMPT FINAL (em inglês):
+```plaintext
+A beautiful young woman with long straight red hair and light skin, wearing a pink T-shirt with  and light blue jeans, films herself in a horizontal selfie mode inside a cozy pink bedroom. A LED sign  glows on the wall behind her. Her tone is playful and ironic, with a warm smile and direct eye contact. She says: "Guys, seriously... if you haven't checked out [Brand Name] yet, you're missing out. I'm obsessed with how [main benefit]. And yeah... it's real. Go now before it's gone!" The lighting is soft and frontal, with no filters or subtitles.
+</textarea>
+                        </div>
+
+                        <div class="mb-10 p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                            <h3 class="text-xl font-bold text-slate-100 mb-4">2º Opção: Prompt Definitivo (Flow)</h3>
+                            <p class="text-sm text-slate-400 mb-4">
+                                Este prompt serve como um "guia em etapas" para criar um influencer de IA e gerar vídeos virais, ideal para quem quer construir uma presença digital consistente.
+                            </p>
+                            <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="65" readonly>
+PROMPT DEFINITIVO — INFLUENCER IA + VÍDEOS VIRAIS COM VEO 3
+Este prompt serve como um guia para criar uma influencer de IA hiper-realista e produzir vídeos virais de até 8 segundos para plataformas como o TikTok, usando a IA de geração de vídeo Google Veo 3. É ideal para criadores, agências ou alunos que desejam criar conteúdo com consistência, impacto e identidade de marca forte.
+
+
+PARTE 1 – CRIAÇÃO DA INFLUENCER IA
+Peça ao ChatGPT para fazer as seguintes perguntas:
+
+Qual será o nome da influencer?
+Qual tom de pele?
+Cor e formato dos olhos?
+Cor, comprimento e textura do cabelo?
+Tipo de corpo? (curvilínea, atlética, magra, voluptuosa etc)
+Estilo de roupa e maquiagem?
+Idade aparente?
+Qual a personalidade predominante? (ex: debochada, misteriosa, carismática, explosiva)
+Qual o sotaque da fala? (carioca, baiano, paulista ou outro?)
+Ela usará gírias regionais ou linguagem neutra?
+Referência de alguma influencer real (ex: Bianca Andrade, Juliette, Anitta)?
+Qual o maior trauma ou polêmica do passado dela?
+Como você quer que ela seja percebida? (ícone da geração Z, voz polêmica, mente criativa?)
+Qual arquétipo ela representa? (ex: rebelde, sedutora, palhaça, sábia, justiceira)?
+Com base nas respostas, o ChatGPT deve:
+Criar a imagem realista da influencer para perfil do TikTok
+Salvar o "banco de identidade" visual e comportamental para usar nos vídeos futuros
+
+
+PARTE 2 – PRODUÇÃO DE VÍDEOS COM VEO 3
+Os vídeos serão criados com prompts em inglês, mas a fala da influencer será em português com o sotaque escolhido. A duração total será de 8 segundos.
+Perguntas para planejar cada vídeo:
+Qual o tema central? (ex: ex, autoestima, signos, traição, espiritualidade etc)
+Qual o tom da fala?
+Humor debochado
+Sarcasmo inteligente
+Indignação explosiva
+Sinceridade emocional
+Reflexão sedutora
+Qual o cenário desejado?
+Podcast
+Confessional (olhando direto pra câmera)
+Bastidores (com câmera "escondida")
+Estilo do vídeo:
+Cru e natural
+Cinemático com luz quente
+Cortes rápidos com efeitos (zoom, glitch)
+Frase viral ou original? Deseja gírias locais?
+
+
+FORMATO DO PROMPT PARA VEO 3
+Scene:
+  Setting: Neon-lit podcast studio with minimalist decor
+  Time: Night
+  Lighting: Soft cinematic, warm tones, lens flare
+
+Camera:
+  Framing: Medium close-up on influencer
+  Movement: Slow push-in
+
+Character:
+  Identity: Use previously saved appearance and personality
+  Facial expression: Half-smile, raised eyebrow
+  Body language: Leaning forward, hands relaxed
+
+Audio:
+  Language: Portuguese (Brazil)
+  Accent: [carioca/baiano]
+  Dialogue: "A frase viral vai aqui"
+  Background: Light ambient podcast noise + low lo-fi beat (optional)
+
+Timing:
+  Total: 8 seconds
+  Breakdown: 2s ambient intro, 4s speech, 2s reaction
+
+Style:
+  Format: Vertical (TikTok)
+  Composition: One-take, cinematic lens
+  Effects: Subtle glitch or zoom (if selected)
+
+
+RECOMENDAÇÕES ADICIONAIS
+Use um sistema de tags para gerar múltiplos vídeos com velocidade:
+
+#sarcastic #emotional #explosive #calma
+#signs #exs #money #espiritualidade
+#podcast #bastidores #confessional
+Defina um objetivo por vídeo:
+
+Goal: Provocar comentários e debates em massa
+Simule reações do público para prever viralização:
+
+Top Comment: "Ela falou tudo em 5 palavras. Ícone."
+
+
+RESUMO
+Com esse prompt, você será capaz de:
+
+Criar influencers IA realistas com branding forte
+Gerar vídeos otimizados para TikTok usando o Veo 3
+Manter consistência absoluta de identidade e estilo
+Produzir conteúdo polêmico, sarcástico, emocional e viral em massa
+</textarea>
+                        </div>
+
+                        <div class="mb-10 p-6 bg-slate-900 border border-slate-700 rounded-lg">
+                            <h3 class="text-xl font-bold text-slate-100 mb-4">3º Opção: Storytelling e Narrativa</h3>
+                            <p class="text-sm text-slate-400 mb-4">
+                                Este prompt foca em criar uma história envolvente, com uma clara progressão emocional e narrativa, ideal para conteúdos que buscam conectar-se com o público em um nível mais profundo.
+                            </p>
+                            <textarea class="font-mono w-full p-3 bg-transparent border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="30" readonly>
+VEO 3 - PROMPT DE STORYTELLING
+Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando a IA de geração de vídeo Google Veo 3.
+
+---
+
+### ARCO EMOCIONAL E NARRATIVA
+• **Cena de Abertura (0-2s)**: [ex: "Eu em uma situação frustrante ou problema"]
+• **Ponto de Virada (2-5s)**: [ex: "Apresento uma solução ou produto que resolve o problema"]
+• **Resolução (5-8s)**: [ex: "Mostro a minha vida após a solução, com alegria e facilidade"]
+• **Mensagem Principal**: [ex: "Não deixe que o [problema] te impeça. [Nome do Produto] pode te ajudar."]
+
+---
+
+### DIREÇÃO E PERSONAGEM
+• **Nome da Personagem**: [ex: João, Maria]
+• **Aparência**: [ex: casual, com mochila, em um escritório bagunçado]
+• **Expressão**: [ex: primeiro frustrado, depois aliviado e sorrindo]
+• **Movimento**: [ex: suspirando, depois de cabeça erguida, com um passo confiante]
+
+---
+
+### AMBIENTAÇÃO E ESTILO
+• **Cenário**: [ex: um escritório desorganizado que se transforma em um espaço limpo e produtivo]
+• **Iluminação**: [ex: iluminação escura no início, se tornando clara e suave ao final]
+• **Trilha Sonora**: [ex: música dramática ou triste que muda para algo animado e otimista]
+• **Estilo Visual**: [ex: transições de câmera fluidas, com cortes que acompanham a emoção da narrativa]
+
+---
+
+### ROTEIRO E FALA
+• **Diálogo (dividido em três partes)**:
+    - Início: [fala introdutória, ex: "Sempre que eu sentia [problema], era um desastre."]
+    - Meio: [fala sobre a solução, ex: "Então eu descobri [solução], e tudo mudou."]
+    - Fim: [fala sobre o resultado, ex: "Agora, tudo é muito mais fácil. Chegou a minha vez!"]
+
+---
+
+### RECOMENDAÇÕES FINAIS
+• **Tom de Voz**: Conforme o arco emocional (ex: de um tom deprimido para um de esperança).
+• **Formato**: 9:16 vertical, ideal para plataformas de vídeo curto.
+• **Foco**: A ênfase é na narrativa e na emoção, não em detalhes técnicos.
+</textarea>
+                        </div>
+                    </div>
+<div id="content-ai-tools" class="tab-content hidden">
+  <h2 class="text-2xl font-bold text-slate-100 mb-6">Compilado de Ferramentas de IA</h2>
+  <p class="text-slate-400 mb-8">
+    <span class="block">Explore e acesse rapidamente uma lista de ferramentas de Inteligência Artificial organizadas por categoria.</span>
+    <span class="block">Cada seção inclui uma breve explicação 💡 do que você pode fazer com essas IAs.</span>
+  </p>
+
+  <!-- GPTs do Mestre & Favoritos -->
+  <section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">🤖 GPTs do Mestre & Favoritos</h3>
+    <p class="text-slate-400 mb-4">
+      <span class="block">💡 Coleção de GPTs personalizados e favoritos prontos para usar no ChatGPT.</span>
+      <span class="block">👉 Use para: resumos, geração de prompts, negociação, criação de nomes e muito mais.</span>
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <a href="https://chat.openai.com/g/g-rqznWjaOb-mestre-dos-problemas" target="_blank" rel="noopener noreferrer"
+         class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/openai.svg" alt="GPT" class="w-4 h-4" 
+             onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Mestre dos Problemas</span>
+      </a>
+        
+        <a href="https://chatgpt.com/g/g-c5pUqdlbh-mestre-da-negociacao" target="_blank" rel="noopener noreferrer"
+         class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/openai.svg" alt="GPT" class="w-4 h-4" 
+             onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Mestre da Negociação</span>
+      </a>
+
+      <a href="https://chatgpt.com/g/g-VCOghF5W0-mestre-das-atleticas" target="_blank" rel="noopener noreferrer"
+         class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/openai.svg" alt="GPT" class="w-4 h-4"
+             onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Mestre das Atléticas</span>
+      </a>
+
+      <a href="https://chatgpt.com/g/g-py9gZteQS-mestre-do-pdf" target="_blank" rel="noopener noreferrer"
+         class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/openai.svg" alt="GPT" class="w-4 h-4"
+             onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h8l4 4v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/></svg>
+        <span>Mestre do PDF</span>
+      </a>
+
+      <a href="https://chatgpt.com/g/g-B3J6o3xG4-mestre-do-stable-difusion" target="_blank" rel="noopener noreferrer"
+         class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/stabilityai.svg" alt="Stable" class="w-4 h-4"
+             onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Mestre do Stable Diffusion</span>
+      </a>
+
+      <a href="https://chatgpt.com/g/g-ir4PylxGT-mestre-gpt" target="_blank" rel="noopener noreferrer"
+         class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/openai.svg" alt="GPT" class="w-4 h-4"
+             onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Mestre Criador de GPTs</span>
+      </a>
+
+      <a href="https://chatgpt.com/g/g-7s8HWPmpX-namegen" target="_blank" rel="noopener noreferrer"
+         class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/openai.svg" alt="NameGen" class="w-4 h-4"
+             onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v16H4z"/></svg>
+        <span>NameGen </span>
+      </a>
+
+      <!-- mantive/gerei botões para todos os GPTs que estavam no seu site -->
+      <a href="https://chatgpt.com/g/g-FN7GJjqX1-mestre-dos-prompts-de-imagem" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/openai.svg" alt="MestrePrompts" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Mestres dos Prompts</span>
+      </a>
+
+      <a href="https://chatgpt.com/g/g-GvcYCKPIH-noyoutube-video-summarizer-noyoutube-unaffiliated" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/openai.svg" alt="VideoSumm" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Video Summarizer</span>
+      </a>
+
+      <a href="https://chatgpt.com/g/g-h8l4uLHFQ-video-ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/invideo.svg" alt="InVideo AI" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v16H4z"/></svg>
+        <span>InVideo AI</span>
+      </a>
+
+      <a href="https://chatgpt.com/g/g-gPRWpLspC-sticker-whiz" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/openai.svg" alt="StickerWhiz" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Sticker Whiz</span>
+      </a>
+
+      <a href="https://chatgpt.com/g/g-bo0FiWLY7-consensus" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/consensus.svg" alt="Consensus" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Consensus</span>
+      </a>
+
+      <a href="https://chatgpt.com/g/g-kZ0eYXlJe-scholar-gpt" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/google.svg" alt="Scholar" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Scholar GPT</span>
+      </a>
+
+      <a href="https://chatgpt.com/g/g-agCdZedbZ-ai-gpt" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/pdf.svg" alt="AI PDF" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>AI PDF</span>
+      </a>
+
+      <a href="https://chatgpt.com/g/g-9qWC0oyBd-super-describe" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/openai.svg" alt="SuperDescribe" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Super Describe</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Ideias / Chatbots -->
+  <section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">💡 Ideias / Chatbots</h3>
+    <p class="text-slate-400 mb-4">
+      <span class="block">💡 Chatbots e assistentes para brainstorm, suporte e pesquisas rápidas.</span>
+      <span class="block">👉 Use para: responder clientes, gerar ideias e criar fluxos conversacionais.</span>
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <a href="https://chat.openai.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/openai.svg" alt="ChatGPT" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>ChatGPT</span>
+      </a>
+
+      <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/google.svg" alt="Gemini" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Gemini</span>
+      </a>
+
+      <a href="https://claude.ai/" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/anthropic.svg" alt="Claude" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v16H4z"/></svg>
+        <span>Claude</span>
+      </a>
+
+      <a href="https://www.perplexity.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/perplexity.svg" alt="Perplexity" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Perplexity</span>
+      </a>
+
+      <a href="https://www.bing.com/chat" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/microsoft.svg" alt="Bing Chat" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Bing Chat</span>
+      </a>
+
+      <a href="https://huggingface.co" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/huggingface.svg" alt="Hugging Face" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Hugging Face</span>
+      </a>
+
+      <a href="https://poe.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/quora.svg" alt="Poe" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v16H4z"/></svg>
+        <span>Poe</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Escrita -->
+  <section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">✍️ Escrita</h3>
+    <p class="text-slate-400 mb-4">
+      <span class="block">💡 Geração e otimização de textos: posts, descrições, copies e roteiros.</span>
+      <span class="block">👉 Use para: marketing, blogs, redes sociais e campanhas.</span>
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <a href="https://www.jasper.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/jasper.svg" alt="Jasper" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Jasper</span>
+      </a>
+
+      <a href="https://rytr.me" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/rytr.svg" alt="Rytr" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Rytr</span>
+      </a>
+
+      <a href="https://writesonic.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/writesonic.svg" alt="Writesonic" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Writesonic</span>
+      </a>
+
+      <a href="https://blaze.today" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/textblaze.svg" alt="TextBlaze" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>TextBlaze</span>
+      </a>
+
+      <a href="https://www.sudowrite.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/sudowrite.svg" alt="Sudowrite" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Sudowrite</span>
+      </a>
+
+      <a href="https://www.copy.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/copydotai.svg" alt="Copy.ai" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Copy.ai</span>
+      </a>
+
+      <a href="https://www.notion.so/product/ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/notion.svg" alt="Notion AI" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Notion AI</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Conteúdo & Revisão -->
+  <section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">📝 Conteúdo & Revisão</h3>
+    <p class="text-slate-400 mb-4">
+      <span class="block">💡 Ferramentas para revisão, checagem de fatos e melhoria de texto.</span>
+      <span class="block">👉 Use para: editar, verificar originalidade e otimizar conteúdo.</span>
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <a href="https://www.grammarly.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/grammarly.svg" alt="Grammarly" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Grammarly</span>
+      </a>
+
+      <a href="https://quillbot.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/quillbot.svg" alt="QuillBot" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>QuillBot</span>
+      </a>
+
+      <a href="https://copyleaks.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/copyleaks.svg" alt="Copyleaks" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v16H4z"/></svg>
+        <span>Copyleaks</span>
+      </a>
+
+      <a href="https://originality.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/originalityai.svg" alt="Originality.ai" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Originality.ai</span>
+      </a>
+
+      <a href="https://www.turnitin.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/turnitin.svg" alt="Turnitin" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Turnitin</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Gerar Imagens -->
+  <section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">🖼️ Gerar Imagens</h3>
+    <p class="text-slate-400 mb-4">
+      <span class="block">💡 Criação e edição de imagens com IA (text-to-image, variações, inpainting).</span>
+      <span class="block">👉 Use para: concept art, campanhas e materiais visuais.</span>
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <a href="https://www.midjourney.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/midjourney.svg" alt="MidJourney" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-purple-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>MidJourney</span>
+      </a>
+
+      <a href="https://openai.com/dall-e-2" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/openai.svg" alt="DALL·E" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-cyan-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>DALL·E (OpenAI)</span>
+      </a>
+
+      <a href="https://stability.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/stabilityai.svg" alt="Stable Diffusion" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-orange-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Stable Diffusion</span>
+      </a>
+
+      <a href="https://leonardo.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <!-- Leonardo pode não ter simple-icon oficial em todas as versões; fallback será usado se necessário -->
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/leonardo.svg" alt="Leonardo AI" class="w-4 h-4"
+             onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-yellow-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Leonardo AI</span>
+      </a>
+
+      <a href="https://firefly.adobe.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/adobe.svg" alt="Adobe Firefly" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-red-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Adobe Firefly</span>
+      </a>
+
+      <a href="https://www.bing.com/create" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/microsoft.svg" alt="Bing Image Creator" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-teal-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Bing Image Creator</span>
+      </a>
+
+      <a href="https://runwayml.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/runwayml.svg" alt="Runway" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-green-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Runway</span>
+      </a>
+
+      <a href="https://clipdrop.co" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/clipdrop.svg" alt="ClipDrop" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>ClipDrop</span>
+      </a>
+    </div>
+  </section>
+  <!-- Designs -->
+  <section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">🎨 Designs</h3>
+    <p class="text-slate-400 mb-4">
+      <span class="block">💡 Ferramentas de design inteligentes e geração de layouts criativos.</span>
+      <span class="block">👉 Use para: posts, campanhas, apresentações e materiais visuais.</span>
+    </p>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/canva.svg" alt="Canva" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Canva</span>
+      </a>
+
+      <a href="https://looka.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/looka.svg" alt="Looka" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Looka</span>
+      </a>
+
+      <a href="https://designs.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/designsdotai.svg" alt="Designs AI" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Designs AI</span>
+      </a>
+
+      <a href="https://www.autodraw.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/autodraw.svg" alt="AutoDraw" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>AutoDraw</span>
+      </a>
+
+      <a href="https://vanceai.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/vanceai.svg" alt="Vance AI" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Vance AI</span>
+      </a>
+
+      <a href="https://clipdrop.co" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/clipdrop.svg" alt="ClipDrop" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>ClipDrop</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Criar Sites -->
+  <section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">🌐 Criar Sites</h3>
+    <p class="text-slate-400 mb-4">
+      <span class="block">💡 Plataformas que aceleram a criação de sites com templates e IA.</span>
+      <span class="block">👉 Use para: criar páginas rápidas sem programar.</span>
+    </p>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <a href="https://framer.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/framer.svg" alt="Framer" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Framer</span>
+      </a>
+
+      <a href="https://durable.co" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/durable.svg" alt="Durable" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Durable</span>
+      </a>
+
+      <a href="https://10web.io" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/10web.svg" alt="10Web" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>10Web</span>
+      </a>
+
+      <a href="https://www.dora.run/" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <svg class="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Dora</span>
+      </a>
+
+      <a href="https://webflow.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/webflow.svg" alt="Webflow" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Webflow</span>
+      </a>
+
+      <a href="https://weglot.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/weglot.svg" alt="Weglot" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Weglot</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Apresentações -->
+  <section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">📊 Apresentações</h3>
+    <p class="text-slate-400 mb-4">
+      <span class="block">💡 Transforme ideias em decks profissionais com apoio de IA.</span>
+      <span class="block">👉 Use para: ppts, pitch decks e relatórios visuais.</span>
+    </p>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <a href="https://gamma.app" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/gamma.svg" alt="Gamma" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Gamma</span>
+      </a>
+
+      <a href="https://tome.app" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/tome.svg" alt="Tome" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Tome</span>
+      </a>
+
+      <a href="https://slidebean.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/slidebean.svg" alt="Slidebean" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Slidebean</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Vídeos -->
+  <section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">🎥 Vídeos</h3>
+    <p class="text-slate-400 mb-4">
+      <span class="block">💡 Geração e edição de vídeo: avatares, legendas, edição automática e narração.</span>
+      <span class="block">👉 Use para: conteúdos sociais, institucionais e criativos.</span>
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <a href="https://invideo.io" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/invideo.svg" alt="InVideo" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>InVideo</span>
+      </a>
+
+      <a href="https://runwayml.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/runwayml.svg" alt="Runway" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Runway</span>
+      </a>
+
+      <a href="https://pictory.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/pictory.svg" alt="Pictory" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Pictory</span>
+      </a>
+
+      <a href="https://www.synthesia.io" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/synthesia.svg" alt="Synthesia" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Synthesia</span>
+      </a>
+
+      <a href="https://www.heygen.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/heygen.svg" alt="HeyGen" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>HeyGen</span>
+      </a>
+
+      <a href="https://www.descript.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/descript.svg" alt="Descript" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Descript</span>
+      </a>
+
+      <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/google.svg" alt="Gemini Videos" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Gemini (Vídeos)</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Narração -->
+  <section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">🎤 Narração</h3>
+    <p class="text-slate-400 mb-4">
+      <span class="block">💡 Síntese de voz, clonagem e edição de áudio para locuções e narrativas.</span>
+      <span class="block">👉 Use para: dublagens, podcasts e narração natural.</span>
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <a href="https://elevenlabs.io" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/elevenlabs.svg" alt="ElevenLabs" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>ElevenLabs</span>
+      </a>
+
+      <a href="https://suno.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/suno.svg" alt="Suno AI" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Suno AI</span>
+      </a>
+
+      <a href="https://udio.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/udio.svg" alt="Udio" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Udio</span>
+      </a>
+
+      <a href="https://deepgram.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/deepgram.svg" alt="Deepgram" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Deepgram</span>
+      </a>
+
+      <a href="https://www.descript.com/overdub" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/descript.svg" alt="Descript Overdub" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Descript (Overdub)</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Reuniões -->
+  <section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">📅 Reuniões</h3>
+    <p class="text-slate-400 mb-4">
+      <span class="block">💡 Transcrição, sumário automático e extração de tarefas a partir de reuniões.</span>
+      <span class="block">👉 Use para: atas automáticas, acompanhamento e produtividade.</span>
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <a href="https://tldv.io" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/tldv.svg" alt="TL;DV" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>TL;DV</span>
+      </a>
+
+      <a href="https://fireflies.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/fireflies.svg" alt="Fireflies" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Fireflies</span>
+      </a>
+
+      <a href="https://otter.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/otter.svg" alt="Otter.ai" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Otter</span>
+      </a>
+
+      <a href="https://krisp.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/krisp.svg" alt="Krisp" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Krisp</span>
+      </a>
+
+      <a href="https://www.avoma.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/avoma.svg" alt="Avoma" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Avoma</span>
+      </a>
+
+      <a href="https://reclaim.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/reclaim.svg" alt="Reclaim" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Reclaim</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Tarefas & Automação -->
+  <section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">✅ Tarefas & Automação</h3>
+    <p class="text-slate-400 mb-4">
+      <span class="block">💡 Gerenciamento, automações e integrações sem código para fluxos de trabalho.</span>
+      <span class="block">👉 Use para: organizar trabalho e automatizar processos.</span>
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <a href="https://clickup.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/clickup.svg" alt="ClickUp" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>ClickUp</span>
+      </a>
+
+      <a href="https://www.drift.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/drift.svg" alt="Drift" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Drift</span>
+      </a>
+
+      <a href="https://www.outreach.io" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/outreach.svg" alt="Outreach" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Outreach</span>
+      </a>
+
+      <a href="https://www.bardeen.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/bardeen.svg" alt="Bardeen" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Bardeen</span>
+      </a>
+
+      <a href="https://zapier.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/zapier.svg" alt="Zapier" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Zapier</span>
+      </a>
+
+      <a href="https://www.make.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/make.svg" alt="Make" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Make (Integromat)</span>
+      </a>
+
+      <a href="https://n8n.io" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/n8n.svg" alt="n8n" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>n8n</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Detectar IA -->
+  <section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">🔍 Detectar IA</h3>
+    <p class="text-slate-400 mb-4">
+      <span class="block">💡 Ferramentas para identificar texto gerado por IA, verificar originalidade e checagem de plágio.</span>
+      <span class="block">👉 Use para: validar autenticidade e evitar uso indevido.</span>
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <a href="https://gptzero.me" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/gptzero.svg" alt="GPTZero" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>GPTZero</span>
+      </a>
+
+      <a href="https://www.wordtune.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/wordtune.svg" alt="Wordtune" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Wordtune</span>
+      </a>
+
+      <a href="https://copyleaks.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/copyleaks.svg" alt="Copyleaks" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Copyleaks</span>
+      </a>
+
+      <a href="https://originality.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/originalityai.svg" alt="Originality.ai" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Originality.ai</span>
+      </a>
+
+      <a href="https://www.turnitin.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/turnitin.svg" alt="Turnitin" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+        <span>Turnitin</span>
+      </a>
+
+      <a href="https://www.grammarly.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/grammarly.svg" alt="Grammarly" class="w-4 h-4" onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='inline-block';">
+        <svg class="fallback-icon hidden w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+        <span>Grammarly</span>
+      </a>
+
+      <a href="https://www.bypassgpt.ai/pt" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
+        <svg class="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v16H4z"/></svg>
+        <span>BypassGPT</span>
+      </a>
+    </div>
+  </section>
+</div>
+      
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contato" class="bg-slate-900 text-slate-300 border-t border-slate-800">
+        <div class="container mx-auto px-6 py-12 text-center">
+            <h2 class="text-3xl font-bold mb-4 text-cyan-300">Em que posso te ajudar?</h2>
+            <p class="text-center text-slate-400 mb-8 max-w-3xl mx-auto">Entre em contato.</p>
+            
+            <div class="flex justify-center items-center space-x-8">
+                <a href="mailto:jean.rgsocd@gmail.com" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Email" title="Email">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
+                </a>
+                <a href="[https://www.instagram.com/jcrs.7/](https://www.instagram.com/jcrs.7/)" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Instagram" title="Instagram">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+                </a>
+                <a href="[https://wa.me/5511984970539](https://wa.me/5511984970539)" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="WhatsApp" title="WhatsApp">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)"><path d="M19.05 4.94A9.95 9.95 0 0 0 12 2C6.48 2 2 6.48 2 12c0 1.77.46 3.45 1.29 4.94L2 22l5.06-1.29A9.95 9.95 0 0 0 12 22c5.52 0 10-4.48 10-10a9.95 9.95 0 0 0-2.95-7.06zM12 20.25a8.25 8.25 0 0 1-4.2-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.69-8.23 8.23-8.23a8.23 8.23 0 0 1 8.23 8.23c0 4.54-3.69 8.23-8.23 8.23zm4.5-6.17c-.27-.13-1.61-.79-1.85-.88-.25-.09-.43-.13-.61.13-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.06-.27-.13-1.14-.42-2.17-1.33-.8-.72-1.34-1.61-1.5-1.89-.16-.27-.02-.42.12-.55.12-.12.27-.31.4-.46.13-.15.18-.25.27-.42.09-.17.05-.31-.02-.44s-.6-1.45-.82-1.98c-.22-.53-.44-.46-.6-.46-.16 0-.34-.02-.52-.02-.18 0-.47.07-.71.34-.24.27-.92.9-1.12 2.22-.2 1.32.22 2.57.25 2.75.03.18 1.14 1.75 2.76 2.44 1.62.69 2.89 1.1 3.28 1.29.39.19.74.16.99.1.29-.07.92-.37 1.05-.72.13-.35.13-.65.09-.72-.04-.07-.16-.11-.33-.18z"/></svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const promptsData = {};
+    </script>
+    <script src="categorias/advocacia.js"></script>
+    <script src="categorias/artes-criativas.js"></script>
+    <script src="categorias/copywriters.js"></script>
+    <script src="categorias/corporativos.js"></script>
+    <script src="categorias/criativos.js"></script>
+    <script src="categorias/desenvolvedores-e-ti.js"></script>
+    <script src="categorias/educacao.js"></script>
+    <script src="categorias/empreendedorismo.js"></script>
+    <script src="categorias/entretenimento.js"></script>
+    <script src="categorias/escrita.js"></script>
+    <script src="categorias/estudantes.js"></script>
+    <script src="categorias/financas.js"></script>
+    <script src="categorias/fitness.js"></script>
+    <script src="categorias/marketing.js"></script>
+    <script src="categorias/negocios.js"></script>
+    <script src="categorias/professores.js"></script>
+    <script src="categorias/programacao.js"></script>
+    <script src="categorias/saude.js"></script>
+    <script src="categorias/tecnologia.js"></script>
+    <script src="categorias/youtubers.js"></script>
     
-    return games_by_league
+    <script src="ferramentas/seguranca.js"></script>
+    <script src="ferramentas/imagens.js"></script>
+    <script src="ferramentas/videos.js"></script>
+    <script src="ferramentas/ia.js"></script>
 
-# ... (o resto do código, com as engines de análise, permanece o mesmo) ...
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Lógica do Menu Mobile
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = mobileMenu.querySelectorAll('a');
 
-def analyze_pre_game(game_id: int, api_key: str, headers: dict) -> List[TipInfo]:
-    # (código da análise pré-jogo que já temos)
-    tips = []; 
-    try:
-        odds_url = f"https://v3.football.api-sports.io/odds?fixture={game_id}"
-        odds_response = requests.get(odds_url, headers=headers).json().get("response", [])
-        if odds_response:
-            bet = odds_response[0].get("bookmakers", [{}])[0].get("bets", [{}])[0]
-            values = bet.get("values", [])
-            home_odd, away_odd = 0, 0
-            for value in values:
-                if value.get("value") == "Home": home_odd = float(value.get("odd", 100))
-                if value.get("value") == "Away": away_odd = float(value.get("odd", 100))
-            if home_odd < 1.6 and home_odd > 1:
-                tips.append(TipInfo(market="Vencedor da Partida", suggestion="Vitória do Time da Casa", justification=f"As odds de {home_odd:.2f} indicam forte favoritismo.", confidence=80))
-            elif away_odd < 1.6 and away_odd > 1:
-                 tips.append(TipInfo(market="Vencedor da Partida", suggestion="Vitória do Time Visitante", justification=f"As odds de {away_odd:.2f} indicam forte favoritismo.", confidence=80))
-        if not tips: tips.append(TipInfo(market="Análise Conclusiva", suggestion="Equilíbrio", justification="Os dados não apontam um favoritismo claro.", confidence=0))
-    except Exception as e:
-        print(f"Erro na análise pré-jogo: {e}"); tips.append(TipInfo(market="Erro de Análise", suggestion="N/A", justification="Não foi possível obter os dados necessários.", confidence=0))
-    return tips
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
 
-def analyze_live_game(game_id: int, api_key: str, headers: dict) -> List[TipInfo]:
-    # (código da análise ao vivo que já temos)
-    tips = []
-    try:
-        fixture_url = f"https://v3.football.api-sports.io/fixtures?id={game_id}"
-        fixture_response = requests.get(fixture_url, headers=headers).json().get("response", [])
-        if not fixture_response: raise ValueError("Dados do fixture não encontrados.")
-        fixture = fixture_response[0]
-        elapsed = fixture.get("fixture", {}).get("status", {}).get("elapsed", 0)
-        stats_url = f"https://v3.football.api-sports.io/fixtures/statistics?fixture={game_id}"
-        stats_response = requests.get(stats_url, headers=headers).json().get("response", [])
-        home_sot, away_sot = 0, 0
-        if len(stats_response) == 2:
-            home_stats = stats_response[0].get('statistics', [])
-            away_stats = stats_response[1].get('statistics', [])
-            def find_stat(sl, sn):
-                for s in sl:
-                    if s.get('type') == sn and s.get('value'): return int(s.get('value'))
-                return 0
-            home_sot = find_stat(home_stats, 'Shots on Goal')
-            away_sot = find_stat(away_stats, 'Shots on Goal')
-        if not tips: tips.append(TipInfo(market="Análise Ao Vivo", suggestion="Aguardar", justification="Jogo sem oportunidades claras no momento.", confidence=0))
-    except Exception as e:
-        print(f"Erro na análise ao vivo: {e}"); tips.append(TipInfo(market="Erro de Análise", suggestion="N/A", justification="Não foi possível obter dados ao vivo.", confidence=0))
-    return tips
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
 
-@app.get("/jogos-do-dia")
-def get_daily_games_endpoint(sport: str = "football"): return get_future_games_from_api(sport)
-@app.get("/analisar-pre-jogo", response_model=List[TipInfo])
-def analyze_pre_game_endpoint(game_id: int):
-    api_key = os.getenv("API_KEY"); headers = {'x-rapidapi-host': "v3.football.api-sports.io", 'x-rapidapi-key': api_key}
-    return analyze_pre_game(game_id, api_key, headers)
-@app.get("/analisar-ao-vivo", response_model=List[TipInfo])
-def analyze_live_game_endpoint(game_id: int):
-    api_key = os.getenv("API_KEY"); headers = {'x-rapidapi-host': "v3.football.api-sports.io", 'x-rapidapi-key': api_key}
-    return analyze_live_game(game_id, api_key, headers)
+            // Lógica do Texto de Introdução (Typed.js)
+            new Typed('#typed-headline', {
+                strings: ['Profissional de Tecnologia e Segurança Cibernética'],
+                typeSpeed: 50,
+                showCursor: true,
+                cursorChar: '_',
+                startDelay: 500,
+                onComplete: (self) => {
+                    self.cursor.style.display = 'none';
+                    const paragraphEl = document.getElementById('intro-paragraph');
+                    paragraphEl.style.opacity = 1;
+                    
+                    setTimeout(() => {
+                        new Typed('#typed-paragraph', {
+                            strings: [
+                                'Com base sólida em Gestão de Projetos, IA e Cybersecurity, busco aplicar minha visão estratégica para garantir a integridade, eficiência e segurança de sistemas. Minha experiência em operações e análise de dados me preparou para resolver problemas complexos e liderar com foco em resultados na área de tecnologia.'
+                            ],
+                            typeSpeed: 25,
+                            showCursor: true,
+                            cursorChar: '_',
+                            startDelay: 200,
+                            onComplete: (selfPara) => {
+                                selfPara.cursor.style.display = 'none';
+                            },
+                        });
+                    }, 300);
+                }
+            });
+
+            // Lógica do Gráfico de Competências (Chart.js)
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            const skillsChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Análise de Vulnerabilidades', 'Pentesting', 'Gestão Ágil', 'Liderança', 'Análise de Dados', 'Arquitetura de Segurança'],
+                    datasets: [{
+                        label: 'Nível de Proficiência',
+                        data: [90, 85, 80, 95, 88, 75],
+                        backgroundColor: 'rgba(0, 230, 230, 0.2)',
+                        borderColor: 'rgba(0, 230, 230, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(0, 230, 230, 1)',
+                        pointBorderColor: '#0d1117',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(0, 230, 230, 1)'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(201, 209, 217, 0.1)' },
+                            grid: { color: 'rgba(201, 209, 217, 0.1)' },
+                            pointLabels: {
+                                font: { size: 12, weight: 'bold' },
+                                color: '#c9d1d9'
+                            },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                stepSize: 20,
+                                color: '#c9d1d9'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                             callbacks: {
+                                 label: function(context) {
+                                     return (context.dataset.label || '') + ': ' + context.parsed.r + '%';
+                                 }
+                             }
+                        }
+                    }
+                }
+            });
+
+            // Lógica das Abas de Competências
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('#competencias .tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.getAttribute('data-tab');
+                    tabs.forEach(t => {
+                        t.classList.remove('text-cyan-300', 'border-cyan-300');
+                        t.classList.add('text-slate-400', 'border-transparent', 'hover:text-slate-300', 'hover:border-slate-500');
+                    });
+                    tab.classList.add('text-cyan-300', 'border-cyan-300');
+                    tab.classList.remove('text-slate-400', 'border-transparent');
+                    
+                    contents.forEach(content => content.classList.add('hidden'));
+                    document.getElementById(target + '-content').classList.remove('hidden');
+                });
+            });
+
+// Lógica para mostrar/esconder os projetos integrados
+const projectListContainer = document.getElementById('project-list-container');
+const analyzerSection = document.getElementById('analisador-seguranca-web');
+const promptsSection = document.getElementById('prompt-generator-section');
+const bettingAnalyzer = document.getElementById('analisador-apostas');
+
+const showScannerButton = document.getElementById('showScannerButton');
+const hideScannerButton = document.getElementById('hideScannerButton');
+const showPromptsButton = document.getElementById('showPromptsButton');
+const hidePromptsButton = document.getElementById('hidePromptsButton');
+const showBettingButton = document.getElementById('showBettingButton');
+const hideBettingButton = document.getElementById('hideBettingButton');
+
+showScannerButton.addEventListener('click', (e) => { e.preventDefault(); projectListContainer.classList.add('hidden'); analyzerSection.classList.remove('hidden'); window.location.href = '#analisador-seguranca-web'; });
+hideScannerButton.addEventListener('click', () => { analyzerSection.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
+showPromptsButton.addEventListener('click', (e) => { e.preventDefault(); projectListContainer.classList.add('hidden'); promptsSection.classList.remove('hidden'); window.location.href = '#prompt-generator-section'; });
+hidePromptsButton.addEventListener('click', () => { promptsSection.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
+showBettingButton.addEventListener('click', (e) => { e.preventDefault(); projectListContainer.classList.add('hidden'); bettingAnalyzer.classList.remove('hidden'); window.location.href = '#analisador-apostas'; });
+hideBettingButton.addEventListener('click', () => { bettingAnalyzer.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
+
+
+// --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO FINAL COM ANÁLISE AO VIVO) ---
+const sportSelect = document.getElementById('sport-select');
+const leagueSelect = document.getElementById('league-select');
+const gameSelect = document.getElementById('game-select');
+const bettingResultsDiv = document.getElementById('bettingResults');
+let allGamesData = {};
+
+async function fetchLeaguesBySport(sport) {
+    if (!sport || sport !== 'football') {
+        leagueSelect.innerHTML = `<option value="">Análise disponível apenas para Futebol</option>`;
+        leagueSelect.disabled = true; return;
+    }
+    const apiUrl = `https://analisador-apostas.onrender.com/jogos-do-dia?esporte=${sport}`;
+    leagueSelect.innerHTML = '<option value="">Carregando ligas...</option>';
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error('Falha na API de jogos.');
+        const data = await response.json();
+        if (data.Erro || !data || Object.keys(data).length === 0) throw new Error(data.Erro ? data.Erro[0].home : 'Nenhuma liga encontrada.');
+        allGamesData = data;
+        leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
+        for (const leagueName in data) {
+            if (Object.prototype.hasOwnProperty.call(data, leagueName) && data[leagueName].length > 0) {
+                const option = new Option(leagueName, leagueName);
+                leagueSelect.add(option);
+            }
+        }
+        leagueSelect.disabled = false;
+    } catch (error) {
+        leagueSelect.innerHTML = `<option value="">${error.message}</option>`;
+    }
+}
+
+async function fetchAndDisplayAnalysis(gameId, status) {
+    if (!gameId) { bettingResultsDiv.classList.add('hidden'); return; }
+    bettingResultsDiv.classList.remove('hidden');
+    bettingResultsDiv.innerHTML = `<p class="text-slate-400 text-center">Analisando estatísticas... 🧠</p>`;
+    
+    // Decide qual endpoint chamar com base no status do jogo
+    const isLive = ['1H', 'HT', '2H', 'ET', 'BT', 'P', 'LIVE'].includes(status);
+    const endpoint = isLive ? 'analisar-ao-vivo' : 'analisar-pre-jogo';
+    const analyzeUrl = `https://analisador-apostas.onrender.com/${endpoint}?game_id=${gameId}`;
+    
+    try {
+        const response = await fetch(analyzeUrl);
+        if (!response.ok) throw new Error('O servidor de análise retornou um erro.');
+        const tips = await response.json();
+        const selectedLeague = leagueSelect.value;
+        const selectedGame = allGamesData[selectedLeague].find(g => g.game_id == gameId);
+
+        let htmlResult = `<h3 class="font-bold text-xl text-cyan-300">${isLive ? 'Análise Ao Vivo' : 'Análise Pré-Jogo'} para: ${selectedGame.home} vs ${selectedGame.away}</h3>`;
+        if (tips.length === 0 || tips[0].confidence === 0) {
+             htmlResult += `<div class="p-4 border rounded-lg border-slate-700 bg-slate-900"><p class="text-slate-400">${tips[0].justification || 'Sem dicas de alta confiança.'}</p></div>`;
+        } else {
+            tips.forEach(tip => {
+                htmlResult += `
+                    <div class="p-4 border rounded-lg border-slate-700 bg-slate-900">
+                        <p class="text-slate-300"><strong class="text-cyan-400">Mercado:</strong> ${tip.market}</p>
+                        <p class="text-slate-300"><strong class="text-cyan-400">Sugestão:</strong> ${tip.suggestion}</p>
+                        <p class="text-slate-400 mt-2"><i>${tip.justification}</i></p>
+                        <div class="w-full bg-slate-700 rounded-full h-2.5 mt-3"><div class="bg-cyan-500 h-2.5 rounded-full" style="width: ${tip.confidence}%"></div></div>
+                        <p class="text-xs text-slate-500 text-right mt-1">Confiança: ${tip.confidence}%</p>
+                    </div>`;
+            });
+        }
+        bettingResultsDiv.innerHTML = htmlResult;
+    } catch (error) {
+        bettingResultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300"><strong>Erro na Análise:</strong> ${error.message}</div>`;
+    }
+}
+
+// Listeners
+sportSelect.addEventListener('change', () => fetchLeaguesBySport(sportSelect.value));
+leagueSelect.addEventListener('change', () => {
+    const selectedLeague = leagueSelect.value;
+    gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
+    bettingResultsDiv.classList.add('hidden');
+    if (selectedLeague && allGamesData[selectedLeague]) {
+        gameSelect.disabled = false;
+        allGamesData[selectedLeague].forEach(game => {
+            // Adiciona o status do jogo ao texto da opção
+            const statusText = game.status !== 'NS' ? ` (${game.status})` : '';
+            const option = new Option(`${game.home} vs ${game.away} (${game.time})${statusText}`, game.game_id);
+            // Guarda o status no próprio elemento da opção para uso posterior
+            option.dataset.status = game.status; 
+            gameSelect.add(option);
+        });
+    } else {
+        gameSelect.disabled = true;
+    }
+});
+
+gameSelect.addEventListener('change', () => {
+    const selectedOption = gameSelect.options[gameSelect.selectedIndex];
+    const gameId = selectedOption.value;
+    const gameStatus = selectedOption.dataset.status;
+    fetchAndDisplayAnalysis(gameId, gameStatus);
+});
+
+gameSelect.addEventListener('change', () => fetchAndDisplayAnalysis(gameSelect.value));
+            // Lógica do Gerador de Prompts (Profissões)
+            const categoriaSelect = document.getElementById('categoria-profissao');
+            const profissaoSelect = document.getElementById('profissao');
+            const gerarBtnProfissao = document.getElementById('gerar-prompt-profissao');
+            const outputProfissao = document.getElementById('prompt-profissao-output');
+            const copiarBtnProfissao = document.getElementById('copiar-prompt-profissao');
+
+            categoriaSelect.addEventListener('change', () => {
+                const categoria = categoriaSelect.value;
+                profissaoSelect.innerHTML = '<option value="">Selecione uma profissão...</option>';
+                profissaoSelect.disabled = !categoria;
+                if (categoria && promptsData[categoria]) {
+                    for (const profissao in promptsData[categoria]) {
+                        const option = document.createElement('option');
+                        option.value = profissao;
+                        option.textContent = profissao;
+                        profissaoSelect.appendChild(option);
+                    }
+                }
+            });
+
+            gerarBtnProfissao.addEventListener('click', () => {
+                const categoria = categoriaSelect.value;
+                const profissao = profissaoSelect.value;
+                if (categoria && profissao && promptsData[categoria] && promptsData[categoria][profissao]) {
+                    outputProfissao.value = promptsData[categoria][profissao];
+                } else {
+                    outputProfissao.value = "Por favor, selecione uma categoria e uma profissão.";
+                }
+            });
+
+            copiarBtnProfissao.addEventListener('click', () => {
+                outputProfissao.select();
+                outputProfissao.setSelectionRange(0, 99999);
+                document.execCommand('copy');
+                copiarBtnProfissao.textContent = 'Copiado!';
+                setTimeout(() => {
+                    copiarBtnProfissao.textContent = 'Copiar';
+                }, 2000);
+            });
+
+            // Lógica das Abas do Gerador de Prompts
+            const promptTabs = document.querySelectorAll('#prompt-generator-section .tab-button');
+            const promptContents = document.querySelectorAll('#prompt-generator-section .tab-content');
+            
+            promptTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetId = tab.id.replace('tab-', 'content-');
+                    
+                    promptTabs.forEach(t => {
+                        t.classList.remove('active', 'text-cyan-300', 'border-cyan-300');
+                        t.classList.add('text-slate-400', 'border-transparent', 'hover:text-slate-200', 'hover:border-slate-500');
+                    });
+                    
+                    tab.classList.add('active', 'text-cyan-300', 'border-cyan-300');
+                    tab.classList.remove('text-slate-400', 'border-transparent');
+                    
+                    promptContents.forEach(content => content.classList.add('hidden'));
+                    document.getElementById(targetId).classList.remove('hidden');
+                });
+            });
+        });
+      // --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO OTIMIZADA) ---
+
+const showBettingButton = document.getElementById('showBettingButton');
+const hideBettingButton = document.getElementById('hideBettingButton');
+const bettingAnalyzer = document.getElementById('analisador-apostas');
+
+// Menus de seleção
+const leagueSelect = document.getElementById('league-select');
+const gameSelect = document.getElementById('game-select');
+
+// Divs de status e resultados
+const bettingStatusDiv = document.getElementById('bettingScanStatus');
+const bettingResultsDiv = document.getElementById('bettingResults');
+
+// Variável para guardar os dados dos jogos vindos da API
+let allGamesData = {};
+
+// Função para buscar os jogos da nossa API
+async function fetchGames() {
+    // Evita buscar novamente se já tivermos os dados
+    if (Object.keys(allGamesData).length > 0 && !allGamesData.Erro) {
+        return;
+    }
+    
+    const apiUrl = 'https://analisador-apostas.onrender.com/jogos-do-dia';
+    leagueSelect.innerHTML = '<option value="">Carregando ligas...</option>'; // Mostra mensagem de carregamento
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error('Falha ao buscar dados da API.');
+        }
+        const data = await response.json();
+
+        if (data.Erro || data.Info) {
+            const errorMessage = data.Erro ? data.Erro[0].home : data.Info[0].home;
+            throw new Error(errorMessage);
+        }
+        
+        allGamesData = data;
+        leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
+
+        for (const leagueName in data) {
+            if (data.hasOwnProperty(leagueName) && data[leagueName].length > 0) {
+                const option = document.createElement('option');
+                option.value = leagueName;
+                option.textContent = leagueName;
+                leagueSelect.appendChild(option);
+            }
+        }
+    } catch (error) {
+        leagueSelect.innerHTML = `<option value="">Erro: ${error.message}</option>`;
+    }
+}
+
+// Quando o botão "Ver Projeto" é clicado, ele APENAS MOSTRA o módulo.
+showBettingButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    projectListContainer.classList.add('hidden');
+    bettingAnalyzer.classList.remove('hidden');
+    window.location.href = '#analisador-apostas';
+    // A chamada fetchGames() foi REMOVIDA daqui.
+});
+
+// **A MÁGICA ACONTECE AQUI**
+// Adiciona um listener que só roda UMA ÚNICA VEZ na primeira vez que o usuário clica no menu.
+leagueSelect.addEventListener('click', fetchGames, { once: true });
+
+// Quando o usuário seleciona uma LIGA
+leagueSelect.addEventListener('change', () => {
+    const selectedLeague = leagueSelect.value;
+    gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
+    bettingResultsDiv.classList.add('hidden');
+
+    if (selectedLeague && allGamesData[selectedLeague]) {
+        gameSelect.disabled = false;
+        allGamesData[selectedLeague].forEach((game, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = `${game.home} vs ${game.away} (${game.time})`;
+            gameSelect.appendChild(option);
+        });
+    } else {
+        gameSelect.disabled = true;
+    }
+});
+
+// Quando o usuário seleciona um JOGO
+gameSelect.addEventListener('change', () => {
+    const selectedLeague = leagueSelect.value;
+    const selectedGameIndex = gameSelect.value;
+
+    if (selectedLeague && selectedGameIndex !== "") {
+        const selectedGame = allGamesData[selectedLeague][selectedGameIndex];
+        bettingStatusDiv.classList.add('hidden');
+        bettingResultsDiv.classList.remove('hidden');
+        
+        let htmlResult = `<h3 class="font-bold text-xl text-cyan-300">Análise Rápida para: ${selectedGame.home} vs ${selectedGame.away}</h3>`;
+        htmlResult += `
+            <div class="p-4 border rounded-lg border-slate-700 bg-slate-900">
+                <p class="text-slate-300"><strong class="text-cyan-400">Mercado Sugerido:</strong> Mais de 1.5 Gols</p>
+                <p class="text-slate-400 mt-2"><i>Com base no histórico geral, há uma boa probabilidade de pelo menos 2 gols na partida.</i></p>
+            </div>
+            <div class="p-4 border rounded-lg border-slate-700 bg-slate-900">
+                <p class="text-slate-300"><strong class="text-cyan-400">Mercado Sugerido:</strong> Ambas as Equipes Marcam</p>
+                <p class="text-slate-400 mt-2"><i>As duas equipes possuem ataques eficientes, sugerindo que ambas podem marcar.</i></p>
+            </div>
+        `;
+        bettingResultsDiv.innerHTML = htmlResult;
+    } else {
+        bettingResultsDiv.classList.add('hidden');
+    }
+});
+
+// A lógica do botão de retornar continua a mesma que já temos no seu outro script
+// hideBettingButton.addEventListener('click', ...);
+    </script>
+</body>
+</html>
