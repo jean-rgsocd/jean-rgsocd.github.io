@@ -1641,7 +1641,7 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
                 });
             });
 
-  // Lógica para mostrar/esconder os projetos integrados
+// Lógica para mostrar/esconder os projetos integrados
 const projectListContainer = document.getElementById('project-list-container');
 const analyzerSection = document.getElementById('analisador-seguranca-web');
 const promptsSection = document.getElementById('prompt-generator-section');
@@ -1662,7 +1662,7 @@ showBettingButton.addEventListener('click', (e) => { e.preventDefault(); project
 hideBettingButton.addEventListener('click', () => { bettingAnalyzer.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
 
 
-// --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO MULTI-ESPORTIVA CORRIGIDA) ---
+// --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO FINAL) ---
 const sportSelect = document.getElementById('sport-select');
 const leagueSelect = document.getElementById('league-select');
 const gameSelect = document.getElementById('game-select');
@@ -1671,7 +1671,6 @@ let allGamesData = {};
 
 async function fetchGamesBySport(sport) {
     if (!sport) {
-        // Limpa e desabilita os menus se nenhum esporte for selecionado
         leagueSelect.innerHTML = '<option value="">Selecione um esporte primeiro</option>';
         leagueSelect.disabled = true;
         gameSelect.innerHTML = '<option value="">Selecione uma liga primeiro</option>';
@@ -1692,14 +1691,14 @@ async function fetchGamesBySport(sport) {
         const data = await response.json();
 
         if (data.Erro || data.Info) {
-            const errorMessage = data.Erro ? data.Erro[0].home : data.Info[0].home;
+            const errorMessage = data.Erro ? `${data.Erro[0].home} ${data.Erro[0].away}` : data.Info[0].home;
             throw new Error(errorMessage);
         }
         
         allGamesData = data;
         leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
         for (const leagueName in data) {
-            if (data.hasOwnProperty(leagueName) && data[leagueName].length > 0) {
+            if (Object.prototype.hasOwnProperty.call(data, leagueName) && data[leagueName].length > 0) {
                 const option = document.createElement('option');
                 option.value = leagueName;
                 option.textContent = leagueName;
@@ -1712,13 +1711,11 @@ async function fetchGamesBySport(sport) {
     }
 }
 
-// Quando o usuário seleciona um ESPORTE
 sportSelect.addEventListener('change', () => {
     const selectedSport = sportSelect.value;
     fetchGamesBySport(selectedSport);
 });
 
-// Quando o usuário seleciona uma LIGA
 leagueSelect.addEventListener('change', () => {
     const selectedLeague = leagueSelect.value;
     gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
@@ -1737,7 +1734,6 @@ leagueSelect.addEventListener('change', () => {
     }
 });
 
-// Quando o usuário seleciona um JOGO
 gameSelect.addEventListener('change', () => {
     const selectedLeague = leagueSelect.value;
     const selectedGameIndex = gameSelect.value;
