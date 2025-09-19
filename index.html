@@ -1662,7 +1662,7 @@ showBettingButton.addEventListener('click', (e) => { e.preventDefault(); project
 hideBettingButton.addEventListener('click', () => { bettingAnalyzer.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
 
 
-// --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO FINAL) ---
+// --- LÓGICA PARA O ANALISADOR DE APOSTAS (VERSÃO FINAL MULTI-ESPORTIVA) ---
 const sportSelect = document.getElementById('sport-select');
 const leagueSelect = document.getElementById('league-select');
 const gameSelect = document.getElementById('game-select');
@@ -1670,15 +1670,20 @@ const bettingResultsDiv = document.getElementById('bettingResults');
 let allGamesData = {};
 
 async function fetchGamesBySport(sport) {
+    // Se nenhum esporte for selecionado, limpa e desabilita os menus
     if (!sport) {
         leagueSelect.innerHTML = '<option value="">Selecione um esporte primeiro</option>';
         leagueSelect.disabled = true;
         gameSelect.innerHTML = '<option value="">Selecione uma liga primeiro</option>';
         gameSelect.disabled = true;
+        bettingResultsDiv.classList.add('hidden');
         return;
     }
     
-    const apiUrl = `https://analisador-apostas.onrender.com/jogos-do-dia?esporte=${sport}`;
+    // Constrói a URL correta com o parâmetro do esporte
+    const apiUrl = `https://analisador-apostas.onrender.com/jogos-do-dia?sport=${sport}`;
+    
+    // Atualiza a interface para mostrar que está carregando
     leagueSelect.innerHTML = '<option value="">Carregando ligas...</option>';
     leagueSelect.disabled = true;
     gameSelect.innerHTML = '<option value="">Selecione uma liga primeiro</option>';
@@ -1687,16 +1692,20 @@ async function fetchGamesBySport(sport) {
 
     try {
         const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error('Falha na API.');
+        if (!response.ok) throw new Error('Falha na comunicação com a API.');
+        
         const data = await response.json();
 
+        // Verifica se a API retornou um erro ou uma informação de "nenhum jogo"
         if (data.Erro || data.Info) {
-            const errorMessage = data.Erro ? `${data.Erro[0].home} ${data.Erro[0].away}` : data.Info[0].home;
+            const errorMessage = data.Erro ? `${data.Erro[0].home} ${data.Erro[0].away}`.trim() : data.Info[0].home;
             throw new Error(errorMessage);
         }
         
-        allGamesData = data;
+        allGamesData = data; // Armazena os dados recebidos
         leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
+        
+        // Preenche o menu de ligas com os dados recebidos
         for (const leagueName in data) {
             if (Object.prototype.hasOwnProperty.call(data, leagueName) && data[leagueName].length > 0) {
                 const option = document.createElement('option');
@@ -1705,17 +1714,20 @@ async function fetchGamesBySport(sport) {
                 leagueSelect.appendChild(option);
             }
         }
-        leagueSelect.disabled = false;
+        leagueSelect.disabled = false; // Habilita o menu de ligas
     } catch (error) {
         leagueSelect.innerHTML = `<option value="">Erro: ${error.message}</option>`;
     }
 }
 
+// **GATILHO PRINCIPAL:** Quando o usuário seleciona um ESPORTE
 sportSelect.addEventListener('change', () => {
     const selectedSport = sportSelect.value;
+    // O valor aqui deve ser "football", "basketball", etc.
     fetchGamesBySport(selectedSport);
 });
 
+// Quando o usuário seleciona uma LIGA
 leagueSelect.addEventListener('change', () => {
     const selectedLeague = leagueSelect.value;
     gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
@@ -1734,6 +1746,7 @@ leagueSelect.addEventListener('change', () => {
     }
 });
 
+// Quando o usuário seleciona um JOGO
 gameSelect.addEventListener('change', () => {
     const selectedLeague = leagueSelect.value;
     const selectedGameIndex = gameSelect.value;
@@ -1742,6 +1755,7 @@ gameSelect.addEventListener('change', () => {
         const selectedGame = allGamesData[selectedLeague][selectedGameIndex];
         bettingResultsDiv.classList.remove('hidden');
         
+        // A análise simulada continua aqui
         let htmlResult = `<h3 class="font-bold text-xl text-cyan-300">Análise Rápida para: ${selectedGame.home} vs ${selectedGame.away}</h3>`;
         htmlResult += `
             <div class="p-4 border rounded-lg border-slate-700 bg-slate-900">
