@@ -1743,7 +1743,7 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
                 resetAndDisable(gameSelect, 'Selecione uma liga');
                 return;
             }
-            gameSelect.innerHTML = '<option value="">Carregando jogos...</option>';
+            gameSelect.innerHTML = '<option value="">Nenhum jogo nos próximos 5 dias</option>';
             gameSelect.disabled = false;
             try {
                 const response = await fetch(`${BASE_URL}/jogos?sport=${sport}&league_id=${leagueId}`);
