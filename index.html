@@ -1694,6 +1694,8 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
     hideBettingButton.addEventListener('click', () => { bettingAnalyzer.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
 
     // --- LÓGICA DO ANALISADOR DE APOSTAS (VERSÃO FINAL SIMPLIFICADA) ---
+    const BASE_URL = 'https://analisador-apostas.onrender.com';
+
     const sportSelect = document.getElementById('sport-select');
     const countrySelectorGroup = document.getElementById('country-selector-group');
     const leagueSelectorGroup = document.getElementById('league-selector-group');
@@ -1701,91 +1703,94 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
     const leagueSelect = document.getElementById('league-select');
     const gameSelect = document.getElementById('game-select');
     const bettingResultsDiv = document.getElementById('bettingResults');
-    const BASE_URL = 'https://analisador-apostas.onrender.com';
+    const tipsterProfileDiv = document.getElementById('tipsterProfile'); // div para dashboard do tipster
 
     function resetAndDisable(selectElement, message) {
         selectElement.innerHTML = `<option value="">${message}</option>`;
         selectElement.disabled = true;
     }
 
+    // ================================
+    // Carregar países
+    // ================================
     async function loadCountries() {
-        countrySelect.innerHTML = '<option value="">Carregando países...</option>';
-        countrySelect.disabled = false;
+        resetAndDisable(countrySelect, 'Carregando países...');
         try {
-            const response = await fetch(`${BASE_URL}/paises?sport=football`);
-            if (!response.ok) throw new Error('Falha ao buscar países.');
-            const countries = await response.json();
+            const res = await fetch(`${BASE_URL}/countries/football`);
+            if (!res.ok) throw new Error('Falha ao carregar países.');
+            const countries = await res.json();
             countrySelect.innerHTML = '<option value="">Selecione um País</option>';
-            countries.forEach(country => {
-                if (country.code) countrySelect.add(new Option(country.name, country.code));
-            });
-        } catch (error) {
-            countrySelect.innerHTML = `<option value="">${error.message}</option>`;
+            countries.response.forEach(c => countrySelect.add(new Option(c.name, c.id)));
+        } catch (err) {
+            countrySelect.innerHTML = `<option value="">${err.message}</option>`;
         }
     }
 
+    // ================================
+    // Carregar ligas por país
+    // ================================
     async function loadLeaguesByCountry() {
-        const countryCode = countrySelect.value;
-        if (!countryCode) return;
-        leagueSelect.innerHTML = '<option value="">Carregando ligas...</option>';
-        leagueSelect.disabled = false;
+        const countryId = countrySelect.value;
+        if (!countryId) return;
+        resetAndDisable(leagueSelect, 'Carregando ligas...');
         try {
-            const response = await fetch(`${BASE_URL}/ligas?sport=football&country_code=${countryCode}`);
-            if (!response.ok) throw new Error('Falha ao buscar ligas.');
-            const leagues = await response.json();
+            const res = await fetch(`${BASE_URL}/leagues/football/${countryId}`);
+            if (!res.ok) throw new Error('Falha ao carregar ligas.');
+            const leagues = await res.json();
             leagueSelect.innerHTML = '<option value="">Selecione uma Liga</option>';
-            leagues.forEach(league => leagueSelect.add(new Option(league.name, league.id)));
-        } catch (error) {
-            leagueSelect.innerHTML = `<option value="">${error.message}</option>`;
+            leagues.response.forEach(l => leagueSelect.add(new Option(l.name, l.id)));
+        } catch (err) {
+            leagueSelect.innerHTML = `<option value="">${err.message}</option>`;
         }
     }
 
+    // ================================
+    // Carregar jogos por liga
+    // ================================
     async function loadGamesByLeague() {
         const leagueId = leagueSelect.value;
         if (!leagueId) return;
-        gameSelect.innerHTML = '<option value="">Carregando jogos...</option>';
-        gameSelect.disabled = false;
+        resetAndDisable(gameSelect, 'Carregando jogos...');
         try {
-            const response = await fetch(`${BASE_URL}/jogos-por-liga?sport=football&league_id=${leagueId}`);
-            if (!response.ok) throw new Error('Falha ao buscar jogos.');
-            const games = await response.json();
+            const res = await fetch(`${BASE_URL}/fixtures/football/${leagueId}`);
+            if (!res.ok) throw new Error('Falha ao carregar jogos.');
+            const games = await res.json();
             gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
-            if (games.length === 0) {
-                gameSelect.innerHTML = '<option value="">Nenhum jogo hoje ou amanhã</option>';
-            }
-            games.forEach(game => {
-                const statusText = game.status !== 'NS' ? ` (${game.status})` : '';
-                const option = new Option(`${game.home} vs ${game.away} (${game.time})${statusText}`, game.game_id);
-                option.dataset.status = game.status;
+            games.response.forEach(game => {
+                const statusText = game.fixture.status.short !== 'NS' ? ` (${game.fixture.status.short})` : '';
+                const option = new Option(`${game.teams.home.name} vs ${game.teams.away.name} (${game.fixture.date.slice(11,16)})${statusText}`, game.fixture.id);
+                option.dataset.status = game.fixture.status.short;
                 gameSelect.add(option);
             });
-        } catch (error) {
-            gameSelect.innerHTML = `<option value="">${error.message}</option>`;
+        } catch (err) {
+            gameSelect.innerHTML = `<option value="">${err.message}</option>`;
         }
     }
 
+    // ================================
+    // Carregar jogos por esporte (outros esportes)
+    // ================================
     async function loadGamesBySport(sport) {
-        gameSelect.innerHTML = '<option value="">Carregando jogos...</option>';
-        gameSelect.disabled = false;
+        resetAndDisable(gameSelect, 'Carregando jogos...');
         try {
-            const response = await fetch(`${BASE_URL}/jogos-por-esporte?sport=${sport}`);
-            if (!response.ok) throw new Error('Falha ao buscar jogos.');
-            const games = await response.json();
+            const res = await fetch(`${BASE_URL}/fixtures/${sport}/0`); // 0 para pegar todos ou ajustar no backend
+            if (!res.ok) throw new Error('Falha ao carregar jogos.');
+            const games = await res.json();
             gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
-            if (games.length === 0) {
-                gameSelect.innerHTML = '<option value="">Nenhum jogo hoje ou amanhã</option>';
-            }
-            games.forEach(game => {
-                const statusText = game.status !== 'NS' ? ` (${game.status})` : '';
-                const option = new Option(`${game.home} vs ${game.away} (${game.time})${statusText}`, game.game_id);
-                option.dataset.status = game.status;
+            games.response.forEach(game => {
+                const statusText = game.fixture.status.short !== 'NS' ? ` (${game.fixture.status.short})` : '';
+                const option = new Option(`${game.teams.home.name} vs ${game.teams.away.name} (${game.fixture.date.slice(11,16)})${statusText}`, game.fixture.id);
+                option.dataset.status = game.fixture.status.short;
                 gameSelect.add(option);
             });
-        } catch (error) {
-            gameSelect.innerHTML = `<option value="">${error.message}</option>`;
+        } catch (err) {
+            gameSelect.innerHTML = `<option value="">${err.message}</option>`;
         }
     }
-    
+
+    // ================================
+    // Buscar análise de apostas (pré-jogo ou ao vivo)
+    // ================================
     async function fetchAndDisplayAnalysis(gameId, status) {
         if (!gameId) { bettingResultsDiv.classList.add('hidden'); return; }
         bettingResultsDiv.classList.remove('hidden');
@@ -1794,33 +1799,63 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
         const liveStatusList = ['1H', 'HT', '2H', 'ET', 'BT', 'P', 'LIVE', 'INT'];
         const isLive = liveStatusList.includes(status);
         const endpoint = isLive ? 'analisar-ao-vivo' : 'analisar-pre-jogo';
-        const analyzeUrl = `${BASE_URL}/${endpoint}?game_id=${gameId}&sport=${sport}`;
         try {
-            const response = await fetch(analyzeUrl);
-            if (!response.ok) throw new Error('O servidor de análise retornou um erro.');
-            const tips = await response.json();
-            const selectedGameText = gameSelect.options[gameSelect.selectedIndex].text.split(' (')[0];
-            let htmlResult = `<h3 class="font-bold text-xl text-cyan-300 mb-4">${isLive ? 'Análise Ao Vivo' : 'Análise Pré-Jogo'} para: ${selectedGameText}</h3>`;
-            if (tips.length === 0 || (tips[0] && tips[0].confidence === 0)) {
-                 htmlResult += `<div class="p-4 border rounded-lg border-slate-700 bg-slate-900"><p class="text-slate-400">${tips.length > 0 ? tips[0].justification : 'Sem dicas de alta confiança.'}</p></div>`;
+            const res = await fetch(`${BASE_URL}/${endpoint}?fixture_id=${gameId}&sport=${sport}`);
+            if (!res.ok) throw new Error('Erro na análise do servidor.');
+            const tips = await res.json();
+
+            let html = `<h3 class="font-bold text-xl text-cyan-300 mb-4">${isLive ? 'Análise Ao Vivo' : 'Análise Pré-Jogo'}</h3>`;
+            if (!tips || tips.length === 0 || tips[0].confidence === 0) {
+                html += `<p class="text-slate-400">Sem dicas de alta confiança.</p>`;
             } else {
                 tips.forEach(tip => {
-                    htmlResult += `
-                        <div class="p-4 border rounded-lg border-slate-700 bg-slate-900 space-y-2">
-                            <p class="text-slate-300"><strong class="text-cyan-400">Mercado:</strong> ${tip.market}</p>
-                            <p class="text-slate-300"><strong class="text-cyan-400">Sugestão:</strong> ${tip.suggestion}</p>
-                            <p class="text-slate-400 mt-2"><i>${tip.justification}</i></p>
-                            <div class="w-full bg-slate-700 rounded-full h-2.5 mt-3"><div class="bg-cyan-500 h-2.5 rounded-full" style="width: ${tip.confidence}%"></div></div>
+                    html += `
+                        <div class="p-4 border rounded-lg border-slate-700 bg-slate-900 mb-2">
+                            <p class="text-slate-300"><strong>Mercado:</strong> ${tip.market}</p>
+                            <p class="text-slate-300"><strong>Sugestão:</strong> ${tip.suggestion}</p>
+                            <p class="text-slate-400 italic mt-1">${tip.justification}</p>
+                            <div class="w-full bg-slate-700 rounded-full h-2 mt-2">
+                                <div class="bg-cyan-500 h-2 rounded-full" style="width:${tip.confidence}%"></div>
+                            </div>
                             <p class="text-xs text-slate-500 text-right mt-1">Confiança: ${tip.confidence}%</p>
                         </div>`;
                 });
             }
-            bettingResultsDiv.innerHTML = htmlResult;
-        } catch (error) {
-            bettingResultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300"><strong>Erro na Análise:</strong> ${error.message}</div>`;
+            bettingResultsDiv.innerHTML = html;
+        } catch (err) {
+            bettingResultsDiv.innerHTML = `<p class="text-red-400 text-center">Erro: ${err.message}</p>`;
         }
     }
 
+    // ================================
+    // Buscar perfil do Tipster
+    // ================================
+    async function loadTipsterProfile() {
+        if (!tipsterProfileDiv) return;
+        tipsterProfileDiv.innerHTML = 'Carregando perfil do Tipster...';
+        try {
+            const res = await fetch(`${BASE_URL}/tipster/dashboard`);
+            if (!res.ok) throw new Error('Erro ao carregar perfil do Tipster.');
+            const data = await res.json();
+            let html = `<h4 class="text-cyan-300 font-bold">Perfil do Tipster</h4>`;
+            html += `<p>Total previsões: ${data.profile.total_predictions}</p>`;
+            html += `<p>Acertos: ${data.profile.correct_predictions}</p>`;
+            html += `<p>Erros: ${data.profile.wrong_predictions}</p>`;
+            html += `<p>Precisão geral: ${data.profile.accuracy || 0}%</p>`;
+            html += `<h5 class="mt-2 font-bold text-slate-300">Por esporte:</h5>`;
+            for (const sport in data.by_sport) {
+                const s = data.by_sport[sport];
+                html += `<p><strong>${sport}:</strong> Total: ${s.total}, Acertos: ${s.correct}, Erros: ${s.wrong}, Precisão: ${s.accuracy}%</p>`;
+            }
+            tipsterProfileDiv.innerHTML = html;
+        } catch (err) {
+            tipsterProfileDiv.innerHTML = `<p class="text-red-400">${err.message}</p>`;
+        }
+    }
+
+    // ================================
+    // Eventos de seleção
+    // ================================
     sportSelect.addEventListener('change', () => {
         const sport = sportSelect.value;
         bettingResultsDiv.classList.add('hidden');
@@ -1831,33 +1866,31 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
             resetAndDisable(countrySelect, 'Carregando...');
             resetAndDisable(leagueSelect, 'Selecione um país');
             resetAndDisable(gameSelect, 'Selecione uma liga');
-            countrySelect.disabled = false;
             loadCountries();
         } else if (sport) {
             countrySelectorGroup.style.display = 'none';
             leagueSelectorGroup.style.display = 'none';
             loadGamesBySport(sport);
-        } else {
-            countrySelectorGroup.style.display = 'block';
-            leagueSelectorGroup.style.display = 'block';
-            resetAndDisable(countrySelect, 'Selecione um esporte');
-            resetAndDisable(leagueSelect, 'Selecione um esporte');
-            resetAndDisable(gameSelect, 'Selecione um esporte');
         }
     });
 
     countrySelect.addEventListener('change', loadLeaguesByCountry);
     leagueSelect.addEventListener('change', loadGamesByLeague);
     gameSelect.addEventListener('change', () => {
-        const selectedOption = gameSelect.options[gameSelect.selectedIndex];
-        if (!selectedOption || !selectedOption.value) {
+        const option = gameSelect.selectedOptions[0];
+        if (!option || !option.value) {
             bettingResultsDiv.classList.add('hidden');
             return;
         }
-        const gameId = selectedOption.value;
-        const gameStatus = selectedOption.dataset.status;
-        fetchAndDisplayAnalysis(gameId, gameStatus);
+        fetchAndDisplayAnalysis(option.value, option.dataset.status);
     });
+    
+    // ================================
+    // Inicializar dashboard Tipster
+    // ================================
+    loadTipsterProfile();
+
+});
 
     // --- LÓGICA DO GERADOR DE PROMPTS (PROFISSÕES E ABAS) ---
     const categoriaSelect = document.getElementById('categoria-profissao');
