@@ -1781,16 +1781,16 @@ if (sportSelect) sportSelect.addEventListener('change', async () => {
 
             leagueSelect.disabled = false;
             leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
-            leagues.forEach(l => leagueSelect.add(new Option(l.title, l.key)));
+            leagues.forEach(l => leagueSelect.add(new Option(l.title, l.key))); // ✅ corrigido
         } catch (error) {
             resetAndDisable(leagueSelect, `Erro: ${error.message}`);
         }
     } 
-    // 🏀 NBA / 🏈 NFL → vão direto para jogos
-    else if (['nba', 'nfl'].includes(selectedSport)) {
+    // 🏀 NBA → busca direto jogos
+    else if (selectedSport === 'nba') {
         if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
         try {
-            const resp = await fetch(`${BASE_URL}/partidas/${encodeURIComponent(selectedSport)}`);
+            const resp = await fetch(`${BASE_URL}/partidas/basketball_nba`);
             if (!resp.ok) throw new Error('Falha ao buscar jogos.');
             const games = await resp.json();
 
@@ -1804,7 +1804,26 @@ if (sportSelect) sportSelect.addEventListener('change', async () => {
         } catch (error) {
             resetAndDisable(gameSelect, `Erro: ${error.message}`);
         }
-    } 
+    }
+    // 🏈 NFL → busca direto jogos
+    else if (selectedSport === 'nfl') {
+        if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
+        try {
+            const resp = await fetch(`${BASE_URL}/partidas/americanfootball_nfl`);
+            if (!resp.ok) throw new Error('Falha ao buscar jogos.');
+            const games = await resp.json();
+
+            gameSelect.disabled = false;
+            gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
+            if (games.length === 0) {
+                gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado para hoje</option>';
+            } else {
+                games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id)));
+            }
+        } catch (error) {
+            resetAndDisable(gameSelect, `Erro: ${error.message}`);
+        }
+    }
     // outros esportes futuros
     else {
         if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
@@ -1857,9 +1876,13 @@ if (gameSelect) gameSelect.addEventListener('change', async () => {
         if (selectedSport === 'football') {
             url = `${BASE_URL}/analise/${encodeURIComponent(selectedLeague)}/${encodeURIComponent(selectedGame)}`;
         } 
-        // NBA/NFL → usam o próprio esporte como league_key
-        else if (['nba', 'nfl'].includes(selectedSport)) {
-            url = `${BASE_URL}/analise/${encodeURIComponent(selectedSport)}/${encodeURIComponent(selectedGame)}`;
+        // NBA
+        else if (selectedSport === 'nba') {
+            url = `${BASE_URL}/analise/basketball_nba/${encodeURIComponent(selectedGame)}`;
+        }
+        // NFL
+        else if (selectedSport === 'nfl') {
+            url = `${BASE_URL}/analise/americanfootball_nfl/${encodeURIComponent(selectedGame)}`;
         }
 
         const resp = await fetch(url);
