@@ -326,68 +326,22 @@
         </div>
     </div>
 
-    <!-- Radar IA -->
-    <div id="radar-ia-section" class="hidden py-12">
-    <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 rounded-lg shadow-lg border border-slate-700">
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="font-bold text-xl text-slate-100">📡 RADAR IA - Análise em Tempo Real</h3>
-            <button id="hideRadarButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
-                Retornar
-            </button>
+      <!-- Radar IA -->
+<div id="radar-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
+    <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Radar+IA" alt="Imagem do Radar IA" class="w-full h-auto object-cover border-b border-slate-700">
+    <div class="p-8">
+        <h3 class="font-bold text-xl mb-2 text-slate-100">Radar IA</h3>
+        <p class="text-slate-400 mb-6">
+            Uma engine de monitoramento esportivo que coleta e exibe dados estatísticos em tempo real.
+        </p>
+        <div class="mb-6">
+            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Python</span>
+            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">FastAPI</span>
+            <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
         </div>
-        <p class="text-slate-400 mb-6">Selecione um jogo ao vivo para acompanhar as estatísticas em tempo real. Os dados são atualizados automaticamente.</p>
-        
-        <div class="form-group mb-8">
-            <label for="radar-game-select" class="block text-slate-300 text-sm font-bold mb-2">Escolha o Jogo Ao Vivo:</label>
-            <select id="radar-game-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
-                <option value="">Buscando jogos ao vivo...</option>
-            </select>
-        </div>
-
-        <div id="radar-results-panel" class="hidden space-y-6">
-            <div class="text-center">
-                <p class="text-2xl font-bold text-slate-100" id="radar-score">1 - 0</p>
-                <p class="text-lg font-mono text-cyan-400" id="radar-minute">45'</p>
-            </div>
-
-            <div class="grid grid-cols-3 gap-4 text-center">
-                <div>
-                    <p class="text-sm text-slate-400">Posse de Bola</p>
-                    <p class="text-xl font-bold text-slate-100"><span id="home-possession">0</span>% - <span id="away-possession">0</span>%</p>
-                </div>
-                <div>
-                    <p class="text-sm text-slate-400">Chutes</p>
-                    <p class="text-xl font-bold text-slate-100"><span id="home-shots">0</span> - <span id="away-shots">0</span></p>
-                </div>
-                <div>
-                    <p class="text-sm text-slate-400">Escanteios</p>
-                    <p class="text-xl font-bold text-slate-100"><span id="home-corners">0</span> - <span id="away-corners">0</span></p>
-                </div>
-            </div>
-
-             <div class="flex justify-center space-x-4">
-                <div class="text-center">
-                    <p class="text-sm text-slate-400">Cartões Casa</p>
-                    <p class="text-lg font-bold">
-                        <span class="text-yellow-400" id="home-yellow-cards">0 🟨</span> | 
-                        <span class="text-red-500" id="home-red-cards">0 🟥</span>
-                    </p>
-                </div>
-                <div class="text-center">
-                    <p class="text-sm text-slate-400">Cartões Fora</p>
-                     <p class="text-lg font-bold">
-                        <span class="text-yellow-400" id="away-yellow-cards">0 🟨</span> | 
-                        <span class="text-red-500" id="away-red-cards">0 🟥</span>
-                    </p>
-                </div>
-            </div>
-
-            <div>
-                 <h4 class="font-bold text-lg text-cyan-300 mb-2 mt-6 text-center">Linha do Tempo</h4>
-                 <ul id="radar-events" class="space-y-2 text-center text-slate-300">
-                    </ul>
-            </div>
-        </div>
+        <button id="showRadarButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+            Ver Projeto
+        </button>
     </div>
 </div>
 
