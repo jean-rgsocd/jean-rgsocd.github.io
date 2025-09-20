@@ -1827,7 +1827,7 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
             bettingResultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300"><strong>Erro na Análise:</strong> ${error.message}</div>`;
         }
     }
-    if (sportSelect) sportSelect.addEventListener('change', async () => {
+if (sportSelect) sportSelect.addEventListener('change', async () => {
     const selectedSport = sportSelect.value;
     bettingResultsDiv.classList.add('hidden');
 
@@ -1835,20 +1835,31 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
     resetAndDisable(leagueSelect, 'Selecione uma liga');
     resetAndDisable(gameSelect, 'Selecione um jogo');
 
-    // Se for Futebol → segue fluxo País/Liga
+    // Se for Futebol → segue fluxo de ligas
     if (selectedSport === 'football') {
         if (leagueSelectorGroup) leagueSelectorGroup.classList.remove('hidden');
-        loadLeagues();
+        try {
+            const resp = await fetch(`${BASE_URL}/ligas/football`);
+            if (!resp.ok) throw new Error('Falha ao buscar ligas');
+            const leagues = await resp.json();
+
+            leagueSelect.disabled = false;
+            leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
+            leagues.forEach(l => leagueSelect.add(new Option(l.name, l.key)));
+        } catch (error) {
+            resetAndDisable(leagueSelect, `Erro: ${error.message}`);
+        }
     } 
     // Se for NBA ou NFL → pula direto para jogos
     else if (['nba', 'nfl'].includes(selectedSport)) {
         if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
         try {
-            const resp = await fetch(`${BASE_URL}/jogos-por-esporte?sport=${encodeURIComponent(selectedSport)}`);
+            const resp = await fetch(`${BASE_URL}/partidas/${encodeURIComponent(selectedSport)}`);
             if (!resp.ok) throw new Error('Falha ao buscar jogos.');
             const games = await resp.json();
+
             gameSelect.disabled = false;
-            gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
+            gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
             if (games.length === 0) {
                 gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado para hoje</option>';
             } else {
@@ -1864,24 +1875,19 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
     }
 });
 
-    if (leagueSelect) leagueSelect.addEventListener('change', async () => {
+// --- EVENTO: escolher liga ---
+if (leagueSelect) leagueSelect.addEventListener('change', async () => {
     const selectedLeague = leagueSelect.value;
-    const selectedSport = sportSelect.value;
     bettingResultsDiv.classList.add('hidden');
 
     resetAndDisable(gameSelect, 'Carregando jogos...');
 
-    // ⚠️ Se esporte for NBA ou NFL → não precisa carregar via liga
-    if (['nba', 'nfl'].includes(selectedSport)) {
-        resetAndDisable(gameSelect, 'Selecione um jogo (já carregado pelo esporte)');
-        return;
-    }
-
     if (selectedLeague) {
         try {
-            const resp = await fetch(`${BASE_URL}/jogos-por-liga?sport=${encodeURIComponent(selectedSport)}&league_id=${encodeURIComponent(selectedLeague)}`);
+            const resp = await fetch(`${BASE_URL}/partidas/${encodeURIComponent(selectedLeague)}`);
             if (!resp.ok) throw new Error('Falha ao buscar jogos da liga');
             const games = await resp.json();
+
             gameSelect.disabled = false;
             gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
             if (games.length === 0) {
@@ -1896,7 +1902,6 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
         resetAndDisable(gameSelect, 'Selecione uma liga');
     }
 });
-
     // --- LÓGICA DO RADAR IA ---
     const radarGameSelect = document.getElementById('radar-game-select');
     const radarResultsPanel = document.getElementById('radar-results-panel');
