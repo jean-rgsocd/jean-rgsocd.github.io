@@ -402,9 +402,9 @@
         <p class="text-slate-400 mb-6">Selecione um esporte para ver os jogos disponíveis para hoje. A análise utiliza dados de uma API para fornecer insights pré-jogo e ao vivo.</p>
 
         <!-- Seletor de esporte -->
-<div class="form-group">
-  <label for="sport-select">Esporte</label>
-  <select id="sport-select" class="form-control">
+<div class="form-group mb-4">
+  <label for="sport-select" class="block text-slate-300 mb-1">Esporte</label>
+  <select id="sport-select" class="form-control w-full p-2 rounded bg-slate-800 text-slate-200">
     <option value="">Selecione um esporte</option>
     <option value="football">Futebol</option>
     <option value="nba">NBA</option>
@@ -413,25 +413,24 @@
 </div>
 
 <!-- Seletor de liga (apenas Futebol usa) -->
-<div id="league-selector-group" class="form-group">
-  <label for="league-select">Liga</label>
-  <select id="league-select" class="form-control" disabled>
+<div id="league-selector-group" class="form-group mb-4 hidden">
+  <label for="league-select" class="block text-slate-300 mb-1">Liga</label>
+  <select id="league-select" class="form-control w-full p-2 rounded bg-slate-800 text-slate-200" disabled>
     <option value="">Selecione uma liga</option>
   </select>
 </div>
 
 <!-- Seletor de jogo -->
-<div class="form-group">
-  <label for="game-select">Jogo</label>
-  <select id="game-select" class="form-control" disabled>
+<div class="form-group mb-4">
+  <label for="game-select" class="block text-slate-300 mb-1">Jogo</label>
+  <select id="game-select" class="form-control w-full p-2 rounded bg-slate-800 text-slate-200" disabled>
     <option value="">Selecione um jogo</option>
   </select>
 </div>
-        </div>
 
-        <div id="bettingResults" class="mt-8 space-y-4 hidden"></div>
-    </div>
-</div>
+<!-- Resultado da análise -->
+<div id="bettingResults" class="mt-6 space-y-4 hidden"></div>
+
         <!-- Painel do Radar IA -->
     <div id="radar-ia-section" class="hidden py-12">
         <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 rounded-lg shadow-lg border border-slate-700">
