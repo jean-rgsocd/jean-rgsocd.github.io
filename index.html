@@ -401,31 +401,32 @@
         </div>
         <p class="text-slate-400 mb-6">Selecione um esporte para ver os jogos disponíveis para hoje. A análise utiliza dados de uma API para fornecer insights pré-jogo e ao vivo.</p>
 
-        <div class="space-y-4">
-            <div class="form-group">
-                <label for="sport-select" class="block text-slate-300 text-sm font-bold mb-2">1. Escolha o Esporte:</label>
-                <select id="sport-select" class="form-control">
-                  <option value="">Selecione um esporte</option>
-                  <option value="football">Futebol</option>
-                  <option value="nba">NBA</option>
-                  <option value="nfl">NFL</option>
-                </select>
+        <!-- Seletor de esporte -->
+<div class="form-group">
+  <label for="sport-select">Esporte</label>
+  <select id="sport-select" class="form-control">
+    <option value="">Selecione um esporte</option>
+    <option value="football">Futebol</option>
+    <option value="nba">NBA</option>
+    <option value="nfl">NFL</option>
+  </select>
+</div>
 
-            </div>
-            
-            <div id="league-selector-group" class="form-group hidden">
-                <label for="league-select" class="block text-slate-300 text-sm font-bold mb-2">2. Escolha a Liga:</label>
-                <select id="league-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
-                    <option value="">Selecione um esporte primeiro</option>
-                </select>
-            </div>
+<!-- Seletor de liga (apenas Futebol usa) -->
+<div id="league-selector-group" class="form-group">
+  <label for="league-select">Liga</label>
+  <select id="league-select" class="form-control" disabled>
+    <option value="">Selecione uma liga</option>
+  </select>
+</div>
 
-            <div class="form-group">
-                <label for="game-select" class="block text-slate-300 text-sm font-bold mb-2">3. Escolha o Jogo:</label>
-                <select id="game-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
-                    <option value="">Selecione uma liga primeiro</option>
-                </select>
-            </div>
+<!-- Seletor de jogo -->
+<div class="form-group">
+  <label for="game-select">Jogo</label>
+  <select id="game-select" class="form-control" disabled>
+    <option value="">Selecione um jogo</option>
+  </select>
+</div>
         </div>
 
         <div id="bettingResults" class="mt-8 space-y-4 hidden"></div>
