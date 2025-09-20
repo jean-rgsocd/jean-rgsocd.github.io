@@ -1838,6 +1838,7 @@ sportSelect.addEventListener('change', () => {
     bettingResultsDiv.classList.add('hidden');
 
     if (sport === 'football') {
+        // ⚽ Football tem países e ligas
         countrySelectorGroup.style.display = 'block';
         leagueSelectorGroup.style.display = 'block';
         resetAndDisable(countrySelect, 'Carregando...');
@@ -1845,11 +1846,16 @@ sportSelect.addEventListener('change', () => {
         resetAndDisable(gameSelect, 'Selecione uma liga');
         countrySelect.disabled = false;
         loadCountries();
-    } else if (sport) {
+    } 
+    else if (sport === 'nba' || sport === 'nfl') {
+        // 🏀 NBA e 🏈 NFL → sem países/ligas, carrega direto os jogos
         countrySelectorGroup.style.display = 'none';
         leagueSelectorGroup.style.display = 'none';
+        resetAndDisable(gameSelect, 'Carregando...');
         loadGamesBySport(sport);
-    } else {
+    } 
+    else {
+        // caso nenhum esporte selecionado
         countrySelectorGroup.style.display = 'block';
         leagueSelectorGroup.style.display = 'block';
         resetAndDisable(countrySelect, 'Selecione um esporte');
@@ -1857,6 +1863,7 @@ sportSelect.addEventListener('change', () => {
         resetAndDisable(gameSelect, 'Selecione um esporte');
     }
 });
+
 
 countrySelect.addEventListener('change', loadLeaguesByCountry);
 leagueSelect.addEventListener('change', loadGamesByLeague);
@@ -1936,3 +1943,4 @@ gameSelect.addEventListener('change', () => {
     </script>
  </body>
 </html>
+
