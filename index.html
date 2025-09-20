@@ -1824,16 +1824,43 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
             bettingResultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300"><strong>Erro na Análise:</strong> ${error.message}</div>`;
         }
     }
-    if (sportSelect) sportSelect.addEventListener('change', () => {
-        const selectedSport = sportSelect.value;
-        bettingResultsDiv.classList.add('hidden');
-        resetAndDisable(gameSelect, 'Selecione uma liga');
-        if (selectedSport === 'football') {
-            loadLeagues();
-        } else {
-            if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
+    if (sportSelect) sportSelect.addEventListener('change', async () => {
+    const selectedSport = sportSelect.value;
+    bettingResultsDiv.classList.add('hidden');
+
+    // Reset selects
+    resetAndDisable(leagueSelect, 'Selecione uma liga');
+    resetAndDisable(gameSelect, 'Selecione um jogo');
+
+    // Se for Futebol → segue fluxo País/Liga
+    if (selectedSport === 'football') {
+        if (leagueSelectorGroup) leagueSelectorGroup.classList.remove('hidden');
+        loadLeagues();
+    } 
+    // Se for NBA ou NFL → pula direto para jogos
+    else if (['nba', 'nfl'].includes(selectedSport)) {
+        if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
+        try {
+            const resp = await fetch(`${BASE_URL}/jogos-por-esporte?sport=${encodeURIComponent(selectedSport)}`);
+            if (!resp.ok) throw new Error('Falha ao buscar jogos.');
+            const games = await resp.json();
+            gameSelect.disabled = false;
+            gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
+            if (games.length === 0) {
+                gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado para hoje</option>';
+            } else {
+                games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id)));
+            }
+        } catch (error) {
+            resetAndDisable(gameSelect, `Erro: ${error.message}`);
         }
-    });
+    } 
+    // Outros esportes futuros → só esconde ligas
+    else {
+        if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
+    }
+});
+
     if (leagueSelect) leagueSelect.addEventListener('change', () => {
         const selectedLeague = leagueSelect.value;
         bettingResultsDiv.classList.add('hidden');
