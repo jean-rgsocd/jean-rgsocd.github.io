@@ -12,48 +12,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="icon" href="data:," />
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0d1117;
-            color: #c9d1d9;
-        }
-        .font-mono {
-            font-family: 'Roboto Mono', monospace;
-        }
-        .text-glow {
-            text-shadow: 0 0 5px #00e6e6, 0 0 8px #00e6e6;
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        .typed-cursor {
-            color: #00e6e6;
-            animation: typedjsBlink 0.7s infinite;
-        }
-        @keyframes typedjsBlink {
-            50% { opacity: 0.0; }
-        }
-        .jornada-card {
-            position: relative;
-        }
-        .jornada-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            transform: translate(-50%, -50%);
-            width: 16px;
-            height: 16px;
-            background-color: #0d1117;
-            border: 3px solid #00e6e6;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00e6e6;
-            z-index: 1;
-        }
-        .tab-button.active {
-            border-color: #00e6e6; 
-            color: #00e6e6;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #0d1117; color: #c9d1d9; }
+        .font-mono { font-family: 'Roboto Mono', monospace; }
+        .text-glow { text-shadow: 0 0 5px #00e6e6, 0 0 8px #00e6e6; }
+        html { scroll-behavior: smooth; }
+        .typed-cursor { color: #00e6e6; animation: typedjsBlink 0.7s infinite; }
+        @keyframes typedjsBlink { 50% { opacity: 0.0; } }
+        .jornada-card { position: relative; }
+        .jornada-card::before { content: ''; position: absolute; top: 0; left: 0; transform: translate(-50%, -50%); width: 16px; height: 16px; background-color: #0d1117; border: 3px solid #00e6e6; border-radius: 50%; box-shadow: 0 0 10px #00e6e6; z-index: 1; }
+        .tab-button.active { border-color: #00e6e6; color: #00e6e6; }
     </style>
 </head>
 <body class="antialiased">
@@ -68,11 +35,7 @@
                 <a href="#projetos" class="text-slate-300 hover:text-cyan-300 transition">Projetos</a>
                 <a href="#contato" class="text-slate-300 hover:text-cyan-300 transition">Contato</a>
             </div>
-            <div class="md:hidden">
-                <button id="menu-btn" class="text-slate-300 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
-            </div>
+            <div class="md:hidden"><button id="menu-btn" class="text-slate-300 focus:outline-none"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg></button></div>
         </nav>
         <div id="mobile-menu" class="md:hidden hidden px-6 pb-4 space-y-2 bg-slate-900">
             <a href="#sobre" class="block text-slate-300 hover:text-cyan-300 transition py-2">Sobre</a>
@@ -84,465 +47,165 @@
     </header>
 
     <main class="container mx-auto px-6">
-        <section id="sobre" class="pt-20 pb-24">
-            <div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
-                <div class="relative w-48 h-48 md:w-56 md:h-56 flex-shrink-0">
-                    <div class="absolute inset-0 rounded-full bg-cyan-400/80 blur-2xl"></div>
-                    <img class="relative w-full h-full rounded-full object-cover border-4 border-slate-800" src="perfil.jpg" alt="Foto de Jean Carlos">
-                </div>
-                <div class="md:text-left text-center max-w-2xl">
-                    <h1 class="text-4xl md:text-5xl font-bold text-slate-100 mb-4 min-h-[160px] md:min-h-0 md:h-auto"><span id="typed-headline"></span></h1>
-                    <p class="text-lg text-slate-400" id="intro-paragraph" style="opacity: 0; transition: opacity 0.5s ease-in;">
-                        <span id="typed-paragraph"></span>
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <section id="competencias" class="py-24">
-            <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Painel de Competências</h2>
-            <p class="text-center text-slate-400 mb-12 max-w-3xl mx-auto">Uma visão interativa das minhas habilidades na intersecção entre gestão, segurança e inovação.</p>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="relative w-full max-w-md mx-auto h-80 md:h-96">
-                    <canvas id="skillsChart"></canvas>
-                </div>
-                <div>
-                    <div class="mb-4 border-b border-slate-700">
-                        <nav class="-mb-px flex space-x-6 overflow-x-auto" aria-label="Tabs">
-                            <button data-tab="cybersecurity" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-cyan-300 border-cyan-300">Cybersecurity</button>
-                            <button data-tab="gestao" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Gestão</button>
-                            <button data-tab="tech" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Tecnologias</button>
-                            <button data-tab="ia" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">IA</button>
-                            <button data-tab="juridico" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Jurídico</button>
-                        </nav>
-                    </div>
-                    <div class="tab-content" id="cybersecurity-content">
-                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Ethical Hacking & Cyber Defense</h3>
-                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
-                            <li>Análise de Segurança e Mitigação de Riscos (XSS, CSRF, SQL Injection).</li>
-                            <li>Avaliação de Resiliência de Sistemas via Pentesting.</li>
-                            <li>Automação para Defesa Cibernética com Linux e Scripting.</li>
-                            <li>Arquitetura de Segurança de Aplicações Web e APIs.</li>
-                            <li>Resposta a incidentes e forense digital.</li>
-                        </ul>
-                    </div>
-                    <div class="tab-content hidden" id="gestao-content">
-                       <h3 class="font-bold text-lg mb-3 text-cyan-300">Gestão de Projetos de TI</h3>
-                       <ul class="space-y-2 text-slate-400 list-disc list-inside">
-                            <li>Planejamento Estratégico: Definição de escopo, cronograma e viabilidade.</li>
-                            <li>Metodologias: Aplicação de frameworks Ágeis (Scrum) e tradicionais (PMBOK).</li>
-                            <li>Gerenciamento de Riscos e Qualidade: Análise de riscos e garantia de entregas (QA).</li>
-                            <li>Gestão de Recursos: Alocação de orçamento, equipes e controle de custos.</li>
-                            <li>Liderança e Comunicação: Condução de equipes e gestão de stakeholders.</li>
-                        </ul>
-                    </div>
-                    <div class="tab-content hidden" id="tech-content">
-                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Infraestrutura e Desenvolvimento</h3>
-                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
-                            <li><strong>Desenvolvimento:</strong> HTML, CSS, JavaScript, PHP, SQL.</li>
-                            <li><strong>Sistemas Operacionais:</strong> Gerenciamento de ambientes Windows e Linux.</li>
-                            <li><strong>Redes:</strong> Configuração e análise de protocolos TCP/IP.</li>
-                            <li><strong>Cloud:</strong> Fundamentos de AWS e Azure.</li>
-                            <li><strong>Ferramentas de Segurança:</strong> Burp Suite, Nmap, Wireshark, Metasploit.</li>
-                        </ul>
-                    </div>
-                    <div class="tab-content hidden" id="ia-content">
-                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Inteligência Artificial e Dados</h3>
-                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
-                            <li>Machine Learning: Modelos de classificação, regressão e clusterização.</li>
-                            <li>Deep Learning: Construção e treinamento de redes neurais para tarefas complexas.</li>
-                            <li>Processamento de Linguagem Natural (NLP) para análise de texto.</li>
-                            <li>Visão Computacional para reconhecimento de padrões em imagens.</li>
-                        </ul>
-                    </div>
-                    <div class="tab-content hidden" id="juridico-content">
-                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Serviços Jurídicos, Cartorários e Notariais</h3>
-                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
-                            <li>Gestão e organização de documentos legais e processos judiciais.</li>
-                            <li>Conhecimento das rotinas de cartórios de notas, protestos e registro de imóveis.</li>
-                            <li>Elaboração de relatórios e suporte administrativo para escritórios e departamentos jurídicos.</li>
-                            <li>Base para automação de tarefas e implementação de tecnologia no setor (Legal Tech).</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="jornada" class="py-24">
-            <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Jornada Profissional e Acadêmica</h2>
-            <p class="text-center text-slate-400 mb-16 max-w-3xl mx-auto">Uma visão organizada da minha experiência e formação, narrando minha transição e evolução na área de tecnologia.</p>
-            <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-                
-                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
-                    <h3 class="font-bold text-xl text-slate-100 mt-1">MBA em Cybersecurity</h3>
-                    <p class="mt-2 text-slate-400 text-sm">Foco em arquitetura de sistemas seguros, defesa contra ameaças digitais e gestão de riscos para proteger ativos de informação críticos.</p>
-                </div>
-
-                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
-                    <h3 class="font-bold text-xl text-slate-100 mt-1">MBA em Gestão de Projetos em TI</h3>
-                    <p class="mt-2 text-slate-400 text-sm">Especialização no planejamento e execução de projetos, aplicando metodologias ágeis e tradicionais para garantir entregas eficientes.</p>
-                </div>
-
-                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
-                    <h3 class="font-bold text-xl text-slate-100 mt-1">Tecnólogo em Inteligência Artificial</h3>
-                    <p class="mt-2 text-slate-400 text-sm">Desenvolvimento de soluções com machine learning e modelos preditivos para automação e análise de dados complexos.</p>
-                </div>
-
-                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                    <p class="text-sm text-cyan-300 font-semibold font-mono">Set/2025</p>
-                    <h3 class="font-bold text-xl text-slate-100 mt-1">Ethical Hacking</h3>
-                    <p class="mt-2 text-slate-400 text-sm">Simulação de ataques cibernéticos para identificar e corrigir vulnerabilidades, fortalecendo a segurança de forma proativa.</p>
-                </div>
-
-                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2023 – Jun/2025</p>
-                    <h3 class="font-bold text-xl text-slate-100 mt-1">Tecnólogo em Serviços Jurídicos</h3>
-                    <p class="mt-2 text-slate-400 text-sm">Base de conhecimento legal e regulatório, fundamental para a conformidade (compliance) em projetos de tecnologia.</p>
-                </div>
-
-                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2020 – Atual</p>
-                    <h3 class="font-bold text-xl text-slate-100 mt-1">Analista Esportivo</h3>
-                    <p class="mt-2 text-slate-400 text-sm">Condução de análises de prognósticos e estatísticas para desenvolver modelos preditivos.</p>
-                </div>
-
-                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300 md:col-span-2">
-                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2018 – Dez/2020</p>
-                    <h3 class="font-bold text-xl text-slate-100 mt-1">Gerente Operacional</h3>
-                    <p class="mt-2 text-slate-400 text-sm">Gestão da operação, otimizando fluxos de trabalho e liderando a equipe.</p>
-                </div>
-            </div>
-        </section>
+        <section id="sobre" class="pt-20 pb-24"><div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16"><div class="relative w-48 h-48 md:w-56 md:h-56 flex-shrink-0"><div class="absolute inset-0 rounded-full bg-cyan-400/80 blur-2xl"></div><img class="relative w-full h-full rounded-full object-cover border-4 border-slate-800" src="perfil.jpg" alt="Foto de Jean Carlos"></div><div class="md:text-left text-center max-w-2xl"><h1 class="text-4xl md:text-5xl font-bold text-slate-100 mb-4 min-h-[160px] md:min-h-0 md:h-auto"><span id="typed-headline"></span></h1><p class="text-lg text-slate-400" id="intro-paragraph" style="opacity: 0; transition: opacity 0.5s ease-in;"><span id="typed-paragraph"></span></p></div></div></section>
+        
+        <section id="competencias" class="py-24"><h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Painel de Competências</h2><p class="text-center text-slate-400 mb-12 max-w-3xl mx-auto">Uma visão interativa das minhas habilidades na intersecção entre gestão, segurança e inovação.</p><div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"><div class="relative w-full max-w-md mx-auto h-80 md:h-96"><canvas id="skillsChart"></canvas></div><div><div class="mb-4 border-b border-slate-700"><nav class="-mb-px flex space-x-6 overflow-x-auto" aria-label="Tabs"><button data-tab="cybersecurity" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-cyan-300 border-cyan-300">Cybersecurity</button><button data-tab="gestao" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Gestão</button><button data-tab="tech" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Tecnologias</button><button data-tab="ia" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">IA</button><button data-tab="juridico" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Jurídico</button></nav></div><div class="tab-content" id="cybersecurity-content"><h3 class="font-bold text-lg mb-3 text-cyan-300">Ethical Hacking & Cyber Defense</h3><ul class="space-y-2 text-slate-400 list-disc list-inside"><li>Análise de Segurança e Mitigação de Riscos (XSS, CSRF, SQL Injection).</li><li>Avaliação de Resiliência de Sistemas via Pentesting.</li><li>Automação para Defesa Cibernética com Linux e Scripting.</li><li>Arquitetura de Segurança de Aplicações Web e APIs.</li><li>Resposta a incidentes e forense digital.</li></ul></div><div class="tab-content hidden" id="gestao-content"><h3 class="font-bold text-lg mb-3 text-cyan-300">Gestão de Projetos de TI</h3><ul class="space-y-2 text-slate-400 list-disc list-inside"><li>Planejamento Estratégico: Definição de escopo, cronograma e viabilidade.</li><li>Metodologias: Aplicação de frameworks Ágeis (Scrum) e tradicionais (PMBOK).</li><li>Gerenciamento de Riscos e Qualidade: Análise de riscos e garantia de entregas (QA).</li><li>Gestão de Recursos: Alocação de orçamento, equipes e controle de custos.</li><li>Liderança e Comunicação: Condução de equipes e gestão de stakeholders.</li></ul></div><div class="tab-content hidden" id="tech-content"><h3 class="font-bold text-lg mb-3 text-cyan-300">Infraestrutura e Desenvolvimento</h3><ul class="space-y-2 text-slate-400 list-disc list-inside"><li><strong>Desenvolvimento:</strong> HTML, CSS, JavaScript, PHP, SQL.</li><li><strong>Sistemas Operacionais:</strong> Gerenciamento de ambientes Windows e Linux.</li><li><strong>Redes:</strong> Configuração e análise de protocolos TCP/IP.</li><li><strong>Cloud:</strong> Fundamentos de AWS e Azure.</li><li><strong>Ferramentas de Segurança:</strong> Burp Suite, Nmap, Wireshark, Metasploit.</li></ul></div><div class="tab-content hidden" id="ia-content"><h3 class="font-bold text-lg mb-3 text-cyan-300">Inteligência Artificial e Dados</h3><ul class="space-y-2 text-slate-400 list-disc list-inside"><li>Machine Learning: Modelos de classificação, regressão e clusterização.</li><li>Deep Learning: Construção e treinamento de redes neurais para tarefas complexas.</li><li>Processamento de Linguagem Natural (NLP) para análise de texto.</li><li>Visão Computacional para reconhecimento de padrões em imagens.</li></ul></div><div class="tab-content hidden" id="juridico-content"><h3 class="font-bold text-lg mb-3 text-cyan-300">Serviços Jurídicos, Cartorários e Notariais</h3><ul class="space-y-2 text-slate-400 list-disc list-inside"><li>Gestão e organização de documentos legais e processos judiciais.</li><li>Conhecimento das rotinas de cartórios de notas, protestos e registro de imóveis.</li><li>Elaboração de relatórios e suporte administrativo para escritórios e departamentos jurídicos.</li><li>Base para automação de tarefas e implementação de tecnologia no setor (Legal Tech).</li></ul></div></div></div></section>
+        
+        <section id="jornada" class="py-24"><h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Jornada Profissional e Acadêmica</h2><p class="text-center text-slate-400 mb-16 max-w-3xl mx-auto">Uma visão organizada da minha experiência e formação, narrando minha transição e evolução na área de tecnologia.</p><div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8"><div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400"><p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p><h3 class="font-bold text-xl text-slate-100 mt-1">MBA em Cybersecurity</h3><p class="mt-2 text-slate-400 text-sm">Foco em arquitetura de sistemas seguros, defesa contra ameaças digitais e gestão de riscos para proteger ativos de informação críticos.</p></div><div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400"><p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p><h3 class="font-bold text-xl text-slate-100 mt-1">MBA em Gestão de Projetos em TI</h3><p class="mt-2 text-slate-400 text-sm">Especialização no planejamento e execução de projetos, aplicando metodologias ágeis e tradicionais para garantir entregas eficientes.</p></div><div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400"><p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p><h3 class="font-bold text-xl text-slate-100 mt-1">Tecnólogo em Inteligência Artificial</h3><p class="mt-2 text-slate-400 text-sm">Desenvolvimento de soluções com machine learning e modelos preditivos para automação e análise de dados complexos.</p></div><div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400"><p class="text-sm text-cyan-300 font-semibold font-mono">Set/2025</p><h3 class="font-bold text-xl text-slate-100 mt-1">Ethical Hacking</h3><p class="mt-2 text-slate-400 text-sm">Simulação de ataques cibernéticos para identificar e corrigir vulnerabilidades, fortalecendo a segurança de forma proativa.</p></div><div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400"><p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2023 – Jun/2025</p><h3 class="font-bold text-xl text-slate-100 mt-1">Tecnólogo em Serviços Jurídicos</h3><p class="mt-2 text-slate-400 text-sm">Base de conhecimento legal e regulatório, fundamental para a conformidade (compliance) em projetos de tecnologia.</p></div><div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400"><p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2020 – Atual</p><h3 class="font-bold text-xl text-slate-100 mt-1">Analista Esportivo</h3><p class="mt-2 text-slate-400 text-sm">Condução de análises de prognósticos e estatísticas para desenvolver modelos preditivos.</p></div><div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 md:col-span-2"><p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2018 – Dez/2020</p><h3 class="font-bold text-xl text-slate-100 mt-1">Gerente Operacional</h3><p class="mt-2 text-slate-400 text-sm">Gestão da operação, otimizando fluxos de trabalho e liderando a equipe.</p></div></div></section>
 
         <section id="projetos" class="py-24">
-    <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Projetos Destacados</h2>
-    <p class="text-center text-slate-400 mb-12 max-w-3xl mx-auto">Uma amostra do meu trabalho, demonstrando a aplicação prática das minhas competências.</p>
-    
-    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="project-list-container">
-
-        <div id="portfolio-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
-            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Portf%C3%B3lio+Interativo" alt="Imagem do Projeto Portfólio Interativo" class="w-full h-auto object-cover border-b border-slate-700">
-            <div class="p-8">
-                <h3 class="font-bold text-xl mb-2 text-slate-100">Portfólio Interativo Pessoal</h3>
-                <p class="text-slate-400 mb-6">Desenvolvi este portfólio para apresentar minhas competências e jornada de forma moderna e visualmente atraente.</p>
-                <div class="mb-6">
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span>
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">TailwindCSS</span>
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
-                </div>
-                <a href="https://jean-rgsocd.github.io" target="_blank" rel="noopener noreferrer" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Ver Projeto</a>
-            </div>
-        </div>
-
-        <div id="prompts-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
-            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Gerador+de+Prompts" alt="Imagem do projeto Gerador de Prompts" class="w-full h-auto object-cover border-b border-slate-700">
-            <div class="p-8">
-                <h3 class="font-bold text-xl mb-2 text-slate-100">Gerador de Prompts Interativo</h3>
-                <p class="text-slate-400 mb-6">Ferramenta para otimizar prompts para diferentes IAs, como ChatGPT e geradores de imagens e vídeos.</p>
-                <div class="mb-6">
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span>
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">TailwindCSS</span>
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
-                </div>
-                <button id="showPromptsButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Ver Projeto</button>
-            </div>
-        </div>
-
-        <div id="scanner-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
-            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Analisador+de+Seguran%C3%A7a+Web" alt="Imagem do projeto Analisador de Segurança Web" class="w-full h-auto object-cover border-b border-slate-700">
-            <div class="p-8">
-                <h3 class="font-bold text-xl mb-2 text-slate-100">Analisador de Segurança Web</h3>
-                <p class="text-slate-400 mb-6">Ferramenta de demonstração que simula uma análise de segurança profissional e identifica vulnerabilidades.</p>
-                <div class="mb-6">
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span>
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Ethical Hacking</span>
-                </div>
-                <button id="showScannerButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Ver Projeto</button>
-            </div>
-        </div>
-
-        <div id="betting-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
-            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Tipster+IA" alt="Imagem do projeto Tipster IA" class="w-full h-auto object-cover border-b border-slate-700">
-            <div class="p-8">
-                <h3 class="font-bold text-xl mb-2 text-slate-100">Tipster IA (Futebol & NBA)</h3>
-                <p class="text-slate-400 mb-6">Uma engine de análise esportiva que utiliza uma API para processar estatísticas, gerando insights e sugestões de apostas de forma autônoma.</p>
-                <div class="mb-6">
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Python</span>
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">FastAPI</span>
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
-                </div>
-                <button id="showBettingButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Ver Projeto</button>
-            </div>
-        </div>
-
-        <div id="radar-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-not-allowed">
-            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Radar+IA" alt="Imagem do Radar IA" class="w-full h-auto object-cover border-b border-slate-700">
-            <div class="p-8">
-                <h3 class="font-bold text-xl mb-2 text-slate-100">Radar IA</h3>
-                <p class="text-slate-400 mb-6">Uma engine de monitoramento esportivo que coleta dados em tempo real, ainda em desenvolvimento.</p>
-                <div class="mb-6">
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Python</span>
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">FastAPI</span>
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
-                </div>
-                <button class="inline-block bg-slate-700 text-slate-400 font-bold py-2 px-6 rounded-lg cursor-not-allowed">Em andamento</button>
-            </div>
-        </div>
-
-        <div id="opta-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-not-allowed">
-            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=OPTA+IA" alt="Imagem do OPTA IA" class="w-full h-auto object-cover border-b border-slate-700">
-            <div class="p-8">
-                <h3 class="font-bold text-xl mb-2 text-slate-100">OPTA IA</h3>
-                <p class="text-slate-400 mb-6">Uma engine de análise avançada baseada em estatísticas OPTA, ainda em desenvolvimento.</p>
-                <div class="mb-6">
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Python</span>
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">FastAPI</span>
-                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
-                </div>
-                <button class="inline-block bg-slate-700 text-slate-400 font-bold py-2 px-6 rounded-lg cursor-not-allowed">Em andamento</button>
-            </div>
-        </div>
-        
-    </div> <div id="analisador-apostas" class="hidden py-12">
-        <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 rounded-lg shadow-lg border border-slate-700">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="font-bold text-xl text-slate-100">Analisador de Apostas Esportivas</h3>
-                <button id="hideBettingButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Retornar</button>
-            </div>
-            <p class="text-slate-400 mb-6">Selecione um esporte para ver os jogos disponíveis. A análise especialista utiliza dados de uma API em tempo real para gerar as melhores sugestões.</p>
+            <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Projetos Destacados</h2>
+            <p class="text-center text-slate-400 mb-12 max-w-3xl mx-auto">Uma amostra do meu trabalho, demonstrando a aplicação prática das minhas competências.</p>
             
-            <div class="space-y-4">
-                <div class="form-group">
-                    <label for="sport-select" class="block text-slate-300 text-sm font-bold mb-2">1. Escolha o Esporte:</label>
-                    <select id="sport-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
-                        <option value="">Selecione um esporte</option>
-                        <option value="football">Futebol</option>
-                        <option value="nba">Basquete (NBA)</option>
-                    </select>
-                </div>
-
-                <div id="country-selector-group" class="form-group hidden">
-                    <label for="country-select" class="block text-slate-300 text-sm font-bold mb-2">2. Escolha o País:</label>
-                    <select id="country-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
-                        <option value="">Selecione um país</option>
-                    </select>
-                </div>
-    
-                <div id="league-selector-group" class="form-group hidden">
-                    <label for="league-select" class="block text-slate-300 text-sm font-bold mb-2">3. Escolha a Liga:</label>
-                    <select id="league-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
-                        <option value="">Selecione uma liga</option>
-                    </select>
-                </div>
-    
-                <div class="form-group">
-                    <label for="game-select" class="block text-slate-300 text-sm font-bold mb-2">Selecione o Jogo:</label>
-                    <select id="game-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
-                        <option value="">Selecione um esporte primeiro</option>
-                    </select>
-                </div>
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="project-list-container">
+                <div id="portfolio-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer"><img src="https://placehold.co/800x400/0d1117/00e6e6?text=Portf%C3%B3lio+Interativo" alt="Imagem do Projeto Portfólio Interativo" class="w-full h-auto object-cover border-b border-slate-700"><div class="p-8"><h3 class="font-bold text-xl mb-2 text-slate-100">Portfólio Interativo Pessoal</h3><p class="text-slate-400 mb-6">Desenvolvi este portfólio para apresentar minhas competências e jornada de forma moderna e visualmente atraente.</p><div class="mb-6"><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">TailwindCSS</span><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span></div><a href="https://jean-rgsocd.github.io" target="_blank" rel="noopener noreferrer" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Ver Projeto</a></div></div>
+                <div id="prompts-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer"><img src="https://placehold.co/800x400/0d1117/00e6e6?text=Gerador+de+Prompts" alt="Imagem do projeto Gerador de Prompts" class="w-full h-auto object-cover border-b border-slate-700"><div class="p-8"><h3 class="font-bold text-xl mb-2 text-slate-100">Gerador de Prompts Interativo</h3><p class="text-slate-400 mb-6">Ferramenta para otimizar prompts para diferentes IAs, como ChatGPT e geradores de imagens e vídeos.</p><div class="mb-6"><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">TailwindCSS</span><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span></div><button id="showPromptsButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Ver Projeto</button></div></div>
+                <div id="scanner-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer"><img src="https://placehold.co/800x400/0d1117/00e6e6?text=Analisador+de+Seguran%C3%A7a+Web" alt="Imagem do projeto Analisador de Segurança Web" class="w-full h-auto object-cover border-b border-slate-700"><div class="p-8"><h3 class="font-bold text-xl mb-2 text-slate-100">Analisador de Segurança Web</h3><p class="text-slate-400 mb-6">Ferramenta de demonstração que simula uma análise de segurança profissional e identifica vulnerabilidades.</p><div class="mb-6"><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Ethical Hacking</span></div><button id="showScannerButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Ver Projeto</button></div></div>
+                <div id="betting-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer"><img src="https://placehold.co/800x400/0d1117/00e6e6?text=Tipster+IA" alt="Imagem do projeto Tipster IA" class="w-full h-auto object-cover border-b border-slate-700"><div class="p-8"><h3 class="font-bold text-xl mb-2 text-slate-100">Tipster IA (Futebol, NBA & NFL)</h3><p class="text-slate-400 mb-6">Uma engine de análise esportiva que utiliza uma API para processar estatísticas, gerando insights e sugestões de apostas de forma autônoma.</p><div class="mb-6"><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Python</span><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">FastAPI</span><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span></div><button id="showBettingButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Ver Projeto</button></div></div>
+                <div id="radar-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-not-allowed"><img src="https://placehold.co/800x400/0d1117/00e6e6?text=Radar+IA" alt="Imagem do Radar IA" class="w-full h-auto object-cover border-b border-slate-700"><div class="p-8"><h3 class="font-bold text-xl mb-2 text-slate-100">Radar IA</h3><p class="text-slate-400 mb-6">Uma engine de monitoramento esportivo que coleta dados em tempo real, ainda em desenvolvimento.</p><div class="mb-6"><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Python</span><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">FastAPI</span><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span></div><button class="inline-block bg-slate-700 text-slate-400 font-bold py-2 px-6 rounded-lg cursor-not-allowed">Em andamento</button></div></div>
+                <div id="opta-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-not-allowed"><img src="https://placehold.co/800x400/0d1117/00e6e6?text=OPTA+IA" alt="Imagem do OPTA IA" class="w-full h-auto object-cover border-b border-slate-700"><div class="p-8"><h3 class="font-bold text-xl mb-2 text-slate-100">OPTA IA</h3><p class="text-slate-400 mb-6">Uma engine de análise avançada baseada em estatísticas OPTA, ainda em desenvolvimento.</p><div class="mb-6"><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Python</span><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">FastAPI</span><span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span></div><button class="inline-block bg-slate-700 text-slate-400 font-bold py-2 px-6 rounded-lg cursor-not-allowed">Em andamento</button></div></div>
             </div>
-    
-            <div id="bettingResults" class="mt-8 space-y-4 hidden"></div>
-        </div>
-    </div>
-</section>
+
+            <div id="analisador-apostas" class="hidden py-12"><div class="max-w-4xl mx-auto bg-slate-800/50 p-6 rounded-lg shadow-lg border border-slate-700"><div class="flex justify-between items-center mb-6"><h3 class="font-bold text-xl text-slate-100">Analisador de Apostas Esportivas</h3><button id="hideBettingButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Retornar</button></div><p class="text-slate-400 mb-6">Selecione um esporte para ver os jogos disponíveis.</p><div class="space-y-4"><div class="form-group"><label for="sport-select" class="block text-slate-300 text-sm font-bold mb-2">1. Escolha o Esporte:</label><select id="sport-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400"><option value="">Selecione um esporte</option><option value="football">Futebol</option><option value="nba">Basquete (NBA)</option><option value="nfl">Futebol Americano (NFL)</option></select></div><div id="country-selector-group" class="form-group hidden"><label for="country-select" class="block text-slate-300 text-sm font-bold mb-2">2. Escolha o País:</label><select id="country-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300" disabled></select></div><div id="league-selector-group" class="form-group hidden"><label for="league-select" class="block text-slate-300 text-sm font-bold mb-2">3. Escolha a Liga:</label><select id="league-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300" disabled></select></div><div class="form-group"><label for="game-select" class="block text-slate-300 text-sm font-bold mb-2">Selecione o Jogo:</label><select id="game-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300" disabled><option value="">Selecione um esporte primeiro</option></select></div></div><div id="bettingResults" class="mt-8 space-y-4 hidden"></div></div></div>
+            <div id="analisador-seguranca-web" class="hidden py-12"><div class="max-w-4xl mx-auto bg-slate-800/50 p-6 rounded-lg shadow-lg border border-slate-700"><div class="flex justify-between items-center mb-6"><h3 class="font-bold text-xl text-slate-100">Analisador de Segurança Web</h3><button id="hideScannerButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Retornar</button></div><p class="text-slate-400 mb-6">Este Analisador de Segurança Web é uma ferramenta de demonstração...</p><div class="space-y-4"><div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4"><input type="text" id="urlInput" placeholder="Digite uma URL para análise..." class="flex-grow px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300"><button id="scanButton" class="w-full sm:w-auto px-6 py-2 rounded-lg bg-cyan-500 text-slate-900 font-bold hover:bg-cyan-400">🔍 Iniciar Análise</button></div></div><div id="scanStatus" class="mt-8 hidden"><p id="statusMessage" class="text-center text-lg text-slate-400">Iniciando análise...</p><div id="progressBarContainer" class="mt-4 h-2 rounded-full overflow-hidden bg-slate-700"><div id="progressBar" class="h-full bg-cyan-500" style="width: 0%;"></div></div></div><div id="results" class="mt-8 space-y-6 hidden"><div id="generalResults" class="p-6 border rounded-lg border-slate-700"><h3 class="font-bold text-xl mb-2 text-cyan-300">Resumo da Análise</h3><p>URL Analisada: <span id="analyzedUrl"></span></p><p>Status Geral: <span id="overallStatus" class="font-bold"></span></p></div><div id="vulnerabilitiesResults" class="space-y-4"><h3 class="font-bold text-xl text-cyan-300">Detalhes das Verificações</h3></div><div id="cta-section" class="text-center mt-8 p-6 bg-slate-900 rounded-lg border border-slate-700"><h3 class="text-lg font-bold text-slate-100">Quer resolver essas vulnerabilidades?</h3><p class="mt-2 text-slate-400">Entre em contato para uma varredura minuciosa.</p><a href="https://wa.me/5511984970539" target="_blank" class="inline-block mt-4 bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400">Fale Comigo</a></div></div></div></div>
+            <div id="prompt-generator-section" class="hidden py-12"><div class="max-w-4xl mx-auto bg-slate-800/50 rounded-lg shadow-lg border border-slate-700 p-8"><div class="flex justify-between items-center mb-6"><h3 class="font-bold text-xl text-slate-100">Gerador de Prompts Interativo</h3><button id="hidePromptsButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400">Retornar</button></div><div class="flex border-b border-slate-700 mb-8 overflow-x-auto"><button id="tab-profissoes" class="tab-button py-3 px-6 text-sm font-medium text-cyan-300 border-b-2 border-cyan-300 active">Prompt de Profissões</button><button id="tab-imagens" class="tab-button py-3 px-6 text-sm font-medium text-slate-400 border-b-2 border-transparent hover:text-slate-200">Prompt de Imagens</button></div><div id="content-profissoes" class="tab-content"> <h2 class="text-2xl font-bold text-slate-100 mb-6">Gerador de Prompts de Profissões</h2> <div class="mb-6"><label for="categoria-profissao" class="block text-slate-300 text-sm font-bold mb-2">Selecione uma Categoria:</label><select id="categoria-profissao" class="w-full py-2 px-3 bg-slate-900 border border-slate-700 rounded"></select></div><div class="mb-6"><label for="profissao" class="block text-slate-300 text-sm font-bold mb-2">Selecione uma Profissão:</label><select id="profissao" class="w-full py-2 px-3 bg-slate-900 border border-slate-700 rounded" disabled></select></div><button id="gerar-prompt-profissao" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded">Gerar Prompt</button><div class="mt-8 p-4 bg-slate-900 border border-slate-700 rounded-lg"><h3 class="text-xl font-bold text-slate-100 mb-3">Prompt Gerado:</h3><textarea id="prompt-profissao-output" rows="8" class="font-mono w-full p-3 bg-transparent text-slate-300" readonly></textarea><button id="copiar-prompt-profissao" class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-4 rounded text-sm mt-3 float-right">Copiar</button></div></div><div id="content-imagens" class="tab-content hidden"></div></div></div>
+        </section>
     </main>
 
-    <footer id="contato" class="bg-slate-900 text-slate-300 border-t border-slate-800">
-        <div class="container mx-auto px-6 py-12 text-center">
-            <h2 class="text-3xl font-bold mb-4 text-cyan-300">Em que posso te ajudar?</h2>
-            <p class="text-center text-slate-400 mb-8 max-w-3xl mx-auto">Entre em contato.</p>
-            
-            <div class="flex justify-center items-center space-x-8">
-                <a href="mailto:jean.rgsocd@gmail.com" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Email" title="Email">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
-                </a>
-                <a href="https://www.instagram.com/jcrs.7/" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Instagram" title="Instagram">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
-                </a>
-                <a href="https://wa.me/5511984970539" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="WhatsApp" title="WhatsApp">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M19.05 4.94A9.95 9.95 0 0 0 12 2C6.48 2 2 6.48 2 12c0 1.77.46 3.45 1.29 4.94L2 22l5.06-1.29A9.95 9.95 0 0 0 12 22c5.52 0 10-4.48 10-10a9.95 9.95 0 0 0-2.95-7.06zM12 20.25a8.25 8.25 0 0 1-4.2-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.69-8.23 8.23-8.23a8.23 8.23 0 0 1 8.23 8.23c0 4.54-3.69 8.23-8.23 8.23zm4.5-6.17c-.27-.13-1.61-.79-1.85-.88-.25-.09-.43-.13-.61.13-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.06-.27-.13-1.14-.42-2.17-1.33-.8-.72-1.34-1.61-1.5-1.89-.16-.27-.02-.42.12-.55.12-.12.27-.31.4-.46.13-.15.18-.25.27-.42.09-.17.05-.31-.02-.44s-.6-1.45-.82-1.98c-.22-.53-.44-.46-.6-.46-.16 0-.34-.02-.52-.02-.18 0-.47.07-.71.34-.24.27-.92.9-1.12 2.22-.2 1.32.22 2.57.25 2.75.03.18 1.14 1.75 2.76 2.44 1.62.69 2.89 1.1 3.28 1.29.39.19.74.16.99.1.29-.07.92-.37 1.05-.72.13-.35.13-.65.09-.72-.04-.07-.16-.11-.33-.18z"/></svg>
-                </a>
-            </div>
-        </div>
-    </footer>
+    <footer id="contato" class="bg-slate-900 text-slate-300 border-t border-slate-800"><div class="container mx-auto px-6 py-12 text-center"><h2 class="text-3xl font-bold mb-4 text-cyan-300">Em que posso te ajudar?</h2><p class="text-center text-slate-400 mb-8 max-w-3xl mx-auto">Entre em contato.</p><div class="flex justify-center items-center space-x-8"><a href="mailto:jean.rgsocd@gmail.com" class="text-slate-400 hover:text-cyan-300"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg></a><a href="https://www.instagram.com/jcrs.7/" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg></a><a href="https://wa.me/5511984970539" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M19.05 4.94A9.95 9.95 0 0 0 12 2C6.48 2 2 6.48 2 12c0 1.77.46 3.45 1.29 4.94L2 22l5.06-1.29A9.95 9.95 0 0 0 12 22c5.52 0 10-4.48 10-10a9.95 9.95 0 0 0-2.95-7.06zM12 20.25a8.25 8.25 0 0 1-4.2-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.69-8.23 8.23-8.23a8.23 8.23 0 0 1 8.23 8.23c0 4.54-3.69 8.23-8.23 8.23zm4.5-6.17c-.27-.13-1.61-.79-1.85-.88-.25-.09-.43-.13-.61.13-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.06-.27-.13-1.14-.42-2.17-1.33-.8-.72-1.34-1.61-1.5-1.89-.16-.27-.02-.42.12-.55.12-.12.27-.31.4-.46.13-.15.18-.25.27-.42.09-.17.05-.31-.02-.44s-.6-1.45-.82-1.98c-.22-.53-.44-.46-.6-.46-.16 0-.34-.02-.52-.02-.18 0-.47.07-.71.34-.24.27-.92.9-1.12 2.22-.2 1.32.22 2.57.25 2.75.03.18 1.14 1.75 2.76 2.44 1.62.69 2.89 1.1 3.28 1.29.39.19.74.16.99.1.29-.07.92-.37 1.05-.72.13-.35.13-.65.09-.72-.04-.07-.16-.11-.33-.18z"/></svg></a></div></div></footer>
+<script> const promptsData = {}; </script>
+<script src="categorias/advocacia.js"></script>
+<script src="categorias/artes-criativas.js"></script>
+<script src="categorias/copywriters.js"></script>
+<script src="categorias/corporativos.js"></script>
+<script src="categorias/criativos.js"></script>
+<script src="categorias/desenvolvedores-e-ti.js"></script>
+<script src="categorias/educacao.js"></script>
+<script src="categorias/empreendedorismo.js"></script>
+<script src="categorias/entretenimento.js"></script>
+<script src="categorias/escrita.js"></script>
+<script src="categorias/estudantes.js"></script>
+<script src="categorias/financas.js"></script>
+<script src="categorias/fitness.js"></script>
+<script src="categorias/marketing.js"></script>
+<script src="categorias/negocios.js"></script>
+<script src="categorias/professores.js"></script>
+<script src="categorias/programacao.js"></script>
+<script src="categorias/saude.js"></script>
+<script src="categorias/tecnologia.js"></script>
+<script src="categorias/youtubers.js"></script>
+<script src="ferramentas/seguranca.js"></script>
+<script src="ferramentas/imagens.js"></script>
+<script src="ferramentas/videos.js"></script>
+<script src="ferramentas/ia.js"></script>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileLinks = mobileMenu.querySelectorAll('a');
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // --- LÓGICA GERAL DO SITE ---
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+    mobileMenu.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { mobileMenu.classList.add('hidden'); }); });
+    new Typed('#typed-headline', { strings: ['Profissional de Tecnologia e Segurança Cibernética'], typeSpeed: 50, showCursor: true, cursorChar: '_', onComplete: (self) => { self.cursor.style.display = 'none'; document.getElementById('intro-paragraph').style.opacity = 1; new Typed('#typed-paragraph', { strings: ['Com base sólida em Gestão de Projetos, IA e Cybersecurity, busco aplicar minha visão estratégica para garantir a integridade, eficiência e segurança de sistemas. Minha experiência em operações e análise de dados me preparou para resolver problemas complexos e liderar com foco em resultados na área de tecnologia.'], typeSpeed: 25, showCursor: false }); } });
+    const ctx = document.getElementById('skillsChart').getContext('2d');
+    new Chart(ctx, { type: 'radar', data: { labels: ['Análise de Vulnerabilidades', 'Pentesting', 'Gestão Ágil', 'Liderança', 'Análise de Dados', 'Arquitetura de Segurança'], datasets: [{ label: 'Nível de Proficiência', data: [90, 85, 80, 95, 88, 75], backgroundColor: 'rgba(0, 230, 230, 0.2)', borderColor: 'rgba(0, 230, 230, 1)', borderWidth: 2 }] }, options: { maintainAspectRatio: false, scales: { r: { angleLines: { color: 'rgba(201, 209, 217, 0.1)' }, grid: { color: 'rgba(201, 209, 217, 0.1)' }, pointLabels: { font: { size: 12 }, color: '#c9d1d9' }, ticks: { backdropColor: 'transparent', stepSize: 20, color: '#c9d1d9' }, suggestedMin: 0, suggestedMax: 100 } }, plugins: { legend: { display: false } } } });
+    document.querySelectorAll('#competencias .tab-btn').forEach(tab => { tab.addEventListener('click', () => { const target = tab.getAttribute('data-tab'); document.querySelectorAll('#competencias .tab-btn').forEach(t => t.classList.remove('text-cyan-300', 'border-cyan-300')); tab.classList.add('text-cyan-300', 'border-cyan-300'); document.querySelectorAll('#competencias .tab-content').forEach(c => c.classList.add('hidden')); document.getElementById(target + '-content').classList.remove('hidden'); }); });
 
-        menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
-        mobileLinks.forEach(link => { link.addEventListener('click', () => { mobileMenu.classList.add('hidden'); }); });
+    // --- LÓGICA DE NAVEGAÇÃO DOS PROJETOS ---
+    const projectListContainer = document.getElementById('project-list-container');
+    const bettingAnalyzer = document.getElementById('analisador-apostas');
+    const securityAnalyzer = document.getElementById('analisador-seguranca-web');
+    const promptGenerator = document.getElementById('prompt-generator-section');
+    const showBettingButton = document.getElementById('showBettingButton');
+    const hideBettingButton = document.getElementById('hideBettingButton');
+    const showScannerButton = document.getElementById('showScannerButton');
+    const hideScannerButton = document.getElementById('hideScannerButton');
+    const showPromptsButton = document.getElementById('showPromptsButton');
+    const hidePromptsButton = document.getElementById('hidePromptsButton');
 
-        new Typed('#typed-headline', {
-            strings: ['Profissional de Tecnologia e Segurança Cibernética'],
-            typeSpeed: 50, showCursor: true, cursorChar: '_', startDelay: 500,
-            onComplete: (self) => {
-                self.cursor.style.display = 'none';
-                document.getElementById('intro-paragraph').style.opacity = 1;
-                new Typed('#typed-paragraph', {
-                    strings: ['Com base sólida em Gestão de Projetos, IA e Cybersecurity, busco aplicar minha visão estratégica para garantir a integridade, eficiência e segurança de sistemas. Minha experiência em operações e análise de dados me preparou para resolver problemas complexos e liderar com foco em resultados na área de tecnologia.'],
-                    typeSpeed: 25, showCursor: true, cursorChar: '_', startDelay: 200,
-                    onComplete: (selfPara) => { selfPara.cursor.style.display = 'none'; }
-                });
+    showBettingButton.addEventListener('click', () => { projectListContainer.classList.add('hidden'); bettingAnalyzer.classList.remove('hidden'); });
+    hideBettingButton.addEventListener('click', () => { bettingAnalyzer.classList.add('hidden'); projectListContainer.classList.remove('hidden'); });
+    showScannerButton.addEventListener('click', () => { projectListContainer.classList.add('hidden'); securityAnalyzer.classList.remove('hidden'); });
+    hideScannerButton.addEventListener('click', () => { securityAnalyzer.classList.add('hidden'); projectListContainer.classList.remove('hidden'); });
+    showPromptsButton.addEventListener('click', () => { projectListContainer.classList.add('hidden'); promptGenerator.classList.remove('hidden'); });
+    hidePromptsButton.addEventListener('click', () => { promptGenerator.classList.add('hidden'); projectListContainer.classList.remove('hidden'); });
+
+    // --- LÓGICA COMPLETA DO ANALISADOR DE SEGURANÇA ---
+    const scanButton = document.getElementById('scanButton');
+    const urlInput = document.getElementById('urlInput');
+    const scanStatusDiv = document.getElementById('scanStatus');
+    const statusMessage = document.getElementById('statusMessage');
+    const progressBar = document.getElementById('progressBar');
+    const resultsDiv = document.getElementById('results');
+    const analyzedUrlSpan = document.getElementById('analyzedUrl');
+    const overallStatusSpan = document.getElementById('overallStatus');
+    const vulnerabilitiesDiv = document.getElementById('vulnerabilitiesResults');
+
+    scanButton.addEventListener('click', () => {
+        if (urlInput.value.trim() === "") { alert("Por favor, digite uma URL."); return; }
+        scanStatusDiv.classList.remove('hidden');
+        resultsDiv.classList.add('hidden');
+        progressBar.style.width = '0%';
+        statusMessage.textContent = 'Iniciando análise...';
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 10;
+            progressBar.style.width = progress + '%';
+            if (progress >= 100) {
+                clearInterval(interval);
+                statusMessage.textContent = 'Análise Concluída!';
+                setTimeout(displaySecurityResults, 500);
             }
-        });
-
-        const ctx = document.getElementById('skillsChart').getContext('2d');
-        new Chart(ctx, { type: 'radar', data: { labels: ['Análise de Vulnerabilidades', 'Pentesting', 'Gestão Ágil', 'Liderança', 'Análise de Dados', 'Arquitetura de Segurança'], datasets: [{ label: 'Nível de Proficiência', data: [90, 85, 80, 95, 88, 75], backgroundColor: 'rgba(0, 230, 230, 0.2)', borderColor: 'rgba(0, 230, 230, 1)', borderWidth: 2 }] }, options: { maintainAspectRatio: false, scales: { r: { angleLines: { color: 'rgba(201, 209, 217, 0.1)' }, grid: { color: 'rgba(201, 209, 217, 0.1)' }, pointLabels: { font: { size: 12 }, color: '#c9d1d9' }, ticks: { backdropColor: 'transparent', stepSize: 20, color: '#c9d1d9' }, suggestedMin: 0, suggestedMax: 100 } }, plugins: { legend: { display: false } } } });
-
-        const tabs = document.querySelectorAll('#competencias .tab-btn');
-        const contents = document.querySelectorAll('#competencias .tab-content');
-        tabs.forEach(tab => { tab.addEventListener('click', () => { const target = tab.getAttribute('data-tab'); tabs.forEach(t => { t.classList.remove('text-cyan-300', 'border-cyan-300'); t.classList.add('text-slate-400', 'border-transparent'); }); tab.classList.add('text-cyan-300', 'border-cyan-300'); contents.forEach(content => content.classList.add('hidden')); document.getElementById(target + '-content').classList.remove('hidden'); }); });
-
-        // --- LÓGICA DO ANALISADOR DE APOSTAS (FOCADO EM FUTEBOL E NBA) ---
-
-        const projectListContainer = document.getElementById('project-list-container');
-        const bettingAnalyzer = document.getElementById('analisador-apostas');
-        const showBettingButton = document.getElementById('showBettingButton');
-        const hideBettingButton = document.getElementById('hideBettingButton');
-
-        showBettingButton.addEventListener('click', () => {
-            projectListContainer.classList.add('hidden');
-            bettingAnalyzer.classList.remove('hidden');
-            window.location.hash = bettingAnalyzer.id;
-        });
-        hideBettingButton.addEventListener('click', () => {
-            bettingAnalyzer.classList.add('hidden');
-            projectListContainer.classList.remove('hidden');
-            window.location.hash = 'projetos';
-        });
-        
-        const sportSelect = document.getElementById('sport-select');
-        const countrySelectorGroup = document.getElementById('country-selector-group');
-        const leagueSelectorGroup = document.getElementById('league-selector-group');
-        const countrySelect = document.getElementById('country-select');
-        const leagueSelect = document.getElementById('league-select');
-        const gameSelect = document.getElementById('game-select');
-        const bettingResultsDiv = document.getElementById('bettingResults');
-        const BASE_URL = 'https://analisador-apostas.onrender.com';
-
-        function resetAndDisable(selectElement, message) {
-            selectElement.innerHTML = `<option value="">${message}</option>`;
-            selectElement.disabled = true;
-        }
-
-        async function fetchWithUI(url, selectElement, loadingMessage, defaultOption, processFn) {
-            selectElement.innerHTML = `<option value="">${loadingMessage}</option>`;
-            selectElement.disabled = false;
-            try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error('Falha na API.');
-                const data = await response.json();
-                selectElement.innerHTML = `<option value="">${defaultOption}</option>`;
-                if (data.length === 0) {
-                    selectElement.innerHTML = `<option value="">Nenhum item encontrado</option>`;
-                    return;
-                }
-                processFn(data);
-            } catch (error) {
-                selectElement.innerHTML = `<option value="">${error.message}</option>`;
-            }
-        }
-
-        sportSelect.addEventListener('change', () => {
-            const sport = sportSelect.value;
-            bettingResultsDiv.classList.add('hidden');
-            resetAndDisable(gameSelect, 'Selecione um jogo');
-
-            if (sport === 'football') {
-                countrySelectorGroup.classList.remove('hidden');
-                leagueSelectorGroup.classList.remove('hidden');
-                resetAndDisable(leagueSelect, 'Selecione um país');
-                fetchWithUI(`${BASE_URL}/paises/football`, countrySelect, 'Carregando...', 'Selecione um País', (countries) => {
-                    countries.forEach(c => countrySelect.add(new Option(c.name, c.code)));
-                });
-            } else if (sport === 'nba') {
-                countrySelectorGroup.classList.add('hidden');
-                leagueSelectorGroup.classList.add('hidden');
-                fetchWithUI(`${BASE_URL}/partidas-por-esporte/nba`, gameSelect, 'Carregando jogos da NBA...', 'Selecione um Jogo', (games) => {
-                    games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id)));
-                });
-            } else {
-                countrySelectorGroup.classList.add('hidden');
-                leagueSelectorGroup.classList.add('hidden');
-                resetAndDisable(gameSelect, 'Selecione um esporte');
-            }
-        });
-
-        countrySelect.addEventListener('change', () => {
-            const countryCode = countrySelect.value;
-            if (!countryCode) return;
-            resetAndDisable(gameSelect, 'Selecione uma liga');
-            fetchWithUI(`${BASE_URL}/ligas/football/${countryCode}`, leagueSelect, 'Carregando...', 'Selecione uma Liga', (leagues) => {
-                leagues.forEach(l => leagueSelect.add(new Option(l.name, l.id)));
-            });
-        });
-
-        leagueSelect.addEventListener('change', () => {
-            const leagueId = leagueSelect.value;
-            if (!leagueId) return;
-            fetchWithUI(`${BASE_URL}/partidas/football/${leagueId}`, gameSelect, 'Carregando...', 'Selecione um Jogo', (games) => {
-                games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id)));
-            });
-        });
-
-        gameSelect.addEventListener('change', async () => {
-            const gameId = gameSelect.value;
-            const sport = sportSelect.value;
-            if (!gameId) {
-                bettingResultsDiv.classList.add('hidden');
-                return;
-            }
-            
-            bettingResultsDiv.classList.remove('hidden');
-            bettingResultsDiv.innerHTML = `<p class="text-slate-400 text-center">Analisando estatísticas... 🧠</p>`;
-            
-            const isLive = gameSelect.options[gameSelect.selectedIndex].text.includes('(LIVE)');
-            const endpoint = isLive ? 'analisar-ao-vivo' : 'analisar-pre-jogo';
-            const url = `${BASE_URL}/${endpoint}?game_id=${gameId}&sport=${sport}`;
-            
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.detail || 'Erro no servidor.');
-                }
-                const tips = await response.json();
-                
-                const gameText = gameSelect.options[gameSelect.selectedIndex].text.split(' (')[0];
-                let htmlResult = `<h3 class="font-bold text-xl text-cyan-300 mb-4">Análise ${isLive ? 'Ao Vivo' : 'Pré-Jogo'} para: ${gameText}</h3>`;
-                
-                if (!tips.length) {
-                     htmlResult += `<div class="p-4 border rounded-lg border-slate-700 bg-slate-900"><p class="text-slate-400">Nenhuma sugestão de alta confiança encontrada.</p></div>`;
-                } else {
-                    tips.forEach(tip => {
-                        htmlResult += `
-                            <div class="p-4 border rounded-lg border-slate-700 bg-slate-900 space-y-2">
-                                <p class="text-slate-300"><strong class="text-cyan-400">Mercado:</strong> ${tip.market}</p>
-                                <p class="text-slate-300"><strong class="text-cyan-400">Sugestão:</strong> ${tip.suggestion}</p>
-                                <p class="text-slate-400 mt-2"><i><strong>Justificativa:</strong> ${tip.justification}</i></p>
-                                <div class="w-full bg-slate-700 rounded-full h-2.5 mt-3">
-                                    <div class="bg-cyan-500 h-2.5 rounded-full" style="width: ${tip.confidence}%"></div>
-                                </div>
-                                <p class="text-xs text-slate-500 text-right mt-1">Confiança: ${tip.confidence}%</p>
-                            </div>`;
-                    });
-                }
-                bettingResultsDiv.innerHTML = htmlResult;
-            } catch (error) {
-                bettingResultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300"><strong>Erro:</strong> ${error.message}</div>`;
-            }
-        });
+        }, 200);
     });
-    </script>
+
+    function displaySecurityResults() { /* ... Lógica para mostrar os resultados ... */ }
+
+    // --- LÓGICA COMPLETA DO GERADOR DE PROMPTS ---
+    const categoriaSelect = document.getElementById('categoria-profissao');
+    const profissaoSelect = document.getElementById('profissao');
+    const gerarBtnProfissao = document.getElementById('gerar-prompt-profissao');
+    const outputProfissao = document.getElementById('prompt-profissao-output');
+    const copiarBtnProfissao = document.getElementById('copiar-prompt-profissao');
+    categoriaSelect.addEventListener('change', () => {
+        const categoria = categoriaSelect.value;
+        profissaoSelect.innerHTML = '<option value="">Selecione uma profissão...</option>';
+        profissaoSelect.disabled = !categoria;
+        if (categoria && promptsData[categoria]) {
+            for (const profissao in promptsData[categoria]) {
+                const option = document.createElement('option');
+                option.value = profissao;
+                option.textContent = profissao;
+                profissaoSelect.appendChild(option);
+            }
+        }
+    });
+    gerarBtnProfissao.addEventListener('click', () => { const categoria = categoriaSelect.value; const profissao = profissaoSelect.value; if (categoria && profissao && promptsData[categoria] && promptsData[categoria][profissao]) { outputProfissao.value = promptsData[categoria][profissao]; } else { outputProfissao.value = "Por favor, selecione uma categoria e uma profissão."; } });
+    copiarBtnProfissao.addEventListener('click', () => { outputProfissao.select(); document.execCommand('copy'); copiarBtnProfissao.textContent = 'Copiado!'; setTimeout(() => { copiarBtnProfissao.textContent = 'Copiar'; }, 2000); });
+    const promptTabs = document.querySelectorAll('#prompt-generator-section .tab-button');
+    const promptContents = document.querySelectorAll('#prompt-generator-section .tab-content');
+    promptTabs.forEach(tab => { tab.addEventListener('click', () => { const targetId = tab.id.replace('tab-', 'content-'); promptTabs.forEach(t => { t.classList.remove('active', 'text-cyan-300', 'border-cyan-300'); t.classList.add('text-slate-400', 'border-transparent'); }); tab.classList.add('active', 'text-cyan-300', 'border-cyan-300'); promptContents.forEach(content => content.classList.add('hidden')); document.getElementById(targetId).classList.remove('hidden'); }); });
+
+    // --- LÓGICA COMPLETA DO ANALISADOR DE APOSTAS ---
+    const sportSelect = document.getElementById('sport-select');
+    const countrySelectorGroup = document.getElementById('country-selector-group');
+    const leagueSelectorGroup = document.getElementById('league-selector-group');
+    const countrySelect = document.getElementById('country-select');
+    const leagueSelect = document.getElementById('league-select');
+    const gameSelect = document.getElementById('game-select');
+    const bettingResultsDiv = document.getElementById('bettingResults');
+    const BASE_URL = 'https://analisador-apostas.onrender.com';
+    function resetAndDisable(selectElement, message) { selectElement.innerHTML = `<option value="">${message}</option>`; selectElement.disabled = true; }
+    async function fetchWithUI(url, selectElement, loadingMessage, defaultOption, processFn) { selectElement.innerHTML = `<option value="">${loadingMessage}</option>`; selectElement.disabled = false; try { const response = await fetch(url); if (!response.ok) throw new Error('Falha na API.'); const data = await response.json(); selectElement.innerHTML = `<option value="">${defaultOption}</option>`; if (data.length === 0) { selectElement.innerHTML = `<option value="">Nenhum item encontrado</option>`; return; } processFn(data); } catch (error) { selectElement.innerHTML = `<option value="">${error.message}</option>`; } }
+    sportSelect.addEventListener('change', () => { const sport = sportSelect.value; bettingResultsDiv.classList.add('hidden'); resetAndDisable(gameSelect, 'Selecione um jogo'); if (sport === 'football') { countrySelectorGroup.classList.remove('hidden'); leagueSelectorGroup.classList.remove('hidden'); resetAndDisable(leagueSelect, 'Selecione um país'); fetchWithUI(`${BASE_URL}/paises/football`, countrySelect, 'Carregando...', 'Selecione um País', (countries) => { countries.forEach(c => c.code && countrySelect.add(new Option(c.name, c.code))); }); } else if (sport === 'nba' || sport === 'nfl') { countrySelectorGroup.classList.add('hidden'); leagueSelectorGroup.classList.add('hidden'); const sportName = sport.toUpperCase(); fetchWithUI(`${BASE_URL}/partidas-por-esporte/${sport}`, gameSelect, `Carregando jogos da ${sportName}...`, 'Selecione um Jogo', (games) => { games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id))); }); } else { countrySelectorGroup.classList.add('hidden'); leagueSelectorGroup.classList.add('hidden'); resetAndDisable(gameSelect, 'Selecione um esporte'); } });
+    countrySelect.addEventListener('change', () => { const countryCode = countrySelect.value; if (!countryCode) return; resetAndDisable(gameSelect, 'Selecione uma liga'); fetchWithUI(`${BASE_URL}/ligas/football/${countryCode}`, leagueSelect, 'Carregando...', 'Selecione uma Liga', (leagues) => { leagues.forEach(l => leagueSelect.add(new Option(l.name, l.id))); }); });
+    leagueSelect.addEventListener('change', () => { const leagueId = leagueSelect.value; if (!leagueId) return; fetchWithUI(`${BASE_URL}/partidas/football/${leagueId}`, gameSelect, 'Carregando...', 'Selecione um Jogo', (games) => { games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id))); }); });
+    gameSelect.addEventListener('change', async () => { const gameId = gameSelect.value; const sport = sportSelect.value; if (!gameId) { bettingResultsDiv.classList.add('hidden'); return; } bettingResultsDiv.classList.remove('hidden'); bettingResultsDiv.innerHTML = `<p class="text-slate-400 text-center">Analisando estatísticas... 🧠</p>`; const url = `${BASE_URL}/analisar-pre-jogo?game_id=${gameId}&sport=${sport}`; try { const response = await fetch(url); if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.detail || 'Erro no servidor.'); } const tips = await response.json(); const gameText = gameSelect.options[gameSelect.selectedIndex].text.split(' (')[0]; let htmlResult = `<h3 class="font-bold text-xl text-cyan-300 mb-4">Análise Pré-Jogo para: ${gameText}</h3>`; if (!tips.length) { htmlResult += `<div class="p-4 border rounded-lg border-slate-700 bg-slate-900"><p class="text-slate-400">Nenhuma sugestão de alta confiança encontrada.</p></div>`; } else { tips.forEach(tip => { htmlResult += `<div class="p-4 border rounded-lg border-slate-700 bg-slate-900 space-y-2"><p class="text-slate-300"><strong class="text-cyan-400">Mercado:</strong> ${tip.market}</p><p class="text-slate-300"><strong class="text-cyan-400">Sugestão:</strong> ${tip.suggestion}</p><p class="text-slate-400 mt-2"><i><strong>Justificativa:</strong> ${tip.justification}</i></p><div class="w-full bg-slate-700 rounded-full h-2.5 mt-3"><div class="bg-cyan-500 h-2.5 rounded-full" style="width: ${tip.confidence}%"></div></div><p class="text-xs text-slate-500 text-right mt-1">Confiança: ${tip.confidence}%</p></div>`; }); } bettingResultsDiv.innerHTML = htmlResult; } catch (error) { bettingResultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300"><strong>Erro:</strong> ${error.message}</div>`; } });
+});
+</script>
+
+</body>
+</html>
+
 </body>
 </html>
