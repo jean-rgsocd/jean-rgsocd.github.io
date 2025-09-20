@@ -407,8 +407,8 @@
   <select id="sport-select" class="form-control w-full p-2 rounded bg-slate-800 text-slate-200">
     <option value="">Selecione um esporte</option>
     <option value="football">Futebol</option>
-    <option value="nba">NBA</option>
-    <option value="nfl">NFL</option>
+    <option value="basketball_nba">NBA</option>
+    <option value="americanfootball_nfl">NFL</option>
   </select>
 </div>
 
@@ -1746,7 +1746,8 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
     // ================= 2. LÓGICAS DOS PROJETOS ================ //
     // ========================================================== //
 
-    const BASE_URL = 'https://analisador-apostas.onrender.com';
+    <script>
+const BASE_URL = 'https://analisador-apostas.onrender.com';
 
 const sportSelect = document.getElementById('sport-select');
 const leagueSelect = document.getElementById('league-select');
@@ -1754,7 +1755,7 @@ const gameSelect = document.getElementById('game-select');
 const leagueSelectorGroup = document.getElementById('league-selector-group');
 const bettingResultsDiv = document.getElementById('bettingResults');
 
-// --- Função utilitária para resetar selects ---
+// Reset utilitário
 function resetAndDisable(selectElement, message) {
     if (selectElement) {
         selectElement.innerHTML = `<option value="">${message}</option>`;
@@ -1767,7 +1768,6 @@ if (sportSelect) sportSelect.addEventListener('change', async () => {
     const selectedSport = sportSelect.value;
     bettingResultsDiv.classList.add('hidden');
 
-    // Reset selects
     resetAndDisable(leagueSelect, 'Selecione uma liga');
     resetAndDisable(gameSelect, 'Selecione um jogo');
 
@@ -1781,16 +1781,16 @@ if (sportSelect) sportSelect.addEventListener('change', async () => {
 
             leagueSelect.disabled = false;
             leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
-            leagues.forEach(l => leagueSelect.add(new Option(l.title, l.key))); // ✅ corrigido
+            leagues.forEach(l => leagueSelect.add(new Option(l.title, l.key)));
         } catch (error) {
             resetAndDisable(leagueSelect, `Erro: ${error.message}`);
         }
     } 
-    // 🏀 NBA → busca direto jogos
-    else if (selectedSport === 'nba') {
+    // 🏀 NBA ou 🏈 NFL → jogos diretos
+    else if (selectedSport === 'basketball_nba' || selectedSport === 'americanfootball_nfl') {
         if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
         try {
-            const resp = await fetch(`${BASE_URL}/partidas/basketball_nba`);
+            const resp = await fetch(`${BASE_URL}/partidas/${encodeURIComponent(selectedSport)}`);
             if (!resp.ok) throw new Error('Falha ao buscar jogos.');
             const games = await resp.json();
 
@@ -1804,29 +1804,6 @@ if (sportSelect) sportSelect.addEventListener('change', async () => {
         } catch (error) {
             resetAndDisable(gameSelect, `Erro: ${error.message}`);
         }
-    }
-    // 🏈 NFL → busca direto jogos
-    else if (selectedSport === 'nfl') {
-        if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
-        try {
-            const resp = await fetch(`${BASE_URL}/partidas/americanfootball_nfl`);
-            if (!resp.ok) throw new Error('Falha ao buscar jogos.');
-            const games = await resp.json();
-
-            gameSelect.disabled = false;
-            gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
-            if (games.length === 0) {
-                gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado para hoje</option>';
-            } else {
-                games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id)));
-            }
-        } catch (error) {
-            resetAndDisable(gameSelect, `Erro: ${error.message}`);
-        }
-    }
-    // outros esportes futuros
-    else {
-        if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
     }
 });
 
@@ -1876,23 +1853,17 @@ if (gameSelect) gameSelect.addEventListener('change', async () => {
         if (selectedSport === 'football') {
             url = `${BASE_URL}/analise/${encodeURIComponent(selectedLeague)}/${encodeURIComponent(selectedGame)}`;
         } 
-        // NBA
-        else if (selectedSport === 'nba') {
-            url = `${BASE_URL}/analise/basketball_nba/${encodeURIComponent(selectedGame)}`;
-        }
-        // NFL
-        else if (selectedSport === 'nfl') {
-            url = `${BASE_URL}/analise/americanfootball_nfl/${encodeURIComponent(selectedGame)}`;
+        // NBA ou NFL → usam diretamente o sport key
+        else if (selectedSport === 'basketball_nba' || selectedSport === 'americanfootball_nfl') {
+            url = `${BASE_URL}/analise/${encodeURIComponent(selectedSport)}/${encodeURIComponent(selectedGame)}`;
         }
 
         const resp = await fetch(url);
         if (!resp.ok) throw new Error('Falha ao buscar análise do jogo');
-
         const analysis = await resp.json();
 
         bettingResultsDiv.classList.remove('hidden');
 
-        // Renderizar resultado
         let htmlResult = `<h3 class="font-bold text-xl text-cyan-300 mb-4">Análise Pré-Jogo</h3>`;
         analysis.forEach(marketAnalysis => {
             htmlResult += `
@@ -1901,8 +1872,7 @@ if (gameSelect) gameSelect.addEventListener('change', async () => {
                         <strong class="text-cyan-400">Mercado:</strong> ${marketAnalysis.market}
                     </p>
                     <p class="text-slate-400 mt-2"><i>${marketAnalysis.analysis}</i></p>
-                </div>
-            `;
+                </div>`;
         });
         bettingResultsDiv.innerHTML = htmlResult;
 
@@ -1914,6 +1884,8 @@ if (gameSelect) gameSelect.addEventListener('change', async () => {
             </div>`;
     }
 });
+</script>
+
     // --- LÓGICA DO RADAR IA ---
     const radarGameSelect = document.getElementById('radar-game-select');
     const radarResultsPanel = document.getElementById('radar-results-panel');
