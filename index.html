@@ -327,23 +327,69 @@
     </div>
 
     <!-- Radar IA -->
-    <div id="radar-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-not-allowed">
-        <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Radar+IA" alt="Imagem do Radar IA" class="w-full h-auto object-cover border-b border-slate-700">
-        <div class="p-8">
-            <h3 class="font-bold text-xl mb-2 text-slate-100">Radar IA</h3>
-            <p class="text-slate-400 mb-6">
-                Uma engine de monitoramento esportivo que coleta dados em tempo real, ainda em desenvolvimento.
-            </p>
-            <div class="mb-6">
-                <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Python</span>
-                <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">FastAPI</span>
-                <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
-            </div>
-            <button class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors cursor-not-allowed">
-                Em andamento
+    <div id="radar-ia-section" class="hidden py-12">
+    <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 rounded-lg shadow-lg border border-slate-700">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="font-bold text-xl text-slate-100">📡 RADAR IA - Análise em Tempo Real</h3>
+            <button id="hideRadarButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">
+                Retornar
             </button>
         </div>
+        <p class="text-slate-400 mb-6">Selecione um jogo ao vivo para acompanhar as estatísticas em tempo real. Os dados são atualizados automaticamente.</p>
+        
+        <div class="form-group mb-8">
+            <label for="radar-game-select" class="block text-slate-300 text-sm font-bold mb-2">Escolha o Jogo Ao Vivo:</label>
+            <select id="radar-game-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
+                <option value="">Buscando jogos ao vivo...</option>
+            </select>
+        </div>
+
+        <div id="radar-results-panel" class="hidden space-y-6">
+            <div class="text-center">
+                <p class="text-2xl font-bold text-slate-100" id="radar-score">1 - 0</p>
+                <p class="text-lg font-mono text-cyan-400" id="radar-minute">45'</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 text-center">
+                <div>
+                    <p class="text-sm text-slate-400">Posse de Bola</p>
+                    <p class="text-xl font-bold text-slate-100"><span id="home-possession">0</span>% - <span id="away-possession">0</span>%</p>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-400">Chutes</p>
+                    <p class="text-xl font-bold text-slate-100"><span id="home-shots">0</span> - <span id="away-shots">0</span></p>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-400">Escanteios</p>
+                    <p class="text-xl font-bold text-slate-100"><span id="home-corners">0</span> - <span id="away-corners">0</span></p>
+                </div>
+            </div>
+
+             <div class="flex justify-center space-x-4">
+                <div class="text-center">
+                    <p class="text-sm text-slate-400">Cartões Casa</p>
+                    <p class="text-lg font-bold">
+                        <span class="text-yellow-400" id="home-yellow-cards">0 🟨</span> | 
+                        <span class="text-red-500" id="home-red-cards">0 🟥</span>
+                    </p>
+                </div>
+                <div class="text-center">
+                    <p class="text-sm text-slate-400">Cartões Fora</p>
+                     <p class="text-lg font-bold">
+                        <span class="text-yellow-400" id="away-yellow-cards">0 🟨</span> | 
+                        <span class="text-red-500" id="away-red-cards">0 🟥</span>
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                 <h4 class="font-bold text-lg text-cyan-300 mb-2 mt-6 text-center">Linha do Tempo</h4>
+                 <ul id="radar-events" class="space-y-2 text-center text-slate-300">
+                    </ul>
+            </div>
+        </div>
     </div>
+</div>
 
     <!-- OPTA IA -->
     <div id="opta-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-not-allowed">
@@ -1813,7 +1859,102 @@ gameSelect.addEventListener('change', () => {
     const selectedGameId = gameSelect.value;
     fetchAndDisplayAnalysis(selectedGameId);
 });
+// --- LÓGICA DO RADAR IA (V1 - COM DADOS SIMULADOS) ---
+const showRadarButton = document.getElementById('showRadarButton');
+const hideRadarButton = document.getElementById('hideRadarButton');
+const radarSection = document.getElementById('radar-ia-section');
+const radarGameSelect = document.getElementById('radar-game-select');
+const radarResultsPanel = document.getElementById('radar-results-panel');
+const RADAR_BASE_URL = 'URL_DO_SEU_NOVO_BACKEND_RADAR_NO_RENDER'; // IMPORTANTE: Substitua esta URL
 
+let radarUpdateInterval = null; // Variavel para controlar o loop de atualização
+
+// Funções para mostrar e esconder a seção
+showRadarButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    projectListContainer.classList.add('hidden');
+    radarSection.classList.remove('hidden');
+    window.location.href = '#radar-ia-section';
+    loadLiveGames(); // Carrega os jogos ao vivo quando a seção é aberta
+});
+
+hideRadarButton.addEventListener('click', () => {
+    radarSection.classList.add('hidden');
+    projectListContainer.classList.remove('hidden');
+    window.location.href = '#projetos';
+    if (radarUpdateInterval) clearInterval(radarUpdateInterval); // Para o loop ao sair
+});
+
+// Carrega a lista de jogos "ao vivo"
+async function loadLiveGames() {
+    try {
+        const response = await fetch(`${RADAR_BASE_URL}/jogos-aovivo`);
+        if (!response.ok) throw new Error('Servidor do Radar offline.');
+        const liveGames = await response.json();
+        
+        radarGameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
+        liveGames.forEach(game => {
+            radarGameSelect.add(new Option(game.title, game.game_id));
+        });
+    } catch (error) {
+        radarGameSelect.innerHTML = `<option value="">${error.message}</option>`;
+    }
+}
+
+// Inicia o monitoramento de um jogo selecionado
+radarGameSelect.addEventListener('change', () => {
+    const gameId = radarGameSelect.value;
+    if (radarUpdateInterval) clearInterval(radarUpdateInterval); // Limpa qualquer loop anterior
+
+    if (gameId) {
+        radarResultsPanel.classList.remove('hidden');
+        updateRadarStats(gameId); // Chama uma vez imediatamente
+        radarUpdateInterval = setInterval(() => updateRadarStats(gameId), 15000); // Atualiza a cada 15 segundos
+    } else {
+        radarResultsPanel.classList.add('hidden');
+    }
+});
+
+// Busca e atualiza as estatísticas na tela
+async function updateRadarStats(gameId) {
+    try {
+        const response = await fetch(`${RADAR_BASE_URL}/stats-aovivo/${gameId}`);
+        if (!response.ok) throw new Error('Falha ao buscar stats.');
+        const data = await response.json();
+
+        // Atualiza placar e tempo
+        document.getElementById('radar-score').textContent = data.score;
+        document.getElementById('radar-minute').textContent = `${data.minute}'`;
+
+        // Atualiza stats
+        document.getElementById('home-possession').textContent = data.stats.possession.home;
+        document.getElementById('away-possession').textContent = data.stats.possession.away;
+        document.getElementById('home-shots').textContent = data.stats.shots.home;
+        document.getElementById('away-shots').textContent = data.stats.shots.away;
+        document.getElementById('home-corners').textContent = data.stats.corners.home;
+        document.getElementById('away-corners').textContent = data.stats.corners.away;
+        
+        // Atualiza cartões
+        document.getElementById('home-yellow-cards').textContent = `${data.stats.cards.yellow_home} 🟨`;
+        document.getElementById('home-red-cards').textContent = `${data.stats.cards.red_home} 🟥`;
+        document.getElementById('away-yellow-cards').textContent = `${data.stats.cards.yellow_away} 🟨`;
+        document.getElementById('away-red-cards').textContent = `${data.stats.cards.red_away} 🟥`;
+
+        // Atualiza eventos
+        const eventsList = document.getElementById('radar-events');
+        eventsList.innerHTML = ''; // Limpa eventos antigos
+        if (data.events.length > 0) {
+            data.events.forEach(event => {
+                eventsList.innerHTML += `<li>${event.minute}' - ${event.type}: ${event.detail}</li>`;
+            });
+        } else {
+            eventsList.innerHTML = `<li>Nenhum evento importante recente.</li>`;
+        }
+
+    } catch (error) {
+        console.error("Erro ao atualizar o radar:", error);
+    }
+}
     // --- LÓGICA DO GERADOR DE PROMPTS (PROFISSÕES E ABAS) ---
     const categoriaSelect = document.getElementById('categoria-profissao');
     const profissaoSelect = document.getElementById('profissao');
