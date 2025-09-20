@@ -1606,7 +1606,7 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
     <script src="ferramentas/ia.js"></script>
     
  <script>
-   document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     // ========================================================== //
     // =========== 1. LÓGICA GERAL E DE NAVEGAÇÃO =============== //
     // ========================================================== //
@@ -1623,13 +1623,13 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
     const mobileLinks = mobileMenu ? mobileMenu.querySelectorAll('a') : [];
     if (menuBtn) {
         menuBtn.addEventListener('click', () => {
-            if(mobileMenu) mobileMenu.classList.toggle('hidden');
+            if (mobileMenu) mobileMenu.classList.toggle('hidden');
         });
     }
     if (mobileLinks) {
         mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
-                if(mobileMenu) mobileMenu.classList.add('hidden');
+                if (mobileMenu) mobileMenu.classList.add('hidden');
             });
         });
     }
@@ -1693,8 +1693,7 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
             } catch (error) {
                 resetAndDisable(leagueSelect, `Erro: ${error.message}`);
             }
-        } 
-        else if (selectedSport === 'basketball_nba' || selectedSport === 'americanfootball_nfl') {
+        } else if (selectedSport === 'basketball_nba' || selectedSport === 'americanfootball_nfl') {
             if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
             try {
                 const resp = await fetch(`${BASE_URL}/partidas/${encodeURIComponent(selectedSport)}`);
@@ -1757,8 +1756,7 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
             let url = '';
             if (selectedSport === 'football') {
                 url = `${BASE_URL}/analise/${encodeURIComponent(selectedLeague)}/${encodeURIComponent(selectedGame)}`;
-            } 
-            else if (selectedSport === 'basketball_nba' || selectedSport === 'americanfootball_nfl') {
+            } else if (selectedSport === 'basketball_nba' || selectedSport === 'americanfootball_nfl') {
                 url = `${BASE_URL}/analise/${encodeURIComponent(selectedSport)}/${encodeURIComponent(selectedGame)}`;
             }
 
@@ -1794,7 +1792,6 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
     // ========================================================== //
 
     const radarGameSelect = document.getElementById('radar-game-select');
-    const radarResultsPanel = document.getElementById('radar-results-panel');
     const RADAR_BASE_URL = 'https://radar-ia-backend.onrender.com';
     let radarUpdateInterval = null;
 
@@ -1824,7 +1821,6 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
             if (!response.ok) throw new Error('Falha ao buscar stats.');
             const data = await response.json();
 
-            // Atualiza painel Radar IA
             document.getElementById('radar-score').textContent = data.score;
             document.getElementById('radar-minute').textContent = `${data.minute}'`;
             document.getElementById('home-possession').textContent = data.stats.possession.home;
@@ -1915,5 +1911,7 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
     });
 
 });
+</script>
+
  </body>
 </html>
