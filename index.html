@@ -1842,37 +1842,49 @@ async function fetchAndDisplayAnalysis(gameId, status) {
     }
 }
 
-sportSelect.addEventListener('change', () => {
+// SUBSTITUA O SEU BLOCO 'sportSelect.addEventListener' ANTIGO POR ESTE
+
+sportSelect.addEventListener('change', async () => {
     const sport = sportSelect.value;
     bettingResultsDiv.classList.add('hidden');
 
-    if (sport === 'football') {
-        // ⚽ Football tem países e ligas
-        countrySelectorGroup.style.display = 'block';
-        leagueSelectorGroup.style.display = 'block';
-        resetAndDisable(countrySelect, 'Carregando...');
-        resetAndDisable(leagueSelect, 'Selecione um país');
-        resetAndDisable(gameSelect, 'Selecione uma liga');
-        countrySelect.disabled = false;
-        loadCountries();
-    } 
-    else if (sport === 'nba' || sport === 'nfl') {
-        // 🏀 NBA e 🏈 NFL → sem países/ligas, carrega direto os jogos
-        countrySelectorGroup.style.display = 'none';
-        leagueSelectorGroup.style.display = 'none';
-        resetAndDisable(gameSelect, 'Carregando...');
-        loadGamesBySport(sport);
-    } 
-    else {
-        // caso nenhum esporte selecionado
-        countrySelectorGroup.style.display = 'block';
-        leagueSelectorGroup.style.display = 'block';
-        resetAndDisable(countrySelect, 'Selecione um esporte');
-        resetAndDisable(leagueSelect, 'Selecione um esporte');
+    // Esconde os seletores de país e liga, que não são mais necessários neste fluxo
+    countrySelectorGroup.style.display = 'none';
+    leagueSelectorGroup.style.display = 'none';
+
+    if (!sport) {
         resetAndDisable(gameSelect, 'Selecione um esporte');
+        return;
+    }
+
+    resetAndDisable(gameSelect, 'Carregando jogos...');
+    gameSelect.disabled = false;
+
+    try {
+        // Esta é a nova chamada de API, direta para o esporte selecionado
+        const response = await fetch(`${BASE_URL}/partidas/${sport}`);
+        if (!response.ok) {
+            throw new Error('Falha ao buscar os jogos.');
+        }
+        const games = await response.json();
+
+        gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
+        if (games.length === 0) {
+            gameSelect.innerHTML = '<option value="">Nenhum jogo futuro encontrado</option>';
+        } else {
+            // Popula o seletor com os jogos recebidos da nova API
+            games.forEach(game => {
+                const optionText = `${game.home} vs ${game.away} (${game.time})`;
+                const option = new Option(optionText, game.game_id);
+                // Armazenamos o status para a função de análise, se necessário
+                option.dataset.status = game.status; 
+                gameSelect.add(option);
+            });
+        }
+    } catch (error) {
+        gameSelect.innerHTML = `<option value="">${error.message}</option>`;
     }
 });
-
 
 countrySelect.addEventListener('change', loadLeaguesByCountry);
 leagueSelect.addEventListener('change', loadGamesByLeague);
@@ -1952,6 +1964,7 @@ gameSelect.addEventListener('change', () => {
     </script>
  </body>
 </html>
+
 
 
 
