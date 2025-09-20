@@ -1902,22 +1902,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const promptTabs = document.querySelectorAll('#prompt-generator-section .tab-button');
     const promptContents = document.querySelectorAll('#prompt-generator-section .tab-content');
-    promptTabs.forEach(tab => {
+        promptTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const targetId = tab.id.replace('tab-', 'content-');
+            
             promptTabs.forEach(t => {
                 t.classList.remove('active', 'text-cyan-300', 'border-cyan-300');
-                t.classList.add('text-slate-400', 'border-transparent');
+                t.classList.add('text-slate-400', 'border-transparent', 'hover:text-slate-200', 'hover:border-slate-500');
             });
+            
             tab.classList.add('active', 'text-cyan-300', 'border-cyan-300');
             tab.classList.remove('text-slate-400', 'border-transparent');
+            
             promptContents.forEach(content => content.classList.add('hidden'));
             document.getElementById(targetId).classList.remove('hidden');
         });
     });
-
-});
 </script>
-
- </body>
+</body>
 </html>
