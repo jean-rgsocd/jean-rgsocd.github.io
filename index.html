@@ -1604,262 +1604,166 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
     
  <script>
    document.addEventListener('DOMContentLoaded', function () {
-    // Lógica do Menu Mobile
-    const menuBtn = document.getElementById('menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileLinks = mobileMenu.querySelectorAll('a');
+    // ========================================================== //
+    // =========== 1. LÓGICA GERAL E DE NAVEGAÇÃO =============== //
+    // ========================================================== //
 
-    menuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-    });
-    mobileLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-        });
-    });
-
-    // Lógica do Texto de Introdução (Typed.js)
-    new Typed('#typed-headline', {
-        strings: ['Profissional de Tecnologia e Segurança Cibernética'],
-        typeSpeed: 50,
-        showCursor: true,
-        cursorChar: '_',
-        startDelay: 500,
-        onComplete: (self) => {
-            self.cursor.style.display = 'none';
-            const paragraphEl = document.getElementById('intro-paragraph');
-            paragraphEl.style.opacity = 1;
-            
-            setTimeout(() => {
-                new Typed('#typed-paragraph', {
-                    strings: [
-                        'Com base sólida em Gestão de Projetos, IA e Cybersecurity, busco aplicar minha visão estratégica para garantir a integridade, eficiência e segurança de sistemas. Minha experiência em operações e análise de dados me preparou para resolver problemas complexos e liderar com foco em resultados na área de tecnologia.'
-                    ],
-                    typeSpeed: 25,
-                    showCursor: true,
-                    cursorChar: '_',
-                    startDelay: 200,
-                    onComplete: (selfPara) => {
-                        selfPara.cursor.style.display = 'none';
-                    },
-                });
-            }, 300);
-        }
-    });
-
-    // Lógica do Gráfico de Competências (Chart.js)
-    const ctx = document.getElementById('skillsChart').getContext('2d');
-    const skillsChart = new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: ['Análise de Vulnerabilidades', 'Pentesting', 'Gestão Ágil', 'Liderança', 'Análise de Dados', 'Arquitetura de Segurança'],
-            datasets: [{
-                label: 'Nível de Proficiência',
-                data: [90, 85, 80, 95, 88, 75],
-                backgroundColor: 'rgba(0, 230, 230, 0.2)',
-                borderColor: 'rgba(0, 230, 230, 1)',
-                borderWidth: 2,
-                pointBackgroundColor: 'rgba(0, 230, 230, 1)',
-                pointBorderColor: '#0d1117',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(0, 230, 230, 1)'
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            scales: {
-                r: {
-                    angleLines: { color: 'rgba(201, 209, 217, 0.1)' },
-                    grid: { color: 'rgba(201, 209, 217, 0.1)' },
-                    pointLabels: {
-                        font: { size: 12, weight: 'bold' },
-                        color: '#c9d1d9'
-                    },
-                    ticks: {
-                        backdropColor: 'transparent',
-                        stepSize: 20,
-                        color: '#c9d1d9'
-                    },
-                    suggestedMin: 0,
-                    suggestedMax: 100
-                }
-            },
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                         label: function(context) {
-                             return (context.dataset.label || '') + ': ' + context.parsed.r + '%';
-                         }
-                     }
-                }
-            }
-        }
-    });
-
-    // Lógica das Abas de Competências
-    const tabs = document.querySelectorAll('.tab-btn');
-    const contents = document.querySelectorAll('#competencias .tab-content');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const target = tab.getAttribute('data-tab');
-            tabs.forEach(t => {
-                t.classList.remove('text-cyan-300', 'border-cyan-300');
-                t.classList.add('text-slate-400', 'border-transparent', 'hover:text-slate-300', 'hover:border-slate-500');
-            });
-            tab.classList.add('text-cyan-300', 'border-cyan-300');
-            tab.classList.remove('text-slate-400', 'border-transparent');
-            
-            contents.forEach(content => content.classList.add('hidden'));
-            document.getElementById(target + '-content').classList.remove('hidden');
-        });
-    });
-
-    // Lógica para mostrar/esconder os projetos integrados
+    // --- Variáveis Globais de Elementos ---
     const projectListContainer = document.getElementById('project-list-container');
     const analyzerSection = document.getElementById('analisador-seguranca-web');
     const promptsSection = document.getElementById('prompt-generator-section');
     const bettingAnalyzer = document.getElementById('analisador-apostas');
+    const radarSection = document.getElementById('radar-ia-section');
+
+    // --- Lógica do Menu Mobile ---
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileLinks = mobileMenu.querySelectorAll('a');
+    if (menuBtn) {
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+    if (mobileLinks) {
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    }
+
+    // --- Lógica de Navegação entre Projetos ---
     const showScannerButton = document.getElementById('showScannerButton');
     const hideScannerButton = document.getElementById('hideScannerButton');
     const showPromptsButton = document.getElementById('showPromptsButton');
     const hidePromptsButton = document.getElementById('hidePromptsButton');
     const showBettingButton = document.getElementById('showBettingButton');
     const hideBettingButton = document.getElementById('hideBettingButton');
+    const showRadarButton = document.getElementById('showRadarButton');
+    const hideRadarButton = document.getElementById('hideRadarButton');
 
-    showScannerButton.addEventListener('click', (e) => { e.preventDefault(); projectListContainer.classList.add('hidden'); analyzerSection.classList.remove('hidden'); window.location.href = '#analisador-seguranca-web'; });
-    hideScannerButton.addEventListener('click', () => { analyzerSection.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
-    showPromptsButton.addEventListener('click', (e) => { e.preventDefault(); projectListContainer.classList.add('hidden'); promptsSection.classList.remove('hidden'); window.location.href = '#prompt-generator-section'; });
-    hidePromptsButton.addEventListener('click', () => { promptsSection.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
-    showBettingButton.addEventListener('click', (e) => { e.preventDefault(); projectListContainer.classList.add('hidden'); bettingAnalyzer.classList.remove('hidden'); window.location.href = '#analisador-apostas'; });
-    hideBettingButton.addEventListener('click', () => { bettingAnalyzer.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
+    if (showScannerButton) showScannerButton.addEventListener('click', () => { projectListContainer.classList.add('hidden'); analyzerSection.classList.remove('hidden'); });
+    if (hideScannerButton) hideScannerButton.addEventListener('click', () => { analyzerSection.classList.add('hidden'); projectListContainer.classList.remove('hidden'); });
+    if (showPromptsButton) showPromptsButton.addEventListener('click', () => { projectListContainer.classList.add('hidden'); promptsSection.classList.remove('hidden'); });
+    if (hidePromptsButton) hidePromptsButton.addEventListener('click', () => { promptsSection.classList.add('hidden'); projectListContainer.classList.remove('hidden'); });
+    if (showBettingButton) showBettingButton.addEventListener('click', () => { projectListContainer.classList.add('hidden'); bettingAnalyzer.classList.remove('hidden'); });
+    if (hideBettingButton) hideBettingButton.addEventListener('click', () => { bettingAnalyzer.classList.add('hidden'); projectListContainer.classList.remove('hidden'); });
+    if (showRadarButton) showRadarButton.addEventListener('click', () => { projectListContainer.classList.add('hidden'); radarSection.classList.remove('hidden'); loadLiveGames(); });
+    if (hideRadarButton) hideRadarButton.addEventListener('click', () => { radarSection.classList.add('hidden'); projectListContainer.classList.remove('hidden'); if (radarUpdateInterval) clearInterval(radarUpdateInterval); });
 
-    // --- LÓGICA DO ANALISADOR DE APOSTAS (V13 - MULTI-LIGAS) ---
-const sportSelect = document.getElementById('sport-select');
-const leagueSelectorGroup = document.getElementById('league-selector-group');
-const leagueSelect = document.getElementById('league-select');
-const gameSelect = document.getElementById('game-select');
-const bettingResultsDiv = document.getElementById('bettingResults');
-const BASE_URL = 'https://analisador-apostas.onrender.com';
+    // ========================================================== //
+    // ================= 2. LÓGICAS DOS PROJETOS ================ //
+    // ========================================================== //
 
-function resetAndDisable(selectElement, message) {
-    selectElement.innerHTML = `<option value="">${message}</option>`;
-    selectElement.disabled = true;
-}
+    // --- LÓGICA DO ANALISADOR DE APOSTAS (TIPSTER IA) ---
+    const sportSelect = document.getElementById('sport-select');
+    const leagueSelectorGroup = document.getElementById('league-selector-group');
+    const leagueSelect = document.getElementById('league-select');
+    const gameSelect = document.getElementById('game-select');
+    const bettingResultsDiv = document.getElementById('bettingResults');
+    const BASE_URL = 'https://analisador-apostas.onrender.com';
 
-async function loadLeagues() {
-    leagueSelectorGroup.classList.remove('hidden');
-    resetAndDisable(leagueSelect, 'Buscando ligas...');
-    leagueSelect.disabled = false;
-    
-    try {
-        const response = await fetch(`${BASE_URL}/ligas/football`);
-        if (!response.ok) throw new Error('Falha ao buscar ligas.');
-        const leagues = await response.json();
-        
-        leagueSelect.innerHTML = '<option value="">Selecione uma Liga</option>';
-        leagues.forEach(league => {
-            leagueSelect.add(new Option(league.title, league.key));
-        });
-    } catch (error) {
-        resetAndDisable(leagueSelect, `Erro: ${error.message}`);
+    function resetAndDisable(selectElement, message) {
+        if (selectElement) {
+            selectElement.innerHTML = `<option value="">${message}</option>`;
+            selectElement.disabled = true;
+        }
     }
-}
 
-async function loadGamesByLeague(leagueKey) {
-    if (!leagueKey) {
-        resetAndDisable(gameSelect, 'Selecione uma liga primeiro');
-        return;
+    async function loadLeagues() {
+        if (!leagueSelectorGroup || !leagueSelect) return;
+        leagueSelectorGroup.classList.remove('hidden');
+        resetAndDisable(leagueSelect, 'Buscando ligas...');
+        leagueSelect.disabled = false;
+        try {
+            const response = await fetch(`${BASE_URL}/ligas/football`);
+            if (!response.ok) throw new Error('Falha ao buscar ligas.');
+            const leagues = await response.json();
+            leagueSelect.innerHTML = '<option value="">Selecione uma Liga</option>';
+            leagues.forEach(league => leagueSelect.add(new Option(league.title, league.key)));
+        } catch (error) {
+            resetAndDisable(leagueSelect, `Erro: ${error.message}`);
+        }
     }
-    resetAndDisable(gameSelect, 'Buscando jogos...');
-    gameSelect.disabled = false;
-    
-    try {
-        const response = await fetch(`${BASE_URL}/partidas/${leagueKey}`);
-        if (!response.ok) throw new Error('Não foi possível buscar os jogos.');
-        const games = await response.json();
-        
-        gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
-        if (games.length === 0) {
-            gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado para hoje</option>';
-        } else {
-            games.forEach(game => {
-                const option = new Option(`${game.home} vs ${game.away} (${game.time})`, game.game_id);
-                gameSelect.add(option);
+
+    async function loadGamesByLeague(leagueKey) {
+        if (!gameSelect) return;
+        if (!leagueKey) {
+            resetAndDisable(gameSelect, 'Selecione uma liga primeiro');
+            return;
+        }
+        resetAndDisable(gameSelect, 'Buscando jogos...');
+        gameSelect.disabled = false;
+        try {
+            const response = await fetch(`${BASE_URL}/partidas/${leagueKey}`);
+            if (!response.ok) throw new Error('Não foi possível buscar os jogos.');
+            const games = await response.json();
+            gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
+            if (games.length === 0) {
+                gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado para hoje</option>';
+            } else {
+                games.forEach(game => gameSelect.add(new Option(`${game.home} vs ${game.away} (${game.time})`, game.game_id)));
+            }
+        } catch (error) {
+            resetAndDisable(gameSelect, `Erro: ${error.message}`);
+        }
+    }
+
+    async function fetchAndDisplayAnalysis(gameId) {
+        if (!bettingResultsDiv || !gameSelect) return;
+        if (!gameId) {
+            bettingResultsDiv.classList.add('hidden');
+            return;
+        }
+        bettingResultsDiv.classList.remove('hidden');
+        bettingResultsDiv.innerHTML = `<p class="text-slate-400 text-center">Analisando odds e mercados... 🧠</p>`;
+        const leagueKey = leagueSelect.value;
+        const analyzeUrl = `${BASE_URL}/analise/${leagueKey}/${gameId}`;
+        try {
+            const response = await fetch(analyzeUrl);
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ detail: 'O servidor retornou um erro inesperado.' }));
+                throw new Error(errorData.detail);
+            }
+            const analysis = await response.json();
+            const selectedGameText = gameSelect.options[gameSelect.selectedIndex].text.split(' (')[0];
+            let htmlResult = `<h3 class="font-bold text-xl text-cyan-300 mb-4">Análise Pré-Jogo para: ${selectedGameText}</h3>`;
+            analysis.forEach(marketAnalysis => {
+                htmlResult += `<div class="p-4 border rounded-lg border-slate-700 bg-slate-900 space-y-2"><p class="text-slate-300"><strong class="text-cyan-400">Mercado:</strong> ${marketAnalysis.market}</p><p class="text-slate-400 mt-2"><i>${marketAnalysis.analysis}</i></p></div>`;
             });
+            bettingResultsDiv.innerHTML = htmlResult;
+        } catch (error) {
+            bettingResultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300"><strong>Erro na Análise:</strong> ${error.message}</div>`;
         }
-    } catch (error) {
-        resetAndDisable(gameSelect, `Erro: ${error.message}`);
     }
-}
-
-async function fetchAndDisplayAnalysis(gameId) {
-    if (!gameId) {
+    if (sportSelect) sportSelect.addEventListener('change', () => {
+        const selectedSport = sportSelect.value;
         bettingResultsDiv.classList.add('hidden');
-        return;
-    }
-    
-    bettingResultsDiv.classList.remove('hidden');
-    bettingResultsDiv.innerHTML = `<p class="text-slate-400 text-center">Analisando odds e mercados... 🧠</p>`;
-    
-    const leagueKey = leagueSelect.value;
-    const analyzeUrl = `${BASE_URL}/analise/${leagueKey}/${gameId}`;
-    
-    try {
-        const response = await fetch(analyzeUrl);
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ detail: 'O servidor retornou um erro inesperado.' }));
-            throw new Error(errorData.detail);
+        resetAndDisable(gameSelect, 'Selecione uma liga');
+        if (selectedSport === 'football') {
+            loadLeagues();
+        } else {
+            if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
         }
-        const analysis = await response.json();
-        const selectedGameText = gameSelect.options[gameSelect.selectedIndex].text.split(' (')[0];
-        
-        let htmlResult = `<h3 class="font-bold text-xl text-cyan-300 mb-4">Análise Pré-Jogo para: ${selectedGameText}</h3>`;
-        
-        analysis.forEach(marketAnalysis => {
-            htmlResult += `
-                <div class="p-4 border rounded-lg border-slate-700 bg-slate-900 space-y-2">
-                    <p class="text-slate-300"><strong class="text-cyan-400">Mercado:</strong> ${marketAnalysis.market}</p>
-                    <p class="text-slate-400 mt-2"><i>${marketAnalysis.analysis}</i></p>
-                </div>`;
-        });
-        bettingResultsDiv.innerHTML = htmlResult;
-    } catch (error) {
-        bettingResultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300"><strong>Erro na Análise:</strong> ${error.message}</div>`;
-    }
-}
+    });
+    if (leagueSelect) leagueSelect.addEventListener('change', () => {
+        const selectedLeague = leagueSelect.value;
+        bettingResultsDiv.classList.add('hidden');
+        loadGamesByLeague(selectedLeague);
+    });
+    if (gameSelect) gameSelect.addEventListener('change', () => {
+        const selectedGameId = gameSelect.value;
+        fetchAndDisplayAnalysis(selectedGameId);
+    });
 
-// --- Event Listeners (Controladores) ---
-sportSelect.addEventListener('change', () => {
-    const selectedSport = sportSelect.value;
-    bettingResultsDiv.classList.add('hidden');
-    resetAndDisable(gameSelect, 'Selecione uma liga');
-    
-    if (selectedSport === 'football') {
-        loadLeagues();
-    } else {
-        leagueSelectorGroup.classList.add('hidden');
-        // Adicionar lógica para outros esportes aqui se necessário
-    }
-});
-
-leagueSelect.addEventListener('change', () => {
-    const selectedLeague = leagueSelect.value;
-    bettingResultsDiv.classList.add('hidden');
-    loadGamesByLeague(selectedLeague);
-});
-
-gameSelect.addEventListener('change', () => {
-    const selectedGameId = gameSelect.value;
-    fetchAndDisplayAnalysis(selectedGameId);
-});
-// --- LÓGICA DO RADAR IA ---
+    // --- LÓGICA DO RADAR IA ---
     const radarGameSelect = document.getElementById('radar-game-select');
     const radarResultsPanel = document.getElementById('radar-results-panel');
     const RADAR_BASE_URL = 'https://radar-ia-backend.onrender.com';
     let radarUpdateInterval = null;
 
     async function loadLiveGames() {
+        if (!radarGameSelect) return;
         try {
             const response = await fetch(`${RADAR_BASE_URL}/jogos-aovivo`);
             if (!response.ok) throw new Error('Servidor do Radar offline.');
@@ -1874,7 +1778,7 @@ gameSelect.addEventListener('change', () => {
             radarGameSelect.innerHTML = `<option value="">Erro: ${error.message}</option>`;
         }
     }
-    radarGameSelect.addEventListener('change', () => {
+    if (radarGameSelect) radarGameSelect.addEventListener('change', () => {
         const gameId = radarGameSelect.value;
         if (radarUpdateInterval) clearInterval(radarUpdateInterval);
         if (gameId) {
