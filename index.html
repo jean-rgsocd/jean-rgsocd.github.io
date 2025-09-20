@@ -1916,17 +1916,53 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
             radarGameSelect.innerHTML = `<option value="">Erro: ${error.message}</option>`;
         }
     }
-    if (radarGameSelect) radarGameSelect.addEventListener('change', () => {
-        const gameId = radarGameSelect.value;
-        if (radarUpdateInterval) clearInterval(radarUpdateInterval);
-        if (gameId) {
-            radarResultsPanel.classList.remove('hidden');
-            updateRadarStats(gameId);
-            radarUpdateInterval = setInterval(() => updateRadarStats(gameId), 15000);
-        } else {
-            radarResultsPanel.classList.add('hidden');
+    if (gameSelect) gameSelect.addEventListener('change', async () => {
+    const gameId = gameSelect.value;
+    const selectedSport = sportSelect.value;
+    const selectedLeague = leagueSelect.value;
+    bettingResultsDiv.classList.add('hidden');
+
+    if (!gameId) return;
+
+    try {
+        let url;
+
+        // Futebol → precisa de league_id + game_id
+        if (selectedSport === 'football') {
+            url = `${BASE_URL}/analise/${encodeURIComponent(selectedLeague)}/${encodeURIComponent(gameId)}`;
         }
-    });
+        // NBA e NFL → liga já é única, só passa sport + game_id
+        else if (['nba', 'nfl'].includes(selectedSport)) {
+            url = `${BASE_URL}/analise/${encodeURIComponent(selectedSport)}/${encodeURIComponent(gameId)}`;
+        }
+        // Outros esportes futuros → fallback
+        else {
+            url = `${BASE_URL}/analise/${encodeURIComponent(selectedSport)}/${encodeURIComponent(gameId)}`;
+        }
+
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error("Erro ao buscar análise");
+
+        const analysis = await resp.json();
+
+        bettingResultsDiv.classList.remove('hidden');
+        bettingResultsDiv.innerHTML = '';
+
+        if (Array.isArray(analysis) && analysis.length > 0) {
+            analysis.forEach(a => {
+                const p = document.createElement('p');
+                p.innerHTML = `<strong>${a.market}:</strong> ${a.analysis}`;
+                bettingResultsDiv.appendChild(p);
+            });
+        } else {
+            bettingResultsDiv.innerHTML = '<p>Nenhuma análise disponível para este jogo.</p>';
+        }
+    } catch (error) {
+        bettingResultsDiv.classList.remove('hidden');
+        bettingResultsDiv.innerHTML = `<p style="color:red;">Erro: ${error.message}</p>`;
+    }
+});
+
     async function updateRadarStats(gameId) {
         try {
             const response = await fetch(`${RADAR_BASE_URL}/stats-aovivo/${gameId}`);
