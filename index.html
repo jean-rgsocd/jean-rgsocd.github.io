@@ -1819,7 +1819,9 @@ const hideRadarButton = document.getElementById('hideRadarButton');
 const radarSection = document.getElementById('radar-ia-section');
 const radarGameSelect = document.getElementById('radar-game-select');
 const radarResultsPanel = document.getElementById('radar-results-panel');
-const RADAR_BASE_URL = 'https://github.com/jean-rgsocd/radar-ia-backend.git'; // IMPORTANTE: Substitua esta URL
+
+// !!! IMPORTANTE: Substitua pela URL do seu backend do Radar no OnRender !!!
+const RADAR_BASE_URL = 'https://radar-ia-backend.onrender.com'; 
 
 let radarUpdateInterval = null; // Variavel para controlar o loop de atualização
 
@@ -1897,7 +1899,7 @@ async function updateRadarStats(gameId) {
         // Atualiza eventos
         const eventsList = document.getElementById('radar-events');
         eventsList.innerHTML = ''; // Limpa eventos antigos
-        if (data.events.length > 0) {
+        if (data.events && data.events.length > 0) {
             data.events.forEach(event => {
                 eventsList.innerHTML += `<li>${event.minute}' - ${event.type}: ${event.detail}</li>`;
             });
@@ -1907,6 +1909,9 @@ async function updateRadarStats(gameId) {
 
     } catch (error) {
         console.error("Erro ao atualizar o radar:", error);
+        // Opcional: mostrar um erro na UI
+        const eventsList = document.getElementById('radar-events');
+        eventsList.innerHTML = `<li>Erro ao buscar dados. Tentando novamente...</li>`;
     }
 }
     // --- LÓGICA DO GERADOR DE PROMPTS (PROFISSÕES E ABAS) ---
