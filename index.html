@@ -1781,7 +1781,7 @@ if (sportSelect) sportSelect.addEventListener('change', async () => {
 
             leagueSelect.disabled = false;
             leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
-            leagues.forEach(l => leagueSelect.add(new Option(l.name, l.key)));
+            leagues.forEach(l => leagueSelect.add(new Option(l.title, l.key)));
         } catch (error) {
             resetAndDisable(leagueSelect, `Erro: ${error.message}`);
         }
