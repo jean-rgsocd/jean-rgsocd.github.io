@@ -1692,6 +1692,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 leagues.forEach(l => leagueSelect.add(new Option(l.title, l.key)));
             } catch (error) {
                 resetAndDisable(leagueSelect, `Erro: ${error.message}`);
+                console.error('Erro na API do Analisador de Apostas:', error);
             }
         } else if (selectedSport === 'basketball_nba' || selectedSport === 'americanfootball_nfl') {
             if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
@@ -1709,6 +1710,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } catch (error) {
                 resetAndDisable(gameSelect, `Erro: ${error.message}`);
+                console.error('Erro na API do Analisador de Apostas:', error);
             }
         }
     });
@@ -1735,6 +1737,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } catch (error) {
                 resetAndDisable(gameSelect, `Erro: ${error.message}`);
+                console.error('Erro na API do Analisador de Apostas:', error);
             }
         } else {
             resetAndDisable(gameSelect, 'Selecione uma liga');
@@ -1782,8 +1785,9 @@ document.addEventListener('DOMContentLoaded', function () {
             bettingResultsDiv.classList.remove('hidden');
             bettingResultsDiv.innerHTML = `
                 <div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300">
-                    <strong>Erro na Análise:</strong> ${error.message}
+                    <strong>Erro na Análise:</strong> ${error.message}. Por favor, tente novamente mais tarde.
                 </div>`;
+            console.error('Erro na API do Analisador de Apostas:', error);
         }
     });
 
@@ -1912,5 +1916,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 </script>
+
  </body>
 </html>
