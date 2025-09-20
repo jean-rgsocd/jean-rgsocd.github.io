@@ -1738,20 +1738,28 @@ async function loadCountries() {
 async function loadLeaguesByCountry() {
     const countryCode = countrySelect.value;
     if (!countryCode) return;
+
     leagueSelect.innerHTML = '<option value="">Carregando ligas...</option>';
     leagueSelect.disabled = false;
+
     try {
-        const response = await fetch(`${BASE_URL}/ligas/football/${countryCode}`)
+        const response = await fetch(`${BASE_URL}/ligas/football/${countryCode}`);
         if (!response.ok) throw new Error('Falha ao buscar ligas.');
+        
         const leagues = await response.json();
         leagueSelect.innerHTML = '<option value="">Selecione uma Liga</option>';
-    leagues.forEach(responseItem => {
-    const league = responseItem.league;
-    // Adiciona uma verificação para garantir que o objeto league e suas propriedades existem
-    if (league && league.id && league.name) {
-        leagueSelect.add(new Option(league.name, league.id));
+
+        leagues.forEach(responseItem => {
+            const league = responseItem.league;
+            if (league && league.id && league.name) {
+                leagueSelect.add(new Option(league.name, league.id));
+            }
+        });
+
+    } catch (error) { // <-- O bloco 'catch' que estava faltando
+        leagueSelect.innerHTML = `<option value="">${error.message}</option>`;
     }
-});
+} // <-- A chave '}' que fecha a função e estava faltando
 async function loadGamesByLeague() {
     const leagueId = leagueSelect.value;
     if (!leagueId) return;
@@ -1944,5 +1952,6 @@ gameSelect.addEventListener('change', () => {
     </script>
  </body>
 </html>
+
 
 
