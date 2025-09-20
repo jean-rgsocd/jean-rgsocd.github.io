@@ -1853,107 +1853,68 @@ gameSelect.addEventListener('change', () => {
     const selectedGameId = gameSelect.value;
     fetchAndDisplayAnalysis(selectedGameId);
 });
-// --- LÓGICA DO RADAR IA (V1 - COM DADOS SIMULADOS) ---
-const showRadarButton = document.getElementById('showRadarButton');
-const hideRadarButton = document.getElementById('hideRadarButton');
-const radarSection = document.getElementById('radar-ia-section');
-const radarGameSelect = document.getElementById('radar-game-select');
-const radarResultsPanel = document.getElementById('radar-results-panel');
+// --- LÓGICA DO RADAR IA ---
+    const radarGameSelect = document.getElementById('radar-game-select');
+    const radarResultsPanel = document.getElementById('radar-results-panel');
+    const RADAR_BASE_URL = 'https://radar-ia-backend.onrender.com';
+    let radarUpdateInterval = null;
 
-// !!! IMPORTANTE: Substitua pela URL do seu backend do Radar no OnRender !!!
-const RADAR_BASE_URL = 'https://radar-ia-backend.onrender.com'; 
-
-let radarUpdateInterval = null; // Variavel para controlar o loop de atualização
-
-// Funções para mostrar e esconder a seção
-showRadarButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    projectListContainer.classList.add('hidden');
-    radarSection.classList.remove('hidden');
-    window.location.href = '#radar-ia-section';
-    loadLiveGames(); // Carrega os jogos ao vivo quando a seção é aberta
-});
-
-hideRadarButton.addEventListener('click', () => {
-    radarSection.classList.add('hidden');
-    projectListContainer.classList.remove('hidden');
-    window.location.href = '#projetos';
-    if (radarUpdateInterval) clearInterval(radarUpdateInterval); // Para o loop ao sair
-});
-
-// Carrega a lista de jogos "ao vivo"
-async function loadLiveGames() {
-    try {
-        const response = await fetch(`${RADAR_BASE_URL}/jogos-aovivo`);
-        if (!response.ok) throw new Error('Servidor do Radar offline.');
-        const liveGames = await response.json();
-        
-        radarGameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
-        liveGames.forEach(game => {
-            radarGameSelect.add(new Option(game.title, game.game_id));
-        });
-    } catch (error) {
-        radarGameSelect.innerHTML = `<option value="">${error.message}</option>`;
-    }
-}
-
-// Inicia o monitoramento de um jogo selecionado
-radarGameSelect.addEventListener('change', () => {
-    const gameId = radarGameSelect.value;
-    if (radarUpdateInterval) clearInterval(radarUpdateInterval); // Limpa qualquer loop anterior
-
-    if (gameId) {
-        radarResultsPanel.classList.remove('hidden');
-        updateRadarStats(gameId); // Chama uma vez imediatamente
-        radarUpdateInterval = setInterval(() => updateRadarStats(gameId), 15000); // Atualiza a cada 15 segundos
-    } else {
-        radarResultsPanel.classList.add('hidden');
-    }
-});
-
-// Busca e atualiza as estatísticas na tela
-async function updateRadarStats(gameId) {
-    try {
-        const response = await fetch(`${RADAR_BASE_URL}/stats-aovivo/${gameId}`);
-        if (!response.ok) throw new Error('Falha ao buscar stats.');
-        const data = await response.json();
-
-        // Atualiza placar e tempo
-        document.getElementById('radar-score').textContent = data.score;
-        document.getElementById('radar-minute').textContent = `${data.minute}'`;
-
-        // Atualiza stats
-        document.getElementById('home-possession').textContent = data.stats.possession.home;
-        document.getElementById('away-possession').textContent = data.stats.possession.away;
-        document.getElementById('home-shots').textContent = data.stats.shots.home;
-        document.getElementById('away-shots').textContent = data.stats.shots.away;
-        document.getElementById('home-corners').textContent = data.stats.corners.home;
-        document.getElementById('away-corners').textContent = data.stats.corners.away;
-        
-        // Atualiza cartões
-        document.getElementById('home-yellow-cards').textContent = `${data.stats.cards.yellow_home} 🟨`;
-        document.getElementById('home-red-cards').textContent = `${data.stats.cards.red_home} 🟥`;
-        document.getElementById('away-yellow-cards').textContent = `${data.stats.cards.yellow_away} 🟨`;
-        document.getElementById('away-red-cards').textContent = `${data.stats.cards.red_away} 🟥`;
-
-        // Atualiza eventos
-        const eventsList = document.getElementById('radar-events');
-        eventsList.innerHTML = ''; // Limpa eventos antigos
-        if (data.events && data.events.length > 0) {
-            data.events.forEach(event => {
-                eventsList.innerHTML += `<li>${event.minute}' - ${event.type}: ${event.detail}</li>`;
-            });
-        } else {
-            eventsList.innerHTML = `<li>Nenhum evento importante recente.</li>`;
+    async function loadLiveGames() {
+        try {
+            const response = await fetch(`${RADAR_BASE_URL}/jogos-aovivo`);
+            if (!response.ok) throw new Error('Servidor do Radar offline.');
+            const liveGames = await response.json();
+            radarGameSelect.innerHTML = '<option value="">Selecione um jogo para acompanhar</option>';
+            if (liveGames.length === 0) {
+                radarGameSelect.innerHTML = '<option value="">Nenhum jogo ao vivo no momento</option>';
+            } else {
+                liveGames.forEach(game => radarGameSelect.add(new Option(game.title, game.game_id)));
+            }
+        } catch (error) {
+            radarGameSelect.innerHTML = `<option value="">Erro: ${error.message}</option>`;
         }
-
-    } catch (error) {
-        console.error("Erro ao atualizar o radar:", error);
-        // Opcional: mostrar um erro na UI
-        const eventsList = document.getElementById('radar-events');
-        eventsList.innerHTML = `<li>Erro ao buscar dados. Tentando novamente...</li>`;
     }
-}
+    radarGameSelect.addEventListener('change', () => {
+        const gameId = radarGameSelect.value;
+        if (radarUpdateInterval) clearInterval(radarUpdateInterval);
+        if (gameId) {
+            radarResultsPanel.classList.remove('hidden');
+            updateRadarStats(gameId);
+            radarUpdateInterval = setInterval(() => updateRadarStats(gameId), 15000);
+        } else {
+            radarResultsPanel.classList.add('hidden');
+        }
+    });
+    async function updateRadarStats(gameId) {
+        try {
+            const response = await fetch(`${RADAR_BASE_URL}/stats-aovivo/${gameId}`);
+            if (!response.ok) throw new Error('Falha ao buscar stats.');
+            const data = await response.json();
+            document.getElementById('radar-score').textContent = data.score;
+            document.getElementById('radar-minute').textContent = `${data.minute}'`;
+            document.getElementById('home-possession').textContent = data.stats.possession.home;
+            document.getElementById('away-possession').textContent = data.stats.possession.away;
+            document.getElementById('home-shots').textContent = data.stats.shots.home;
+            document.getElementById('away-shots').textContent = data.stats.shots.away;
+            document.getElementById('home-corners').textContent = data.stats.corners.home;
+            document.getElementById('away-corners').textContent = data.stats.corners.away;
+            document.getElementById('home-yellow-cards').textContent = `${data.stats.cards.yellow_home} 🟨`;
+            document.getElementById('home-red-cards').textContent = `${data.stats.cards.red_home} 🟥`;
+            document.getElementById('away-yellow-cards').textContent = `${data.stats.cards.yellow_away} 🟨`;
+            document.getElementById('away-red-cards').textContent = `${data.stats.cards.red_away} 🟥`;
+            const eventsList = document.getElementById('radar-events');
+            eventsList.innerHTML = '';
+            if (data.events && data.events.length > 0) {
+                data.events.forEach(event => eventsList.innerHTML += `<li>${event.minute}' - ${event.type}: ${event.detail}</li>`);
+            } else {
+                eventsList.innerHTML = `<li>Nenhum evento importante recente.</li>`;
+            }
+        } catch (error) {
+            console.error("Erro ao atualizar o radar:", error);
+            const eventsList = document.getElementById('radar-events');
+            if (eventsList) eventsList.innerHTML = `<li>Erro ao buscar dados. Tentando novamente...</li>`;
+        }
+    }
     // --- LÓGICA DO GERADOR DE PROMPTS (PROFISSÕES E ABAS) ---
     const categoriaSelect = document.getElementById('categoria-profissao');
     const profissaoSelect = document.getElementById('profissao');
