@@ -1634,7 +1634,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-        // --- Botões de navegação entre seções ---
+    // --- Botões de navegação entre seções ---
     const showScannerButton = document.getElementById('showScannerButton');
     const hideScannerButton = document.getElementById('hideScannerButton');
     const showPromptsButton = document.getElementById('showPromptsButton');
@@ -1653,6 +1653,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (showRadarButton) showRadarButton.addEventListener('click', () => { projectListContainer.classList.add('hidden'); radarSection.classList.remove('hidden'); loadLiveGames(); });
     if (hideRadarButton) hideRadarButton.addEventListener('click', () => { radarSection.classList.add('hidden'); projectListContainer.classList.remove('hidden'); if (radarUpdateInterval) clearInterval(radarUpdateInterval); });
 
+    /*
     // ========================================================== //
     // ================= 2. LÓGICA TIPSTER IA =================== //
     // ========================================================== //
@@ -1672,75 +1673,45 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Função para buscar ligas de forma segura
-    async function fetchLeagues(sport) {
-        try {
-            const resp = await fetch(`${BASE_URL}/ligas/${sport}`);
-            if (!resp.ok) throw new Error('Falha ao buscar ligas');
-            return await resp.json();
-        } catch (error) {
-            console.error('Erro na API do Analisador de Apostas (Ligas):', error);
-            return null;
-        }
-    }
-
-    // Função para buscar partidas de forma segura
-    async function fetchGames(sportOrLeague) {
-        try {
-            const resp = await fetch(`${BASE_URL}/partidas/${encodeURIComponent(sportOrLeague)}`);
-            if (!resp.ok) throw new Error('Falha ao buscar jogos.');
-            return await resp.json();
-        } catch (error) {
-            console.error('Erro na API do Analisador de Apostas (Jogos):', error);
-            return null;
-        }
-    }
-
-    // Função para buscar a análise do jogo de forma segura
-    async function fetchAnalysis(sportOrLeague, gameId) {
-        try {
-            let url = '';
-            if (sportOrLeague.startsWith('football')) {
-                url = `${BASE_URL}/analise/${encodeURIComponent(sportOrLeague)}/${encodeURIComponent(gameId)}`;
-            } else {
-                url = `${BASE_URL}/analise/${encodeURIComponent(sportOrLeague)}/${encodeURIComponent(gameId)}`;
-            }
-            const resp = await fetch(url);
-            if (!resp.ok) throw new Error('Falha ao buscar análise do jogo');
-            return await resp.json();
-        } catch (error) {
-            console.error('Erro na API do Analisador de Apostas (Análise):', error);
-            return null;
-        }
-    }
-
     // --- EVENTO: escolher esporte ---
     if (sportSelect) sportSelect.addEventListener('change', async () => {
         const selectedSport = sportSelect.value;
         bettingResultsDiv.classList.add('hidden');
+
         resetAndDisable(leagueSelect, 'Selecione uma liga');
         resetAndDisable(gameSelect, 'Selecione um jogo');
 
         if (selectedSport === 'football') {
             if (leagueSelectorGroup) leagueSelectorGroup.classList.remove('hidden');
-            const leagues = await fetchLeagues(selectedSport);
-            if (leagues) {
+            try {
+                const resp = await fetch(`${BASE_URL}/ligas/football`);
+                if (!resp.ok) throw new Error('Falha ao buscar ligas');
+                const leagues = await resp.json();
+
                 leagueSelect.disabled = false;
                 leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
                 leagues.forEach(l => leagueSelect.add(new Option(l.title, l.key)));
-            } else {
-                resetAndDisable(leagueSelect, 'Erro ao carregar ligas. Tente novamente.');
+            } catch (error) {
+                resetAndDisable(leagueSelect, `Erro: ${error.message}`);
+                console.error('Erro na API do Analisador de Apostas:', error);
             }
-        } else if (selectedSport) {
+        } else if (selectedSport === 'basketball_nba' || selectedSport === 'americanfootball_nfl') {
             if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
-            const games = await fetchGames(selectedSport);
-            if (games) {
+            try {
+                const resp = await fetch(`${BASE_URL}/partidas/${encodeURIComponent(selectedSport)}`);
+                if (!resp.ok) throw new Error('Falha ao buscar jogos.');
+                const games = await resp.json();
+
                 gameSelect.disabled = false;
                 gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
-                games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id)));
-                if (games.length === 0) gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado para hoje</option>';
-            } else {
-                resetAndDisable(gameSelect, 'Erro ao carregar jogos. Tente novamente.');
+                if (games.length === 0) {
+                    gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado para hoje</option>';
+                } else {
+                    games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id)));
+                }
+            } catch (error) {
+                resetAndDisable(gameSelect, `Erro: ${error.message}`);
+                console.error('Erro na API do Analisador de Apostas:', error);
             }
         }
     });
@@ -1749,17 +1720,25 @@ document.addEventListener('DOMContentLoaded', function () {
     if (leagueSelect) leagueSelect.addEventListener('change', async () => {
         const selectedLeague = leagueSelect.value;
         bettingResultsDiv.classList.add('hidden');
+
         resetAndDisable(gameSelect, 'Carregando jogos...');
 
         if (selectedLeague) {
-            const games = await fetchGames(selectedLeague);
-            if (games) {
+            try {
+                const resp = await fetch(`${BASE_URL}/partidas/${encodeURIComponent(selectedLeague)}`);
+                if (!resp.ok) throw new Error('Falha ao buscar jogos da liga');
+                const games = await resp.json();
+
                 gameSelect.disabled = false;
                 gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
-                games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id)));
-                if (games.length === 0) gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado</option>';
-            } else {
-                resetAndDisable(gameSelect, 'Erro ao carregar jogos. Tente novamente.');
+                if (games.length === 0) {
+                    gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado</option>';
+                } else {
+                    games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id)));
+                }
+            } catch (error) {
+                resetAndDisable(gameSelect, `Erro: ${error.message}`);
+                console.error('Erro na API do Analisador de Apostas:', error);
             }
         } else {
             resetAndDisable(gameSelect, 'Selecione uma liga');
@@ -1771,14 +1750,26 @@ document.addEventListener('DOMContentLoaded', function () {
         const selectedGame = gameSelect.value;
         const selectedSport = sportSelect.value;
         const selectedLeague = leagueSelect.value;
+
         bettingResultsDiv.classList.add('hidden');
         bettingResultsDiv.innerHTML = '';
+
         if (!selectedGame) return;
 
-        const analysis = await fetchAnalysis(selectedSport === 'football' ? selectedLeague : selectedSport, selectedGame);
+        try {
+            let url = '';
+            if (selectedSport === 'football') {
+                url = `${BASE_URL}/analise/${encodeURIComponent(selectedLeague)}/${encodeURIComponent(selectedGame)}`;
+            } else if (selectedSport === 'basketball_nba' || selectedSport === 'americanfootball_nfl') {
+                url = `${BASE_URL}/analise/${encodeURIComponent(selectedSport)}/${encodeURIComponent(selectedGame)}`;
+            }
 
-        if (analysis) {
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error('Falha ao buscar análise do jogo');
+            const analysis = await resp.json();
+
             bettingResultsDiv.classList.remove('hidden');
+
             let htmlResult = `<h3 class="font-bold text-xl text-cyan-300 mb-4">Análise Pré-Jogo</h3>`;
             analysis.forEach(marketAnalysis => {
                 htmlResult += `
@@ -1790,12 +1781,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>`;
             });
             bettingResultsDiv.innerHTML = htmlResult;
-        } else {
+
+        } catch (error) {
             bettingResultsDiv.classList.remove('hidden');
             bettingResultsDiv.innerHTML = `
                 <div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300">
-                    <strong>Erro na Análise:</strong> Não foi possível carregar os dados. A API pode estar indisponível. Por favor, tente novamente mais tarde.
+                    <strong>Erro na Análise:</strong> ${error.message}. Por favor, tente novamente mais tarde.
                 </div>`;
+            console.error('Erro na API do Analisador de Apostas:', error);
         }
     });
 
@@ -1861,7 +1854,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (eventsList) eventsList.innerHTML = `<li>Erro ao buscar dados. Tentando novamente...</li>`;
         }
     });
-
+    */
+    
     // ========================================================== //
     // ================= 4. GERADOR DE PROMPTS ================= //
     // ========================================================== //
@@ -1924,5 +1918,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 </script>
+
  </body>
 </html>
