@@ -1807,41 +1807,7 @@ async function loadGamesBySport(sport) {
     }
 }
 
-async function fetchAndDisplayAnalysis(gameId, status) {
-    if (!gameId) { bettingResultsDiv.classList.add('hidden'); return; }
-    bettingResultsDiv.classList.remove('hidden');
-    bettingResultsDiv.innerHTML = `<p class="text-slate-400 text-center">Analisando estatísticas... 🧠</p>`;
-    const sport = sportSelect.value;
-    const liveStatusList = ['1H', 'HT', '2H', 'ET', 'BT', 'P', 'LIVE', 'INT'];
-    const isLive = liveStatusList.includes(status);
-    const endpoint = isLive ? 'analisar-ao-vivo' : 'analisar-pre-jogo';
-    const analyzeUrl = `${BASE_URL}/${endpoint}?game_id=${gameId}&sport=${sport}`;
-    try {
-        const response = await fetch(analyzeUrl);
-        if (!response.ok) throw new Error('O servidor de análise retornou um erro.');
-        const tips = await response.json();
-        const selectedGameText = gameSelect.options[gameSelect.selectedIndex].text.split(' (')[0];
-        let htmlResult = `<h3 class="font-bold text-xl text-cyan-300 mb-4">${isLive ? 'Análise Ao Vivo' : 'Análise Pré-Jogo'} para: ${selectedGameText}</h3>`;
-        if (tips.length === 0 || (tips[0] && tips[0].confidence === 0)) {
-             htmlResult += `<div class="p-4 border rounded-lg border-slate-700 bg-slate-900"><p class="text-slate-400">${tips.length > 0 ? tips[0].justification : 'Sem dicas de alta confiança.'}</p></div>`;
-        } else {
-            tips.forEach(tip => {
-                htmlResult += `
-                    <div class="p-4 border rounded-lg border-slate-700 bg-slate-900 space-y-2">
-                        <p class="text-slate-300"><strong class="text-cyan-400">Mercado:</strong> ${tip.market}</p>
-                        <p class="text-slate-300"><strong class="text-cyan-400">Sugestão:</strong> ${tip.suggestion}</p>
-                        <p class="text-slate-400 mt-2"><i>${tip.justification}</i></p>
-                        <div class="w-full bg-slate-700 rounded-full h-2.5 mt-3"><div class="bg-cyan-500 h-2.5 rounded-full" style="width: ${tip.confidence}%"></div></div>
-                        <p class="text-xs text-slate-500 text-right mt-1">Confiança: ${tip.confidence}%</p>
-                    </div>`;
-            });
-        }
-        bettingResultsDiv.innerHTML = htmlResult;
-    } catch (error) {
-        bettingResultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300"><strong>Erro na Análise:</strong> ${error.message}</div>`;
-    }
-}
-
+fetchAndDisplayAnalysis
 // SUBSTITUA O SEU BLOCO 'sportSelect.addEventListener' ANTIGO POR ESTE
 
 sportSelect.addEventListener('change', async () => {
@@ -1964,6 +1930,7 @@ gameSelect.addEventListener('change', () => {
     </script>
  </body>
 </html>
+
 
 
 
