@@ -1611,17 +1611,16 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
     // =========== 1. LÓGICA GERAL E DE NAVEGAÇÃO =============== //
     // ========================================================== //
 
-    // --- Variáveis Globais de Elementos ---
     const projectListContainer = document.getElementById('project-list-container');
     const analyzerSection = document.getElementById('analisador-seguranca-web');
     const promptsSection = document.getElementById('prompt-generator-section');
     const bettingAnalyzer = document.getElementById('analisador-apostas');
     const radarSection = document.getElementById('radar-ia-section');
 
-    // --- Lógica do Menu Mobile ---
+    // --- Menu Mobile ---
     const menuBtn = document.getElementById('menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-    const mobileLinks = mobileMenu.querySelectorAll('a');
+    const mobileLinks = mobileMenu ? mobileMenu.querySelectorAll('a') : [];
     if (menuBtn) {
         menuBtn.addEventListener('click', () => {
             if(mobileMenu) mobileMenu.classList.toggle('hidden');
@@ -1635,7 +1634,7 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
         });
     }
 
-    // --- Lógica de Navegação entre Projetos ---
+    // --- Botões de navegação entre seções ---
     const showScannerButton = document.getElementById('showScannerButton');
     const hideScannerButton = document.getElementById('hideScannerButton');
     const showPromptsButton = document.getElementById('showPromptsButton');
@@ -1654,239 +1653,146 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
     if (showRadarButton) showRadarButton.addEventListener('click', () => { projectListContainer.classList.add('hidden'); radarSection.classList.remove('hidden'); loadLiveGames(); });
     if (hideRadarButton) hideRadarButton.addEventListener('click', () => { radarSection.classList.add('hidden'); projectListContainer.classList.remove('hidden'); if (radarUpdateInterval) clearInterval(radarUpdateInterval); });
 
-    // --- Lógica do Texto de Introdução (Typed.js) ---
-    if(document.getElementById('typed-headline')) {
-        new Typed('#typed-headline', {
-            strings: ['Profissional de Tecnologia e Segurança Cibernética'],
-            typeSpeed: 50,
-            showCursor: true,
-            cursorChar: '_',
-            startDelay: 500,
-            onComplete: (self) => {
-                if(self.cursor) self.cursor.style.display = 'none';
-                const paragraphEl = document.getElementById('intro-paragraph');
-                if(paragraphEl) paragraphEl.style.opacity = 1;
-                setTimeout(() => {
-                    new Typed('#typed-paragraph', {
-                        strings: [
-                            'Com base sólida em Gestão de Projetos, IA e Cybersecurity, busco aplicar minha visão estratégica para garantir a integridade, eficiência e segurança de sistemas. Minha experiência em operações e análise de dados me preparou para resolver problemas complexos e liderar com foco em resultados na área de tecnologia.'
-                        ],
-                        typeSpeed: 25,
-                        showCursor: true,
-                        cursorChar: '_',
-                        startDelay: 200,
-                        onComplete: (selfPara) => { if(selfPara.cursor) selfPara.cursor.style.display = 'none'; },
-                    });
-                }, 300);
-            }
-        });
-    }
-
-    // --- Lógica do Gráfico de Competências (Chart.js) ---
-    const skillsChartEl = document.getElementById('skillsChart');
-    if (skillsChartEl) {
-        const ctx = skillsChartEl.getContext('2d');
-        const skillsChart = new Chart(ctx, {
-            type: 'radar',
-            data: {
-                labels: ['Análise de Vulnerabilidades', 'Pentesting', 'Gestão Ágil', 'Liderança', 'Análise de Dados', 'Arquitetura de Segurança'],
-                datasets: [{
-                    label: 'Nível de Proficiência',
-                    data: [90, 85, 80, 95, 88, 75],
-                    backgroundColor: 'rgba(0, 230, 230, 0.2)',
-                    borderColor: 'rgba(0, 230, 230, 1)',
-                    borderWidth: 2,
-                    pointBackgroundColor: 'rgba(0, 230, 230, 1)',
-                    pointBorderColor: '#0d1117',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(0, 230, 230, 1)'
-                }]
-            },
-            options: {
-                maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        angleLines: { color: 'rgba(201, 209, 217, 0.1)' },
-                        grid: { color: 'rgba(201, 209, 217, 0.1)' },
-                        pointLabels: { font: { size: 12, weight: 'bold' }, color: '#c9d1d9' },
-                        ticks: { backdropColor: 'transparent', stepSize: 20, color: '#c9d1d9' },
-                        suggestedMin: 0,
-                        suggestedMax: 100
-                    }
-                },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { callbacks: { label: (context) => (context.dataset.label || '') + ': ' + context.parsed.r + '%' } }
-                }
-            }
-        });
-    }
-    
-    // --- Lógica das Abas de Competências ---
-    const tabs = document.querySelectorAll('.tab-btn');
-    const contents = document.querySelectorAll('#competencias .tab-content');
-    if(tabs && contents) {
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const target = tab.getAttribute('data-tab');
-                tabs.forEach(t => {
-                    t.classList.remove('text-cyan-300', 'border-cyan-300');
-                    t.classList.add('text-slate-400', 'border-transparent');
-                });
-                tab.classList.add('text-cyan-300', 'border-cyan-300');
-                tab.classList.remove('text-slate-400', 'border-transparent');
-                contents.forEach(content => content.classList.add('hidden'));
-                const targetContent = document.getElementById(target + '-content');
-                if (targetContent) targetContent.classList.remove('hidden');
-            });
-        });
-    }
-
     // ========================================================== //
-    // ================= 2. LÓGICAS DOS PROJETOS ================ //
+    // ================= 2. LÓGICA TIPSTER IA =================== //
     // ========================================================== //
 
-    <script>
-const BASE_URL = 'https://analisador-apostas.onrender.com';
+    const BASE_URL = 'https://analisador-apostas.onrender.com';
 
-const sportSelect = document.getElementById('sport-select');
-const leagueSelect = document.getElementById('league-select');
-const gameSelect = document.getElementById('game-select');
-const leagueSelectorGroup = document.getElementById('league-selector-group');
-const bettingResultsDiv = document.getElementById('bettingResults');
+    const sportSelect = document.getElementById('sport-select');
+    const leagueSelect = document.getElementById('league-select');
+    const gameSelect = document.getElementById('game-select');
+    const leagueSelectorGroup = document.getElementById('league-selector-group');
+    const bettingResultsDiv = document.getElementById('bettingResults');
 
-// Reset utilitário
-function resetAndDisable(selectElement, message) {
-    if (selectElement) {
-        selectElement.innerHTML = `<option value="">${message}</option>`;
-        selectElement.disabled = true;
-    }
-}
-
-// --- EVENTO: escolher esporte ---
-if (sportSelect) sportSelect.addEventListener('change', async () => {
-    const selectedSport = sportSelect.value;
-    bettingResultsDiv.classList.add('hidden');
-
-    resetAndDisable(leagueSelect, 'Selecione uma liga');
-    resetAndDisable(gameSelect, 'Selecione um jogo');
-
-    // ⚽ Futebol → fluxo de ligas
-    if (selectedSport === 'football') {
-        if (leagueSelectorGroup) leagueSelectorGroup.classList.remove('hidden');
-        try {
-            const resp = await fetch(`${BASE_URL}/ligas/football`);
-            if (!resp.ok) throw new Error('Falha ao buscar ligas');
-            const leagues = await resp.json();
-
-            leagueSelect.disabled = false;
-            leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
-            leagues.forEach(l => leagueSelect.add(new Option(l.title, l.key)));
-        } catch (error) {
-            resetAndDisable(leagueSelect, `Erro: ${error.message}`);
-        }
-    } 
-    // 🏀 NBA ou 🏈 NFL → jogos diretos
-    else if (selectedSport === 'basketball_nba' || selectedSport === 'americanfootball_nfl') {
-        if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
-        try {
-            const resp = await fetch(`${BASE_URL}/partidas/${encodeURIComponent(selectedSport)}`);
-            if (!resp.ok) throw new Error('Falha ao buscar jogos.');
-            const games = await resp.json();
-
-            gameSelect.disabled = false;
-            gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
-            if (games.length === 0) {
-                gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado para hoje</option>';
-            } else {
-                games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id)));
-            }
-        } catch (error) {
-            resetAndDisable(gameSelect, `Erro: ${error.message}`);
+    function resetAndDisable(selectElement, message) {
+        if (selectElement) {
+            selectElement.innerHTML = `<option value="">${message}</option>`;
+            selectElement.disabled = true;
         }
     }
-});
 
-// --- EVENTO: escolher liga ---
-if (leagueSelect) leagueSelect.addEventListener('change', async () => {
-    const selectedLeague = leagueSelect.value;
-    bettingResultsDiv.classList.add('hidden');
+    // --- EVENTO: escolher esporte ---
+    if (sportSelect) sportSelect.addEventListener('change', async () => {
+        const selectedSport = sportSelect.value;
+        bettingResultsDiv.classList.add('hidden');
 
-    resetAndDisable(gameSelect, 'Carregando jogos...');
+        resetAndDisable(leagueSelect, 'Selecione uma liga');
+        resetAndDisable(gameSelect, 'Selecione um jogo');
 
-    if (selectedLeague) {
-        try {
-            const resp = await fetch(`${BASE_URL}/partidas/${encodeURIComponent(selectedLeague)}`);
-            if (!resp.ok) throw new Error('Falha ao buscar jogos da liga');
-            const games = await resp.json();
-
-            gameSelect.disabled = false;
-            gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
-            if (games.length === 0) {
-                gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado</option>';
-            } else {
-                games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id)));
-            }
-        } catch (error) {
-            resetAndDisable(gameSelect, `Erro: ${error.message}`);
-        }
-    } else {
-        resetAndDisable(gameSelect, 'Selecione uma liga');
-    }
-});
-
-// --- EVENTO: escolher jogo ---
-if (gameSelect) gameSelect.addEventListener('change', async () => {
-    const selectedGame = gameSelect.value;
-    const selectedSport = sportSelect.value;
-    const selectedLeague = leagueSelect.value;
-
-    bettingResultsDiv.classList.add('hidden');
-    bettingResultsDiv.innerHTML = '';
-
-    if (!selectedGame) return;
-
-    try {
-        let url = '';
-
-        // Futebol → usa league_key
         if (selectedSport === 'football') {
-            url = `${BASE_URL}/analise/${encodeURIComponent(selectedLeague)}/${encodeURIComponent(selectedGame)}`;
+            if (leagueSelectorGroup) leagueSelectorGroup.classList.remove('hidden');
+            try {
+                const resp = await fetch(`${BASE_URL}/ligas/football`);
+                if (!resp.ok) throw new Error('Falha ao buscar ligas');
+                const leagues = await resp.json();
+
+                leagueSelect.disabled = false;
+                leagueSelect.innerHTML = '<option value="">Selecione uma liga</option>';
+                leagues.forEach(l => leagueSelect.add(new Option(l.title, l.key)));
+            } catch (error) {
+                resetAndDisable(leagueSelect, `Erro: ${error.message}`);
+            }
         } 
-        // NBA ou NFL → usam diretamente o sport key
         else if (selectedSport === 'basketball_nba' || selectedSport === 'americanfootball_nfl') {
-            url = `${BASE_URL}/analise/${encodeURIComponent(selectedSport)}/${encodeURIComponent(selectedGame)}`;
+            if (leagueSelectorGroup) leagueSelectorGroup.classList.add('hidden');
+            try {
+                const resp = await fetch(`${BASE_URL}/partidas/${encodeURIComponent(selectedSport)}`);
+                if (!resp.ok) throw new Error('Falha ao buscar jogos.');
+                const games = await resp.json();
+
+                gameSelect.disabled = false;
+                gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
+                if (games.length === 0) {
+                    gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado para hoje</option>';
+                } else {
+                    games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id)));
+                }
+            } catch (error) {
+                resetAndDisable(gameSelect, `Erro: ${error.message}`);
+            }
         }
+    });
 
-        const resp = await fetch(url);
-        if (!resp.ok) throw new Error('Falha ao buscar análise do jogo');
-        const analysis = await resp.json();
+    // --- EVENTO: escolher liga ---
+    if (leagueSelect) leagueSelect.addEventListener('change', async () => {
+        const selectedLeague = leagueSelect.value;
+        bettingResultsDiv.classList.add('hidden');
 
-        bettingResultsDiv.classList.remove('hidden');
+        resetAndDisable(gameSelect, 'Carregando jogos...');
 
-        let htmlResult = `<h3 class="font-bold text-xl text-cyan-300 mb-4">Análise Pré-Jogo</h3>`;
-        analysis.forEach(marketAnalysis => {
-        htmlResult += `
-        <div class="p-4 border rounded-lg border-slate-700 bg-slate-900 space-y-2">
-            <p class="text-slate-300">
-                <strong class="text-cyan-400">Mercado:</strong> ${marketAnalysis.market}
-            </p>
-            <p class="text-slate-400 mt-2"><i>${marketAnalysis.analysis}</i></p>
-        </div>`;
-        });
-        bettingResultsDiv.innerHTML = htmlResult;
+        if (selectedLeague) {
+            try {
+                const resp = await fetch(`${BASE_URL}/partidas/${encodeURIComponent(selectedLeague)}`);
+                if (!resp.ok) throw new Error('Falha ao buscar jogos da liga');
+                const games = await resp.json();
 
+                gameSelect.disabled = false;
+                gameSelect.innerHTML = '<option value="">Selecione um jogo</option>';
+                if (games.length === 0) {
+                    gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado</option>';
+                } else {
+                    games.forEach(g => gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id)));
+                }
+            } catch (error) {
+                resetAndDisable(gameSelect, `Erro: ${error.message}`);
+            }
+        } else {
+            resetAndDisable(gameSelect, 'Selecione uma liga');
+        }
+    });
 
-    } catch (error) {
-        bettingResultsDiv.classList.remove('hidden');
-        bettingResultsDiv.innerHTML = `
-            <div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300">
-                <strong>Erro na Análise:</strong> ${error.message}
-            </div>`;
-    }
-});
+    // --- EVENTO: escolher jogo ---
+    if (gameSelect) gameSelect.addEventListener('change', async () => {
+        const selectedGame = gameSelect.value;
+        const selectedSport = sportSelect.value;
+        const selectedLeague = leagueSelect.value;
 
-    // --- LÓGICA DO RADAR IA ---
+        bettingResultsDiv.classList.add('hidden');
+        bettingResultsDiv.innerHTML = '';
+
+        if (!selectedGame) return;
+
+        try {
+            let url = '';
+            if (selectedSport === 'football') {
+                url = `${BASE_URL}/analise/${encodeURIComponent(selectedLeague)}/${encodeURIComponent(selectedGame)}`;
+            } 
+            else if (selectedSport === 'basketball_nba' || selectedSport === 'americanfootball_nfl') {
+                url = `${BASE_URL}/analise/${encodeURIComponent(selectedSport)}/${encodeURIComponent(selectedGame)}`;
+            }
+
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error('Falha ao buscar análise do jogo');
+            const analysis = await resp.json();
+
+            bettingResultsDiv.classList.remove('hidden');
+
+            let htmlResult = `<h3 class="font-bold text-xl text-cyan-300 mb-4">Análise Pré-Jogo</h3>`;
+            analysis.forEach(marketAnalysis => {
+                htmlResult += `
+                <div class="p-4 border rounded-lg border-slate-700 bg-slate-900 space-y-2">
+                    <p class="text-slate-300">
+                        <strong class="text-cyan-400">Mercado:</strong> ${marketAnalysis.market}
+                    </p>
+                    <p class="text-slate-400 mt-2"><i>${marketAnalysis.analysis}</i></p>
+                </div>`;
+            });
+            bettingResultsDiv.innerHTML = htmlResult;
+
+        } catch (error) {
+            bettingResultsDiv.classList.remove('hidden');
+            bettingResultsDiv.innerHTML = `
+                <div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300">
+                    <strong>Erro na Análise:</strong> ${error.message}
+                </div>`;
+        }
+    });
+
+    // ========================================================== //
+    // ==================== 3. LÓGICA RADAR IA ================== //
+    // ========================================================== //
+
     const radarGameSelect = document.getElementById('radar-game-select');
     const radarResultsPanel = document.getElementById('radar-results-panel');
     const RADAR_BASE_URL = 'https://radar-ia-backend.onrender.com';
@@ -1908,58 +1814,17 @@ if (gameSelect) gameSelect.addEventListener('change', async () => {
             radarGameSelect.innerHTML = `<option value="">Erro: ${error.message}</option>`;
         }
     }
-    if (gameSelect) gameSelect.addEventListener('change', async () => {
-    const gameId = gameSelect.value;
-    const selectedSport = sportSelect.value;
-    const selectedLeague = leagueSelect.value;
-    bettingResultsDiv.classList.add('hidden');
 
-    if (!gameId) return;
+    if (radarGameSelect) radarGameSelect.addEventListener('change', async () => {
+        const gameId = radarGameSelect.value;
+        if (!gameId) return;
 
-    try {
-        let url;
-
-        // Futebol → precisa de league_id + game_id
-        if (selectedSport === 'football') {
-            url = `${BASE_URL}/analise/${encodeURIComponent(selectedLeague)}/${encodeURIComponent(gameId)}`;
-        }
-        // NBA e NFL → liga já é única, só passa sport + game_id
-        else if (['nba', 'nfl'].includes(selectedSport)) {
-            url = `${BASE_URL}/analise/${encodeURIComponent(selectedSport)}/${encodeURIComponent(gameId)}`;
-        }
-        // Outros esportes futuros → fallback
-        else {
-            url = `${BASE_URL}/analise/${encodeURIComponent(selectedSport)}/${encodeURIComponent(gameId)}`;
-        }
-
-        const resp = await fetch(url);
-        if (!resp.ok) throw new Error("Erro ao buscar análise");
-
-        const analysis = await resp.json();
-
-        bettingResultsDiv.classList.remove('hidden');
-        bettingResultsDiv.innerHTML = '';
-
-        if (Array.isArray(analysis) && analysis.length > 0) {
-            analysis.forEach(a => {
-                const p = document.createElement('p');
-                p.innerHTML = `<strong>${a.market}:</strong> ${a.analysis}`;
-                bettingResultsDiv.appendChild(p);
-            });
-        } else {
-            bettingResultsDiv.innerHTML = '<p>Nenhuma análise disponível para este jogo.</p>';
-        }
-    } catch (error) {
-        bettingResultsDiv.classList.remove('hidden');
-        bettingResultsDiv.innerHTML = `<p style="color:red;">Erro: ${error.message}</p>`;
-    }
-});
-
-    async function updateRadarStats(gameId) {
         try {
             const response = await fetch(`${RADAR_BASE_URL}/stats-aovivo/${gameId}`);
             if (!response.ok) throw new Error('Falha ao buscar stats.');
             const data = await response.json();
+
+            // Atualiza painel Radar IA
             document.getElementById('radar-score').textContent = data.score;
             document.getElementById('radar-minute').textContent = `${data.minute}'`;
             document.getElementById('home-possession').textContent = data.stats.possession.home;
@@ -1972,41 +1837,50 @@ if (gameSelect) gameSelect.addEventListener('change', async () => {
             document.getElementById('home-red-cards').textContent = `${data.stats.cards.red_home} 🟥`;
             document.getElementById('away-yellow-cards').textContent = `${data.stats.cards.yellow_away} 🟨`;
             document.getElementById('away-red-cards').textContent = `${data.stats.cards.red_away} 🟥`;
+
             const eventsList = document.getElementById('radar-events');
             eventsList.innerHTML = '';
             if (data.events && data.events.length > 0) {
-                data.events.forEach(event => eventsList.innerHTML += `<li>${event.minute}' - ${event.type}: ${event.detail}</li>`);
+                data.events.forEach(event => {
+                    eventsList.innerHTML += `<li>${event.minute}' - ${event.type}: ${event.detail}</li>`;
+                });
             } else {
                 eventsList.innerHTML = `<li>Nenhum evento importante recente.</li>`;
             }
         } catch (error) {
-            console.error("Erro ao atualizar o radar:", error);
+            console.error("Erro ao atualizar radar:", error);
             const eventsList = document.getElementById('radar-events');
             if (eventsList) eventsList.innerHTML = `<li>Erro ao buscar dados. Tentando novamente...</li>`;
         }
-    }
-    // --- LÓGICA DO GERADOR DE PROMPTS (PROFISSÕES E ABAS) ---
+    });
+
+    // ========================================================== //
+    // ================= 4. GERADOR DE PROMPTS ================= //
+    // ========================================================== //
+
     const categoriaSelect = document.getElementById('categoria-profissao');
     const profissaoSelect = document.getElementById('profissao');
     const gerarBtnProfissao = document.getElementById('gerar-prompt-profissao');
     const outputProfissao = document.getElementById('prompt-profissao-output');
     const copiarBtnProfissao = document.getElementById('copiar-prompt-profissao');
-    
-    categoriaSelect.addEventListener('change', () => {
-        const categoria = categoriaSelect.value;
-        profissaoSelect.innerHTML = '<option value="">Selecione uma profissão...</option>';
-        profissaoSelect.disabled = !categoria;
-        if (categoria && promptsData[categoria]) {
-            for (const profissao in promptsData[categoria]) {
-                const option = document.createElement('option');
-                option.value = profissao;
-                option.textContent = profissao;
-                profissaoSelect.appendChild(option);
-            }
-        }
-    });
 
-    gerarBtnProfissao.addEventListener('click', () => {
+    if (categoriaSelect) {
+        categoriaSelect.addEventListener('change', () => {
+            const categoria = categoriaSelect.value;
+            profissaoSelect.innerHTML = '<option value="">Selecione uma profissão...</option>';
+            profissaoSelect.disabled = !categoria;
+            if (categoria && promptsData[categoria]) {
+                for (const profissao in promptsData[categoria]) {
+                    const option = document.createElement('option');
+                    option.value = profissao;
+                    option.textContent = profissao;
+                    profissaoSelect.appendChild(option);
+                }
+            }
+        });
+    }
+
+    if (gerarBtnProfissao) gerarBtnProfissao.addEventListener('click', () => {
         const categoria = categoriaSelect.value;
         const profissao = profissaoSelect.value;
         if (categoria && profissao && promptsData[categoria] && promptsData[categoria][profissao]) {
@@ -2016,36 +1890,31 @@ if (gameSelect) gameSelect.addEventListener('change', async () => {
         }
     });
 
-    copiarBtnProfissao.addEventListener('click', () => {
+    if (copiarBtnProfissao) copiarBtnProfissao.addEventListener('click', () => {
         outputProfissao.select();
         outputProfissao.setSelectionRange(0, 99999);
         document.execCommand('copy');
         copiarBtnProfissao.textContent = 'Copiado!';
-        setTimeout(() => {
-            copiarBtnProfissao.textContent = 'Copiar';
-        }, 2000);
+        setTimeout(() => { copiarBtnProfissao.textContent = 'Copiar'; }, 2000);
     });
 
     const promptTabs = document.querySelectorAll('#prompt-generator-section .tab-button');
     const promptContents = document.querySelectorAll('#prompt-generator-section .tab-content');
-    
     promptTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const targetId = tab.id.replace('tab-', 'content-');
-            
             promptTabs.forEach(t => {
                 t.classList.remove('active', 'text-cyan-300', 'border-cyan-300');
-                t.classList.add('text-slate-400', 'border-transparent', 'hover:text-slate-200', 'hover:border-slate-500');
+                t.classList.add('text-slate-400', 'border-transparent');
             });
-            
             tab.classList.add('active', 'text-cyan-300', 'border-cyan-300');
             tab.classList.remove('text-slate-400', 'border-transparent');
-            
             promptContents.forEach(content => content.classList.add('hidden'));
             document.getElementById(targetId).classList.remove('hidden');
         });
     });
+
 });
-    </script>
+</script>
  </body>
 </html>
