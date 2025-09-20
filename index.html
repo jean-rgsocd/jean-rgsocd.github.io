@@ -1865,16 +1865,16 @@ if (gameSelect) gameSelect.addEventListener('change', async () => {
         bettingResultsDiv.classList.remove('hidden');
 
         let htmlResult = `<h3 class="font-bold text-xl text-cyan-300 mb-4">Análise Pré-Jogo</h3>`;
-analysis.forEach(marketAnalysis => {
-    htmlResult += `
+        analysis.forEach(marketAnalysis => {
+        htmlResult += `
         <div class="p-4 border rounded-lg border-slate-700 bg-slate-900 space-y-2">
             <p class="text-slate-300">
                 <strong class="text-cyan-400">Mercado:</strong> ${marketAnalysis.market}
             </p>
             <p class="text-slate-400 mt-2"><i>${marketAnalysis.analysis}</i></p>
         </div>`;
-});
-bettingResultsDiv.innerHTML = htmlResult;
+        });
+        bettingResultsDiv.innerHTML = htmlResult;
 
 
     } catch (error) {
@@ -1885,7 +1885,6 @@ bettingResultsDiv.innerHTML = htmlResult;
             </div>`;
     }
 });
-</script>
 
     // --- LÓGICA DO RADAR IA ---
     const radarGameSelect = document.getElementById('radar-game-select');
