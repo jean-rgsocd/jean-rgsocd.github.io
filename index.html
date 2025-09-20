@@ -418,23 +418,28 @@
         <p class="text-slate-400 mb-6">Selecione um esporte para ver os jogos disponíveis para hoje. A análise utiliza dados de uma API para fornecer insights pré-jogo e ao vivo.</p>
         
         <div class="space-y-4">
-            <div class="form-group">
-                <label for="sport-select" class="block text-slate-300 text-sm font-bold mb-2">1. Escolha o Esporte:</label>
-                <select id="sport-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
-                    <option value="">Selecione um esporte</option>
-                    <option value="football">Futebol</option>
-                    <option value="nba">Basquete (NBA)</option>
-                    <option value="nfl">Futebol Americano (NFL)</option>
-                </select>
-            </div>
+    <div class="form-group">
+        <label for="sport-select" class="block text-slate-300 text-sm font-bold mb-2">1. Escolha o Esporte:</label>
+        <select id="sport-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400">
+            <option value="">Selecione um esporte</option>
+            <option value="football">Futebol</option>
+            </select>
+    </div>
+    
+    <div id="league-selector-group" class="form-group hidden">
+        <label for="league-select" class="block text-slate-300 text-sm font-bold mb-2">2. Escolha a Liga:</label>
+        <select id="league-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
+            <option value="">Selecione um esporte primeiro</option>
+        </select>
+    </div>
 
-            <div class="form-group">
-                <label for="game-select" class="block text-slate-300 text-sm font-bold mb-2">2. Escolha o Jogo:</label>
-                <select id="game-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
-                    <option value="">Selecione um esporte primeiro</option>
-                </select>
-            </div>
-        </div>
+    <div class="form-group">
+        <label for="game-select" class="block text-slate-300 text-sm font-bold mb-2">3. Escolha o Jogo:</label>
+        <select id="game-select" class="w-full px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 focus:outline-none focus:border-cyan-400" disabled>
+            <option value="">Selecione uma liga primeiro</option>
+        </select>
+    </div>
+</div>
 
         <div id="bettingResults" class="mt-8 space-y-4 hidden"></div>
     </div>
@@ -1689,107 +1694,125 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
     showBettingButton.addEventListener('click', (e) => { e.preventDefault(); projectListContainer.classList.add('hidden'); bettingAnalyzer.classList.remove('hidden'); window.location.href = '#analisador-apostas'; });
     hideBettingButton.addEventListener('click', () => { bettingAnalyzer.classList.add('hidden'); projectListContainer.classList.remove('hidden'); window.location.href = '#projetos'; });
 
-    // --- LÓGICA DO ANALISADOR DE APOSTAS (VERSÃO FINAL E CORRETA) ---
-    const sportSelect = document.getElementById('sport-select');
-    const gameSelect = document.getElementById('game-select');
-    const bettingResultsDiv = document.getElementById('bettingResults');
-    const BASE_URL = 'https://analisador-apostas.onrender.com';
+    // --- LÓGICA DO ANALISADOR DE APOSTAS (V13 - MULTI-LIGAS) ---
+const sportSelect = document.getElementById('sport-select');
+const leagueSelectorGroup = document.getElementById('league-selector-group');
+const leagueSelect = document.getElementById('league-select');
+const gameSelect = document.getElementById('game-select');
+const bettingResultsDiv = document.getElementById('bettingResults');
+const BASE_URL = 'https://analisador-apostas.onrender.com';
 
-    function resetAndDisable(selectElement, message) {
-        selectElement.innerHTML = `<option value="">${message}</option>`;
-        selectElement.disabled = true;
+function resetAndDisable(selectElement, message) {
+    selectElement.innerHTML = `<option value="">${message}</option>`;
+    selectElement.disabled = true;
+}
+
+async function loadLeagues() {
+    leagueSelectorGroup.classList.remove('hidden');
+    resetAndDisable(leagueSelect, 'Buscando ligas...');
+    leagueSelect.disabled = false;
+    
+    try {
+        const response = await fetch(`${BASE_URL}/ligas/football`);
+        if (!response.ok) throw new Error('Falha ao buscar ligas.');
+        const leagues = await response.json();
+        
+        leagueSelect.innerHTML = '<option value="">Selecione uma Liga</option>';
+        leagues.forEach(league => {
+            leagueSelect.add(new Option(league.title, league.key));
+        });
+    } catch (error) {
+        resetAndDisable(leagueSelect, `Erro: ${error.message}`);
     }
+}
 
-    async function loadGamesBySport(sport) {
-        if (!sport) {
-            resetAndDisable(gameSelect, 'Selecione um esporte primeiro');
-            return;
-        }
-        
-        resetAndDisable(gameSelect, 'Buscando jogos...');
-        gameSelect.disabled = false;
-        
-        try {
-            const response = await fetch(`${BASE_URL}/partidas/${sport}`);
-            if (!response.ok) {
-                throw new Error('Não foi possível buscar os jogos. O servidor pode estar offline.');
-            }
-            const games = await response.json();
-            
-            gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
-            
-            if (games.length === 0) {
-                gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado para hoje</option>';
-                gameSelect.disabled = true;
-            } else {
-                games.forEach(game => {
-                    const optionText = `${game.home} vs ${game.away} (${game.time})`;
-                    const option = new Option(optionText, game.game_id);
-                    option.dataset.status = game.status;
-                    gameSelect.add(option);
-                });
-            }
-        } catch (error) {
-            resetAndDisable(gameSelect, `Erro: ${error.message}`);
-        }
+async function loadGamesByLeague(leagueKey) {
+    if (!leagueKey) {
+        resetAndDisable(gameSelect, 'Selecione uma liga primeiro');
+        return;
     }
-
-    async function fetchAndDisplayAnalysis(gameId, status) {
-        if (!gameId) {
-            bettingResultsDiv.classList.add('hidden');
-            return;
+    resetAndDisable(gameSelect, 'Buscando jogos...');
+    gameSelect.disabled = false;
+    
+    try {
+        const response = await fetch(`${BASE_URL}/partidas/${leagueKey}`);
+        if (!response.ok) throw new Error('Não foi possível buscar os jogos.');
+        const games = await response.json();
+        
+        gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
+        if (games.length === 0) {
+            gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado para hoje</option>';
+        } else {
+            games.forEach(game => {
+                const option = new Option(`${game.home} vs ${game.away} (${game.time})`, game.game_id);
+                gameSelect.add(option);
+            });
         }
-        
-        bettingResultsDiv.classList.remove('hidden');
-        bettingResultsDiv.innerHTML = `<p class="text-slate-400 text-center">Analisando odds e mercados... 🧠</p>`;
-        
-        const sport = sportSelect.value;
-        const analyzeUrl = `${BASE_URL}/analise/${sport}/${gameId}`;
-        
-        try {
-            const response = await fetch(analyzeUrl);
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({ detail: 'O servidor de análise retornou um erro inesperado.' }));
-                throw new Error(errorData.detail);
-            }
-            const analysis = await response.json();
-            const selectedGameText = gameSelect.options[gameSelect.selectedIndex].text.split(' (')[0];
-            
-            let htmlResult = `<h3 class="font-bold text-xl text-cyan-300 mb-4">Análise Pré-Jogo para: ${selectedGameText}</h3>`;
-            
-            if (!analysis || analysis.length === 0) {
-                 htmlResult += `<div class="p-4 border rounded-lg border-slate-700 bg-slate-900"><p class="text-slate-400">Nenhuma análise de mercado disponível no momento.</p></div>`;
-            } else {
-                analysis.forEach(marketAnalysis => {
-                    htmlResult += `
-                        <div class="p-4 border rounded-lg border-slate-700 bg-slate-900 space-y-2">
-                            <p class="text-slate-300"><strong class="text-cyan-400">Mercado:</strong> ${marketAnalysis.market}</p>
-                            <p class="text-slate-400 mt-2"><i>${marketAnalysis.analysis}</i></p>
-                        </div>`;
-                });
-            }
-            bettingResultsDiv.innerHTML = htmlResult;
-        } catch (error) {
-            bettingResultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300"><strong>Erro na Análise:</strong> ${error.message}</div>`;
-        }
+    } catch (error) {
+        resetAndDisable(gameSelect, `Erro: ${error.message}`);
     }
+}
 
-    sportSelect.addEventListener('change', () => {
-        const selectedSport = sportSelect.value;
+async function fetchAndDisplayAnalysis(gameId) {
+    if (!gameId) {
         bettingResultsDiv.classList.add('hidden');
-        loadGamesBySport(selectedSport);
-    });
-
-    gameSelect.addEventListener('change', () => {
-        const selectedOption = gameSelect.options[gameSelect.selectedIndex];
-        if (!selectedOption || !selectedOption.value) {
-            bettingResultsDiv.classList.add('hidden');
-            return;
+        return;
+    }
+    
+    bettingResultsDiv.classList.remove('hidden');
+    bettingResultsDiv.innerHTML = `<p class="text-slate-400 text-center">Analisando odds e mercados... 🧠</p>`;
+    
+    const leagueKey = leagueSelect.value;
+    const analyzeUrl = `${BASE_URL}/analise/${leagueKey}/${gameId}`;
+    
+    try {
+        const response = await fetch(analyzeUrl);
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ detail: 'O servidor retornou um erro inesperado.' }));
+            throw new Error(errorData.detail);
         }
-        const gameId = selectedOption.value;
-        const gameStatus = selectedOption.dataset.status;
-        fetchAndDisplayAnalysis(gameId, gameStatus);
-    });
+        const analysis = await response.json();
+        const selectedGameText = gameSelect.options[gameSelect.selectedIndex].text.split(' (')[0];
+        
+        let htmlResult = `<h3 class="font-bold text-xl text-cyan-300 mb-4">Análise Pré-Jogo para: ${selectedGameText}</h3>`;
+        
+        analysis.forEach(marketAnalysis => {
+            htmlResult += `
+                <div class="p-4 border rounded-lg border-slate-700 bg-slate-900 space-y-2">
+                    <p class="text-slate-300"><strong class="text-cyan-400">Mercado:</strong> ${marketAnalysis.market}</p>
+                    <p class="text-slate-400 mt-2"><i>${marketAnalysis.analysis}</i></p>
+                </div>`;
+        });
+        bettingResultsDiv.innerHTML = htmlResult;
+    } catch (error) {
+        bettingResultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300"><strong>Erro na Análise:</strong> ${error.message}</div>`;
+    }
+}
+
+// --- Event Listeners (Controladores) ---
+sportSelect.addEventListener('change', () => {
+    const selectedSport = sportSelect.value;
+    bettingResultsDiv.classList.add('hidden');
+    resetAndDisable(gameSelect, 'Selecione uma liga');
+    
+    if (selectedSport === 'football') {
+        loadLeagues();
+    } else {
+        leagueSelectorGroup.classList.add('hidden');
+        // Adicionar lógica para outros esportes aqui se necessário
+    }
+});
+
+leagueSelect.addEventListener('change', () => {
+    const selectedLeague = leagueSelect.value;
+    bettingResultsDiv.classList.add('hidden');
+    loadGamesByLeague(selectedLeague);
+});
+
+gameSelect.addEventListener('change', () => {
+    const selectedGameId = gameSelect.value;
+    fetchAndDisplayAnalysis(selectedGameId);
+});
 
     // --- LÓGICA DO GERADOR DE PROMPTS (PROFISSÕES E ABAS) ---
     const categoriaSelect = document.getElementById('categoria-profissao');
