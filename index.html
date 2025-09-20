@@ -1745,12 +1745,13 @@ async function loadLeaguesByCountry() {
         if (!response.ok) throw new Error('Falha ao buscar ligas.');
         const leagues = await response.json();
         leagueSelect.innerHTML = '<option value="">Selecione uma Liga</option>';
-        leagues.forEach(league => leagueSelect.add(new Option(league.name, league.id)));
-    } catch (error) {
-        leagueSelect.innerHTML = `<option value="">${error.message}</option>`;
+    leagues.forEach(responseItem => {
+    const league = responseItem.league;
+    // Adiciona uma verificação para garantir que o objeto league e suas propriedades existem
+    if (league && league.id && league.name) {
+        leagueSelect.add(new Option(league.name, league.id));
     }
-}
-
+});
 async function loadGamesByLeague() {
     const leagueId = leagueSelect.value;
     if (!leagueId) return;
@@ -1943,4 +1944,5 @@ gameSelect.addEventListener('change', () => {
     </script>
  </body>
 </html>
+
 
