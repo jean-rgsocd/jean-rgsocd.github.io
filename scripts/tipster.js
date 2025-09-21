@@ -7,11 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const gameGroup = tipsterSection.querySelector('#game-selector-group');
     const gameSelect = tipsterSection.querySelector('#game-select');
     
-    // Oculta permanentemente os seletores de país e liga
+    // Oculta permanentemente os seletores de país e liga, caso existam no HTML
     const countryGroup = tipsterSection.querySelector('#country-selector-group');
     const leagueGroup = tipsterSection.querySelector('#league-selector-group');
-    if(countryGroup) countryGroup.classList.add('hidden');
-    if(leagueGroup) leagueGroup.classList.add('hidden');
+    if(countryGroup) countryGroup.style.display = 'none';
+    if(leagueGroup) leagueGroup.style.display = 'none';
     
     const TIPSTER_BASE_URL = 'https://analisador-apostas.onrender.com';
 
