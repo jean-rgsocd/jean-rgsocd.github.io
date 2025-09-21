@@ -2,29 +2,37 @@ document.addEventListener('DOMContentLoaded', function () {
     const promptGeneratorSection = document.getElementById('prompt-generator-section');
     if (!promptGeneratorSection) return;
 
-    // --- LÓGICA CORRIGIDA DAS ABAS DO GERADOR DE PROMPTS ---
+    // --- LÓGICA DAS ABAS (VERSÃO À PROVA DE FALHAS) ---
     const promptTabs = promptGeneratorSection.querySelectorAll('.tab-button');
     const promptContents = promptGeneratorSection.querySelectorAll('.tab-content');
     
+    // Mapa que conecta o ID do botão ao ID do conteúdo
+    const tabMap = {
+        'tab-profissoes': 'content-profissoes',
+        'tab-imagens': 'content-imagens',
+        'tab-videos': 'content-veo3',
+        'tab-ferramentas': 'content-ai-tools'
+    };
+
     promptTabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            const targetId = tab.getAttribute('data-tab'); // Correção: Lendo o atributo 'data-tab'
+            const buttonId = tab.id;
+            const targetContentId = tabMap[buttonId]; // Usa o mapa para achar o alvo
             
-            // 1. Atualiza a aparência dos botões
+            // Atualiza a aparência dos botões
             promptTabs.forEach(t => {
                 t.classList.remove('active', 'text-cyan-300', 'border-cyan-300');
                 t.classList.add('text-slate-400', 'border-transparent', 'hover:text-slate-200', 'hover:border-slate-500');
             });
             tab.classList.add('active', 'text-cyan-300', 'border-cyan-300');
-            tab.classList.remove('text-slate-400', 'border-transparent');
             
-            // 2. Esconde TODOS os conteúdos
+            // Esconde todos os conteúdos
             promptContents.forEach(content => {
                 content.classList.add('hidden');
             });
             
-            // 3. Mostra APENAS o conteúdo alvo
-            const targetContent = document.getElementById(targetId);
+            // Mostra o conteúdo correto
+            const targetContent = document.getElementById(targetContentId);
             if (targetContent) {
                 targetContent.classList.remove('hidden');
             }
