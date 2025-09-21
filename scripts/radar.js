@@ -6,14 +6,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const gameSelect = document.getElementById("radar-game-select");
     const dashboard = document.getElementById("radar-dashboard");
-    // ... (demais seletores de elementos)
     const scoreEl = document.getElementById("radar-score");
     const minuteEl = document.getElementById("radar-minute");
     const homeTeamEl = document.getElementById("home-team-name");
     const awayTeamEl = document.getElementById("away-team-name");
     const eventsEl = document.getElementById("radar-events");
-    // ... (outros seletores de estatísticas)
-
+    const statPossessionEl = document.getElementById("stat-possession");
+    const statShotsEl = document.getElementById("stat-shots");
+    const statCornersEl = document.getElementById("stat-corners");
+    const statFoulsEl = document.getElementById("stat-fouls");
+    const statYellowCardsEl = document.getElementById("stat-yellow-cards");
+    const statRedCardsEl = document.getElementById("stat-red-cards");
+    
     let updateInterval = null;
 
     const loadLiveGames = async () => {
@@ -26,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (games.length === 0) {
                 gameSelect.innerHTML = `<option value="">Nenhum jogo ao vivo no momento</option>`;
+                gameSelect.disabled = true;
                 return;
             }
 
@@ -43,17 +48,16 @@ document.addEventListener("DOMContentLoaded", function () {
         awayTeamEl.textContent = data.teams?.away?.name || "Time Fora";
         scoreEl.textContent = `${data.goals?.home || 0} - ${data.goals?.away || 0}`;
         minuteEl.textContent = data.fixture?.status?.elapsed ? `${data.fixture.status.elapsed}'` : "-";
-
-        // A API retorna as estatísticas dentro de um array. Posição 0 é time da casa, 1 é visitante.
-        const homeStatsData = data.stats?.fullGame?.find(s => s.team.id === data.teams.home.id);
-        const awayStatsData = data.stats?.fullGame?.find(s => s.team.id === data.teams.away.id);
+        
+        const homeStatsData = data.statistics?.find(s => s.team.id === data.teams.home.id);
+        const awayStatsData = data.statistics?.find(s => s.team.id === data.teams.away.id);
         
         const homeStats = homeStatsData?.statistics || [];
         const awayStats = awayStatsData?.statistics || [];
 
         const getStat = (stats, name) => (stats.find(s => s.type === name)?.value || 0);
         
-        statPossessionEl.textContent = `${getStat(homeStats, 'Ball Possession') || 'N/A'} / ${getStat(awayStats, 'Ball Possession') || 'N/A'}`;
+        statPossessionEl.textContent = `${getStat(homeStats, 'Ball Possession') || 'N/A'}`;
         statShotsEl.textContent = `${getStat(homeStats, 'Total Shots')} (${getStat(homeStats, 'Shots on Goal')}) / ${getStat(awayStats, 'Total Shots')} (${getStat(awayStats, 'Shots on Goal')})`;
         statCornersEl.textContent = `${getStat(homeStats, 'Corner Kicks')} / ${getStat(awayStats, 'Corner Kicks')}`;
         statFoulsEl.textContent = `${getStat(homeStats, 'Fouls')} / ${getStat(awayStats, 'Fouls')}`;
@@ -64,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (data.events && data.events.length > 0) {
             data.events.forEach(e => {
                 const li = document.createElement("li");
-                li.className = "truncate"; // Evita que texto muito longo quebre o layout
+                li.className = "truncate";
                 li.textContent = `${e.time.elapsed}' - ${e.type} (${e.detail}) por ${e.player.name}`;
                 eventsEl.appendChild(li);
             });
@@ -84,7 +88,6 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch (err) {
             console.error("Erro ao carregar estatísticas:", err);
             dashboard.classList.add("hidden");
-            // Limpa o intervalo se houver erro para não ficar repetindo a falha
             clearInterval(updateInterval);
         }
     };
@@ -94,19 +97,18 @@ document.addEventListener("DOMContentLoaded", function () {
         clearInterval(updateInterval); 
 
         if (gameId) {
-            dashboard.classList.add("hidden"); // Esconde o painel antigo
+            dashboard.classList.add("hidden");
             fetchGameStats(gameId); 
-            updateInterval = setInterval(() => fetchGameStats(gameId), 30000); // Atualiza a cada 30 segundos
+            updateInterval = setInterval(() => fetchGameStats(gameId), 45000);
         } else {
             dashboard.classList.add("hidden");
         }
     });
 
-    // Carrega os jogos iniciais quando a seção se torna visível
     const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
             loadLiveGames();
-            observer.disconnect(); // Roda apenas uma vez
+            observer.disconnect();
         }
     }, { threshold: 0.1 });
     
@@ -114,4 +116,3 @@ document.addEventListener("DOMContentLoaded", function () {
         observer.observe(radarSection);
     }
 });
-
