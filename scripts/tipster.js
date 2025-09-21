@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!res.ok) throw new Error('Falha ao buscar países');
             const data = await res.json();
             countrySelect.innerHTML = '<option value="">Selecione País</option>';
+            // <-- CORREÇÃO AQUI: Garante que o VALOR da opção seja o CÓDIGO do país
             data.forEach(c => countrySelect.add(new Option(c.name, c.code)));
         } catch (err) {
             resetSelect(countrySelect, err.message);
@@ -41,12 +42,12 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const loadLeagues = async () => {
-        const countryCode = countrySelect.value;
+        const countryCode = countrySelect.value; // Pega o CÓDIGO (ex: "BR")
         if (!countryCode) return;
         leagueSelect.innerHTML = '<option value="">Carregando...</option>';
         leagueSelect.disabled = false;
         try {
-            const res = await fetch(`${TIPSTER_BASE_URL}/ligas/football/${countryCode}`);
+            const res = await fetch(`${TIPSTER_BASE_URL}/ligas/football/${countryCode}`); // Envia o CÓDIGO
             if (!res.ok) throw new Error('Falha ao buscar ligas');
             const data = await res.json();
             leagueSelect.innerHTML = '<option value="">Selecione Liga</option>';
@@ -120,14 +121,13 @@ document.addEventListener('DOMContentLoaded', function () {
             countryGroup.classList.add('flex');
             leagueGroup.classList.remove('hidden');
             leagueGroup.classList.add('flex');
-            gameGroup.classList.remove('lg:col-span-2');
-            gameGroup.classList.add('lg:col-span-1');
+            gameGroup.classList.add('lg:col-span-2');
             loadCountries();
         } else if (sport === 'basketball') {
-            gameGroup.classList.add('lg:col-span-2');
+            gameGroup.classList.remove('lg:col-span-2');
             loadGames('basketball', 12); 
         } else if (sport === 'american-football') {
-            gameGroup.classList.add('lg:col-span-2');
+            gameGroup.classList.remove('lg:col-span-2');
             loadGames('american-football', 16); 
         }
     });
