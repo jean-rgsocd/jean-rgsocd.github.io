@@ -34,20 +34,19 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!res.ok) throw new Error('Falha ao buscar países');
             const data = await res.json();
             countrySelect.innerHTML = '<option value="">Selecione País</option>';
-            // <-- CORREÇÃO PRINCIPAL AQUI: O valor da opção agora é o NOME do país
-            data.forEach(c => countrySelect.add(new Option(c.name, c.name))); 
+            data.forEach(c => countrySelect.add(new Option(c.name, c.code)));
         } catch (err) {
             resetSelect(countrySelect, err.message);
         }
     };
 
     const loadLeagues = async () => {
-        const countryName = countrySelect.value; // Agora pega o NOME do país
-        if (!countryName) return;
+        const countryCode = countrySelect.value;
+        if (!countryCode) return;
         leagueSelect.innerHTML = '<option value="">Carregando...</option>';
         leagueSelect.disabled = false;
         try {
-            const res = await fetch(`${TIPSTER_BASE_URL}/ligas/football/${countryName}`); // Envia o NOME
+            const res = await fetch(`${TIPSTER_BASE_URL}/ligas/football/${countryCode}`);
             if (!res.ok) throw new Error('Falha ao buscar ligas');
             const data = await res.json();
             leagueSelect.innerHTML = '<option value="">Selecione Liga</option>';
@@ -83,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
     
-    // O resto do arquivo permanece o mesmo
     const fetchAnalysis = async (gameId, status) => {
         if (!gameId) { resultsDiv.classList.add('hidden'); return; }
         resultsDiv.classList.remove('hidden');
