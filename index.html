@@ -311,55 +311,62 @@
                  </div>
                  
                  <div id="analisador-apostas" class="hidden py-12">
-    <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 md:p-8 rounded-lg shadow-lg border border-slate-700">
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="font-bold text-2xl text-slate-100">Tipster IA - Análise Esportiva</h3>
-            <button id="hideBettingButton" class="whitespace-nowrap bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Retornar</button>
-        </div>
-        <p class="text-slate-400 mb-8">Selecione o esporte, o país (para futebol) e a liga para receber uma análise baseada em dados e estatísticas processadas pela minha API de backend.</p>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="tipster-selectors">
-            <!-- Seleção de Esporte -->
-<div class="mb-4">
-  <label for="sport-select" class="block text-slate-200 mb-1">Escolha o Esporte:</label>
-  <select id="sport-select" class="w-full p-2 rounded bg-slate-700 text-slate-100">
-    <option value="">Selecione...</option>
-    <option value="football">Futebol</option>
-    <option value="nba">NBA</option>
-    <option value="nfl">NFL</option>
-  </select>
-</div>
-
-<!-- Seleção de País (só aparece para Futebol) -->
-<div id="country-selector-group" class="mb-4 hidden">
-  <label for="country-select" class="block text-slate-200 mb-1">Escolha o País:</label>
-  <select id="country-select" class="w-full p-2 rounded bg-slate-700 text-slate-100">
-    <option value="">Selecione um país</option>
-  </select>
-</div>
-
-<!-- Seleção de Liga (só aparece para Futebol) -->
-<div id="league-selector-group" class="mb-4 hidden">
-  <label for="league-select" class="block text-slate-200 mb-1">Escolha a Liga:</label>
-  <select id="league-select" class="w-full p-2 rounded bg-slate-700 text-slate-100">
-    <option value="">Selecione uma liga</option>
-  </select>
-</div>
-
-<!-- Seleção de Jogo (Futebol/NBA/NFL) -->
-<div id="game-selector-group" class="mb-4 hidden">
-    <div id="tipster-analysis-result" class="mt-4"></div>
-  <label for="game-select" class="block text-slate-200 mb-1">Escolha o Jogo:</label>
-  <select id="game-select" class="w-full p-2 rounded bg-slate-700 text-slate-100">
-    <option value="">Selecione um jogo</option>
-  </select>
-</div>
-
-        </div>
-
-        <div id="bettingResults" class="hidden mt-8 space-y-4"></div>
+  <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 md:p-8 rounded-lg shadow-lg border border-slate-700">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="font-bold text-2xl text-slate-100">Tipster IA - Análise Esportiva</h3>
+      <button id="hideBettingButton" class="whitespace-nowrap bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Retornar</button>
     </div>
+    <p class="text-slate-400 mb-8">
+      Selecione o esporte, o país (para futebol), a liga e o jogo para receber uma análise inteligente com recomendações de apostas geradas pela minha IA.
+    </p>
+
+    <!-- Seletores -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="tipster-selectors">
+
+      <!-- Esporte -->
+      <div class="mb-4">
+        <label for="sport-select" class="block text-slate-200 mb-1">Escolha o Esporte:</label>
+        <select id="sport-select" class="w-full p-2 rounded bg-slate-700 text-slate-100">
+          <option value="">Selecione...</option>
+          <option value="football">Futebol</option>
+          <option value="nba">NBA</option>
+          <option value="nfl">NFL</option>
+        </select>
+      </div>
+
+      <!-- País (só para Futebol) -->
+      <div id="country-selector-group" class="mb-4 hidden">
+        <label for="country-select" class="block text-slate-200 mb-1">Escolha o País:</label>
+        <select id="country-select" class="w-full p-2 rounded bg-slate-700 text-slate-100">
+          <option value="">Selecione um país</option>
+        </select>
+      </div>
+
+      <!-- Liga (só para Futebol) -->
+      <div id="league-selector-group" class="mb-4 hidden">
+        <label for="league-select" class="block text-slate-200 mb-1">Escolha a Liga:</label>
+        <select id="league-select" class="w-full p-2 rounded bg-slate-700 text-slate-100">
+          <option value="">Selecione uma liga</option>
+        </select>
+      </div>
+
+      <!-- Jogo (para todos esportes) -->
+      <div id="game-selector-group" class="mb-4 hidden">
+        <label for="game-select" class="block text-slate-200 mb-1">Escolha o Jogo:</label>
+        <select id="game-select" class="w-full p-2 rounded bg-slate-700 text-slate-100">
+          <option value="">Selecione um jogo</option>
+        </select>
+      </div>
+
+    </div>
+
+    <!-- Resultado da análise do Tipster IA -->
+    <div id="tipster-analysis-result" class="hidden mt-8 p-4 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-300">
+      <!-- Aqui entra a análise automática do Tipster IA -->
+    </div>
+  </div>
 </div>
+
                  
                  <div id="prompt-generator-section" class="hidden py-12">
                     <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 md:p-8 rounded-lg shadow-lg border border-slate-700">
