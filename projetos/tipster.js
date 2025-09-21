@@ -1,5 +1,5 @@
 // ---------------- Tipster IA ----------------
-const TIPSTER_API = "https://analizador-apostas-backend.vercel.app"; 
+const TIPSTER_API = "https://analisador-apostas.onrender.com";
 // ajusta a URL do deploy do seu backend
 
 const sportSelect = document.getElementById("sportSelect");
@@ -126,3 +126,4 @@ gameSelect.addEventListener("change", async () => {
       </div>`;
   }
 });
+
