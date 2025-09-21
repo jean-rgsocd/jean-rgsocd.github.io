@@ -303,8 +303,8 @@
                             </div>
                             <div id="vulnerabilitiesResults"></div>
                              <div id="cta-section" class="hidden text-center pt-6">
-                                <p class="text-slate-300 mb-4">Proteja seu sistema contra essas e outras ameaças.</p>
-                                <a href="#contato" class="bg-green-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-green-400 transition-colors">Solicitar Análise Completa</a>
+                                <p class="text-slate-300 mb-4">Solicite uma análise completa entrando em contato.</p>
+                                <a href="#contato" class="bg-green-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-green-400 transition-colors">Entrar em Contato</a>
                             </div>
                         </div>
                     </div>
@@ -318,19 +318,34 @@
                         </div>
                         <p class="text-slate-400 mb-8">Selecione o esporte, a liga e o jogo para receber uma análise baseada em dados e estatísticas processadas pela minha API de backend.</p>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                            <select id="sport-select" class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                                <option value="">Selecione um Esporte</option>
-                                <option value="football">Futebol</option>
-                                <option value="basketball">Basquete (NBA)</option>
-                                <option value="nfl">Futebol Americano (NFL)</option>
-                            </select>
-                            <select id="league-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
-                                <option value="">Selecione uma Liga</option>
-                            </select>
-                            <select id="game-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
-                                <option value="">Selecione um Jogo</option>
-                            </select>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                            <div class="flex flex-col space-y-2">
+                                <label for="sport-select" class="text-sm font-medium text-slate-400">Esporte</label>
+                                <select id="sport-select" class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                    <option value="">Selecione</option>
+                                    <option value="football">Futebol</option>
+                                    <option value="basketball">Basquete (NBA)</option>
+                                    <option value="american-football">Futebol Americano (NFL)</option>
+                                </select>
+                            </div>
+                            <div id="country-selector-group" class="flex flex-col space-y-2">
+                                <label for="country-select" class="text-sm font-medium text-slate-400">País</label>
+                                <select id="country-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
+                                    <option value="">Selecione</option>
+                                </select>
+                            </div>
+                            <div id="league-selector-group" class="flex flex-col space-y-2">
+                                <label for="league-select" class="text-sm font-medium text-slate-400">Liga</label>
+                                <select id="league-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
+                                    <option value="">Selecione</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col space-y-2">
+                                <label for="game-select" class="text-sm font-medium text-slate-400">Jogo</label>
+                                <select id="game-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
+                                    <option value="">Selecione</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div id="bettingResults" class="hidden mt-8 space-y-4">
@@ -347,9 +362,11 @@
                         <p class="text-slate-400 mb-8">Crie prompts de alta qualidade para diversas finalidades, desde atuar como um especialista até gerar imagens detalhadas.</p>
 
                         <div class="mb-4 border-b border-slate-700">
-                            <nav class="-mb-px flex space-x-6" aria-label="Tabs">
-                                <button id="tab-profissoes" class="tab-button active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-cyan-300 border-cyan-300">Profissões</button>
-                                <button id="tab-imagens" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-200 hover:border-slate-500">Imagens</button>
+                            <nav class="-mb-px flex space-x-6 overflow-x-auto" aria-label="Tabs">
+                                <button id="tab-profissoes" class="tab-button active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Profissões</button>
+                                <button id="tab-imagens" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Imagens</button>
+                                <button id="tab-videos" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Vídeos (VEO)</button>
+                                <button id="tab-ferramentas" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Ferramentas IA</button>
                             </nav>
                         </div>
 
@@ -359,8 +376,24 @@
                                     <option value="">Selecione a Categoria</option>
                                     <option value="advocacia">Advocacia</option>
                                     <option value="artes-criativas">Artes Criativas</option>
-                                    <option value="programacao">Programação</option>
+                                    <option value="copywriters">Copywriters</option>
+                                    <option value="corporativos">Corporativo</option>
+                                    <option value="criativos">Criativos</option>
+                                    <option value="desenvolvedores-e-ti">Desenvolvedores e TI</option>
+                                    <option value="educacao">Educação</option>
+                                    <option value="empreendedorismo">Empreendedorismo</option>
+                                    <option value="entretenimento">Entretenimento</option>
+                                    <option value="escrita">Escrita</option>
+                                    <option value="estudantes">Estudantes</option>
+                                    <option value="financas">Finanças</option>
+                                    <option value="fitness">Fitness</option>
                                     <option value="marketing">Marketing</option>
+                                    <option value="negocios">Negócios</option>
+                                    <option value="professores">Professores</option>
+                                    <option value="programacao">Programação</option>
+                                    <option value="saude">Saúde</option>
+                                    <option value="tecnologia">Tecnologia</option>
+                                    <option value="youtubers">Youtubers</option>
                                 </select>
                                 <select id="profissao" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
                                     <option value="">Selecione a Profissão</option>
@@ -381,6 +414,7 @@
                                     <option value="cartoon">Desenho Animado</option>
                                     <option value="fantasy art">Arte Fantasia</option>
                                     <option value="impressionist">Impressionista</option>
+                                    <option value="prompts-prontos">Prompts Prontos</option>
                                 </select>
                                 <select id="qualidade-imagem" class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
                                     <option value=", ultra detailed, 8K">Ultra detalhada, 8K</option>
@@ -396,6 +430,44 @@
                                 <button id="gerar-prompt-imagem" class="bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Gerar Prompt</button>
                                 <button id="copiar-prompt-imagem" class="bg-slate-600 text-slate-100 font-bold py-2 px-6 rounded-lg hover:bg-slate-500 transition-colors">Copiar</button>
                             </div>
+                        </div>
+
+                        <div id="content-videos" class="tab-content hidden">
+                            <p class="text-slate-400 mb-4">Selecione o tipo de vídeo e o tom desejado para gerar um prompt para IAs de vídeo como a VEO do Google.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <select id="vid-type" class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                    <option value="Cinematic">Cinemático</option>
+                                    <option value="Aerial">Aéreo</option>
+                                    <option value="Time-lapse">Time-lapse</option>
+                                    <option value="Black and White">Preto e Branco</option>
+                                </select>
+                                <select id="vid-tone" class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                    <option value="Dramatic">Dramático</option>
+                                    <option value="Joyful">Alegre</option>
+                                    <option value="Mysterious">Misterioso</option>
+                                    <option value="Epic">Épico</option>
+                                </select>
+                            </div>
+                            <textarea id="vid-result" rows="8" class="w-full bg-slate-900 border border-slate-700 rounded-md p-4 text-slate-400 font-mono text-sm" readonly>Seu prompt de vídeo aparecerá aqui...</textarea>
+                            <div class="mt-4">
+                                <button onclick="generateVideoPrompt()" class="bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Gerar Prompt de Vídeo</button>
+                            </div>
+                        </div>
+                        
+                        <div id="content-ferramentas" class="tab-content hidden">
+                            <p class="text-slate-400 mb-4">Use pequenas ferramentas de IA para tarefas rápidas de texto.</p>
+                             <div class="mb-4">
+                                <select id="ai-tool" class="w-full md:w-1/2 bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                    <option value="Summarizer">Resumidor</option>
+                                    <option value="Translator">Tradutor (Simulado)</option>
+                                    <option value="Creative Rewriter">Reescritor Criativo</option>
+                                </select>
+                            </div>
+                            <textarea id="ai-input" placeholder="Cole seu texto aqui..." rows="6" class="w-full bg-slate-900 border border-slate-700 rounded-md p-4 text-slate-400 font-mono text-sm"></textarea>
+                            <div class="mt-4">
+                                <button onclick="runAITool()" class="bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Executar Ferramenta</button>
+                            </div>
+                            <p id="ai-result" class="mt-4 p-4 bg-slate-900 border border-slate-700 rounded-md text-slate-300 min-h-[50px]"></p>
                         </div>
                     </div>
                 </div>
