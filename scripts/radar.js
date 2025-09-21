@@ -1,4 +1,4 @@
-// radar.js - versão Half-Time / Full-Time
+// radar.js - versão simplificada SEM Half-Time
 document.addEventListener("DOMContentLoaded", () => {
   const RADAR_API = "https://radar-ia-backend.onrender.com";
   const radarSection = document.getElementById("radar-ia-section");
@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const eventsEl     = document.getElementById("radar-events");
   const stoppageBox  = document.getElementById("stoppage-time-prediction");
   const stoppageVal  = document.getElementById("stoppage-time-value");
-  const tabs         = document.querySelectorAll(".period-btn");
 
   const statPossEl   = document.getElementById("stat-possession");
   const statShotsEl  = document.getElementById("stat-shots");
@@ -22,9 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const statFoulsEl  = document.getElementById("stat-fouls");
   const statYellowEl = document.getElementById("stat-yellow-cards");
   const statRedEl    = document.getElementById("stat-red-cards");
+  const statDangerEl = document.getElementById("stat-dangerous-attacks"); // NOVO
 
   let currentGameId = null;
-  let currentPeriod = "full"; // "half" ou "full"
   let updateInterval = null;
 
   // ----------------------
@@ -102,10 +101,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const foulsCandidates      = ["fouls","foul"];
   const yellowCandidates     = ["yellow_cards","yellow cards","yellow"];
   const redCandidates        = ["red_cards","red cards","red"];
+  const dangerCandidates     = ["dangerous_attacks","dangerous attacks","attacks dangerous"]; // NOVO
 
   function setStatsPanel(statsObj = {}) {
     if (!statsObj || !statsObj.home || !statsObj.away) {
-      [statPossEl, statShotsEl, statCornersEl, statFoulsEl, statYellowEl, statRedEl]
+      [statPossEl, statShotsEl, statCornersEl, statFoulsEl, statYellowEl, statRedEl, statDangerEl]
         .forEach(el => el && (el.textContent = "-"));
       return;
     }
@@ -138,6 +138,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     statRedEl.textContent =
       `${getVal(home, redCandidates)} / ${getVal(away, redCandidates)}`;
+
+    statDangerEl.textContent =
+      `${getVal(home, dangerCandidates)} / ${getVal(away, dangerCandidates)}`;
   }
 
   // ----------------------
@@ -180,11 +183,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ----------------------
-  async function fetchStats(gameId, half = false) {
+  async function fetchStats(gameId) {
     let url = `${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`;
-    if (half) {
-      url += "&half=true";
-    }
     const r = await fetch(url);
     if (!r.ok) throw new Error("Erro ao buscar stats");
     return await r.json();
@@ -193,8 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function fetchAndRender(gameId) {
     if (!gameId) return;
     try {
-      const isHalf = (currentPeriod === "half");
-      const data = await fetchStats(gameId, isHalf);
+      const data = await fetchStats(gameId);
 
       const fixture = data.fixture || {};
       const teams = data.teams || {};
@@ -206,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (data.estimated_extra) {
         stoppageBox.classList.remove("hidden");
-        stoppageVal.textContent = data.estimated_extra;
+        stoppageBox.querySelector("p").innerHTML = `<span class="font-semibold">Estimativa de Acréscimo Ao Vivo:</span> ${data.estimated_extra} minutos`;
       } else {
         stoppageBox.classList.add("hidden");
       }
@@ -238,16 +237,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const lid = ev.target.value;
     if (!lid) return;
     loadGames(lid);
-  });
-
-  tabs?.forEach(btn => {
-    btn.addEventListener("click", () => {
-      tabs.forEach(b => b.classList.remove("bg-cyan-600", "text-white"));
-      btn.classList.add("bg-cyan-600", "text-white");
-      const p = btn.dataset.period;
-      currentPeriod = (p === "half") ? "half" : "full";
-      if (currentGameId) fetchAndRender(currentGameId);
-    });
   });
 
   // ----------------------
