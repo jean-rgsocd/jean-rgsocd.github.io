@@ -1,4 +1,3 @@
-// scripts/radar.js
 document.addEventListener("DOMContentLoaded", function () {
     const radarSection = document.getElementById("radar-ia-section");
     if (!radarSection) return;
@@ -127,13 +126,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Só carrega os jogos quando o projeto é exibido
     const radarCardButton = document.getElementById('showRadarButton');
     if(radarCardButton){
         const observer = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
                 loadLiveGames();
-                observer.disconnect(); // Roda só uma vez
+                observer.disconnect();
             }
         });
         observer.observe(radarSection);
