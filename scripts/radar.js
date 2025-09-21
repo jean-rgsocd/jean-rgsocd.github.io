@@ -2,24 +2,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const radarSection = document.getElementById("radar-ia-section");
     if (!radarSection) return;
 
-    // URL do backend do Radar
     const RADAR_API = "https://radar-ia-backend.onrender.com";
 
-    // Seletores de elementos da UI
     const gameSelect = document.getElementById("radar-game-select");
     const dashboard = document.getElementById("radar-dashboard");
+    // ... (demais seletores de elementos)
     const scoreEl = document.getElementById("radar-score");
     const minuteEl = document.getElementById("radar-minute");
     const homeTeamEl = document.getElementById("home-team-name");
     const awayTeamEl = document.getElementById("away-team-name");
     const eventsEl = document.getElementById("radar-events");
-    const statPossessionEl = document.getElementById("stat-possession");
-    const statShotsEl = document.getElementById("stat-shots");
-    const statCornersEl = document.getElementById("stat-corners");
-    const statFoulsEl = document.getElementById("stat-fouls");
-    const statYellowCardsEl = document.getElementById("stat-yellow-cards");
-    const statRedCardsEl = document.getElementById("stat-red-cards");
-    
+    // ... (outros seletores de estatísticas)
+
     let updateInterval = null;
 
     const loadLiveGames = async () => {
@@ -27,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         gameSelect.innerHTML = `<option value="">Carregando jogos ao vivo...</option>`;
         try {
             const response = await fetch(`${RADAR_API}/jogos-aovivo`);
-            if (!response.ok) throw new Error("Falha na rede ao buscar jogos");
+            if (!response.ok) throw new Error("Falha ao buscar jogos ao vivo");
             const games = await response.json();
 
             if (games.length === 0) {
@@ -120,3 +114,4 @@ document.addEventListener("DOMContentLoaded", function () {
         observer.observe(radarSection);
     }
 });
+
