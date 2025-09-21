@@ -24,7 +24,9 @@ document.addEventListener("DOMContentLoaded", function () {
         red: document.getElementById("stat-red-cards")
     };
 
-    let interval = null; let currentGameId = null; let currentPeriod = "full";
+    let interval = null; 
+    let currentGameId = null; 
+    let currentPeriod = "full";
 
     const loadLeagues = async () => {
         if (!leagueSelect) return;
@@ -88,7 +90,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function renderEvents(events) {
         eventsEl.innerHTML = "";
-        if (!events || events.length === 0) { eventsEl.innerHTML = "<li>Nenhum evento recente</li>"; return; }
+        if (!events || events.length === 0) { 
+            eventsEl.innerHTML = "<li>Nenhum evento recente</li>"; 
+            return; 
+        }
         events.forEach(ev => {
             const li = document.createElement("li");
             li.className = "flex items-start gap-2 py-1";
@@ -104,12 +109,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function setStatsPanel(statObj, periodKey="full") {
-        if (!statObj) { Object.values(statElements).forEach(el=>el&& (el.textContent="-")); return; }
+        if (!statObj) { 
+            Object.values(statElements).forEach(el => el && (el.textContent="-")); 
+            return; 
+        }
         const full = statObj.full || {};
         let srcHome = full.home || {}, srcAway = full.away || {};
-        if (periodKey === "firstHalf" && statObj.firstHalf_derived) { srcHome = statObj.firstHalf_derived.home || {}; srcAway = statObj.firstHalf_derived.away || {};}
-        else if (periodKey === "secondHalf" && statObj.secondHalf_derived) { srcHome = statObj.secondHalf_derived.home || {}; srcAway = statObj.secondHalf_derived.away || {};}
-        const parsePoss = v => { if (v == null) return "-"; if (typeof v === "string" && v.includes("%")) return v; return `${v}%`; };
+        if (periodKey === "firstHalf" && statObj.firstHalf_derived) { 
+            srcHome = statObj.firstHalf_derived.home || {}; 
+            srcAway = statObj.firstHalf_derived.away || {};
+        } else if (periodKey === "secondHalf" && statObj.secondHalf_derived) { 
+            srcHome = statObj.secondHalf_derived.home || {}; 
+            srcAway = statObj.secondHalf_derived.away || {};
+        }
+        const parsePoss = v => { 
+            if (v == null) return "-"; 
+            if (typeof v === "string" && v.includes("%")) return v; 
+            return `${v}%`; 
+        };
         if (statElements.possession) statElements.possession.textContent = parsePoss(srcHome.possession) || "-";
         if (statElements.shots) statElements.shots.textContent = `${srcHome.total_shots ?? "-"} / ${srcAway.total_shots ?? "-"}`;
         if (statElements.corners) statElements.corners.textContent = `${srcHome.corners ?? "-"} / ${srcAway.corners ?? "-"}`;
@@ -126,14 +143,18 @@ document.addEventListener("DOMContentLoaded", function () {
             const fixture = data.fixture || {};
             const teams = data.teams || {};
             const home = teams.home || {}, away = teams.away || {};
-            homeTeamEl.textContent = home.name || "Time Casa"; awayTeamEl.textContent = away.name || "Time Fora";
+            homeTeamEl.textContent = home.name || "Time Casa"; 
+            awayTeamEl.textContent = away.name || "Time Fora";
             const goals = data.score || fixture.goals || {};
             const h = (data.score && data.score.home!=null) ? data.score.home : (goals.home!=null ? goals.home : "-");
             const a = (data.score && data.score.away!=null) ? data.score.away : (goals.away!=null ? goals.away : "-");
             scoreEl.textContent = `${h} - ${a}`;
-            const elapsed = (data.status && data.status.elapsed) || (fixture && fixture.get && fixture.get("status") && fixture.get("status").elapsed) || (data.fixture && data.fixture.status && data.fixture.status.elapsed);
+            const elapsed = (data.status && data.status.elapsed) || (fixture && fixture.status && fixture.status.elapsed);
             minuteEl.textContent = elapsed ? `${elapsed}'` : "-";
-            if (data.estimated_extra) { stoppageBox.classList.remove("hidden"); stoppageVal.textContent = data.estimated_extra; } else stoppageBox.classList.add("hidden");
+            if (data.estimated_extra) { 
+                stoppageBox.classList.remove("hidden"); 
+                stoppageVal.textContent = data.estimated_extra; 
+            } else stoppageBox.classList.add("hidden");
             setStatsPanel(data.statistics, currentPeriod === "firstHalf" ? "firstHalf" : (currentPeriod === "secondHalf" ? "secondHalf" : "full"));
             renderEvents(data.events || []);
             dashboard.classList.remove("hidden");
@@ -149,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!id) { dashboard.classList.add("hidden"); return; }
         currentGameId = id;
         fetchAndRender(currentGameId);
-        interval = setInterval(() => fetchAndRender(currentGameId), 15000);
+        interval = setInterval(() => fetchAndRender(currentGameId), 60000); // agora 60s
     });
 
     leagueSelect && leagueSelect.addEventListener("change", (e) => {
