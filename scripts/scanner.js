@@ -1,278 +1,112 @@
-<!DOCTYPE html>
-<html lang="pt-BR" class="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfólio | Jean Carlos Ribeiro da Silva</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:," />
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0d1117;
-            color: #c9d1d9;
-        }
-        .font-mono {
-            font-family: 'Roboto Mono', monospace;
-        }
-        .text-glow {
-            text-shadow: 0 0 5px #00e6e6, 0 0 8px #00e6e6;
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        .typed-cursor {
-            color: #00e6e6;
-            animation: typedjsBlink 0.7s infinite;
-        }
-        @keyframes typedjsBlink {
-            50% { opacity: 0.0; }
-        }
-        .jornada-card {
-            position: relative;
-        }
-        .jornada-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            transform: translate(-50%, -50%);
-            width: 16px;
-            height: 16px;
-            background-color: #0d1117;
-            border: 3px solid #00e6e6;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00e6e6;
-            z-index: 1;
-        }
-        .vulnerable-status { color: #ef4444; }
-        .secure-status { color: #34d399; }
-        .scan-status-low { background-color: #1a222c; border-color: #34d399; }
-        .scan-status-medium { background-color: #1a222c; border-color: #fbbf24; }
-        .scan-status-high { background-color: #1a222c; border-color: #ef4444; }
-        .progress-bar { background-color: #1a222c; }
-        .progress-bar-fill { background-color: #00e6e6; }
-        .tab-button.active { border-color: #00e6e6; color: #00e6e6; }
-    </style>
-</head>
-<body class="antialiased">
+document.addEventListener('DOMContentLoaded', function () {
+    const scannerSection = document.getElementById('analisador-seguranca-web');
+    if (!scannerSection) return;
 
-    <header class="bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-slate-800">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="text-xl font-bold font-mono text-cyan-300 text-glow">JCRS</div>
-            <div class="hidden md:flex space-x-8">
-                <a href="#sobre" class="text-slate-300 hover:text-cyan-300 transition">Sobre</a>
-                <a href="#competencias" class="text-slate-300 hover:text-cyan-300 transition">Competências</a>
-                <a href="#jornada" class="text-slate-300 hover:text-cyan-300 transition">Jornada</a>
-                <a href="#projetos" class="text-slate-300 hover:text-cyan-300 transition">Projetos</a>
-                <a href="#contato" class="text-slate-300 hover:text-cyan-300 transition">Contato</a>
-            </div>
-            <div class="md:hidden">
-                <button id="menu-btn" class="text-slate-300 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
-            </div>
-        </nav>
-        <div id="mobile-menu" class="md:hidden hidden px-6 pb-4 space-y-2 bg-slate-900">
-            <a href="#sobre" class="block text-slate-300 hover:text-cyan-300 transition py-2">Sobre</a>
-            <a href="#competencias" class="block text-slate-300 hover:text-cyan-300 transition py-2">Competências</a>
-            <a href="#jornada" class="block text-slate-300 hover:text-cyan-300 transition py-2">Jornada</a>
-            <a href="#projetos" class="block text-slate-300 hover:text-cyan-300 transition py-2">Projetos</a>
-            <a href="#contato" class="block text-slate-300 hover:text-cyan-300 transition py-2">Contato</a>
-        </div>
-    </header>
-
-    <main class="container mx-auto px-6">
-        <section id="sobre" class="pt-20 pb-24">
-            <div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
-                <div class="relative w-48 h-48 md:w-56 md:h-56 flex-shrink-0">
-                    <div class="absolute inset-0 rounded-full bg-cyan-400/80 blur-2xl"></div>
-                    <img class="relative w-full h-full rounded-full object-cover border-4 border-slate-800" src="perfil.jpg" alt="Foto de Jean Carlos">
-                </div>
-                <div class="md:text-left text-center max-w-2xl">
-                    <h1 class="text-4xl md:text-5xl font-bold text-slate-100 mb-4 min-h-[160px] md:min-h-0 md:h-auto"><span id="typed-headline"></span></h1>
-                    <p class="text-lg text-slate-400" id="intro-paragraph" style="opacity: 0; transition: opacity 0.5s ease-in;">
-                        <span id="typed-paragraph"></span>
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <section id="competencias" class="py-24">
-            <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Painel de Competências</h2>
-            <p class="text-center text-slate-400 mb-12 max-w-3xl mx-auto">Uma visão interativa das minhas habilidades na intersecção entre gestão, segurança e inovação.</p>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="relative w-full max-w-md mx-auto h-80 md:h-96">
-                    <canvas id="skillsChart"></canvas>
-                </div>
-                <div>
-                    <div class="mb-4 border-b border-slate-700">
-                        <nav class="-mb-px flex space-x-6 overflow-x-auto" aria-label="Tabs">
-                            <button data-tab="cybersecurity" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-cyan-300 border-cyan-300">Cybersecurity</button>
-                            <button data-tab="gestao" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Gestão</button>
-                            <button data-tab="tech" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Tecnologias</button>
-                            <button data-tab="ia" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">IA</button>
-                            <button data-tab="juridico" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Jurídico</button>
-                        </nav>
-                    </div>
-                    <div class="tab-content" id="cybersecurity-content">
-                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Ethical Hacking & Cyber Defense</h3>
-                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
-                            <li>Análise de Segurança e Mitigação de Riscos (XSS, CSRF, SQL Injection).</li>
-                            <li>Avaliação de Resiliência de Sistemas via Pentesting.</li>
-                            <li>Automação para Defesa Cibernética com Linux e Scripting.</li>
-                            <li>Arquitetura de Segurança de Aplicações Web e APIs.</li>
-                            <li>Resposta a incidentes e forense digital.</li>
-                        </ul>
-                    </div>
-                    <div class="tab-content hidden" id="gestao-content">
-                       <h3 class="font-bold text-lg mb-3 text-cyan-300">Gestão de Projetos de TI</h3>
-                       <ul class="space-y-2 text-slate-400 list-disc list-inside">
-                            <li>Planejamento Estratégico: Definição de escopo, cronograma e viabilidade.</li>
-                            <li>Metodologias: Aplicação de frameworks Ágeis (Scrum) e tradicionais (PMBOK).</li>
-                            <li>Gerenciamento de Riscos e Qualidade: Análise de riscos e garantia de entregas (QA).</li>
-                            <li>Gestão de Recursos: Alocação de orçamento, equipes e controle de custos.</li>
-                            <li>Liderança e Comunicação: Condução de equipes e gestão de stakeholders.</li>
-                        </ul>
-                    </div>
-                    <div class="tab-content hidden" id="tech-content">
-                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Infraestrutura e Desenvolvimento</h3>
-                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
-                            <li><strong>Desenvolvimento:</strong> HTML, CSS, JavaScript, PHP, SQL.</li>
-                            <li><strong>Sistemas Operacionais:</strong> Gerenciamento de ambientes Windows e Linux.</li>
-                            <li><strong>Redes:</strong> Configuração e análise de protocolos TCP/IP.</li>
-                            <li><strong>Cloud:</strong> Fundamentos de AWS e Azure.</li>
-                            <li><strong>Ferramentas de Segurança:</strong> Burp Suite, Nmap, Wireshark, Metasploit.</li>
-                        </ul>
-                    </div>
-                    <div class="tab-content hidden" id="ia-content">
-                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Inteligência Artificial e Dados</h3>
-                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
-                            <li>Machine Learning: Modelos de classificação, regressão e clusterização.</li>
-                            <li>Deep Learning: Construção e treinamento de redes neurais para tarefas complexas.</li>
-                            <li>Processamento de Linguagem Natural (NLP) para análise de texto.</li>
-                            <li>Visão Computacional para reconhecimento de padrões em imagens.</li>
-                        </ul>
-                    </div>
-                    <div class="tab-content hidden" id="juridico-content">
-                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Serviços Jurídicos, Cartorários e Notariais</h3>
-                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
-                            <li>Gestão e organização de documentos legais e processos judiciais.</li>
-                            <li>Conhecimento das rotinas de cartórios de notas, protestos e registro de imóveis.</li>
-                            <li>Elaboração de relatórios e suporte administrativo para escritórios e departamentos jurídicos.</li>
-                            <li>Base para automação de tarefas e implementação de tecnologia no setor (Legal Tech).</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="jornada" class="py-24">
-            <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Jornada Profissional e Acadêmica</h2>
-            <p class="text-center text-slate-400 mb-16 max-w-3xl mx-auto">Uma visão organizada da minha experiência e formação, narrando minha transição e evolução na área de tecnologia.</p>
-            <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-                
-                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
-                    <h3 class="font-bold text-xl text-slate-100 mt-1">MBA em Cybersecurity</h3>
-                    <p class="mt-2 text-slate-400 text-sm">Foco em arquitetura de sistemas seguros, defesa contra ameaças digitais e gestão de riscos para proteger ativos de informação críticos.</p>
-                </div>
-
-                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
-                    <h3 class="font-bold text-xl text-slate-100 mt-1">MBA em Gestão de Projetos em TI</h3>
-                    <p class="mt-2 text-slate-400 text-sm">Especialização no planejamento e execução de projetos, aplicando metodologias ágeis e tradicionais para garantir entregas eficientes.</p>
-                </div>
-
-                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
-                    <h3 class="font-bold text-xl text-slate-100 mt-1">Tecnólogo em Inteligência Artificial</h3>
-                    <p class="mt-2 text-slate-400 text-sm">Desenvolvimento de soluções com machine learning e modelos preditivos para automação e análise de dados complexos.</p>
-                </div>
-
-                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                    <p class="text-sm text-cyan-300 font-semibold font-mono">Set/2025</p>
-                    <h3 class="font-bold text-xl text-slate-100 mt-1">Ethical Hacking</h3>
-                    <p class="mt-2 text-slate-400 text-sm">Simulação de ataques cibernéticos para identificar e corrigir vulnerabilidades, fortalecendo a segurança de forma proativa.</p>
-                </div>
-
-                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2023 – Jun/2025</p>
-                    <h3 class="font-bold text-xl text-slate-100 mt-1">Tecnólogo em Serviços Jurídicos</h3>
-                    <p class="mt-2 text-slate-400 text-sm">Base de conhecimento legal e regulatório, fundamental para a conformidade (compliance) em projetos de tecnologia.</p>
-                </div>
-
-                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
-                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2020 – Atual</p>
-                    <h3 class="font-bold text-xl text-slate-100 mt-1">Analista Esportivo</h3>
-                    <p class="mt-2 text-slate-400 text-sm">Condução de análises de prognósticos e estatísticas para desenvolver modelos preditivos.</p>
-                </div>
-
-                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300 md:col-span-2">
-                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2018 – Dez/2020</p>
-                    <h3 class="font-bold text-xl text-slate-100 mt-1">Gerente Operacional</h3>
-                    <p class="mt-2 text-slate-400 text-sm">Gestão da operação, otimizando fluxos de trabalho e liderando a equipe.</p>
-                </div>
-
-            </div>
-        </section>
-
-		<section id="projetos" class="py-24">
-            </section>
-    </main>
-
-    <footer id="contato" class="bg-slate-900 text-slate-300 border-t border-slate-800">
-        <div class="container mx-auto px-6 py-12 text-center">
-            <h2 class="text-3xl font-bold mb-4 text-cyan-300">Em que posso te ajudar?</h2>
-            <p class="text-center text-slate-400 mb-8 max-w-3xl mx-auto">Entre em contato.</p>
-            <div class="flex justify-center items-center space-x-8">
-                <a href="mailto:jean.rgsocd@gmail.com" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Email" title="Email">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
-                </a>
-                <a href="https://www.instagram.com/jcrs.7/" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Instagram" title="Instagram">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
-                </a>
-                <a href="https://wa.me/5511984970539" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="WhatsApp" title="WhatsApp">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.05 4.94A9.95 9.95 0 0 0 12 2C6.48 2 2 6.48 2 12c0 1.77.46 3.45 1.29 4.94L2 22l5.06-1.29A9.95 9.95 0 0 0 12 22c5.52 0 10-4.48 10-10a9.95 9.95 0 0 0-2.95-7.06zM12 20.25a8.25 8.25 0 0 1-4.2-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.69-8.23 8.23-8.23a8.23 8.23 0 0 1 8.23 8.23c0 4.54-3.69 8.23-8.23 8.23zm4.5-6.17c-.27-.13-1.61-.79-1.85-.88-.25-.09-.43-.13-.61.13-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.06-.27-.13-1.14-.42-2.17-1.33-.8-.72-1.34-1.61-1.5-1.89-.16-.27-.02-.42.12-.55.12-.12.27-.31.4-.46.13-.15.18-.25.27-.42.09-.17.05-.31-.02-.44s-.6-1.45-.82-1.98c-.22-.53-.44-.46-.6-.46-.16 0-.34-.02-.52-.02-.18 0-.47.07-.71.34-.24.27-.92.9-1.12 2.22-.2 1.32.22 2.57.25 2.75.03.18 1.14 1.75 2.76 2.44 1.62.69 2.89 1.1 3.28 1.29.39.19.74.16.99.1.29-.07.92-.37 1.05-.72.13-.35.13-.65.09-.72-.04-.07-.16-.11-.33-.18z"/></svg>
-                </a>
-            </div>
-        </div>
-    </footer>
-
-    <script> const promptsData = {}; </script>
-    <script src="categorias/advocacia.js"></script>
-    <script src="categorias/artes-criativas.js"></script>
-    <script src="categorias/copywriters.js"></script>
-    <script src="categorias/corporativos.js"></script>
-    <script src="categorias/criativos.js"></script>
-    <script src="categorias/desenvolvedores-e-ti.js"></script>
-    <script src="categorias/educacao.js"></script>
-    <script src="categorias/empreendedorismo.js"></script>
-    <script src="categorias/entretenimento.js"></script>
-    <script src="categorias/escrita.js"></script>
-    <script src="categorias/estudantes.js"></script>
-    <script src="categorias/financas.js"></script>
-    <script src="categorias/fitness.js"></script>
-    <script src="categorias/marketing.js"></script>
-    <script src="categorias/negocios.js"></script>
-    <script src="categorias/professores.js"></script>
-    <script src="categorias/programacao.js"></script>
-    <script src="categorias/saude.js"></script>
-    <script src="categorias/tecnologia.js"></script>
-    <script src="categorias/youtubers.js"></script>
+    const urlInput = document.getElementById('urlInput');
+    const scanButton = document.getElementById('scanButton');
+    const scanStatus = document.getElementById('scanStatus');
+    const statusMessage = document.getElementById('statusMessage');
+    const progressBarContainer = document.getElementById('progressBarContainer');
+    const progressBar = document.getElementById('progressBar');
+    const resultsDiv = document.getElementById('results');
+    const analyzedUrlSpan = document.getElementById('analyzedUrl');
+    const overallStatusSpan = document.getElementById('overallStatus');
+    const vulnerabilitiesResults = document.getElementById('vulnerabilitiesResults');
     
-    <script src="scripts/main.js" defer></script>
-    <script src="scripts/navigation.js" defer></script>
-    <script src="scripts/scanner.js" defer></script>
-    <script src="scripts/tipster.js" defer></script>
-    <script src="scripts/prompts.js" defer></script>
-    <script src="scripts/radar.js" defer></script>
+    const vulnerabilities = [
+        { name: 'Injeção de SQL', risk: 'high', description: 'Permite que um atacante manipule consultas ao banco de dados.' },
+        { name: 'Cross-Site Scripting (XSS)', risk: 'high', description: 'Permite que um atacante injete scripts maliciosos em páginas web.' },
+        { name: 'Exposição de Dados Sensíveis', risk: 'high', description: 'Dados confidenciais são expostos sem criptografia adequada.' },
+        { name: 'Quebra de Autenticação', risk: 'high', description: 'Permite que atacantes roubem sessões para se passar por usuários.' },
+        { name: 'Falsificação de Requisição entre Sites (CSRF)', risk: 'high', description: 'Força o navegador de um usuário a enviar uma requisição maliciosa.' },
+        { name: 'Upload de Arquivos Não-restrito', risk: 'high', description: 'Permite que atacantes enviem arquivos maliciosos para o servidor.' },
+        { name: 'Vulnerabilidades em Componentes Desatualizados', risk: 'medium', description: 'Bibliotecas e frameworks com falhas de segurança conhecidas.' },
+        { name: 'Configuração Incorreta de Segurança', risk: 'medium', description: 'Causada por configurações padrão do servidor ou portas abertas.' },
+        { name: 'Falta de HTTPS', risk: 'medium', description: 'Comunicação não é criptografada, expondo dados a interceptação.' },
+        { name: 'Inclusão de Arquivos Remotos (RFI/LFI)', risk: 'medium', description: 'Permite que um atacante leia ou execute arquivos no servidor.' },
+        { name: 'Gerenciamento de Sessão Inseguro', risk: 'low', description: 'O atacante pode roubar a sessão de um usuário (cookie).' },
+        { name: 'Exposição de Informações do Servidor', risk: 'low', description: 'Informações detalhadas sobre o servidor são expostas.' },
+    ];
+    
+    if (scanButton) {
+        scanButton.addEventListener('click', () => {
+            const url = urlInput.value.trim();
+            if (!url) {
+                alert('Por favor, digite uma URL válida.');
+                return;
+            }
 
-</body>
-</html>
+            scanStatus.classList.remove('hidden');
+            statusMessage.textContent = 'Iniciando varredura minuciosa...';
+            progressBarContainer.classList.remove('hidden');
+            resultsDiv.classList.add('hidden');
+            progressBar.style.width = '0%';
+
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 5 + 1;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInterval);
+                    setTimeout(showResults, 500);
+                }
+                progressBar.style.width = progress + '%';
+            }, 100);
+
+            function showResults() {
+                statusMessage.textContent = 'Análise concluída com sucesso!';
+                resultsDiv.classList.remove('hidden');
+                analyzedUrlSpan.textContent = url;
+                
+                vulnerabilitiesResults.innerHTML = '<h3 class="font-bold text-xl text-cyan-300 mb-4">Detalhes das Verificações</h3>';
+                let hasHighRisk = false;
+
+                const highRiskVulns = vulnerabilities.filter(v => v.risk === 'high');
+                const mediumRiskVulns = vulnerabilities.filter(v => v.risk === 'medium');
+                const lowRiskVulns = vulnerabilities.filter(v => v.risk === 'low');
+                
+                const numHigh = 1 + Math.floor(Math.random() * 2);
+                const numMedium = 2 + Math.floor(Math.random() * 2);
+                const numLow = 1;
+
+                const selectedVulns = [
+                    ...highRiskVulns.sort(() => 0.5 - Math.random()).slice(0, numHigh),
+                    ...mediumRiskVulns.sort(() => 0.5 - Math.random()).slice(0, numMedium),
+                    ...lowRiskVulns.sort(() => 0.5 - Math.random()).slice(0, numLow)
+                ].sort(() => 0.5 - Math.random());
+
+                selectedVulns.forEach(vuln => {
+                    if (vuln.risk === 'high') hasHighRisk = true;
+                    
+                    const riskText = vuln.risk.charAt(0).toUpperCase() + vuln.risk.slice(1);
+                    const riskClassMap = { high: 'vulnerable-status', medium: 'text-yellow-400', low: 'secure-status' };
+                    const borderClassMap = { high: 'scan-status-high', medium: 'scan-status-medium', low: 'scan-status-low' };
+
+                    const riskClass = riskClassMap[vuln.risk];
+                    const borderClass = borderClassMap[vuln.risk];
+                    
+                    const vulnerabilityElement = document.createElement('div');
+                    vulnerabilityElement.className = `p-4 my-2 rounded-lg border ${borderClass} bg-slate-900`;
+                    vulnerabilityElement.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <p class="font-bold text-slate-100">${vuln.name}</p>
+                            <p class="text-sm font-bold ${riskClass}">Risco: ${riskText}</p>
+                        </div>
+                        <p class="text-sm text-slate-400 mt-1">${vuln.description}</p>
+                    `;
+                    vulnerabilitiesResults.appendChild(vulnerabilityElement);
+                });
+
+                if (hasHighRisk) {
+                    overallStatusSpan.textContent = 'Criticamente Vulnerável';
+                    overallStatusSpan.className = 'font-bold vulnerable-status';
+                } else {
+                    overallStatusSpan.textContent = 'Vulnerável';
+                    overallStatusSpan.className = 'font-bold text-yellow-400';
+                }
+
+                document.getElementById('cta-section').classList.remove('hidden');
+            }
+        });
+    }
+});
