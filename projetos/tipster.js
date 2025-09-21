@@ -1,6 +1,5 @@
 // ---------------- Tipster IA ----------------
 const TIPSTER_API = "https://analisador-apostas.onrender.com";
-// ajusta a URL do deploy do seu backend
 
 const sportSelect = document.getElementById("sportSelect");
 const leagueSelect = document.getElementById("leagueSelect");
@@ -30,14 +29,17 @@ sportSelect.addEventListener("change", async () => {
 
       leagueSelect.disabled = false;
       leagueSelect.innerHTML = `<option value="">Selecione uma liga</option>`;
-      leagues.forEach(l => leagueSelect.add(new Option(l.title, l.key)));
+      leagues.forEach(l => leagueSelect.add(new Option(l.title, l.id)));
     } catch (err) {
       resetAndDisable(leagueSelect, `Erro: ${err.message}`);
     }
   } else if (sport === "nba" || sport === "nfl") {
+    // Para NBA/NFL não precisamos de liga extra, já sabemos os IDs
     leagueSelectorGroup.style.display = "none";
+
+    const leagueId = sport === "nba" ? 12 : 16;
     try {
-      const res = await fetch(`${TIPSTER_API}/partidas-por-esporte/${sport}`);
+      const res = await fetch(`${TIPSTER_API}/partidas/${sport === "nba" ? "basketball" : "nfl"}/${leagueId}`);
       if (!res.ok) throw new Error("Falha ao buscar jogos");
       const games = await res.json();
 
@@ -47,7 +49,7 @@ sportSelect.addEventListener("change", async () => {
         gameSelect.innerHTML = `<option value="">Nenhum jogo encontrado</option>`;
       } else {
         games.forEach(g =>
-          gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id))
+          gameSelect.add(new Option(`${g.home} vs ${g.away} (${new Date(g.time).toLocaleString()})`, g.fixture_id))
         );
       }
     } catch (err) {
@@ -58,13 +60,13 @@ sportSelect.addEventListener("change", async () => {
 
 // --- Evento: escolher liga (só Futebol) ---
 leagueSelect.addEventListener("change", async () => {
-  const league = leagueSelect.value;
+  const leagueId = leagueSelect.value;
   bettingResultsDiv.classList.add("hidden");
   resetAndDisable(gameSelect, "Carregando jogos...");
 
-  if (league) {
+  if (leagueId) {
     try {
-      const res = await fetch(`${TIPSTER_API}/partidas/${encodeURIComponent(league)}`);
+      const res = await fetch(`${TIPSTER_API}/partidas/football/${encodeURIComponent(leagueId)}`);
       if (!res.ok) throw new Error("Falha ao buscar jogos");
       const games = await res.json();
 
@@ -74,7 +76,7 @@ leagueSelect.addEventListener("change", async () => {
         gameSelect.innerHTML = `<option value="">Nenhum jogo encontrado</option>`;
       } else {
         games.forEach(g =>
-          gameSelect.add(new Option(`${g.home} vs ${g.away} (${g.time})`, g.game_id))
+          gameSelect.add(new Option(`${g.home} vs ${g.away} (${new Date(g.time).toLocaleString()})`, g.fixture_id))
         );
       }
     } catch (err) {
@@ -85,21 +87,23 @@ leagueSelect.addEventListener("change", async () => {
 
 // --- Evento: escolher jogo ---
 gameSelect.addEventListener("change", async () => {
-  const gameId = gameSelect.value;
+  const fixtureId = gameSelect.value;
   const sport = sportSelect.value;
-  const league = leagueSelect.value;
+  const leagueId = leagueSelect.value;
 
   bettingResultsDiv.classList.add("hidden");
   bettingResultsDiv.innerHTML = "";
 
-  if (!gameId) return;
+  if (!fixtureId) return;
 
   try {
     let url = "";
     if (sport === "football") {
-      url = `${TIPSTER_API}/analise/${encodeURIComponent(league)}/${encodeURIComponent(gameId)}`;
-    } else {
-      url = `${TIPSTER_API}/analise/${encodeURIComponent(sport)}/${encodeURIComponent(gameId)}`;
+      url = `${TIPSTER_API}/analise/football/${encodeURIComponent(fixtureId)}`;
+    } else if (sport === "nba") {
+      url = `${TIPSTER_API}/analise/basketball/${encodeURIComponent(fixtureId)}`;
+    } else if (sport === "nfl") {
+      url = `${TIPSTER_API}/analise/nfl/${encodeURIComponent(fixtureId)}`;
     }
 
     const res = await fetch(url);
@@ -126,4 +130,3 @@ gameSelect.addEventListener("change", async () => {
       </div>`;
   }
 });
-
