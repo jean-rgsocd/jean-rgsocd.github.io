@@ -222,14 +222,14 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   tabs?.forEach(btn => {
-    btn.addEventListener("click", () => {
-      tabs.forEach(b => b.classList.remove("bg-cyan-600", "text-white"));
-      btn.classList.add("bg-cyan-600", "text-white");
-      const p = btn.dataset.period;
-      currentPeriod = (p === "half") ? "half" : "full";
-      if (currentGameId) fetchAndRender(currentGameId);
-    });
+  btn.addEventListener("click", () => {
+    tabs.forEach(b => b.classList.remove("bg-cyan-600", "text-white"));
+    btn.classList.add("bg-cyan-600", "text-white");
+    const p = btn.dataset.period;
+    currentPeriod = (p === "half") ? "half" : "full";
+    if (currentGameId) fetchAndRender(currentGameId);
   });
+});
 
   // ----------------------
   const obs = new IntersectionObserver(entries => {
@@ -240,3 +240,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.1 });
   obs.observe(radarSection);
 });
+
