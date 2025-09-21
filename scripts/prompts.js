@@ -8,27 +8,30 @@ document.addEventListener('DOMContentLoaded', function () {
     
     promptTabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            const targetId = tab.getAttribute('data-tab'); // Correção: Lendo o atributo 'data-tab'
+            const targetId = tab.getAttribute('data-tab'); // Pega o alvo, ex: "content-profissoes"
             
+            // 1. Atualiza a aparência dos botões
             promptTabs.forEach(t => {
                 t.classList.remove('active', 'text-cyan-300', 'border-cyan-300');
                 t.classList.add('text-slate-400', 'border-transparent');
             });
-            
             tab.classList.add('active', 'text-cyan-300', 'border-cyan-300');
             tab.classList.remove('text-slate-400', 'border-transparent');
             
+            // 2. Esconde TODOS os conteúdos
             promptContents.forEach(content => {
-                if (content.id === targetId) {
-                    content.classList.remove('hidden');
-                } else {
-                    content.classList.add('hidden');
-                }
+                content.classList.add('hidden');
             });
+            
+            // 3. Mostra APENAS o conteúdo alvo
+            const targetContent = document.getElementById(targetId);
+            if (targetContent) {
+                targetContent.classList.remove('hidden');
+            }
         });
     });
 
-    // --- ABA 1: GERADOR DE PROMPTS (PROFISSÕES) ---
+    // --- LÓGICA DA ABA DE PROFISSÕES ---
     const categoriaSelect = document.getElementById('categoria-profissao');
     const profissaoSelect = document.getElementById('profissao');
     const gerarBtnProfissao = document.getElementById('gerar-prompt-profissao');
@@ -49,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if(gerarBtnProfissao) {
+    if (gerarBtnProfissao) {
         gerarBtnProfissao.addEventListener('click', () => {
             const categoria = categoriaSelect.value;
             const profissao = profissaoSelect.value;
@@ -61,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if(copiarBtnProfissao) {
+    if (copiarBtnProfissao) {
         copiarBtnProfissao.addEventListener('click', () => {
             outputProfissao.select();
             document.execCommand('copy');
@@ -70,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // --- ABA 2: GERADOR DE PROMPTS (IMAGENS) ---
+    // --- LÓGICA DA ABA DE IMAGENS ---
     const estiloSelect = document.getElementById('estilo-imagem');
     const descricaoInput = document.getElementById('descricao-imagem');
     const qualidadeSelect = document.getElementById('qualidade-imagem');
@@ -78,18 +81,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const outputImagem = document.getElementById('prompt-imagem-output');
     const copiarBtnImagem = document.getElementById('copiar-prompt-imagem');
     
-    // As funções para gerar os prompts de imagem
     const promptsPorEstilo = {
-        "photorealistic": (descricao, qualidade) => `Hyper-realistic, cinematic portrait of ${descricao}, 8K photo, dramatic studio lighting, soft shadows, sharp focus. --ar 9:16 --v 6.0`,
-        "digital art": (descricao, qualidade) => `Digital art of ${descricao}, magical atmosphere, glowing elements, vibrant colors, highly detailed, concept art style. ${qualidade}.`,
-        "cartoon": (descricao, qualidade) => `Animated portrait of ${descricao}, vibrant cartoon style, 2D animation, clean lines, colorful, minimalist background. ${qualidade}.`,
-        "fantasy art": (descricao, qualidade) => `Epic fantasy art portrait of ${descricao}, majestic setting, dynamic pose, flowing clothes, dramatic lighting, rich colors. ${qualidade}.`,
-        "impressionist": (descricao, qualidade) => `Impressionist style painting of ${descricao}, soft visible brushstrokes, luminous colors, vibrant lighting. ${qualidade}.`,
+        "photorealistic": (descricao, qualidade) => `Hyper-realistic, cinematic portrait of ${descricao}, 8K photo, dramatic studio lighting, soft shadows, sharp focus. ${qualidade}`,
+        "digital art": (descricao, qualidade) => `Digital art of ${descricao}, magical atmosphere, glowing elements, vibrant colors, highly detailed, concept art style. ${qualidade}`,
+        "cartoon": (descricao, qualidade) => `Animated portrait of ${descricao}, vibrant cartoon style, 2D animation, clean lines, colorful, minimalist background. ${qualidade}`,
+        "fantasy art": (descricao, qualidade) => `Epic fantasy art portrait of ${descricao}, majestic setting, dynamic pose, flowing clothes, dramatic lighting, rich colors. ${qualidade}`,
+        "impressionist": (descricao, qualidade) => `Impressionist style painting of ${descricao}, soft visible brushstrokes, luminous colors, vibrant lighting. ${qualidade}`,
     };
 
     const promptsProntos = {
-        "Retrato Fashion P&B": "Black and white fashion portrait of a handsome young man looking over his shoulder. He is wearing a stylish black leather jacket and modern rectangular red sunglasses. The background is a seamless, minimalist white studio backdrop with blue circle ring. The lighting is dramatic high-contrast studio lighting, creating sharp focus. --ar 9:16 --v 6.0",
-        "Guerreira Fantasia": "Epic fantasy art portrait of a female warrior with intricate armor, standing on a mountain peak at sunset. Dynamic pose, flowing cape, dramatic lighting, rich colors, intricate details. --ar 9:16 --v 6.0"
+        "Retrato Fashion P&B": "Black and white fashion portrait of a handsome young man looking over his shoulder. He is wearing a stylish black leather jacket and modern rectangular red sunglasses. The background is a seamless, minimalist white studio backdrop with blue circle ring. --ar 9:16 --v 6.0",
+        "Guerreira Fantasia": "Epic fantasy art portrait of a female warrior with intricate armor, standing on a mountain peak at sunset. Dynamic pose, flowing cape, dramatic lighting, rich colors. --ar 9:16 --v 6.0"
     };
             
     if (estiloSelect) {
