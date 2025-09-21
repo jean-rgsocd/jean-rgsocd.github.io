@@ -1,9 +1,10 @@
+// radar.js - radar ao vivo com seleção por liga -> jogo e perídos clicáveis
 document.addEventListener("DOMContentLoaded", function () {
     const radarSection = document.getElementById("radar-ia-section");
     if (!radarSection) return;
 
     const RADAR_API = "https://radar-ia-backend.onrender.com";
-
+    const leagueSelect = document.getElementById("radar-league-select");
     const gameSelect = document.getElementById("radar-game-select");
     const dashboard = document.getElementById("radar-dashboard");
     const scoreEl = document.getElementById("radar-score");
@@ -11,111 +12,121 @@ document.addEventListener("DOMContentLoaded", function () {
     const homeTeamEl = document.getElementById("home-team-name");
     const awayTeamEl = document.getElementById("away-team-name");
     const eventsEl = document.getElementById("radar-events");
-    const statPossessionEl = document.getElementById("stat-possession");
-    const statShotsEl = document.getElementById("stat-shots");
-    const statCornersEl = document.getElementById("stat-corners");
-    const statFoulsEl = document.getElementById("stat-fouls");
-    const statYellowCardsEl = document.getElementById("stat-yellow-cards");
-    const statRedCardsEl = document.getElementById("stat-red-cards");
-    
-    let updateInterval = null;
+    const tab1 = document.getElementById("tab-1t");
+    const tab2 = document.getElementById("tab-2t");
+    const tabFull = document.getElementById("tab-full");
 
-    const loadLiveGames = async () => {
-        gameSelect.disabled = true;
-        gameSelect.innerHTML = `<option value="">Carregando jogos ao vivo...</option>`;
+    let interval = null;
+    let currentGameId = null;
+    let currentPeriod = "full"; // "1t", "2t", "full"
+
+    // carregar ligas ao abrir a seção
+    const loadLeagues = async () => {
+        leagueSelect.disabled = true;
+        leagueSelect.innerHTML = `<option>Carregando ligas...</option>`;
         try {
-            const response = await fetch(`${RADAR_API}/jogos-aovivo`);
-            if (!response.ok) throw new Error("Falha ao buscar jogos ao vivo");
-            const games = await response.json();
+            const resp = await fetch(`${RADAR_API}/ligas`);
+            const leagues = await resp.json();
+            leagueSelect.innerHTML = `<option value="">Escolha uma liga</option>`;
+            leagues.forEach(l => leagueSelect.add(new Option(`${l.name} - ${l.country}`, l.id)));
+            leagueSelect.disabled = false;
+        } catch (err) {
+            leagueSelect.innerHTML = `<option value="">Erro ao carregar ligas</option>`;
+        }
+    };
 
-            if (games.length === 0) {
-                gameSelect.innerHTML = `<option value="">Nenhum jogo ao vivo no momento</option>`;
-                gameSelect.disabled = true;
+    // carregar jogos da liga selecionada (ao vivo)
+    const loadGames = async (leagueId) => {
+        gameSelect.disabled = true;
+        gameSelect.innerHTML = `<option>Carregando jogos...</option>`;
+        try {
+            const resp = await fetch(`${RADAR_API}/jogos-aovivo?league=${leagueId}`);
+            const games = await resp.json();
+            if (!games || games.length === 0) {
+                gameSelect.innerHTML = `<option value="">Nenhum jogo ao vivo</option>`;
                 return;
             }
-
-            gameSelect.innerHTML = `<option value="">Selecione um jogo para acompanhar</option>`;
+            gameSelect.innerHTML = `<option value="">Selecione um jogo</option>`;
             games.forEach(g => gameSelect.add(new Option(g.title, g.game_id)));
             gameSelect.disabled = false;
         } catch (err) {
             gameSelect.innerHTML = `<option value="">Erro ao carregar jogos</option>`;
-            console.error(err);
         }
     };
-    
-    const updateDashboardUI = (data) => {
-        homeTeamEl.textContent = data.teams?.home?.name || "Time Casa";
-        awayTeamEl.textContent = data.teams?.away?.name || "Time Fora";
-        scoreEl.textContent = `${data.goals?.home || 0} - ${data.goals?.away || 0}`;
-        minuteEl.textContent = data.fixture?.status?.elapsed ? `${data.fixture.status.elapsed}'` : "-";
-        
-        const homeStatsData = data.statistics?.find(s => s.team.id === data.teams.home.id);
-        const awayStatsData = data.statistics?.find(s => s.team.id === data.teams.away.id);
-        
-        const homeStats = homeStatsData?.statistics || [];
-        const awayStats = awayStatsData?.statistics || [];
 
-        const getStat = (stats, name) => {
-            const stat = stats.find(s => s.type === name);
-            return stat ? stat.value : 0;
-        };
-        
-        statPossessionEl.textContent = `${getStat(homeStats, 'Ball Possession') || 'N/A'}`;
-        statShotsEl.textContent = `${getStat(homeStats, 'Total Shots')} (${getStat(homeStats, 'Shots on Goal')}) / ${getStat(awayStats, 'Total Shots')} (${getStat(awayStats, 'Shots on Goal')})`;
-        statCornersEl.textContent = `${getStat(homeStats, 'Corner Kicks')} / ${getStat(awayStats, 'Corner Kicks')}`;
-        statFoulsEl.textContent = `${getStat(homeStats, 'Fouls')} / ${getStat(awayStats, 'Fouls')}`;
-        statYellowCardsEl.textContent = `${getStat(homeStats, 'Yellow Cards')} / ${getStat(awayStats, 'Yellow Cards')}`;
-        statRedCardsEl.textContent = `${getStat(homeStats, 'Red Cards')} / ${getStat(awayStats, 'Red Cards')}`;
-        
+    const renderStats = (data) => {
+        homeTeamEl.textContent = data.teams?.home?.name || "Home";
+        awayTeamEl.textContent = data.teams?.away?.name || "Away";
+        scoreEl.textContent = `${data.goals?.home ?? 0} - ${data.goals?.away ?? 0}`;
+        minuteEl.textContent = data.fixture?.status?.elapsed ? `${data.fixture.status.elapsed}'` : "-";
+
+        // eventos
         eventsEl.innerHTML = "";
         if (data.events && data.events.length > 0) {
             data.events.forEach(e => {
                 const li = document.createElement("li");
                 li.className = "truncate";
-                li.textContent = `${e.time.elapsed}' - ${e.type} (${e.detail}) por ${e.player.name || 'N/A'}`;
+                const timeLabel = e.time?.elapsed ? `${e.time.elapsed}'` : '';
+                const extraSec = e.time?.second ? `:${e.time.second}` : '';
+                li.textContent = `${timeLabel}${extraSec} - ${e.type} (${e.detail}) - ${e.player?.name || ''}`;
                 eventsEl.appendChild(li);
             });
         } else {
             eventsEl.innerHTML = "<li>Nenhum evento recente.</li>";
         }
-        
+
         dashboard.classList.remove("hidden");
     };
 
-    const fetchGameStats = async (gameId) => {
+    const fetchGame = async (gameId) => {
         try {
-            const response = await fetch(`${RADAR_API}/stats-aovivo/${gameId}`);
-            if (!response.ok) throw new Error("Falha ao buscar estatísticas");
-            const data = await response.json();
-            updateDashboardUI(data);
+            const resp = await fetch(`${RADAR_API}/stats-aovivo/${gameId}`);
+            if (!resp.ok) throw new Error("Erro stats");
+            const data = await resp.json();
+            renderStats(data);
         } catch (err) {
             console.error("Erro ao carregar estatísticas:", err);
             dashboard.classList.add("hidden");
-            clearInterval(updateInterval);
+            clearInterval(interval);
         }
     };
-    
-    gameSelect.addEventListener("change", () => {
-        const gameId = gameSelect.value;
-        clearInterval(updateInterval); 
 
-        if (gameId) {
+    gameSelect.addEventListener('change', () => {
+        const id = gameSelect.value;
+        clearInterval(interval);
+        if (!id) {
             dashboard.classList.add("hidden");
-            fetchGameStats(gameId); 
-            updateInterval = setInterval(() => fetchGameStats(gameId), 45000);
-        } else {
-            dashboard.classList.add("hidden");
+            return;
         }
+        currentGameId = id;
+        fetchGame(currentGameId);
+        interval = setInterval(() => fetchGame(currentGameId), 45000); // atualiza a cada 45s
     });
 
+    leagueSelect.addEventListener('change', () => {
+        const lid = leagueSelect.value;
+        if (!lid) return;
+        loadGames(lid);
+    });
+
+    tab1 && tab1.addEventListener('click', () => {
+        currentPeriod = "1t";
+        // atualmente backend retorna estatísticas por período em "statistics" se disponível
+    });
+    tab2 && tab2.addEventListener('click', () => {
+        currentPeriod = "2t";
+    });
+    tabFull && tabFull.addEventListener('click', () => {
+        currentPeriod = "full";
+    });
+
+    // observer para carregar ligas quando a seção ficar visível
     const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-            loadLiveGames();
+            loadLeagues();
             observer.disconnect();
         }
     }, { threshold: 0.1 });
-    
-    if (radarSection) {
-        observer.observe(radarSection);
-    }
+
+    observer.observe(radarSection);
 });
