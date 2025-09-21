@@ -327,3 +327,4 @@ const obs = new IntersectionObserver(entries => {
   }
 }, { threshold: 0.1 });
 obs.observe(radarSection);
+});
