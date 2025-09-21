@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const statFoulsEl  = document.getElementById("stat-fouls");
   const statYellowEl = document.getElementById("stat-yellow-cards");
   const statRedEl    = document.getElementById("stat-red-cards");
-  const statDangerEl = document.getElementById("stat-dangerous-attacks"); // ataques perigosos
+  const statOffsidesEl = document.getElementById("stat-offsides"); // NOVO: impedimentos
 
   let currentGameId = null;
   let updateInterval = null;
@@ -100,11 +100,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const foulsCandidates      = ["fouls","foul"];
   const yellowCandidates     = ["yellow_cards","yellow cards","yellow"];
   const redCandidates        = ["red_cards","red cards","red"];
-  const dangerCandidates     = ["dangerous_attacks","dangerous attacks","attacks dangerous","attacks"]; // incl. attacks simples
+  const offsidesCandidates   = ["offsides","offside"]; // NOVO
 
   function setStatsPanel(statsObj = {}) {
     if (!statsObj || !statsObj.home || !statsObj.away) {
-      [statPossEl, statShotsEl, statCornersEl, statFoulsEl, statYellowEl, statRedEl, statDangerEl]
+      [statPossEl, statShotsEl, statCornersEl, statFoulsEl, statYellowEl, statRedEl, statOffsidesEl]
         .forEach(el => el && (el.textContent = "- / -"));
       return;
     }
@@ -138,8 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
     statRedEl.textContent =
       `${getVal(home, redCandidates)} / ${getVal(away, redCandidates)}`;
 
-    statDangerEl.textContent =
-      `${getVal(home, dangerCandidates)} / ${getVal(away, dangerCandidates)}`;
+    statOffsidesEl.textContent =
+      `${getVal(home, offsidesCandidates)} / ${getVal(away, offsidesCandidates)}`;
   }
 
   // ----------------------
