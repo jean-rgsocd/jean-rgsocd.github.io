@@ -26,8 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentGameId = null;
   let currentPeriod = "full"; // "half" ou "full"
   let updateInterval = null;
-  let latestData = null;
-  let halfTimeStats = null; // snapshot congelado do HT
 
   // ----------------------
   // utils
@@ -96,12 +94,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // ----------------------
   // candidatos
   const possessionCandidates = ["possession","ball possession","ball possession%","possession%","possession %"];
-  const totalShotsCandidates = ["total_shots","total shots","totalshots","total shots"];
-  const onTargetCandidates   = ["shots_on_goal","shots on goal","shots_on_target","shots on target"];
-  const cornersCandidates    = ["corner kicks","corner_kicks","cornerkicks","corners","corner"];
+  const totalShotsCandidates = ["total_shots","total shots"];
+  const onTargetCandidates   = ["shots_on_goal","shots on goal"];
+  const offTargetCandidates  = ["shots_off_goal","shots off goal"];
+  const blockedCandidates    = ["shots_blocked","blocked shots"];
+  const cornersCandidates    = ["corner kicks","corner_kicks","corners","corner"];
   const foulsCandidates      = ["fouls","foul"];
-  const yellowCandidates     = ["yellow_cards","yellow cards","yellow card","yellow"];
-  const redCandidates        = ["red_cards","red cards","red card","red"];
+  const yellowCandidates     = ["yellow_cards","yellow cards","yellow"];
+  const redCandidates        = ["red_cards","red cards","red"];
 
   function setStatsPanel(statsObj = {}) {
     if (!statsObj || !statsObj.home || !statsObj.away) {
@@ -109,34 +109,35 @@ document.addEventListener("DOMContentLoaded", () => {
         .forEach(el => el && (el.textContent = "-"));
       return;
     }
+
     const home = statsObj.home || {};
-const away = statsObj.away || {};
+    const away = statsObj.away || {};
 
-statPossEl.textContent =
-  `${getVal(home, possessionCandidates)} / ${getVal(away, possessionCandidates)}`;
+    statPossEl.textContent =
+      `${getVal(home, possessionCandidates)} / ${getVal(away, possessionCandidates)}`;
 
-statShotsEl.textContent =
-  `${getVal(home, totalShotsCandidates)} ` +
-  `(${getVal(home, onTargetCandidates)} no gol / ` +
-  `${getVal(home, ["shots_off_goal","shots off goal"])} fora / ` +
-  `${getVal(home, ["shots_blocked","blocked shots"])} bloqueadas)` +
-  ` / ` +
-  `${getVal(away, totalShotsCandidates)} ` +
-  `(${getVal(away, onTargetCandidates)} no gol / ` +
-  `${getVal(away, ["shots_off_goal","shots off goal"])} fora / ` +
-  `${getVal(away, ["shots_blocked","blocked shots"])} bloqueadas)`;
+    statShotsEl.textContent =
+      `${getVal(home, totalShotsCandidates)} ` +
+      `(${getVal(home, onTargetCandidates)} no gol / ` +
+      `${getVal(home, offTargetCandidates)} fora / ` +
+      `${getVal(home, blockedCandidates)} bloqueadas)` +
+      ` / ` +
+      `${getVal(away, totalShotsCandidates)} ` +
+      `(${getVal(away, onTargetCandidates)} no gol / ` +
+      `${getVal(away, offTargetCandidates)} fora / ` +
+      `${getVal(away, blockedCandidates)} bloqueadas)`;
 
-statCornersEl.textContent =
-  `${getVal(home, cornersCandidates)} / ${getVal(away, cornersCandidates)}`;
+    statCornersEl.textContent =
+      `${getVal(home, cornersCandidates)} / ${getVal(away, cornersCandidates)}`;
 
-statFoulsEl.textContent =
-  `${getVal(home, foulsCandidates)} / ${getVal(away, foulsCandidates)}`;
+    statFoulsEl.textContent =
+      `${getVal(home, foulsCandidates)} / ${getVal(away, foulsCandidates)}`;
 
-statYellowEl.textContent =
-  `${getVal(home, yellowCandidates)} / ${getVal(away, yellowCandidates)}`;
+    statYellowEl.textContent =
+      `${getVal(home, yellowCandidates)} / ${getVal(away, yellowCandidates)}`;
 
-statRedEl.textContent =
-  `${getVal(home, redCandidates)} / ${getVal(away, redCandidates)}`;
+    statRedEl.textContent =
+      `${getVal(home, redCandidates)} / ${getVal(away, redCandidates)}`;
   }
 
   // ----------------------
@@ -180,49 +181,44 @@ statRedEl.textContent =
 
   // ----------------------
   async function fetchStats(gameId, half = false) {
-  let url = `${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`;
-  if (half) {
-    url += "&half=true"; // API-Sports: só estatísticas do intervalo
+    let url = `${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`;
+    if (half) {
+      url += "&half=true";
+    }
+    const r = await fetch(url);
+    if (!r.ok) throw new Error("Erro ao buscar stats");
+    return await r.json();
   }
-  const r = await fetch(url);
-  if (!r.ok) throw new Error("Erro ao buscar stats");
-  return await r.json();
-}
 
   async function fetchAndRender(gameId) {
-  if (!gameId) return;
-  try {
-    // half ou full conforme aba selecionada
-    const isHalf = (currentPeriod === "half");
-    const data = await fetchStats(gameId, isHalf);
-    latestData = data;
+    if (!gameId) return;
+    try {
+      const isHalf = (currentPeriod === "half");
+      const data = await fetchStats(gameId, isHalf);
 
-    const fixture = data.fixture || {};
-    const teams = data.teams || {};
-    homeTeamEl.textContent = teams.home?.name || "Time Casa";
-    awayTeamEl.textContent = teams.away?.name || "Time Fora";
+      const fixture = data.fixture || {};
+      const teams = data.teams || {};
+      homeTeamEl.textContent = teams.home?.name || "Time Casa";
+      awayTeamEl.textContent = teams.away?.name || "Time Fora";
 
-    scoreEl.textContent = `${data.score?.home ?? fixture.goals?.home ?? "-"} - ${data.score?.away ?? fixture.goals?.away ?? "-"}`;
-    minuteEl.textContent = data.status?.elapsed ? `${data.status.elapsed}'` : "-";
+      scoreEl.textContent = `${data.score?.home ?? fixture.goals?.home ?? "-"} - ${data.score?.away ?? fixture.goals?.away ?? "-"}`;
+      minuteEl.textContent = data.status?.elapsed ? `${data.status.elapsed}'` : "-";
 
-    if (data.estimated_extra) {
-      stoppageBox.classList.remove("hidden");
-      stoppageVal.textContent = data.estimated_extra;
-    } else {
-      stoppageBox.classList.add("hidden");
+      if (data.estimated_extra) {
+        stoppageBox.classList.remove("hidden");
+        stoppageVal.textContent = data.estimated_extra;
+      } else {
+        stoppageBox.classList.add("hidden");
+      }
+
+      setStatsPanel(data.statistics || {});
+      renderEvents(data.events || []);
+      dashboard?.classList.remove("hidden");
+    } catch (err) {
+      console.error("fetchAndRender error", err);
+      dashboard?.classList.add("hidden");
     }
-
-    // ✅ aqui já vem filtrado (half ou full) da API
-    const stats = data.statistics || {};
-    setStatsPanel(stats);
-
-    renderEvents(data.events || []);
-    dashboard?.classList.remove("hidden");
-  } catch (err) {
-    console.error("fetchAndRender error", err);
-    dashboard?.classList.add("hidden");
   }
-}
 
   // ----------------------
   // eventos
@@ -245,14 +241,14 @@ statRedEl.textContent =
   });
 
   tabs?.forEach(btn => {
-  btn.addEventListener("click", () => {
-    tabs.forEach(b => b.classList.remove("bg-cyan-600", "text-white"));
-    btn.classList.add("bg-cyan-600", "text-white");
-    const p = btn.dataset.period;
-    currentPeriod = (p === "half") ? "half" : "full";
-    if (currentGameId) fetchAndRender(currentGameId);
+    btn.addEventListener("click", () => {
+      tabs.forEach(b => b.classList.remove("bg-cyan-600", "text-white"));
+      btn.classList.add("bg-cyan-600", "text-white");
+      const p = btn.dataset.period;
+      currentPeriod = (p === "half") ? "half" : "full";
+      if (currentGameId) fetchAndRender(currentGameId);
+    });
   });
-});
 
   // ----------------------
   const obs = new IntersectionObserver(entries => {
@@ -263,6 +259,3 @@ statRedEl.textContent =
   }, { threshold: 0.1 });
   obs.observe(radarSection);
 });
-
-
-
