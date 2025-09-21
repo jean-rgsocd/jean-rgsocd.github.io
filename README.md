@@ -5,6 +5,7 @@ Este repositório contém o **frontend** (site em GitHub Pages) que integra os p
 ---
 
 ## 📂 Estrutura do Repositório
+
 / (raiz)
 │ index.html
 │
