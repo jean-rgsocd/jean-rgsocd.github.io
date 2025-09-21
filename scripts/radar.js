@@ -1,4 +1,4 @@
-// radar.js - exibição de eventos (mais recentes primeiro) com minuto/seg e categoria
+// radar.js - Radar IA (liga -> jogo ao vivo -> estatísticas + eventos)
 document.addEventListener("DOMContentLoaded", function () {
     const radarSection = document.getElementById("radar-ia-section");
     if (!radarSection) return;
@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const homeTeamEl = document.getElementById("home-team-name");
     const awayTeamEl = document.getElementById("away-team-name");
     const eventsEl = document.getElementById("radar-events");
+    const stoppageBox = document.getElementById("stoppage-time-prediction");
+    const stoppageVal = document.getElementById("stoppage-time-value");
+
     const tab1 = document.getElementById("tab-1t");
     const tab2 = document.getElementById("tab-2t");
     const tabFull = document.getElementById("tab-full");
@@ -20,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentGameId = null;
     let currentPeriod = "full";
 
+    // -------- Carregar Ligas --------
     const loadLeagues = async () => {
         leagueSelect.disabled = true;
         leagueSelect.innerHTML = `<option>Carregando ligas...</option>`;
@@ -35,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
+    // -------- Carregar Jogos --------
     const loadGames = async (leagueId) => {
         gameSelect.disabled = true;
         gameSelect.innerHTML = `<option>Carregando jogos...</option>`;
@@ -54,31 +59,47 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
+    // -------- Renderizar Estatísticas e Eventos --------
     const renderStats = (data) => {
         homeTeamEl.textContent = data.teams?.home?.name || "Time Casa";
         awayTeamEl.textContent = data.teams?.away?.name || "Time Fora";
         scoreEl.textContent = `${data.goals?.home ?? 0} - ${data.goals?.away ?? 0}`;
         minuteEl.textContent = data.fixture?.status?.elapsed ? `${data.fixture.status.elapsed}'` : "-";
 
-        // eventos: já vêm do backend em ordem decrescente (mais recentes primeiro)
+        // Acréscimos
+        if (data.estimated_extra) {
+            stoppageBox.classList.remove("hidden");
+            stoppageVal.textContent = data.estimated_extra;
+        } else {
+            stoppageBox.classList.add("hidden");
+        }
+
+        // Eventos
         eventsEl.innerHTML = "";
         const events = data.events || [];
         if (events.length > 0) {
-            // criar lista mostrando display_time (min/seg) e categoria
             events.forEach(e => {
                 const li = document.createElement("li");
-                li.className = "truncate py-1";
+                li.className = "truncate py-1 flex items-center gap-2";
 
-                // use display_time se existir, senao fallback para time.elapsed
-                const timeLabel = e.display_time || (e.time?.elapsed ? `${e.time.elapsed}'` : "-");
-                const category = e.category || (e.type || e.detail || "Evento");
-                const detail = e.detail ? ` — ${e.detail}` : "";
-                const player = (e.player && e.player.name) ? ` por ${e.player.name}` : "";
+                const timeLabel = e.display_time || (e.raw?.time?.elapsed ? `${e.raw.time.elapsed}'` : "-");
 
-                // exemplo: 80'23" — Shot on Target — Chute no alvo por E. Haaland
-                li.innerHTML = `<span class="font-semibold mr-2">${timeLabel}</span>
-                                <span class="text-sm event-cat mr-2">${category}</span>
-                                <span class="text-xs text-muted">${detail}${player}</span>`;
+                // Ícones por tipo
+                let icon = "⚪";
+                const type = (e.type || "").toLowerCase();
+                const detail = (e.detail || "").toLowerCase();
+                if (type.includes("goal")) icon = "⚽";
+                else if (detail.includes("yellow")) icon = "🟨";
+                else if (detail.includes("red")) icon = "🟥";
+                else if (type.includes("substitution")) icon = "🔄";
+                else if (type.includes("shot")) icon = "🎯";
+                else if (type.includes("foul")) icon = "🛑";
+                else if (type.includes("corner")) icon = "🚩";
+
+                const player = (e.player) ? ` — ${e.player}` : "";
+                const team = (e.team) ? ` (${e.team})` : "";
+
+                li.innerHTML = `<span class="font-semibold">${timeLabel}</span> ${icon} ${e.type || ""} ${e.detail || ""}${player}${team}`;
                 eventsEl.appendChild(li);
             });
         } else {
@@ -88,6 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
         dashboard.classList.remove("hidden");
     };
 
+    // -------- Buscar Stats --------
     const fetchGame = async (gameId) => {
         try {
             const resp = await fetch(`${RADAR_API}/stats-aovivo/${gameId}`);
@@ -101,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
+    // -------- Eventos de UI --------
     gameSelect.addEventListener('change', () => {
         const id = gameSelect.value;
         clearInterval(interval);
@@ -123,6 +146,7 @@ document.addEventListener("DOMContentLoaded", function () {
     tab2 && tab2.addEventListener('click', () => { currentPeriod = "2t"; });
     tabFull && tabFull.addEventListener('click', () => { currentPeriod = "full"; });
 
+    // -------- Inicialização --------
     const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
             loadLeagues();
