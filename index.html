@@ -328,8 +328,12 @@
                                     <option value="american-football">Futebol Americano (NFL)</option>
                                 </select>
                             </div>
-                            <div id="country-selector-group" style="display: none;"></div>
-                            
+                            <div id="country-selector-group" class="form-group flex flex-col space-y-2">
+    <label for="country-select" class="text-sm font-medium text-slate-400">País</label>
+    <select id="country-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
+        <option value="">Selecione</option>
+    </select>
+</div>                          
                             <div id="league-selector-group" class="flex flex-col space-y-2">
                                 <label for="league-select" class="text-sm font-medium text-slate-400">Liga</label>
                                 <select id="league-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
