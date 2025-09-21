@@ -11,17 +11,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const gameSelect = tipsterSection.querySelector('#game-select');
     const resultsDiv = tipsterSection.querySelector('#bettingResults');
     
-    // URL do seu backend para o Tipster IA
     const TIPSTER_BASE_URL = 'https://analisador-apostas.onrender.com';
 
-    // Função para resetar e desabilitar um seletor
     const resetSelect = (selectElement, message) => {
         selectElement.innerHTML = `<option value="">${message}</option>`;
         selectElement.disabled = true;
     };
-
-    // Esconde todos os seletores dependentes
-    const hideDependentSelectors = () => {
+    
+    const hideAllGroups = () => {
         countryGroup.classList.add('hidden');
         leagueGroup.classList.add('hidden');
         gameGroup.classList.add('hidden');
@@ -44,18 +41,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    const loadLeagues = async (sport, countryCode = null) => {
+    const loadLeagues = async (countryCode) => {
         resetSelect(leagueSelect, 'Carregando ligas...');
-        let url = `${TIPSTER_BASE_URL}/ligas/${sport}`;
-        if (sport === 'football' && countryCode) {
-            url += `?country_code=${countryCode}`;
-        } else if (sport === 'football' && !countryCode) {
-            resetSelect(leagueSelect, 'Selecione um país');
-            return;
-        }
-
         try {
-            const response = await fetch(url);
+            const response = await fetch(`${TIPSTER_BASE_URL}/ligas/football?country_code=${countryCode}`);
             if (!response.ok) throw new Error('Falha ao buscar ligas');
             const leagues = await response.json();
 
@@ -72,13 +61,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
     
-    const loadGames = async (sport, leagueId) => {
-        if (!sport || !leagueId) return;
+    const loadGames = async (sport, leagueId = null) => {
         resetSelect(gameSelect, 'Carregando jogos...');
-        gameGroup.classList.remove('hidden');
-
+        let url = `${TIPSTER_BASE_URL}/partidas/${sport}`;
+        if (leagueId) {
+            url += `?league_id=${leagueId}`;
+        }
+        
         try {
-            const response = await fetch(`${TIPSTER_BASE_URL}/partidas/${sport}/${leagueId}`);
+            const response = await fetch(url);
             if (!response.ok) throw new Error('Falha ao buscar jogos');
             const games = await response.json();
             
@@ -102,48 +93,45 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- EVENT LISTENERS ---
     sportSelect.addEventListener('change', () => {
         const sport = sportSelect.value;
-        hideDependentSelectors();
+        hideAllGroups();
         resetSelect(countrySelect, '...');
         resetSelect(leagueSelect, '...');
         resetSelect(gameSelect, '...');
 
-        if (sport) {
+        if (!sport) return;
+
+        // REESTRUTURAÇÃO DO FLUXO
+        if (sport === 'football') {
+            countryGroup.classList.remove('hidden');
             leagueGroup.classList.remove('hidden');
-            if (sport === 'football') {
-                countryGroup.classList.remove('hidden');
-                loadCountries();
-            } else {
-                loadLeagues(sport);
-            }
+            gameGroup.classList.remove('hidden');
+            loadCountries();
+        } else if (sport === 'basketball' || sport === 'american-football') {
+            gameGroup.classList.remove('hidden');
+            loadGames(sport); // Chama os jogos diretamente
         }
     });
 
     countrySelect.addEventListener('change', () => {
-        const sport = sportSelect.value;
         const countryCode = countrySelect.value;
         resetSelect(leagueSelect, '...');
         resetSelect(gameSelect, '...');
         if (countryCode) {
-            loadLeagues(sport, countryCode);
+            loadLeagues(countryCode);
         }
     });
 
     leagueSelect.addEventListener('change', () => {
-        const sport = sportSelect.value;
         const leagueId = leagueSelect.value;
         resetSelect(gameSelect, '...');
-        resultsDiv.classList.add('hidden');
         if (leagueId) {
-            loadGames(sport, leagueId);
+            loadGames('football', leagueId);
         }
     });
     
     gameSelect.addEventListener('change', () => {
-        // A lógica de análise de jogo foi mantida conforme o original,
-        // pois o backend para análise não foi solicitado para refatoração.
-        // Se houver um endpoint de análise, ele seria chamado aqui.
         resultsDiv.classList.remove('hidden');
         const gameText = gameSelect.options[gameSelect.selectedIndex].text.split(' (')[0];
-        resultsDiv.innerHTML = `<p class="text-slate-400 text-center">Análise para ${gameText} não implementada neste frontend.</p>`;
+        resultsDiv.innerHTML = `<p class="text-slate-400 text-center">Análise para ${gameText} não implementada.</p>`;
     });
 });
