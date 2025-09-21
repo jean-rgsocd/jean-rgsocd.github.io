@@ -1357,110 +1357,94 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
       </a>
 
       <a href="https://www.bypassgpt.ai/pt" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2">
-        <svg class="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v16H4z"/></svg>
-        <span>BypassGPT</span>
-      </a>
-    </div>
-  </section>
-</div>
-      
+                            <svg class="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v16H4z"/></svg>
+                            <span>BypassGPT</span>
+                        </a>
+                    </div>
+                </section>
+            </div> </div> </div> <div id="radar-ia-section" class="hidden py-12">
+        <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 md:p-8 rounded-lg shadow-lg border border-slate-700">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-bold text-2xl text-slate-100">Radar IA - Monitoramento Ao Vivo</h3>
+                <button id="hideRadarButton" class="whitespace-nowrap bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Retornar</button>
+            </div>
+            <p class="text-slate-400 mb-8">Acompanhe as estatísticas e o índice de pressão de jogos de futebol que estão acontecendo em tempo real. Os dados são atualizados periodicamente.</p>
+            <div class="mb-6">
+                <label for="radar-game-select" class="text-sm font-medium text-slate-400">Selecione um Jogo Ao Vivo</label>
+                <select id="radar-game-select" class="w-full mt-2 bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    <option value="">Carregando jogos ao vivo...</option>
+                </select>
+            </div>
+            <div id="radar-dashboard" class="hidden space-y-6">
+                <div class="flex justify-between items-center bg-slate-900 p-4 rounded-lg">
+                    <div class="text-left w-1/3"><p class="font-bold text-lg md:text-xl" id="home-team-name">Time Casa</p></div>
+                    <div class="text-center w-1/3"><p class="text-4xl font-bold text-slate-100" id="radar-score">-</p><p class="text-lg text-cyan-400" id="radar-minute">-</p></div>
+                    <div class="text-right w-1/3"><p class="font-bold text-lg md:text-xl" id="away-team-name">Time Fora</p></div>
+                </div>
+                <div class="flex justify-center space-x-2 p-1 bg-slate-900 rounded-lg">
+                    <button data-period="firstHalf" class="period-btn w-full py-2 text-sm font-semibold rounded-md transition-colors">1º Tempo</button>
+                    <button data-period="secondHalf" class="period-btn w-full py-2 text-sm font-semibold rounded-md transition-colors">2º Tempo</button>
+                    <button data-period="fullGame" class="period-btn w-full py-2 text-sm font-semibold rounded-md transition-colors bg-cyan-600 text-white">Jogo Completo</button>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div class="bg-slate-900 p-3 rounded-md"><p class="text-sm text-slate-400">Posse</p><p class="text-lg font-semibold" id="stat-possession">-</p></div>
+                    <div class="bg-slate-900 p-3 rounded-md"><p class="text-sm text-slate-400">Finalizações (no gol)</p><p class="text-lg font-semibold" id="stat-shots">-</p></div>
+                    <div class="bg-slate-900 p-3 rounded-md"><p class="text-sm text-slate-400">Escanteios</p><p class="text-lg font-semibold" id="stat-corners">-</p></div>
+                    <div class="bg-slate-900 p-3 rounded-md"><p class="text-sm text-slate-400">Faltas</p><p class="text-lg font-semibold" id="stat-fouls">-</p></div>
+                    <div class="bg-slate-900 p-3 rounded-md col-span-2"><p class="text-sm text-slate-400">Cartões Amarelos</p><p class="text-lg font-semibold" id="stat-yellow-cards">-</p></div>
+                    <div class="bg-slate-900 p-3 rounded-md col-span-2"><p class="text-sm text-slate-400">Cartões Vermelhos</p><p class="text-lg font-semibold" id="stat-red-cards">-</p></div>
+                </div>
+                <div id="stoppage-time-prediction" class="hidden text-center bg-yellow-900/50 border border-yellow-500 text-yellow-300 p-3 rounded-md"><p class="font-semibold">Estimativa de Acréscimos: <span id="stoppage-time-value"></span> minutos</p></div>
+                <div>
+                    <h4 class="font-bold text-slate-200 mb-2">Eventos Recentes</h4>
+                    <ul id="radar-events" class="text-sm text-slate-400 space-y-1 h-40 overflow-y-auto p-2 bg-slate-900 rounded-md"><li>Nenhum evento recente</li></ul>
                 </div>
             </div>
-        </section>
         </div>
     </div>
-</div>
 
-<div id="radar-ia-section" class="hidden py-12">
-    <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 md:p-8 rounded-lg shadow-lg border border-slate-700">
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="font-bold text-2xl text-slate-100">Radar IA - Monitoramento Ao Vivo</h3>
-            <button id="hideRadarButton" class="whitespace-nowrap bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Retornar</button>
-        </div>
-        <p class="text-slate-400 mb-8">Acompanhe as estatísticas e o índice de pressão de jogos de futebol que estão acontecendo em tempo real. Os dados são atualizados periodicamente.</p>
-        <div class="mb-6">
-            <label for="radar-game-select" class="text-sm font-medium text-slate-400">Selecione um Jogo Ao Vivo</label>
-            <select id="radar-game-select" class="w-full mt-2 bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                <option value="">Carregando jogos ao vivo...</option>
-            </select>
-        </div>
-        <div id="radar-dashboard" class="hidden space-y-6">
-            <div class="flex justify-between items-center bg-slate-900 p-4 rounded-lg">
-                <div class="text-left w-1/3"><p class="font-bold text-lg md:text-xl" id="home-team-name">Time Casa</p></div>
-                <div class="text-center w-1/3"><p class="text-4xl font-bold text-slate-100" id="radar-score">-</p><p class="text-lg text-cyan-400" id="radar-minute">-</p></div>
-                <div class="text-right w-1/3"><p class="font-bold text-lg md:text-xl" id="away-team-name">Time Fora</p></div>
-            </div>
-            <div class="flex justify-center space-x-2 p-1 bg-slate-900 rounded-lg">
-                <button data-period="firstHalf" class="period-btn w-full py-2 text-sm font-semibold rounded-md transition-colors">1º Tempo</button>
-                <button data-period="secondHalf" class="period-btn w-full py-2 text-sm font-semibold rounded-md transition-colors">2º Tempo</button>
-                <button data-period="fullGame" class="period-btn w-full py-2 text-sm font-semibold rounded-md transition-colors bg-cyan-600 text-white">Jogo Completo</button>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                <div class="bg-slate-900 p-3 rounded-md"><p class="text-sm text-slate-400">Posse</p><p class="text-lg font-semibold" id="stat-possession">-</p></div>
-                <div class="bg-slate-900 p-3 rounded-md"><p class="text-sm text-slate-400">Finalizações (no gol)</p><p class="text-lg font-semibold" id="stat-shots">-</p></div>
-                <div class="bg-slate-900 p-3 rounded-md"><p class="text-sm text-slate-400">Escanteios</p><p class="text-lg font-semibold" id="stat-corners">-</p></div>
-                <div class="bg-slate-900 p-3 rounded-md"><p class="text-sm text-slate-400">Faltas</p><p class="text-lg font-semibold" id="stat-fouls">-</p></div>
-                <div class="bg-slate-900 p-3 rounded-md col-span-2"><p class="text-sm text-slate-400">Cartões Amarelos</p><p class="text-lg font-semibold" id="stat-yellow-cards">-</p></div>
-                <div class="bg-slate-900 p-3 rounded-md col-span-2"><p class="text-sm text-slate-400">Cartões Vermelhos</p><p class="text-lg font-semibold" id="stat-red-cards">-</p></div>
-            </div>
-            <div id="stoppage-time-prediction" class="hidden text-center bg-yellow-900/50 border border-yellow-500 text-yellow-300 p-3 rounded-md"><p class="font-semibold">Estimativa de Acréscimos: <span id="stoppage-time-value"></span> minutos</p></div>
-            <div>
-                <h4 class="font-bold text-slate-200 mb-2">Eventos Recentes</h4>
-                <ul id="radar-events" class="text-sm text-slate-400 space-y-1 h-40 overflow-y-auto p-2 bg-slate-900 rounded-md"><li>Nenhum evento recente</li></ul>
-            </div>
+</div> </section> </main>
+
+<footer id="contato" class="bg-slate-900 text-slate-300 border-t border-slate-800">
+    <div class="container mx-auto px-6 py-12 text-center">
+        <h2 class="text-3xl font-bold mb-4 text-cyan-300">Em que posso te ajudar?</h2>
+        <p class="text-center text-slate-400 mb-8 max-w-3xl mx-auto">Entre em contato.</p>
+        <div class="flex justify-center items-center space-x-8">
+            <a href="mailto:jean.rgsocd@gmail.com" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Email" title="Email"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg></a>
+            <a href="https://www.instagram.com/jcrs.7/" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Instagram" title="Instagram"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg></a>
+            <a href="https://wa.me/5511984970539" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="WhatsApp" title="WhatsApp"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.05 4.94A9.95 9.95 0 0 0 12 2C6.48 2 2 6.48 2 12c0 1.77.46 3.45 1.29 4.94L2 22l5.06-1.29A9.95 9.95 0 0 0 12 22c5.52 0 10-4.48 10-10a9.95 9.95 0 0 0-2.95-7.06zM12 20.25a8.25 8.25 0 0 1-4.2-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.69-8.23 8.23-8.23a8.23 8.23 0 0 1 8.23 8.23c0 4.54-3.69 8.23-8.23 8.23zm4.5-6.17c-.27-.13-1.61-.79-1.85-.88-.25-.09-.43-.13-.61.13-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.06-.27-.13-1.14-.42-2.17-1.33-.8-.72-1.34-1.61-1.5-1.89-.16-.27-.02-.42.12-.55.12-.12.27-.31.4-.46.13-.15.18-.25.27-.42.09-.17.05-.31-.02-.44s-.6-1.45-.82-1.98c-.22-.53-.44-.46-.6-.46-.16 0-.34-.02-.52-.02-.18 0-.47.07-.71.34-.24.27-.92.9-1.12 2.22-.2 1.32.22 2.57.25 2.75.03.18 1.14 1.75 2.76 2.44 1.62.69 2.89 1.1 3.28 1.29.39.19.74.16.99.1.29-.07.92-.37 1.05-.72.13-.35.13-.65.09-.72-.04-.07-.16-.11-.33-.18z"/></svg></a>
         </div>
     </div>
-</div>
-            </div>
-        </section>
-    </main>
+</footer>
 
-    <footer id="contato" class="bg-slate-900 text-slate-300 border-t border-slate-800">
-        <div class="container mx-auto px-6 py-12 text-center">
-            <h2 class="text-3xl font-bold mb-4 text-cyan-300">Em que posso te ajudar?</h2>
-            <p class="text-center text-slate-400 mb-8 max-w-3xl mx-auto">Entre em contato.</p>
-            <div class="flex justify-center items-center space-x-8">
-                <a href="mailto:jean.rgsocd@gmail.com" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Email" title="Email">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
-                </a>
-                <a href="https://www.instagram.com/jcrs.7/" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="Instagram" title="Instagram">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
-                </a>
-                <a href="https://wa.me/5511984970539" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-300 transition-colors duration-300" aria-label="WhatsApp" title="WhatsApp">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.05 4.94A9.95 9.95 0 0 0 12 2C6.48 2 2 6.48 2 12c0 1.77.46 3.45 1.29 4.94L2 22l5.06-1.29A9.95 9.95 0 0 0 12 22c5.52 0 10-4.48 10-10a9.95 9.95 0 0 0-2.95-7.06zM12 20.25a8.25 8.25 0 0 1-4.2-1.16l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.69-8.23 8.23-8.23a8.23 8.23 0 0 1 8.23 8.23c0 4.54-3.69 8.23-8.23 8.23zm4.5-6.17c-.27-.13-1.61-.79-1.85-.88-.25-.09-.43-.13-.61.13-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.06-.27-.13-1.14-.42-2.17-1.33-.8-.72-1.34-1.61-1.5-1.89-.16-.27-.02-.42.12-.55.12-.12.27-.31.4-.46.13-.15.18-.25.27-.42.09-.17.05-.31-.02-.44s-.6-1.45-.82-1.98c-.22-.53-.44-.46-.6-.46-.16 0-.34-.02-.52-.02-.18 0-.47.07-.71.34-.24.27-.92.9-1.12 2.22-.2 1.32.22 2.57.25 2.75.03.18 1.14 1.75 2.76 2.44 1.62.69 2.89 1.1 3.28 1.29.39.19.74.16.99.1.29-.07.92-.37 1.05-.72.13-.35.13-.65.09-.72-.04-.07-.16-.11-.33-.18z"/></svg>
-                </a>
-            </div>
-        </div>
-    </footer>
+<script> const promptsData = {}; </script>
+<script src="categorias/advocacia.js"></script>
+<script src="categorias/artes-criativas.js"></script>
+<script src="categorias/copywriters.js"></script>
+<script src="categorias/corporativos.js"></script>
+<script src="categorias/criativos.js"></script>
+<script src="categorias/desenvolvedores-e-ti.js"></script>
+<script src="categorias/educacao.js"></script>
+<script src="categorias/empreendedorismo.js"></script>
+<script src="categorias/entretenimento.js"></script>
+<script src="categorias/escrita.js"></script>
+<script src="categorias/estudantes.js"></script>
+<script src="categorias/financas.js"></script>
+<script src="categorias/fitness.js"></script>
+<script src="categorias/marketing.js"></script>
+<script src="categorias/negocios.js"></script>
+<script src="categorias/professores.js"></script>
+<script src="categorias/programacao.js"></script>
+<script src="categorias/saude.js"></script>
+<script src="categorias/tecnologia.js"></script>
+<script src="categorias/youtubers.js"></script>
 
-    <script> const promptsData = {}; </script>
-    <script src="categorias/advocacia.js"></script>
-    <script src="categorias/artes-criativas.js"></script>
-    <script src="categorias/copywriters.js"></script>
-    <script src="categorias/corporativos.js"></script>
-    <script src="categorias/criativos.js"></script>
-    <script src="categorias/desenvolvedores-e-ti.js"></script>
-    <script src="categorias/educacao.js"></script>
-    <script src="categorias/empreendedorismo.js"></script>
-    <script src="categorias/entretenimento.js"></script>
-    <script src="categorias/escrita.js"></script>
-    <script src="categorias/estudantes.js"></script>
-    <script src="categorias/financas.js"></script>
-    <script src="categorias/fitness.js"></script>
-    <script src="categorias/marketing.js"></script>
-    <script src="categorias/negocios.js"></script>
-    <script src="categorias/professores.js"></script>
-    <script src="categorias/programacao.js"></script>
-    <script src="categorias/saude.js"></script>
-    <script src="categorias/tecnologia.js"></script>
-    <script src="categorias/youtubers.js"></script>
-    
-    <script src="scripts/main.js" defer></script>
-    <script src="scripts/navigation.js" defer></script>
-    <script src="scripts/scanner.js" defer></script>
-    <script src="scripts/tipster.js" defer></script>
-    <script src="scripts/prompts.js" defer></script>
-    <script src="scripts/radar.js" defer></script>
+<script src="scripts/main.js" defer></script>
+<script src="scripts/navigation.js" defer></script>
+<script src="scripts/scanner.js" defer></script>
+<script src="scripts/tipster.js" defer></script>
+<script src="scripts/prompts.js" defer></script>
+<script src="scripts/radar.js" defer></script>
 
 </body>
 </html>
