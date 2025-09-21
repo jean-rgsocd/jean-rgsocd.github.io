@@ -20,6 +20,13 @@ document.addEventListener('DOMContentLoaded', function () {
             hideBtn: document.getElementById('hideBettingButton'),
             section: document.getElementById('analisador-apostas'),
             anchor: '#analisador-apostas'
+        },
+        // --- CORREÇÃO ADICIONADA AQUI ---
+        'radar': {
+            showBtn: document.getElementById('showRadarButton'),
+            hideBtn: document.getElementById('hideRadarButton'),
+            section: document.getElementById('radar-ia-section'),
+            anchor: '#radar-ia-section'
         }
     };
 
