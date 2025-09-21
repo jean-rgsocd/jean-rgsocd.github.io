@@ -1,89 +1,112 @@
 document.addEventListener('DOMContentLoaded', function () {
     const scannerSection = document.getElementById('analisador-seguranca-web');
-    if (!scannerSection) return; // Só executa se a seção existir
+    if (!scannerSection) return;
 
     const urlInput = document.getElementById('urlInput');
     const scanButton = document.getElementById('scanButton');
-    const scanStatusDiv = document.getElementById('scanStatus');
+    const scanStatus = document.getElementById('scanStatus');
     const statusMessage = document.getElementById('statusMessage');
+    const progressBarContainer = document.getElementById('progressBarContainer');
     const progressBar = document.getElementById('progressBar');
     const resultsDiv = document.getElementById('results');
     const analyzedUrlSpan = document.getElementById('analyzedUrl');
     const overallStatusSpan = document.getElementById('overallStatus');
-    const vulnerabilitiesDiv = document.getElementById('vulnerabilitiesResults');
-
-    scanButton.addEventListener('click', iniciarAnalise);
-
-    function iniciarAnalise() {
-        const url = urlInput.value;
-        if (!url || !url.startsWith('http')) {
-            alert('Por favor, insira uma URL válida (ex: https://site.com).');
+    const vulnerabilitiesResults = document.getElementById('vulnerabilitiesResults');
+    
+    const vulnerabilities = [
+        { name: 'Injeção de SQL', risk: 'high', description: 'Permite que um atacante manipule consultas ao banco de dados.' },
+        { name: 'Cross-Site Scripting (XSS)', risk: 'high', description: 'Permite que um atacante injete scripts maliciosos em páginas web.' },
+        { name: 'Exposição de Dados Sensíveis', risk: 'high', description: 'Dados confidenciais são expostos sem criptografia adequada.' },
+        { name: 'Quebra de Autenticação', risk: 'high', description: 'Permite que atacantes roubem sessões para se passar por usuários.' },
+        { name: 'Falsificação de Requisição entre Sites (CSRF)', risk: 'high', description: 'Força o navegador de um usuário a enviar uma requisição maliciosa.' },
+        { name: 'Upload de Arquivos Não-restrito', risk: 'high', description: 'Permite que atacantes enviem arquivos maliciosos para o servidor.' },
+        { name: 'Vulnerabilidades em Componentes Desatualizados', risk: 'medium', description: 'Bibliotecas e frameworks com falhas de segurança conhecidas.' },
+        { name: 'Configuração Incorreta de Segurança', risk: 'medium', description: 'Causada por configurações padrão do servidor ou portas abertas.' },
+        { name: 'Falta de HTTPS', risk: 'medium', description: 'Comunicação não é criptografada, expondo dados a interceptação.' },
+        { name: 'Inclusão de Arquivos Remotos (RFI/LFI)', risk: 'medium', description: 'Permite que um atacante leia ou execute arquivos no servidor.' },
+        { name: 'Gerenciamento de Sessão Inseguro', risk: 'low', description: 'O atacante pode roubar a sessão de um usuário (cookie).' },
+        { name: 'Exposição de Informações do Servidor', risk: 'low', description: 'Informações detalhadas sobre o servidor são expostas.' },
+    ];
+    
+    scanButton.addEventListener('click', () => {
+        const url = urlInput.value.trim();
+        if (!url) {
+            alert('Por favor, digite uma URL válida.');
             return;
         }
 
-        // Resetar a interface
-        scanStatusDiv.classList.remove('hidden');
+        scanStatus.classList.remove('hidden');
+        statusMessage.textContent = 'Iniciando varredura minuciosa...';
+        progressBarContainer.classList.remove('hidden');
         resultsDiv.classList.add('hidden');
         progressBar.style.width = '0%';
-        statusMessage.textContent = 'Iniciando análise em ' + url;
-        vulnerabilitiesDiv.innerHTML = '<h3 class="font-bold text-xl text-cyan-300">Detalhes das Verificações</h3>';
 
-        // ===================================================================
-        // COLE AQUI A LÓGICA DE SIMULAÇÃO DO SCANNER
-        // O código abaixo é um exemplo de como a simulação pode ser feita
-        // Adapte com o seu código original.
-        // ===================================================================
-        
-        // Exemplo de Simulação:
         let progress = 0;
-        const interval = setInterval(() => {
-            progress += 10;
-            progressBar.style.width = progress + '%';
+        const progressInterval = setInterval(() => {
+            progress += Math.random() * 5 + 1;
             if (progress >= 100) {
-                clearInterval(interval);
-                statusMessage.textContent = 'Análise Concluída!';
-                exibirResultadosSimulados(url);
+                progress = 100;
+                clearInterval(progressInterval);
+                setTimeout(showResults, 500);
             }
-        }, 200);
-    }
+            progressBar.style.width = progress + '%';
+        }, 100);
 
-    function exibirResultadosSimulados(url) {
-        resultsDiv.classList.remove('hidden');
-        analyzedUrlSpan.textContent = url;
-        
-        // Simulação de resultados
-        const vulnerabilidades = [
-            { nome: 'Cross-Site Scripting (XSS)', status: 'Vulnerável', severidade: 'Alta', desc: 'Permite que atacantes injetem scripts maliciosos em páginas web.' },
-            { nome: 'SQL Injection', status: 'Seguro', severidade: 'Crítica', desc: 'Impede a manipulação de queries ao banco de dados.' },
-            { nome: 'Cabeçalhos de Segurança', status: 'Vulnerável', severidade: 'Média', desc: 'Faltam cabeçalhos como HSTS e CSP, expondo o site a certos tipos de ataque.' },
-            { nome: 'Validação de Certificado SSL/TLS', status: 'Seguro', severidade: 'Alta', desc: 'A conexão é criptografada e segura.' }
-        ];
+        function showResults() {
+            statusMessage.textContent = 'Análise concluída com sucesso!';
+            resultsDiv.classList.remove('hidden');
+            analyzedUrlSpan.textContent = url;
+            
+            // Limpa resultados anteriores antes de adicionar novos
+            vulnerabilitiesResults.innerHTML = '<h3 class="font-bold text-xl text-cyan-300 mb-4">Detalhes das Verificações</h3>';
+            let hasHighRisk = false;
 
-        let temVulnerabilidadeAlta = false;
-        vulnerabilidades.forEach(vuln => {
-            const statusClass = vuln.status === 'Vulnerável' ? 'vulnerable-status' : 'secure-status';
-            if(vuln.status === 'Vulnerável' && (vuln.severidade === 'Alta' || vuln.severidade === 'Crítica')) {
-                temVulnerabilidadeAlta = true;
-            }
-            const vulnHtml = `
-                <div class="p-4 border rounded-lg border-slate-700 bg-slate-900">
+            const highRiskVulns = vulnerabilities.filter(v => v.risk === 'high');
+            const mediumRiskVulns = vulnerabilities.filter(v => v.risk === 'medium');
+            const lowRiskVulns = vulnerabilities.filter(v => v.risk === 'low');
+            
+            // Simula a descoberta de um número aleatório de vulnerabilidades
+            const numHigh = 1 + Math.floor(Math.random() * 2);
+            const numMedium = 2 + Math.floor(Math.random() * 2);
+            const numLow = 1;
+
+            const selectedVulns = [
+                ...highRiskVulns.sort(() => 0.5 - Math.random()).slice(0, numHigh),
+                ...mediumRiskVulns.sort(() => 0.5 - Math.random()).slice(0, numMedium),
+                ...lowRiskVulns.sort(() => 0.5 - Math.random()).slice(0, numLow)
+            ].sort(() => 0.5 - Math.random());
+
+            selectedVulns.forEach(vuln => {
+                if (vuln.risk === 'high') hasHighRisk = true;
+                
+                const riskText = vuln.risk.charAt(0).toUpperCase() + vuln.risk.slice(1);
+                const riskClassMap = { high: 'vulnerable-status', medium: 'text-yellow-400', low: 'secure-status' };
+                const borderClassMap = { high: 'scan-status-high', medium: 'scan-status-medium', low: 'scan-status-low' };
+
+                const riskClass = riskClassMap[vuln.risk];
+                const borderClass = borderClassMap[vuln.risk];
+                
+                const vulnerabilityElement = document.createElement('div');
+                vulnerabilityElement.className = `p-4 my-2 rounded-lg border ${borderClass} bg-slate-900`;
+                vulnerabilityElement.innerHTML = `
                     <div class="flex justify-between items-center">
-                        <h4 class="font-bold text-slate-200">${vuln.nome}</h4>
-                        <span class="font-bold text-sm ${statusClass}">${vuln.status.toUpperCase()}</span>
+                        <p class="font-bold text-slate-100">${vuln.name}</p>
+                        <p class="text-sm font-bold ${riskClass}">Risco: ${riskText}</p>
                     </div>
-                    <p class="text-sm text-slate-400 mt-1">${vuln.desc}</p>
-                    <p class="text-xs text-slate-500 mt-2">Severidade: ${vuln.severidade}</p>
-                </div>
-            `;
-            vulnerabilitiesDiv.innerHTML += vulnHtml;
-        });
+                    <p class="text-sm text-slate-400 mt-1">${vuln.description}</p>
+                `;
+                vulnerabilitiesResults.appendChild(vulnerabilityElement);
+            });
 
-        if (temVulnerabilidadeAlta) {
-            overallStatusSpan.textContent = 'VULNERÁVEL';
-            overallStatusSpan.className = 'font-bold vulnerable-status';
-        } else {
-            overallStatusSpan.textContent = 'SEGURO';
-            overallStatusSpan.className = 'font-bold secure-status';
+            if (hasHighRisk) {
+                overallStatusSpan.textContent = 'Criticamente Vulnerável';
+                overallStatusSpan.className = 'font-bold vulnerable-status';
+            } else {
+                overallStatusSpan.textContent = 'Vulnerável';
+                overallStatusSpan.className = 'font-bold text-yellow-400';
+            }
+
+            document.getElementById('cta-section').classList.remove('hidden');
         }
-    }
+    });
 });
