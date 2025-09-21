@@ -229,7 +229,7 @@
                     <p class="text-center text-slate-400 mb-12 max-w-3xl mx-auto">Uma amostra do meu trabalho, demonstrando a aplicação prática das minhas competências.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         
-                        <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
+                        <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400">
                             <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Portf%C3%B3lio+Interativo" alt="Imagem do Projeto Portfólio Interativo" class="w-full h-auto object-cover border-b border-slate-700">
                             <div class="p-8">
                                 <h3 class="font-bold text-xl mb-2 text-slate-100">Portfólio Interativo Pessoal</h3>
@@ -268,9 +268,9 @@
                         <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400">
                             <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Radar+IA" alt="Imagem do Radar IA" class="w-full h-auto object-cover border-b border-slate-700">
                             <div class="p-8">
-                                <h3 class="font-bold text-xl mb-2 text-slate-100">Radar IA (Em Breve)</h3>
-                                <p class="text-slate-400 mb-6">Engine de monitoramento esportivo em tempo real para análise de pressão e domínio durante os jogos.</p>
-                                <button id="showRadarButton" class="inline-block bg-gray-500 text-slate-900 font-bold py-2 px-6 rounded-lg cursor-not-allowed">Em desenvolvimento</button>
+                                <h3 class="font-bold text-xl mb-2 text-slate-100">Radar IA</h3>
+                                <p class="text-slate-400 mb-6">Engine de monitoramento em tempo real para análise de pressão e domínio durante os jogos ao vivo.</p>
+                                <button id="showRadarButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Ver Ferramenta</button>
                             </div>
                         </div>
                     </div>
@@ -318,7 +318,7 @@
                         </div>
                         <p class="text-slate-400 mb-8">Selecione o esporte, a liga e o jogo para receber uma análise baseada em dados e estatísticas processadas pela minha API de backend.</p>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                             <div class="flex flex-col space-y-2">
                                 <label for="sport-select" class="text-sm font-medium text-slate-400">Esporte</label>
                                 <select id="sport-select" class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
@@ -328,16 +328,12 @@
                                     <option value="american-football">Futebol Americano (NFL)</option>
                                 </select>
                             </div>
-                            <div id="country-selector-group" class="flex flex-col space-y-2">
-                                <label for="country-select" class="text-sm font-medium text-slate-400">País</label>
-                                <select id="country-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
-                                    <option value="">Selecione</option>
-                                </select>
-                            </div>
+                            <div id="country-selector-group" style="display: none;"></div>
+                            
                             <div id="league-selector-group" class="flex flex-col space-y-2">
                                 <label for="league-select" class="text-sm font-medium text-slate-400">Liga</label>
                                 <select id="league-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
-                                    <option value="">Selecione</option>
+                                    <option value="">Selecione um Esporte</option>
                                 </select>
                             </div>
                             <div class="flex flex-col space-y-2">
@@ -348,8 +344,7 @@
                             </div>
                         </div>
 
-                        <div id="bettingResults" class="hidden mt-8 space-y-4">
-                            </div>
+                        <div id="bettingResults" class="hidden mt-8 space-y-4"></div>
                     </div>
                  </div>
                  
@@ -470,9 +465,61 @@
                             <p id="ai-result" class="mt-4 p-4 bg-slate-900 border border-slate-700 rounded-md text-slate-300 min-h-[50px]"></p>
                         </div>
                     </div>
-                </div>
-                 
                  </div>
+                 
+                 <div id="radar-ia-section" class="hidden py-12">
+                    <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 md:p-8 rounded-lg shadow-lg border border-slate-700">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-2xl text-slate-100">Radar IA - Monitoramento Ao Vivo</h3>
+                            <button id="hideRadarButton" class="whitespace-nowrap bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Retornar</button>
+                        </div>
+                        <p class="text-slate-400 mb-8">Acompanhe as estatísticas e o índice de pressão de jogos de futebol que estão acontecendo em tempo real. Os dados são atualizados periodicamente.</p>
+                        
+                        <div class="mb-6">
+                            <label for="radar-game-select" class="text-sm font-medium text-slate-400">Selecione um Jogo Ao Vivo</label>
+                            <select id="radar-game-select" class="w-full mt-2 bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                <option value="">Carregando jogos ao vivo...</option>
+                            </select>
+                        </div>
+
+                        <div id="radar-dashboard" class="space-y-6">
+                            <div class="text-center">
+                                <p class="text-4xl font-bold text-slate-100" id="radar-score">-</p>
+                                <p class="text-lg text-cyan-400" id="radar-minute">-</p>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-4 text-center">
+                                <div>
+                                    <p class="text-sm text-slate-400">Posse</p>
+                                    <p class="text-lg font-semibold"><span id="home-possession">-</span>% / <span id="away-possession">-</span>%</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-400">Finalizações</p>
+                                    <p class="text-lg font-semibold"><span id="home-shots">-</span> / <span id="away-shots">-</span></p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-400">Escanteios</p>
+                                    <p class="text-lg font-semibold"><span id="home-corners">-</span> / <span id="away-corners">-</span></p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="text-sm font-medium text-slate-400">Índice de Pressão (Últimos 10 min)</label>
+                                <div class="w-full bg-slate-700 rounded-full h-4 mt-2">
+                                    <div id="pressure-bar" class="bg-cyan-500 h-4 rounded-full transition-all duration-500" style="width: 50%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-bold text-slate-200 mb-2">Eventos Recentes</h4>
+                                <ul id="radar-events" class="text-sm text-slate-400 space-y-1 h-32 overflow-y-auto p-2 bg-slate-900 rounded-md">
+                                    <li>Nenhum evento recente</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
