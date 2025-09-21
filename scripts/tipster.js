@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const tipsterSection = document.getElementById('analisador-apostas');
     if (!tipsterSection) return;
 
-    // Seleciona os elementos pelo ID, já que a estrutura agora é mais simples
     const sportSelect = document.getElementById('sport-select'); 
     const gameSelect = document.getElementById('game-select');
     const resultsDiv = document.getElementById('bettingResults');
@@ -13,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
         el.disabled = true;
     };
 
-    // 1. CARREGAR ESPORTES
     const loadSports = async () => {
         resetSelect(sportSelect, 'Carregando Esportes...');
         sportSelect.disabled = false;
@@ -30,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    // 2. CARREGAR JOGOS QUANDO UM ESPORTE É SELECIONADO
     sportSelect.addEventListener('change', async () => {
         const sportKey = sportSelect.value;
         resultsDiv.classList.add('hidden');
@@ -46,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!res.ok) throw new Error('Falha ao buscar jogos');
             const games = await res.json();
             
-            // Salva os dados dos jogos para não precisar buscar de novo
             gameSelect.gamesData = games; 
 
             gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
@@ -64,7 +60,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // 3. MOSTRAR ODDS QUANDO UM JOGO É SELECIONADO
     gameSelect.addEventListener('change', () => {
         const gameId = gameSelect.value;
         if (!gameId || !gameSelect.gamesData) {
@@ -87,6 +82,5 @@ document.addEventListener('DOMContentLoaded', function () {
         resultsDiv.innerHTML = html;
     });
 
-    // Inicia o processo carregando os esportes
     loadSports();
 });
