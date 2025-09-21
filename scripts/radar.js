@@ -15,7 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const stoppageBox    = document.getElementById("stoppage-time-prediction");
 
   const statPossEl     = document.getElementById("stat-possession");
-  const statShotsEl    = document.getElementById("stat-shots");
+  const statShotsHomeEl= document.getElementById("stat-shots-home"); // casa
+  const statShotsAwayEl= document.getElementById("stat-shots-away"); // fora
   const statCornersEl  = document.getElementById("stat-corners");
   const statFoulsEl    = document.getElementById("stat-fouls");
   const statYellowEl   = document.getElementById("stat-yellow-cards");
@@ -43,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   function getVal(sideObj, candidates) {
     const val = pickStat(sideObj, candidates);
-    return val !== null && val !== undefined ? val : "N/D"; // mostra N/D se não vier
+    return val !== null && val !== undefined ? val : "N/D";
   }
 
   function iconFor(cat = "") {
@@ -56,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (c.includes("sub")) return "🔁";
     if (c.includes("corner")) return "🚩";
     if (c.includes("foul")) return "🛑";
-    if (c.includes("offside")) return "🏳️"; // NOVO: ícone para impedimento
+    if (c.includes("offside")) return "🏳️"; // impedimento
     return "•";
   }
 
@@ -102,12 +103,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const foulsCandidates      = ["fouls","foul"];
   const yellowCandidates     = ["yellow_cards","yellow cards","yellow"];
   const redCandidates        = ["red_cards","red cards","red"];
-  const offsidesCandidates   = ["offsides","offside"]; // impedimentos
+  const offsidesCandidates   = ["offsides","offside"];
 
   function setStatsPanel(statsObj = {}) {
     if (!statsObj || !statsObj.home || !statsObj.away) {
-      [statPossEl, statShotsEl, statCornersEl, statFoulsEl, statYellowEl, statRedEl, statOffsidesEl]
-        .forEach(el => el && (el.textContent = "- / -"));
+      [statPossEl, statShotsHomeEl, statShotsAwayEl, statCornersEl, statFoulsEl, statYellowEl, statRedEl, statOffsidesEl]
+        .forEach(el => el && (el.textContent = "-"));
       return;
     }
 
@@ -117,16 +118,11 @@ document.addEventListener("DOMContentLoaded", () => {
     statPossEl.textContent =
       `${getVal(home, possessionCandidates)} / ${getVal(away, possessionCandidates)}`;
 
-    statShotsEl.textContent =
-      `${getVal(home, totalShotsCandidates)} ` +
-      `(${getVal(home, onTargetCandidates)} no gol / ` +
-      `${getVal(home, offTargetCandidates)} fora / ` +
-      `${getVal(home, blockedCandidates)} bloqueadas)` +
-      ` / ` +
-      `${getVal(away, totalShotsCandidates)} ` +
-      `(${getVal(away, onTargetCandidates)} no gol / ` +
-      `${getVal(away, offTargetCandidates)} fora / ` +
-      `${getVal(away, blockedCandidates)} bloqueadas)`;
+    statShotsHomeEl.textContent =
+      `${getVal(home, totalShotsCandidates)} ( ${getVal(home, onTargetCandidates)} Gol / ${getVal(home, offTargetCandidates)} Fora / ${getVal(home, blockedCandidates)} Block )`;
+
+    statShotsAwayEl.textContent =
+      `${getVal(away, totalShotsCandidates)} ( ${getVal(away, onTargetCandidates)} Gol / ${getVal(away, offTargetCandidates)} Fora / ${getVal(away, blockedCandidates)} Block )`;
 
     statCornersEl.textContent =
       `${getVal(home, cornersCandidates)} / ${getVal(away, cornersCandidates)}`;
