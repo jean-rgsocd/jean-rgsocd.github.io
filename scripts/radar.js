@@ -1,7 +1,6 @@
 // radar.js
 document.addEventListener("DOMContentLoaded", function () {
-    const RADAR_API = "<COLOQUE_URL_RADAR_BACKEND_AQUI>"; // ex: https://radar-ia-backend.onrender.com
-
+    const RADAR_API = "https://radar-ia-backend.onrender.com"; // <--- substitua pelo seu backend
     const radarSection = document.getElementById("radar-ia-section");
     if (!radarSection) return;
 
@@ -25,22 +24,20 @@ document.addEventListener("DOMContentLoaded", function () {
         red: document.getElementById("stat-red-cards")
     };
 
-    let interval = null;
-    let currentGameId = null;
-    let currentPeriod = "full"; // "firstHalf" / "secondHalf" / "full"
+    let interval = null; let currentGameId = null; let currentPeriod = "full";
 
     const loadLeagues = async () => {
         if (!leagueSelect) return;
         leagueSelect.disabled = true;
         leagueSelect.innerHTML = `<option>Carregando ligas...</option>`;
         try {
-            const resp = await fetch(`${RADAR_API}/ligas`);
-            const data = await resp.json();
+            const r = await fetch(`${RADAR_API}/ligas`);
+            const data = await r.json();
             leagueSelect.innerHTML = `<option value="">Escolha uma liga</option>`;
             data.forEach(l => leagueSelect.add(new Option(`${l.name} - ${l.country || ''}`, l.id)));
             leagueSelect.disabled = false;
-        } catch (err) {
-            console.error('loadLeagues', err);
+        } catch (e) {
+            console.error("loadLeagues", e);
             leagueSelect.innerHTML = `<option value="">Erro ao carregar ligas</option>`;
         }
     };
@@ -50,8 +47,8 @@ document.addEventListener("DOMContentLoaded", function () {
         gameSelect.disabled = true;
         gameSelect.innerHTML = `<option>Carregando jogos ao vivo...</option>`;
         try {
-            const resp = await fetch(`${RADAR_API}/jogos-aovivo?league=${encodeURIComponent(leagueId)}`);
-            const data = await resp.json();
+            const r = await fetch(`${RADAR_API}/jogos-aovivo?league=${encodeURIComponent(leagueId)}`);
+            const data = await r.json();
             if (!data || data.length === 0) {
                 gameSelect.innerHTML = `<option value="">Nenhum jogo ao vivo</option>`;
                 return;
@@ -59,8 +56,8 @@ document.addEventListener("DOMContentLoaded", function () {
             gameSelect.innerHTML = `<option value="">Selecione um jogo</option>`;
             data.forEach(g => gameSelect.add(new Option(g.title, g.game_id)));
             gameSelect.disabled = false;
-        } catch (err) {
-            console.error('loadGames', err);
+        } catch (e) {
+            console.error("loadGames", e);
             gameSelect.innerHTML = `<option value="">Erro ao carregar jogos</option>`;
         }
     };
@@ -69,10 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!ev) return "-";
         if (ev.display_time) return ev.display_time;
         if (ev.raw && ev.raw.time) {
-            const t = ev.raw.time;
-            const elapsed = t.elapsed;
-            const sec = t.second;
-            const extra = t.extra;
+            const t = ev.raw.time, elapsed = t.elapsed, sec = t.second, extra = t.extra;
             if (elapsed == null) return "-";
             if (extra != null) return `${elapsed}+${extra}' ${sec ? sec + '"' : ""}`;
             return `${elapsed}'`;
@@ -94,10 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function renderEvents(events) {
         eventsEl.innerHTML = "";
-        if (!events || events.length === 0) {
-            eventsEl.innerHTML = "<li>Nenhum evento recente</li>";
-            return;
-        }
+        if (!events || events.length === 0) { eventsEl.innerHTML = "<li>Nenhum evento recente</li>"; return; }
         events.forEach(ev => {
             const li = document.createElement("li");
             li.className = "flex items-start gap-2 py-1";
@@ -113,26 +104,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function setStatsPanel(statObj, periodKey="full") {
-        if (!statObj) {
-            Object.values(statElements).forEach(el => el && (el.textContent = "-"));
-            return;
-        }
+        if (!statObj) { Object.values(statElements).forEach(el=>el&& (el.textContent="-")); return; }
         const full = statObj.full || {};
-        let srcHome = full.home || {};
-        let srcAway = full.away || {};
-
-        if (periodKey === "firstHalf" && statObj.firstHalf_derived) {
-            srcHome = statObj.firstHalf_derived.home || {};
-            srcAway = statObj.firstHalf_derived.away || {};
-        } else if (periodKey === "secondHalf" && statObj.secondHalf_derived) {
-            srcHome = statObj.secondHalf_derived.home || {};
-            srcAway = statObj.secondHalf_derived.away || {};
-        }
-        const parsePoss = v => {
-            if (v == null) return "-";
-            if (typeof v === "string" && v.includes("%")) return v;
-            return `${v}%`;
-        };
+        let srcHome = full.home || {}, srcAway = full.away || {};
+        if (periodKey === "firstHalf" && statObj.firstHalf_derived) { srcHome = statObj.firstHalf_derived.home || {}; srcAway = statObj.firstHalf_derived.away || {};}
+        else if (periodKey === "secondHalf" && statObj.secondHalf_derived) { srcHome = statObj.secondHalf_derived.home || {}; srcAway = statObj.secondHalf_derived.away || {};}
+        const parsePoss = v => { if (v == null) return "-"; if (typeof v === "string" && v.includes("%")) return v; return `${v}%`; };
         if (statElements.possession) statElements.possession.textContent = parsePoss(srcHome.possession) || "-";
         if (statElements.shots) statElements.shots.textContent = `${srcHome.total_shots ?? "-"} / ${srcAway.total_shots ?? "-"}`;
         if (statElements.corners) statElements.corners.textContent = `${srcHome.corners ?? "-"} / ${srcAway.corners ?? "-"}`;
@@ -143,34 +120,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function fetchAndRender(gameId) {
         try {
-            const resp = await fetch(`${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`);
-            if (!resp.ok) throw new Error("Erro ao buscar stats");
-            const data = await resp.json();
+            const r = await fetch(`${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`);
+            if (!r.ok) throw new Error("Erro stats");
+            const data = await r.json();
             const fixture = data.fixture || {};
             const teams = data.teams || {};
-            const home = teams.home || {};
-            const away = teams.away || {};
-            homeTeamEl.textContent = home.name || "Time Casa";
-            awayTeamEl.textContent = away.name || "Time Fora";
-            const goals = data.score || fixture.get?.("goals") || fixture.get?.("score") || {};
-            const h = (data.score && data.score.home!=null) ? data.score.home : (fixture.get && fixture.get("goals") and fixture.get("goals").get("home"));
-            // simpler fallback:
-            const hscore = data.score && data.score.home!=null ? data.score.home : (fixture && fixture.get("goals") and fixture.get("goals").get("home")) || (fixture && fixture.get("score") && fixture.get("score").get("fulltime") && fixture.get("score").fulltime.home) || "-";
-            const ascore = data.score && data.score.away!=null ? data.score.away : "-";
-            scoreEl.textContent = `${hscore} - ${ascore}`;
-            const elapsed = (data.status && data.status.elapsed) || (fixture && fixture.get && fixture.get("status") && fixture.get("status").get("elapsed")) || (data.fixture && data.fixture.status && data.fixture.status.elapsed);
+            const home = teams.home || {}, away = teams.away || {};
+            homeTeamEl.textContent = home.name || "Time Casa"; awayTeamEl.textContent = away.name || "Time Fora";
+            const goals = data.score || fixture.goals || {};
+            const h = (data.score && data.score.home!=null) ? data.score.home : (goals.home!=null ? goals.home : "-");
+            const a = (data.score && data.score.away!=null) ? data.score.away : (goals.away!=null ? goals.away : "-");
+            scoreEl.textContent = `${h} - ${a}`;
+            const elapsed = (data.status && data.status.elapsed) || (fixture && fixture.get && fixture.get("status") && fixture.get("status").elapsed) || (data.fixture && data.fixture.status && data.fixture.status.elapsed);
             minuteEl.textContent = elapsed ? `${elapsed}'` : "-";
-            // stoppage time
-            if (data.estimated_extra) {
-                stoppageBox.classList.remove("hidden");
-                stoppageVal.textContent = data.estimated_extra;
-            } else stoppageBox.classList.add("hidden");
-            // stats
+            if (data.estimated_extra) { stoppageBox.classList.remove("hidden"); stoppageVal.textContent = data.estimated_extra; } else stoppageBox.classList.add("hidden");
             setStatsPanel(data.statistics, currentPeriod === "firstHalf" ? "firstHalf" : (currentPeriod === "secondHalf" ? "secondHalf" : "full"));
             renderEvents(data.events || []);
             dashboard.classList.remove("hidden");
-        } catch (err) {
-            console.error("fetchAndRender", err);
+        } catch (e) {
+            console.error("fetchAndRender", e);
             dashboard.classList.add("hidden");
         }
     }
@@ -202,12 +170,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // lazy load leagues when visible
     const obs = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-            loadLeagues();
-            obs.disconnect();
-        }
+        if (entries[0].isIntersecting) { loadLeagues(); obs.disconnect(); }
     }, { threshold: 0.1 });
     obs.observe(radarSection);
 });
