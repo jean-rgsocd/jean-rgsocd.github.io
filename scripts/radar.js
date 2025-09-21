@@ -1,9 +1,6 @@
-// radar.js - atualizado para casar com radar_ia.py
-// - 60s refresh
-// - busca stats direto da API por período (full, first, second)
-// - eventos com display_time (minuto/seg) e categoria
+// radar.js - atualizado para separar 1ºT, 2ºT e jogo completo
 document.addEventListener("DOMContentLoaded", () => {
-  const RADAR_API = "https://radar-ia-backend.onrender.com"; // ajuste se necessário
+  const RADAR_API = "https://radar-ia-backend.onrender.com";
   const radarSection = document.getElementById("radar-ia-section");
   if (!radarSection) return;
 
@@ -30,8 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPeriod = "full"; // "full", "first", "second"
   let updateInterval = null;
   let latestData = null;
+  let firstHalfStats = null; // snapshot do 1º tempo
 
-  // helpers
+  // utils
   function mapKeysLower(obj = {}) {
     const m = {};
     Object.keys(obj || {}).forEach(k => { m[k.toLowerCase()] = obj[k]; });
@@ -77,18 +75,15 @@ document.addEventListener("DOMContentLoaded", () => {
       eventsEl.innerHTML = "<li>Nenhum evento recente</li>";
       return;
     }
-    // mais recentes primeiro
     events = events.slice().sort((a,b) => (b._sort || 0) - (a._sort || 0));
     events.forEach(ev => {
       const li = document.createElement("li");
       li.className = "flex items-start gap-2 py-1";
-
       const timeLabel = ev.display_time || (ev.raw && ev.raw.time ? formatRawTime(ev.raw.time) : "-");
       const icon = iconFor(ev.category || ev.type || ev.detail || "");
       const detail = ev.detail ? ` — ${ev.detail}` : "";
       const player = ev.player ? ` — ${ev.player}` : "";
       const team = ev.team ? ` (${ev.team})` : "";
-
       li.innerHTML = `<span class="font-semibold text-slate-200">${timeLabel}</span>
                       <span class="ml-2">${icon}</span>
                       <div class="ml-2 text-sm text-slate-300">${(ev.type || '')}${detail}${player}${team}</div>`;
@@ -96,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // listas de candidatos (nomes possíveis vindos da API)
+  // candidatos
   const possessionCandidates = ["possession","ball possession","ball possession%","possession%","possession %"];
   const totalShotsCandidates = ["total_shots","total shots","totalshots","total shots"];
   const onTargetCandidates   = ["shots_on_goal","shots on goal","shots_on_target","shots on target"];
@@ -105,51 +100,63 @@ document.addEventListener("DOMContentLoaded", () => {
   const yellowCandidates     = ["yellow_cards","yellow cards","yellow card","yellow"];
   const redCandidates        = ["red_cards","red cards","red card","red"];
 
-  function getValWithFallback(statsObj, sideObj, side, candidates) {
+  function getValWithFallback(sideObj, candidates) {
     return pickStat(sideObj, candidates) ?? "-";
   }
 
-  function setStatsPanel(statsObj = {}, periodKey = "full") {
-    if (!statsObj) {
+  function setStatsPanel(statsObj = {}) {
+    if (!statsObj || !statsObj.home || !statsObj.away) {
       [statPossEl, statShotsEl, statCornersEl, statFoulsEl, statYellowEl, statRedEl]
         .forEach(el => el && (el.textContent = "-"));
       return;
     }
 
-    let source = statsObj[periodKey] || statsObj.full || {};
-    const home = (source && source.home) || {};
-    const away = (source && source.away) || {};
+    const home = statsObj.home || {};
+    const away = statsObj.away || {};
 
-    // Possession
-    const hPoss = getValWithFallback(statsObj, home, "home", possessionCandidates);
-    const aPoss = getValWithFallback(statsObj, away, "away", possessionCandidates);
-    statPossEl && (statPossEl.textContent = `${hPoss} / ${aPoss}`);
+    const hPoss = getValWithFallback(home, possessionCandidates);
+    const aPoss = getValWithFallback(away, possessionCandidates);
+    statPossEl.textContent = `${hPoss} / ${aPoss}`;
 
-    // Shots
-    const hTotal = getValWithFallback(statsObj, home, "home", totalShotsCandidates);
-    const aTotal = getValWithFallback(statsObj, away, "away", totalShotsCandidates);
-    const hOn = getValWithFallback(statsObj, home, "home", onTargetCandidates);
-    const aOn = getValWithFallback(statsObj, away, "away", onTargetCandidates);
-    statShotsEl && (statShotsEl.textContent = `${hTotal} (${hOn}) / ${aTotal} (${aOn})`);
+    const hTotal = getValWithFallback(home, totalShotsCandidates);
+    const aTotal = getValWithFallback(away, totalShotsCandidates);
+    const hOn = getValWithFallback(home, onTargetCandidates);
+    const aOn = getValWithFallback(away, onTargetCandidates);
+    statShotsEl.textContent = `${hTotal} (${hOn}) / ${aTotal} (${aOn})`;
 
-    // Corners
-    const hCorners = getValWithFallback(statsObj, home, "home", cornersCandidates);
-    const aCorners = getValWithFallback(statsObj, away, "away", cornersCandidates);
-    statCornersEl && (statCornersEl.textContent = `${hCorners} / ${aCorners}`);
+    const hCorners = getValWithFallback(home, cornersCandidates);
+    const aCorners = getValWithFallback(away, cornersCandidates);
+    statCornersEl.textContent = `${hCorners} / ${aCorners}`;
 
-    // Fouls
-    const hFouls = getValWithFallback(statsObj, home, "home", foulsCandidates);
-    const aFouls = getValWithFallback(statsObj, away, "away", foulsCandidates);
-    statFoulsEl && (statFoulsEl.textContent = `${hFouls} / ${aFouls}`);
+    const hFouls = getValWithFallback(home, foulsCandidates);
+    const aFouls = getValWithFallback(away, foulsCandidates);
+    statFoulsEl.textContent = `${hFouls} / ${aFouls}`;
 
-    // Cards
-    const hY = getValWithFallback(statsObj, home, "home", yellowCandidates);
-    const aY = getValWithFallback(statsObj, away, "away", yellowCandidates);
-    statYellowEl && (statYellowEl.textContent = `${hY} / ${aY}`);
+    const hY = getValWithFallback(home, yellowCandidates);
+    const aY = getValWithFallback(away, yellowCandidates);
+    statYellowEl.textContent = `${hY} / ${aY}`;
 
-    const hR = getValWithFallback(statsObj, home, "home", redCandidates);
-    const aR = getValWithFallback(statsObj, away, "away", redCandidates);
-    statRedEl && (statRedEl.textContent = `${hR} / ${aR}`);
+    const hR = getValWithFallback(home, redCandidates);
+    const aR = getValWithFallback(away, redCandidates);
+    statRedEl.textContent = `${hR} / ${aR}`;
+  }
+
+  function computeSecondHalf(fullStats, firstStats) {
+    const result = { home: {}, away: {} };
+    for (const side of ["home", "away"]) {
+      const full = fullStats[side] || {};
+      const first = firstStats[side] || {};
+      const out = {};
+      for (const key in full) {
+        const f = Number(full[key] || 0);
+        const h1 = Number(first[key] || 0);
+        if (!isNaN(f) && !isNaN(h1)) {
+          out[key] = f - h1;
+        }
+      }
+      result[side] = out;
+    }
+    return result;
   }
 
   // carregar ligas
@@ -169,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // carregar jogos ao vivo
+  // carregar jogos
   async function loadGames(leagueId = null) {
     if (!gameSelect) return;
     gameSelect.disabled = true;
@@ -194,21 +201,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // buscar estatísticas por período
-  async function fetchStatsByPeriod(gameId, periodKey = "full") {
-    let url = `${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`;
-    if (periodKey === "first") url += "&period=first";
-    else if (periodKey === "second") url += "&period=second";
+  async function fetchStatsByPeriod(gameId) {
+    const url = `${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`;
     const r = await fetch(url);
     if (!r.ok) throw new Error("Erro ao buscar stats");
     return await r.json();
   }
 
-  // buscar dados e renderizar
   async function fetchAndRender(gameId) {
     if (!gameId) return;
     try {
-      const data = await fetchStatsByPeriod(gameId, currentPeriod);
+      const data = await fetchStatsByPeriod(gameId);
       latestData = data;
 
       const fixture = data.fixture || {};
@@ -229,12 +232,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (data.estimated_extra) {
         stoppageBox?.classList.remove("hidden");
-        stoppageVal && (stoppageVal.textContent = data.estimated_extra);
+        stoppageVal.textContent = data.estimated_extra;
       } else {
         stoppageBox?.classList.add("hidden");
       }
 
-      setStatsPanel(data.statistics || {}, currentPeriod);
+      const fullStats = data.statistics || {};
+
+      // salva snapshot do 1º tempo no intervalo
+      if (data.status?.short === "HT" && !firstHalfStats) {
+        firstHalfStats = JSON.parse(JSON.stringify(fullStats));
+      }
+
+      if (currentPeriod === "first") {
+        setStatsPanel(firstHalfStats || fullStats);
+      } else if (currentPeriod === "second") {
+        if (firstHalfStats) {
+          const second = computeSecondHalf(fullStats, firstHalfStats);
+          setStatsPanel(second);
+        } else {
+          setStatsPanel({});
+        }
+      } else {
+        setStatsPanel(fullStats);
+      }
+
       renderEvents(data.events || []);
       dashboard?.classList.remove("hidden");
     } catch (err) {
@@ -243,7 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // handlers
+  // eventos
   gameSelect?.addEventListener("change", (ev) => {
     const id = ev.target.value;
     clearInterval(updateInterval);
@@ -263,28 +285,17 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   tabs?.forEach(btn => {
-    btn.addEventListener("click", async () => {
+    btn.addEventListener("click", () => {
       tabs.forEach(b => b.classList.remove("bg-cyan-600", "text-white"));
       btn.classList.add("bg-cyan-600", "text-white");
-
       const p = btn.dataset.period;
       if (p === "firstHalf") currentPeriod = "first";
       else if (p === "secondHalf") currentPeriod = "second";
       else currentPeriod = "full";
-
-      if (currentGameId) {
-        try {
-          const data = await fetchStatsByPeriod(currentGameId, currentPeriod);
-          latestData = data;
-          setStatsPanel(data.statistics || {}, currentPeriod);
-        } catch (err) {
-          console.error("Erro ao trocar período", err);
-        }
-      }
+      if (currentGameId) fetchAndRender(currentGameId);
     });
   });
 
-  // carregar ligas assim que a seção entrar na tela
   const obs = new IntersectionObserver(entries => {
     if (entries[0].isIntersecting) {
       loadLeagues();
