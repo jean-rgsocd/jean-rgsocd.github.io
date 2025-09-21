@@ -297,23 +297,33 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   tabs && tabs.forEach(btn => {
-    btn.addEventListener("click", () => {
-      tabs.forEach(b => b.classList.remove("bg-cyan-600","text-white"));
-      btn.classList.add("bg-cyan-600","text-white");
-      const p = btn.dataset.period;
-      if (p === "firstHalf") currentPeriod = "first";
-      else if (p === "secondHalf") currentPeriod = "second";
-      else currentPeriod = "full";
-      if (latestData) setStatsPanel(latestData.statistics || {}, currentPeriod);
-    });
-  });
+  btn.addEventListener("click", () => {
+    tabs.forEach(b => b.classList.remove("bg-cyan-600","text-white"));
+    btn.classList.add("bg-cyan-600","text-white");
 
-  const obs = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting) {
-      loadLeagues();
-      obs.disconnect();
+    const p = btn.dataset.period;
+    if (p === "firstHalf") currentPeriod = "first";
+    else if (p === "secondHalf") currentPeriod = "second";
+    else currentPeriod = "full";
+
+    if (latestData) {
+      const fixture = latestData.fixture || {};
+      const shortStatus = (latestData.status && latestData.status.short) || (fixture && fixture.status && fixture.status.short);
+
+      if (currentPeriod === "second" && shortStatus !== "2H") {
+        // limpa stats do 2º tempo até começar realmente
+        setStatsPanel({}, "second");
+      } else {
+        setStatsPanel(latestData.statistics || {}, currentPeriod);
+      }
     }
-  }, { threshold: 0.1 });
-  obs.observe(radarSection);
+  });
 });
 
+const obs = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) {
+    loadLeagues();
+    obs.disconnect();
+  }
+}, { threshold: 0.1 });
+obs.observe(radarSection);
