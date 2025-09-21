@@ -55,7 +55,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const homeStats = homeStatsData?.statistics || [];
         const awayStats = awayStatsData?.statistics || [];
 
-        const getStat = (stats, name) => (stats.find(s => s.type === name)?.value || 0);
+        const getStat = (stats, name) => {
+            const stat = stats.find(s => s.type === name);
+            return stat ? stat.value : 0;
+        };
         
         statPossessionEl.textContent = `${getStat(homeStats, 'Ball Possession') || 'N/A'}`;
         statShotsEl.textContent = `${getStat(homeStats, 'Total Shots')} (${getStat(homeStats, 'Shots on Goal')}) / ${getStat(awayStats, 'Total Shots')} (${getStat(awayStats, 'Shots on Goal')})`;
@@ -69,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
             data.events.forEach(e => {
                 const li = document.createElement("li");
                 li.className = "truncate";
-                li.textContent = `${e.time.elapsed}' - ${e.type} (${e.detail}) por ${e.player.name}`;
+                li.textContent = `${e.time.elapsed}' - ${e.type} (${e.detail}) por ${e.player.name || 'N/A'}`;
                 eventsEl.appendChild(li);
             });
         } else {
