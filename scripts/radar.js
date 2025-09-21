@@ -1,139 +1,149 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const radarSection = document.getElementById("radar-ia-section");
-    if (!radarSection) return;
+document.addEventListener('DOMContentLoaded', function () {
+    const tipsterSection = document.getElementById('analisador-apostas');
+    if (!tipsterSection) return;
 
-    const RADAR_API = "https://radar-ia-backend.onrender.com";
-
-    const gameSelect = document.getElementById("radar-game-select");
-    const dashboard = document.getElementById("radar-dashboard");
-    const scoreEl = document.getElementById("radar-score");
-    const minuteEl = document.getElementById("radar-minute");
-    const homeTeamEl = document.getElementById("home-team-name");
-    const awayTeamEl = document.getElementById("away-team-name");
-    const eventsEl = document.getElementById("radar-events");
-    const periodButtons = radarSection.querySelectorAll(".period-btn");
-    const stoppagePredictionEl = document.getElementById("stoppage-time-prediction");
-    const stoppageValueEl = document.getElementById("stoppage-time-value");
-
-    let currentData = null;
-    let currentPeriod = "fullGame";
-    let updateInterval = null;
-
-    async function loadLiveGames() {
-        gameSelect.innerHTML = `<option value="">Carregando jogos...</option>`;
-        try {
-            const res = await fetch(`${RADAR_API}/jogos-aovivo`);
-            if (!res.ok) throw new Error("Falha ao buscar jogos");
-            const games = await res.json();
-
-            gameSelect.innerHTML = "";
-            if (games.length === 0) {
-                gameSelect.innerHTML = `<option value="">Nenhum jogo ao vivo no momento</option>`;
-                return;
-            }
-
-            gameSelect.add(new Option("Selecione um jogo para acompanhar", ""));
-            games.forEach(g => gameSelect.add(new Option(g.title, g.game_id)));
-        } catch (err) {
-            gameSelect.innerHTML = `<option value="">Erro ao carregar: ${err.message}</option>`;
-        }
-    }
-
-    function updateStatsView(period) {
-        if (!currentData || !currentData.stats[period]) return;
-
-        const stats = currentData.stats[period];
-        const possession = (period === 'fullGame' && stats.possession) ? stats.possession : currentData.stats.fullGame.possession;
-        
-        document.getElementById("stat-possession").textContent = `${possession.home}% / ${possession.away}%`;
-
-        const shotsOnGoal = stats.shots_on_goal || { home: 0, away: 0 };
-        const totalShots = stats.total_shots || { home: 0, away: 0 };
-        document.getElementById("stat-shots").textContent = `${totalShots.home} (${shotsOnGoal.home}) / ${totalShots.away} (${shotsOnGoal.away})`;
-        
-        document.getElementById("stat-corners").textContent = `${stats.corners.home} / ${stats.corners.away}`;
-        document.getElementById("stat-fouls").textContent = `${stats.fouls.home} / ${stats.fouls.away}`;
-        document.getElementById("stat-yellow-cards").textContent = `${stats.yellow_cards.home} / ${stats.yellow_cards.away}`;
-        document.getElementById("stat-red-cards").textContent = `${stats.red_cards.home} / ${stats.red_cards.away}`;
-
-        periodButtons.forEach(btn => {
-            btn.classList.toggle("bg-cyan-600", btn.dataset.period === period);
-            btn.classList.toggle("text-white", btn.dataset.period === period);
-        });
-    }
-
-    async function fetchGameStats(gameId) {
-        try {
-            const res = await fetch(`${RADAR_API}/stats-aovivo/${gameId}`);
-            if (!res.ok) throw new Error("Falha ao buscar estatísticas");
-            currentData = await res.json();
-            
-            dashboard.classList.remove("hidden");
-
-            homeTeamEl.textContent = currentData.teams.home || "Time Casa";
-            awayTeamEl.textContent = currentData.teams.away || "Time Fora";
-            scoreEl.textContent = currentData.score || "-";
-            minuteEl.textContent = (currentData.minute || "-") + "'";
-
-            updateStatsView(currentPeriod);
-            
-            eventsEl.innerHTML = "";
-            if (currentData.events && currentData.events.length > 0) {
-                currentData.events.forEach(e => {
-                    const li = document.createElement("li");
-                    li.textContent = `${e.minute}' - ${e.type} por ${e.detail}`;
-                    eventsEl.appendChild(li);
-                });
-            } else {
-                eventsEl.innerHTML = "<li>Nenhum evento registrado.</li>";
-            }
-
-            const stoppage = currentData.estimated_stoppage;
-            const minute = currentData.minute;
-            let periodKey = null;
-            if (minute >= 85) periodKey = "second_half";
-            else if (minute >= 40 && minute < 55) periodKey = "first_half";
-
-            if (stoppage && periodKey && stoppage[periodKey]) {
-                stoppageValueEl.textContent = `+${stoppage[periodKey]}`;
-                stoppagePredictionEl.classList.remove("hidden");
-            } else {
-                stoppagePredictionEl.classList.add("hidden");
-            }
-
-        } catch (err) {
-            console.error("Erro ao carregar estatísticas:", err);
-            dashboard.classList.add("hidden");
-        }
-    }
+    const sportSelect = tipsterSection.querySelector('#sport-select');
+    const countryGroup = tipsterSection.querySelector('#country-selector-group');
+    const leagueGroup = tipsterSection.querySelector('#league-selector-group');
+    const gameGroup = tipsterSection.querySelector('#game-selector-group');
+    const countrySelect = tipsterSection.querySelector('#country-select');
+    const leagueSelect = tipsterSection.querySelector('#league-select');
+    const gameSelect = tipsterSection.querySelector('#game-select');
+    const resultsDiv = tipsterSection.querySelector('#bettingResults');
     
-    gameSelect.addEventListener("change", () => {
-        const gameId = gameSelect.value;
-        clearInterval(updateInterval); 
+    // URL do seu backend para o Tipster IA
+    const TIPSTER_BASE_URL = 'https://analisador-apostas.onrender.com';
 
-        if (gameId) {
-            fetchGameStats(gameId); 
-            updateInterval = setInterval(() => fetchGameStats(gameId), 30000); 
-        } else {
-            dashboard.classList.add("hidden");
+    // Função para resetar e desabilitar um seletor
+    const resetSelect = (selectElement, message) => {
+        selectElement.innerHTML = `<option value="">${message}</option>`;
+        selectElement.disabled = true;
+    };
+
+    // Esconde todos os seletores dependentes
+    const hideDependentSelectors = () => {
+        countryGroup.classList.add('hidden');
+        leagueGroup.classList.add('hidden');
+        gameGroup.classList.add('hidden');
+        resultsDiv.classList.add('hidden');
+    };
+
+    const loadCountries = async () => {
+        resetSelect(countrySelect, 'Carregando países...');
+        try {
+            const response = await fetch(`${TIPSTER_BASE_URL}/paises/football`);
+            if (!response.ok) throw new Error('Falha ao buscar países');
+            const countries = await response.json();
+            
+            countrySelect.innerHTML = '<option value="">Selecione o País</option>';
+            countries.forEach(c => countrySelect.add(new Option(c.name, c.code)));
+            countrySelect.disabled = false;
+        } catch (error) {
+            resetSelect(countrySelect, 'Erro ao carregar');
+            console.error(error);
+        }
+    };
+
+    const loadLeagues = async (sport, countryCode = null) => {
+        resetSelect(leagueSelect, 'Carregando ligas...');
+        let url = `${TIPSTER_BASE_URL}/ligas/${sport}`;
+        if (sport === 'football' && countryCode) {
+            url += `?country_code=${countryCode}`;
+        } else if (sport === 'football' && !countryCode) {
+            resetSelect(leagueSelect, 'Selecione um país');
+            return;
+        }
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Falha ao buscar ligas');
+            const leagues = await response.json();
+
+            leagueSelect.innerHTML = '<option value="">Selecione a Liga</option>';
+            if (leagues.length === 0) {
+                 leagueSelect.innerHTML = '<option value="">Nenhuma liga encontrada</option>';
+            } else {
+                 leagues.forEach(l => leagueSelect.add(new Option(l.name, l.id)));
+                 leagueSelect.disabled = false;
+            }
+        } catch (error) {
+            resetSelect(leagueSelect, 'Erro ao carregar');
+            console.error(error);
+        }
+    };
+    
+    const loadGames = async (sport, leagueId) => {
+        if (!sport || !leagueId) return;
+        resetSelect(gameSelect, 'Carregando jogos...');
+        gameGroup.classList.remove('hidden');
+
+        try {
+            const response = await fetch(`${TIPSTER_BASE_URL}/partidas/${sport}/${leagueId}`);
+            if (!response.ok) throw new Error('Falha ao buscar jogos');
+            const games = await response.json();
+            
+            gameSelect.innerHTML = '<option value="">Selecione o Jogo</option>';
+            if (games.length === 0) {
+                gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado</option>';
+            } else {
+                games.forEach(g => {
+                    const date = new Date(g.time).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+                    const optionText = `${g.home} vs ${g.away} (${date})`;
+                    gameSelect.add(new Option(optionText, g.game_id));
+                });
+                gameSelect.disabled = false;
+            }
+        } catch (error) {
+            resetSelect(gameSelect, 'Erro ao carregar');
+            console.error(error);
+        }
+    };
+
+    // --- EVENT LISTENERS ---
+    sportSelect.addEventListener('change', () => {
+        const sport = sportSelect.value;
+        hideDependentSelectors();
+        resetSelect(countrySelect, '...');
+        resetSelect(leagueSelect, '...');
+        resetSelect(gameSelect, '...');
+
+        if (sport) {
+            leagueGroup.classList.remove('hidden');
+            if (sport === 'football') {
+                countryGroup.classList.remove('hidden');
+                loadCountries();
+            } else {
+                loadLeagues(sport);
+            }
         }
     });
 
-    periodButtons.forEach(button => {
-        button.addEventListener("click", () => {
-            currentPeriod = button.dataset.period;
-            updateStatsView(currentPeriod);
-        });
+    countrySelect.addEventListener('change', () => {
+        const sport = sportSelect.value;
+        const countryCode = countrySelect.value;
+        resetSelect(leagueSelect, '...');
+        resetSelect(gameSelect, '...');
+        if (countryCode) {
+            loadLeagues(sport, countryCode);
+        }
     });
 
-    const radarCardButton = document.getElementById('showRadarButton');
-    if(radarCardButton){
-        const observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                loadLiveGames();
-                observer.disconnect();
-            }
-        });
-        observer.observe(radarSection);
-    }
+    leagueSelect.addEventListener('change', () => {
+        const sport = sportSelect.value;
+        const leagueId = leagueSelect.value;
+        resetSelect(gameSelect, '...');
+        resultsDiv.classList.add('hidden');
+        if (leagueId) {
+            loadGames(sport, leagueId);
+        }
+    });
+    
+    gameSelect.addEventListener('change', () => {
+        // A lógica de análise de jogo foi mantida conforme o original,
+        // pois o backend para análise não foi solicitado para refatoração.
+        // Se houver um endpoint de análise, ele seria chamado aqui.
+        resultsDiv.classList.remove('hidden');
+        const gameText = gameSelect.options[gameSelect.selectedIndex].text.split(' (')[0];
+        resultsDiv.innerHTML = `<p class="text-slate-400 text-center">Análise para ${gameText} não implementada neste frontend.</p>`;
+    });
 });
