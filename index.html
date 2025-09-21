@@ -1,152 +1,127 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jean Carlos - Portfólio</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    body { background-color: #0a0f1c; color: #e5e7eb; }
-    .card { background-color: #111827; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-    .glow { box-shadow: 0 0 20px #00e0ff; }
-    .hidden { display: none; }
-    .flex { display: flex; }
-  </style>
 </head>
-<body class="font-sans leading-relaxed tracking-wide flex flex-col">
+<body class="bg-gray-900 text-gray-100">
 
-  <!-- Navbar -->
-  <header class="bg-gray-900 text-gray-200 shadow">
-    <div class="container mx-auto flex justify-between items-center p-4">
-      <h1 class="text-xl font-bold">JCRS</h1>
-      <nav class="space-x-6">
-        <a href="#sobre" class="hover:text-teal-400">Sobre</a>
-        <a href="#competencias" class="hover:text-teal-400">Competências</a>
-        <a href="#jornada" class="hover:text-teal-400">Jornada</a>
-        <a href="#projetos" class="hover:text-teal-400">Projetos</a>
-        <a href="#contato" class="hover:text-teal-400">Contato</a>
+  <!-- Header -->
+  <header class="bg-gray-800 shadow-lg">
+    <div class="max-w-6xl mx-auto flex items-center justify-between p-4">
+      <div class="flex items-center space-x-4">
+        <img src="perfil.jpg" alt="Foto de Perfil" class="w-16 h-16 rounded-full border-2 border-cyan-400">
+        <h1 class="text-2xl font-bold text-cyan-300">Jean Carlos</h1>
+      </div>
+      <nav class="space-x-6 hidden md:flex">
+        <a href="#sobre" class="hover:text-cyan-300">Sobre</a>
+        <a href="#competencias" class="hover:text-cyan-300">Competências</a>
+        <a href="#projetos" class="hover:text-cyan-300">Projetos</a>
+        <a href="#tipster" class="hover:text-cyan-300">Tipster IA</a>
+        <a href="#radar" class="hover:text-cyan-300">Radar IA</a>
+        <a href="#contato" class="hover:text-cyan-300">Contato</a>
       </nav>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="text-center mt-12">
-    <img src="https://via.placeholder.com/150" alt="Foto Jean Carlos" class="rounded-full mx-auto glow w-40 h-40 object-cover">
-    <h2 class="text-3xl font-bold mt-6">Painel de Competências</h2>
-    <p class="mt-2 text-gray-400">Uma visão interativa das minhas habilidades na interseção entre gestão, segurança e inovação.</p>
+  <!-- Seção Sobre -->
+  <section id="sobre" class="max-w-6xl mx-auto py-16 px-4">
+    <h2 class="text-3xl font-bold text-cyan-300 mb-6">Sobre Mim</h2>
+    <p class="text-gray-300 leading-relaxed">
+      Sou Jean Carlos, desenvolvedor apaixonado por tecnologia e soluções baseadas em IA. 
+      Tenho experiência em projetos que unem inovação, análise de dados e interfaces modernas para entregar resultados reais.
+    </p>
   </section>
 
-  <!-- Competências -->
-  <section id="competencias" class="container mx-auto mt-16 px-6">
-    <div class="flex space-x-6 justify-center">
-      <button class="tab-btn text-teal-400" data-tab="cyber">Cybersecurity</button>
-      <button class="tab-btn" data-tab="gestao">Gestão</button>
-      <button class="tab-btn" data-tab="tec">Tecnologias</button>
-      <button class="tab-btn" data-tab="ia">IA</button>
-      <button class="tab-btn" data-tab="juridico">Jurídico</button>
-    </div>
-    <div id="cyber" class="tab-content mt-6">
-      <h3 class="text-xl font-bold">Ethical Hacking & Cyber Defense</h3>
-      <ul class="list-disc ml-6 mt-2">
-        <li>Análise de Segurança e Mitigação de Riscos (XSS, CSRF, SQL Injection)</li>
-        <li>Avaliação de Resiliência via Pentesting</li>
-        <li>Automação com Linux e Scripting</li>
-        <li>Arquitetura de Segurança de Aplicações</li>
-        <li>Resposta a incidentes e forense digital</li>
+  <!-- Seção Competências -->
+  <section id="competencias" class="bg-gray-800 py-16 px-4">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-cyan-300 mb-6">Competências</h2>
+      <ul class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <li class="bg-gray-900 p-4 rounded-lg shadow">JavaScript / Node.js</li>
+        <li class="bg-gray-900 p-4 rounded-lg shadow">Python / FastAPI</li>
+        <li class="bg-gray-900 p-4 rounded-lg shadow">APIs e Integrações</li>
+        <li class="bg-gray-900 p-4 rounded-lg shadow">TailwindCSS</li>
+        <li class="bg-gray-900 p-4 rounded-lg shadow">Banco de Dados SQL/NoSQL</li>
+        <li class="bg-gray-900 p-4 rounded-lg shadow">Machine Learning</li>
       </ul>
     </div>
   </section>
 
-  <!-- Jornada -->
-  <section id="jornada" class="container mx-auto mt-20 px-6">
-    <h2 class="text-2xl font-bold text-center">Jornada Profissional e Acadêmica</h2>
-    <div class="grid md:grid-cols-2 gap-6 mt-10">
-      <div class="card">MBA em Cybersecurity (Cursando)</div>
-      <div class="card">MBA em Gestão de Projetos em TI (Cursando)</div>
-      <div class="card">Tecnólogo em Inteligência Artificial (Cursando)</div>
-      <div class="card">Ethical Hacking</div>
-      <div class="card">Tecnólogo em Serviços Jurídicos</div>
-      <div class="card">Analista Esportivo</div>
-      <div class="card">Gerente Operacional</div>
+  <!-- Seção Projetos -->
+  <section id="projetos" class="max-w-6xl mx-auto py-16 px-4">
+    <h2 class="text-3xl font-bold text-cyan-300 mb-6">Projetos</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h3 class="text-xl font-bold text-cyan-200 mb-2">Tipster IA</h3>
+        <p class="text-gray-300">
+          Plataforma inteligente de análise pré-jogo em Futebol, NBA e NFL com integração API-Sports.
+        </p>
+      </div>
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h3 class="text-xl font-bold text-cyan-200 mb-2">Radar IA</h3>
+        <p class="text-gray-300">
+          Sistema de estatísticas ao vivo e cálculo do Índice de Pressão para acompanhar jogos em tempo real.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção Tipster IA -->
+  <section id="tipster" class="bg-gray-800 py-16 px-4">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-cyan-300 mb-6">Tipster IA</h2>
+
+      <div class="grid md:grid-cols-3 gap-4 mb-6">
+        <select id="sportSelect" class="p-2 rounded bg-gray-900 border border-gray-700">
+          <option value="">Selecione um esporte</option>
+          <option value="football">Futebol</option>
+          <option value="nba">NBA</option>
+          <option value="nfl">NFL</option>
+        </select>
+
+        <div id="leagueSelectorGroup">
+          <select id="leagueSelect" class="p-2 rounded bg-gray-900 border border-gray-700">
+            <option value="">Selecione uma liga</option>
+          </select>
+        </div>
+
+        <select id="gameSelect" class="p-2 rounded bg-gray-900 border border-gray-700">
+          <option value="">Selecione um jogo</option>
+        </select>
+      </div>
+
+      <div id="bettingResults" class="hidden"></div>
     </div>
   </section>
 
-  <!-- Projetos -->
-  <section id="projetos" class="container mx-auto mt-20 px-6">
-    <h2 class="text-2xl font-bold text-center">Projetos Destacados</h2>
-    <div class="grid md:grid-cols-3 gap-6 mt-10">
-      <!-- Tipster -->
-      <div class="card text-center">
-        <h3 class="text-xl font-bold text-teal-400">Tipster IA</h3>
-        <p class="mt-2">Engine de análise esportiva com dados de API em tempo real.</p>
-        <button class="mt-4 bg-teal-500 px-4 py-2 rounded-lg text-white ver-projeto" data-projeto="tipster">Ver Projeto</button>
-      </div>
-      <!-- Radar -->
-      <div class="card text-center">
-        <h3 class="text-xl font-bold text-teal-400">Radar IA</h3>
-        <p class="mt-2">Monitoramento de jogos ao vivo com estatísticas em tempo real.</p>
-        <button class="mt-4 bg-teal-500 px-4 py-2 rounded-lg text-white ver-projeto" data-projeto="radar">Ver Projeto</button>
-      </div>
-      <!-- Gerador -->
-      <div class="card text-center">
-        <h3 class="text-xl font-bold text-teal-400">Gerador de Prompts</h3>
-        <p class="mt-2">Ferramenta interativa para otimizar prompts de IA.</p>
-        <button class="mt-4 bg-teal-500 px-4 py-2 rounded-lg text-white">Abrir</button>
-      </div>
+  <!-- Seção Radar IA -->
+  <section id="radar" class="max-w-6xl mx-auto py-16 px-4">
+    <h2 class="text-3xl font-bold text-cyan-300 mb-6">Radar IA</h2>
+    <p class="text-gray-300">Aqui vão os dados ao vivo e o índice de pressão dos jogos em tempo real.</p>
+    <!-- Dá pra integrar o radar.js aqui -->
+  </section>
+
+  <!-- Seção Contato -->
+  <section id="contato" class="bg-gray-800 py-16 px-4">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-cyan-300 mb-6">Contato</h2>
+      <p class="text-gray-300 mb-4">Entre em contato comigo para colaborações ou oportunidades:</p>
+      <p class="text-gray-400">Email: <a href="mailto:jean@email.com" class="text-cyan-400">jean@email.com</a></p>
+      <p class="text-gray-400">LinkedIn: <a href="https://linkedin.com/in/jean" class="text-cyan-400">linkedin.com/in/jean</a></p>
+      <p class="text-gray-400">GitHub: <a href="https://github.com/jean-rgsocd" class="text-cyan-400">github.com/jean-rgsocd</a></p>
     </div>
-
-    <!-- Containers dos Projetos -->
-    <div id="tipster-app" class="space-y-4">
-  <select id="sportSelect" class="p-2 rounded bg-slate-800 text-white w-full">
-    <option value="">Selecione um esporte</option>
-    <option value="football">Futebol</option>
-    <option value="nba">NBA</option>
-    <option value="nfl">NFL</option>
-  </select>
-
-  <div id="leagueSelectorGroup" style="display:none;">
-    <select id="leagueSelect" class="p-2 rounded bg-slate-800 text-white w-full">
-      <option value="">Selecione uma liga</option>
-    </select>
-  </div>
-
-  <select id="gameSelect" class="p-2 rounded bg-slate-800 text-white w-full" disabled>
-    <option value="">Selecione um jogo</option>
-  </select>
-
-  <div id="bettingResults" class="hidden mt-4"></div>
-</div>
-    <div id="radar-container" class="hidden mt-10 card"></div>
-    <div id="radar-app" class="space-y-4">
-  <!-- Selecionar liga -->
-  <select id="radar-league-select" class="p-2 rounded bg-slate-800 text-white w-full">
-    <option value="">Selecione uma liga</option>
-  </select>
-
-  <!-- Selecionar jogo -->
-  <select id="radar-game-select" class="p-2 rounded bg-slate-800 text-white w-full" disabled>
-    <option value="">Selecione um jogo</option>
-  </select>
-
-  <!-- Resultados -->
-  <div id="radar-results-panel" class="mt-4 text-slate-200">
-    <p class="text-slate-500">Selecione um jogo para ver estatísticas ao vivo.</p>
-  </div>
-</div>
-
   </section>
 
-  <!-- Contato -->
-  <section id="contato" class="container mx-auto mt-20 px-6 text-center">
-    <h2 class="text-2xl font-bold">Em que posso te ajudar?</h2>
-    <p class="mt-2 text-gray-400">Entre em contato para colaborações, parcerias ou projetos.</p>
-  </section>
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-center py-6 border-t border-gray-700">
+    <p class="text-gray-500">&copy; 2025 Jean Carlos - Todos os direitos reservados.</p>
+  </footer>
 
   <!-- Scripts -->
-<script src="categorias/index.js"></script>
-<script src="ferramentas/index.js"></script>
-<script src="projetos/tipster.js"></script>
-<script src="projetos/radar.js"></script>
-<script src="projetos/navegacao.js"></script>
+  <script src="tipster.js"></script>
+  <script src="radar.js"></script>
 </body>
 </html>
