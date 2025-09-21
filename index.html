@@ -1,168 +1,125 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jean Carlos - Portfólio</title>
-  <link rel="icon" href="assets/images/perfil.jpg" />
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <style>
-    body { background-color: #030712; color: #e2e8f0; }
-    .btn { @apply px-3 py-2 bg-cyan-500 text-slate-900 rounded-md font-medium hover:bg-cyan-400; }
-    .modal { display: none; }
-    .modal.flex { display: flex; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio | Jean Carlos Ribeiro da Silva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:," />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        .font-mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+        .text-glow {
+            text-shadow: 0 0 5px #00e6e6, 0 0 8px #00e6e6;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .typed-cursor {
+            color: #00e6e6;
+            animation: typedjsBlink 0.7s infinite;
+        }
+        @keyframes typedjsBlink {
+            50% { opacity: 0.0; }
+        }
+        .jornada-card {
+            position: relative;
+        }
+        .jornada-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            background-color: #0d1117;
+            border: 3px solid #00e6e6;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00e6e6;
+            z-index: 1;
+        }
+        .vulnerable-status { color: #ef4444; }
+        .secure-status { color: #34d399; }
+        .scan-status-low { background-color: #1a222c; border-color: #34d399; }
+        .scan-status-medium { background-color: #1a222c; border-color: #fbbf24; }
+        .scan-status-high { background-color: #1a222c; border-color: #ef4444; }
+        .progress-bar { background-color: #1a222c; }
+        .progress-bar-fill { background-color: #00e6e6; }
+        .tab-button.active { border-color: #00e6e6; color: #00e6e6; }
+    </style>
 </head>
-<body class="font-sans">
+<body class="antialiased">
 
-  <!-- Header -->
-  <header class="p-6 flex justify-between items-center border-b border-slate-800">
-    <div class="flex items-center gap-3">
-      <img src="assets/images/perfil.jpg" alt="Foto de perfil" class="w-12 h-12 rounded-full border-2 border-cyan-400" />
-      <h1 class="text-2xl font-bold text-cyan-300">Jean Carlos</h1>
-    </div>
-    <nav class="space-x-4">
-      <a href="#sobre" class="hover:text-cyan-400">Sobre</a>
-      <a href="#competencias" class="hover:text-cyan-400">Competências</a>
-      <a href="#projetos" class="hover:text-cyan-400">Projetos</a>
-      <a href="#ferramentas" class="hover:text-cyan-400">Ferramentas</a>
-    </nav>
-  </header>
+    <header class="bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-slate-800">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold font-mono text-cyan-300 text-glow">JCRS</div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#sobre" class="text-slate-300 hover:text-cyan-300 transition">Sobre</a>
+                <a href="#competencias" class="text-slate-300 hover:text-cyan-300 transition">Competências</a>
+                <a href="#jornada" class="text-slate-300 hover:text-cyan-300 transition">Jornada</a>
+                <a href="#projetos" class="text-slate-300 hover:text-cyan-300 transition">Projetos</a>
+                <a href="#contato" class="text-slate-300 hover:text-cyan-300 transition">Contato</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-slate-300 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden px-6 pb-4 space-y-2 bg-slate-900">
+            <a href="#sobre" class="block text-slate-300 hover:text-cyan-300 transition py-2">Sobre</a>
+            <a href="#competencias" class="block text-slate-300 hover:text-cyan-300 transition py-2">Competências</a>
+            <a href="#jornada" class="block text-slate-300 hover:text-cyan-300 transition py-2">Jornada</a>
+            <a href="#projetos" class="block text-slate-300 hover:text-cyan-300 transition py-2">Projetos</a>
+            <a href="#contato" class="block text-slate-300 hover:text-cyan-300 transition py-2">Contato</a>
+        </div>
+    </header>
 
-  <!-- Sobre -->
-  <section id="sobre" class="p-6 max-w-3xl mx-auto">
-    <h2 class="text-xl font-bold text-cyan-400 mb-2">Sobre mim</h2>
-    <p class="text-slate-300 leading-relaxed">
-      Sou desenvolvedor focado em <span class="text-cyan-400">IA aplicada</span>, automações e segurança cibernética.
-      Experiência com <strong>Python</strong>, <strong>FastAPI</strong>, <strong>APIs</strong> e integrações complexas.
-    </p>
-  </section>
+    <main class="container mx-auto px-6">
+        </main>
 
-  <!-- Competências -->
-  <section id="competencias" class="p-6 max-w-4xl mx-auto">
-    <h2 class="text-xl font-bold text-cyan-400 mb-4">Competências</h2>
-    <ul class="grid grid-cols-2 md:grid-cols-3 gap-3 text-slate-300">
-      <li>Python & FastAPI</li>
-      <li>APIs REST / Webhooks</li>
-      <li>Integrações de IA</li>
-      <li>Segurança Web</li>
-      <li>Banco de Dados</li>
-      <li>Frontend (Tailwind, JS)</li>
-    </ul>
-  </section>
+    <footer id="contato" class="bg-slate-900 text-slate-300 border-t border-slate-800">
+        </footer>
 
-  <!-- Projetos -->
-  <section id="projetos" class="p-6 max-w-5xl mx-auto">
-    <h2 class="text-xl font-bold text-cyan-400 mb-4">Projetos</h2>
-    <div class="grid md:grid-cols-2 gap-4">
-      <div class="bg-[#071023] p-4 rounded-lg border border-slate-700">
-        <h4 class="font-semibold text-slate-100">Portfólio Interativo</h4>
-        <p class="text-slate-300 text-sm mt-1">Site pessoal com design responsivo e integração de ferramentas.</p>
-      </div>
-      <div class="bg-[#071023] p-4 rounded-lg border border-slate-700">
-        <h4 class="font-semibold text-slate-100">Opta IA (em andamento)</h4>
-        <p class="text-slate-300 text-sm mt-1">Integração de dados esportivos com inteligência artificial.</p>
-      </div>
-    </div>
-  </section>
+    <script> const promptsData = {}; </script>
+    <script src="categorias/advocacia.js"></script>
+    <script src="categorias/artes-criativas.js"></script>
+    <script src="categorias/copywriters.js"></script>
+    <script src="categorias/corporativos.js"></script>
+    <script src="categorias/criativos.js"></script>
+    <script src="categorias/desenvolvedores-e-ti.js"></script>
+    <script src="categorias/educacao.js"></script>
+    <script src="categorias/empreendedorismo.js"></script>
+    <script src="categorias/entretenimento.js"></script>
+    <script src="categorias/escrita.js"></script>
+    <script src="categorias/estudantes.js"></script>
+    <script src="categorias/financas.js"></script>
+    <script src="categorias/fitness.js"></script>
+    <script src="categorias/marketing.js"></script>
+    <script src="categorias/negocios.js"></script>
+    <script src="categorias/professores.js"></script>
+    <script src="categorias/programacao.js"></script>
+    <script src="categorias/saude.js"></script>
+    <script src="categorias/tecnologia.js"></script>
+    <script src="categorias/youtubers.js"></script>
+    
+    <script src="scripts/main.js" defer></script>
+    <script src="scripts/navigation.js" defer></script>
+    <script src="scripts/scanner.js" defer></script>
+    <script src="scripts/tipster.js" defer></script>
+    <script src="scripts/prompts.js" defer></script>
 
-  <!-- Ferramentas -->
-  <section id="ferramentas" class="p-6 max-w-6xl mx-auto">
-    <h2 class="text-xl font-bold text-cyan-400 mb-4">Ferramentas</h2>
-    <div class="grid md:grid-cols-3 gap-4">
-
-      <!-- Tipster -->
-      <div class="bg-[#071023] p-4 rounded-lg border border-slate-700">
-        <h4 class="font-semibold text-slate-100">Tipster IA</h4>
-        <p class="text-slate-300 text-sm mt-1">Análises pré-jogo para Futebol, NBA e NFL.</p>
-        <button class="btn mt-3" onclick="openModal('modal-tipster')">Abrir</button>
-      </div>
-
-      <!-- Radar -->
-      <div class="bg-[#071023] p-4 rounded-lg border border-slate-700">
-        <h4 class="font-semibold text-slate-100">Radar IA</h4>
-        <p class="text-slate-300 text-sm mt-1">Monitoramento ao vivo de jogos e índice de pressão.</p>
-        <button class="btn mt-3" onclick="openModal('modal-radar')">Abrir</button>
-      </div>
-
-      <!-- Gerador de Prompts -->
-      <div class="bg-[#071023] p-4 rounded-lg border border-slate-700">
-        <h4 class="font-semibold text-slate-100">Gerador de Prompts</h4>
-        <p class="text-slate-300 text-sm mt-1">Sugestões otimizadas para imagens, vídeos e IA.</p>
-        <button class="btn mt-3" onclick="openModal('modal-prompts')">Abrir</button>
-      </div>
-
-      <!-- Analisador de Segurança Web -->
-      <div class="bg-[#071023] p-4 rounded-lg border border-slate-700">
-        <h4 class="font-semibold text-slate-100">Analisador de Segurança Web</h4>
-        <p class="text-slate-300 text-sm mt-1">Ferramenta demonstrativa para testar URLs e possíveis falhas básicas.</p>
-        <button class="btn mt-3" onclick="openModal('modal-scanner')">Abrir</button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="p-6 text-center text-slate-500 border-t border-slate-800">
-    © 2025 Jean Carlos — Todos os direitos reservados
-  </footer>
-
-  <!-- Modals existentes -->
-  <div id="modal-tipster" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
-    <div class="bg-[#071023] w-full max-w-3xl rounded-lg p-6">
-      <h3 class="text-cyan-300 font-bold mb-2">Tipster IA</h3>
-      <div id="tipster-content"></div>
-    </div>
-  </div>
-
-  <div id="modal-radar" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
-    <div class="bg-[#071023] w-full max-w-3xl rounded-lg p-6">
-      <h3 class="text-cyan-300 font-bold mb-2">Radar IA</h3>
-      <div id="radar-content"></div>
-    </div>
-  </div>
-
-  <div id="modal-prompts" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
-    <div class="bg-[#071023] w-full max-w-3xl rounded-lg p-6">
-      <h3 class="text-cyan-300 font-bold mb-2">Gerador de Prompts</h3>
-      <div id="prompts-content"></div>
-    </div>
-  </div>
-
-  <!-- Modal Scanner -->
-  <div id="modal-scanner" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
-    <div class="bg-[#071023] w-full max-w-2xl rounded-lg p-6">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-cyan-300 font-bold">Analisador de Segurança Web</h3>
-        <button class="text-slate-300" onclick="closeModal('modal-scanner')">Fechar ✕</button>
-      </div>
-
-      <label for="scanner-url" class="text-slate-300">Digite a URL do site:</label>
-      <input id="scanner-url" type="text" placeholder="https://exemplo.com"
-        class="w-full mt-2 p-2 rounded bg-slate-900 border border-slate-700 text-slate-200" />
-
-      <button id="scanner-run" class="mt-3 px-4 py-2 bg-cyan-500 text-slate-900 rounded font-semibold">Analisar</button>
-
-      <div id="scanner-results" class="mt-4 text-slate-300 text-sm space-y-2"></div>
-    </div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="scripts/navigation.js"></script>
-  <script src="scripts/tipster.js"></script>
-  <script src="scripts/radar.js"></script>
-  <script src="scripts/prompts.js"></script>
-  <script src="scripts/imagens.js"></script>
-  <script src="scripts/scanner.js"></script>
-  <script>
-    function openModal(id) {
-      const el = document.getElementById(id);
-      if (el) { el.classList.remove('hidden'); el.classList.add('flex'); }
-    }
-    function closeModal(id) {
-      const el = document.getElementById(id);
-      if (el) { el.classList.add('hidden'); el.classList.remove('flex'); }
-    }
-  </script>
 </body>
 </html>
