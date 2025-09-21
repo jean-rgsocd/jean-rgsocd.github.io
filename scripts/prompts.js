@@ -2,24 +2,29 @@ document.addEventListener('DOMContentLoaded', function () {
     const promptGeneratorSection = document.getElementById('prompt-generator-section');
     if (!promptGeneratorSection) return;
 
-    // --- LÓGICA GERAL DAS ABAS ---
-    const promptTabs = document.querySelectorAll('#prompt-generator-section .tab-button');
-    const promptContents = document.querySelectorAll('#prompt-generator-section .tab-content');
+    // --- LÓGICA CORRIGIDA DAS ABAS DO GERADOR DE PROMPTS ---
+    const promptTabs = promptGeneratorSection.querySelectorAll('.tab-button');
+    const promptContents = promptGeneratorSection.querySelectorAll('.tab-content');
     
     promptTabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            const targetId = tab.id.replace('tab-', 'content-');
+            const targetId = tab.getAttribute('data-tab'); // Correção: Lendo o atributo 'data-tab'
             
             promptTabs.forEach(t => {
                 t.classList.remove('active', 'text-cyan-300', 'border-cyan-300');
-                t.classList.add('text-slate-400', 'border-transparent', 'hover:text-slate-200', 'hover:border-slate-500');
+                t.classList.add('text-slate-400', 'border-transparent');
             });
             
             tab.classList.add('active', 'text-cyan-300', 'border-cyan-300');
             tab.classList.remove('text-slate-400', 'border-transparent');
             
-            promptContents.forEach(content => content.classList.add('hidden'));
-            document.getElementById(targetId).classList.remove('hidden');
+            promptContents.forEach(content => {
+                if (content.id === targetId) {
+                    content.classList.remove('hidden');
+                } else {
+                    content.classList.add('hidden');
+                }
+            });
         });
     });
 
@@ -65,20 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // --- ABA 2: GERADOR DE PROMPTS (IMAGENS) - Lógica migrada de imagens.js ---
-    const promptsPorEstilo = {
-        "photorealistic": (descricao, qualidade) => `Hyper-realistic, cinematic portrait of a person with ${descricao}, 8K photo, with dramatic studio lighting, soft shadows, sharp focus, capturing fine details and natural skin textures. No filter, no blur, high resolution. --ar 9:16 --v 6.0`,
-        "digital art": (descricao, qualidade) => `Digital art of a person with ${descricao}, in a magical atmosphere, with glowing elements and vibrant colors. Highly detailed, artistic lighting, concept art style. ${qualidade}.`,
-        "cartoon": (descricao, qualidade) => `Animated portrait of a person with ${descricao}, in a vibrant cartoon style. 2D animation, clean lines, colorful, minimalist background, playful expression. ${qualidade}.`,
-        "fantasy art": (descricao, qualidade) => `Epic fantasy art portrait of a person with ${descricao}, in a majestic setting. Dynamic pose, flowing clothes, dramatic lighting, rich colors, intricate details. ${qualidade}.`,
-        "impressionist": (descricao, qualidade) => `Impressionist style painting of a person with ${descricao}. Soft, visible brushstrokes, luminous colors, vibrant lighting, emotional mood. ${qualidade}.`,
-    };
-            
-    const promptsProntos = {
-        "Retrato Fashion em Preto e Branco": "Black and white fashion portrait of a handsome young man looking over his shoulder. He is wearing a stylish black leather jacket and modern rectangular red sunglasses. The background is a seamless, minimalist white studio backdrop with blue circle ring. The lighting is dramatic high-contrast studio lighting, creating sharp focus and highlighting the texture of the leather jacket. --ar 9:16 --v 6.0",
-        // ... (todos os outros prompts prontos que você tinha)
-    };
-
+    // --- ABA 2: GERADOR DE PROMPTS (IMAGENS) ---
     const estiloSelect = document.getElementById('estilo-imagem');
     const descricaoInput = document.getElementById('descricao-imagem');
     const qualidadeSelect = document.getElementById('qualidade-imagem');
@@ -86,27 +78,34 @@ document.addEventListener('DOMContentLoaded', function () {
     const outputImagem = document.getElementById('prompt-imagem-output');
     const copiarBtnImagem = document.getElementById('copiar-prompt-imagem');
     
-    if(estiloSelect) {
-        const descricaoWrapper = descricaoInput.closest('.mb-6');
-        const qualidadeWrapper = qualidadeSelect.closest('.mb-6');
+    // As funções para gerar os prompts de imagem
+    const promptsPorEstilo = {
+        "photorealistic": (descricao, qualidade) => `Hyper-realistic, cinematic portrait of ${descricao}, 8K photo, dramatic studio lighting, soft shadows, sharp focus. --ar 9:16 --v 6.0`,
+        "digital art": (descricao, qualidade) => `Digital art of ${descricao}, magical atmosphere, glowing elements, vibrant colors, highly detailed, concept art style. ${qualidade}.`,
+        "cartoon": (descricao, qualidade) => `Animated portrait of ${descricao}, vibrant cartoon style, 2D animation, clean lines, colorful, minimalist background. ${qualidade}.`,
+        "fantasy art": (descricao, qualidade) => `Epic fantasy art portrait of ${descricao}, majestic setting, dynamic pose, flowing clothes, dramatic lighting, rich colors. ${qualidade}.`,
+        "impressionist": (descricao, qualidade) => `Impressionist style painting of ${descricao}, soft visible brushstrokes, luminous colors, vibrant lighting. ${qualidade}.`,
+    };
 
+    const promptsProntos = {
+        "Retrato Fashion P&B": "Black and white fashion portrait of a handsome young man looking over his shoulder. He is wearing a stylish black leather jacket and modern rectangular red sunglasses. The background is a seamless, minimalist white studio backdrop with blue circle ring. The lighting is dramatic high-contrast studio lighting, creating sharp focus. --ar 9:16 --v 6.0",
+        "Guerreira Fantasia": "Epic fantasy art portrait of a female warrior with intricate armor, standing on a mountain peak at sunset. Dynamic pose, flowing cape, dramatic lighting, rich colors, intricate details. --ar 9:16 --v 6.0"
+    };
+            
+    if (estiloSelect) {
         estiloSelect.addEventListener('change', () => {
             const estilo = estiloSelect.value;
-            qualidadeSelect.innerHTML = '';
-            qualidadeSelect.disabled = true;
-
+            const descricaoWrapper = descricaoInput.closest('.mb-6');
+            
             if (estilo === 'prompts-prontos') {
                 descricaoWrapper.classList.add('hidden');
-                qualidadeWrapper.classList.remove('hidden');
-                qualidadeSelect.disabled = false;
-                qualidadeSelect.innerHTML = '<option value="">Selecione um prompt pronto...</option>';
+                qualidadeSelect.innerHTML = '<option value="">Selecione um prompt...</option>';
                 for (const titulo in promptsProntos) {
                     qualidadeSelect.add(new Option(titulo, titulo));
                 }
             } else {
                 descricaoWrapper.classList.remove('hidden');
-                qualidadeWrapper.classList.remove('hidden');
-                qualidadeSelect.disabled = false;
+                qualidadeSelect.innerHTML = '';
                 const originalQualities = [
                     { value: ", ultra detailed, 8K", text: "Ultra detalhada, 8K" },
                     { value: ", high quality, sharp focus", text: "Alta qualidade, foco nítido" },
@@ -114,72 +113,38 @@ document.addEventListener('DOMContentLoaded', function () {
                 ];
                 originalQualities.forEach(item => qualidadeSelect.add(new Option(item.text, item.value)));
             }
-        });
-
-        qualidadeSelect.addEventListener('change', () => {
-            if (estiloSelect.value === 'prompts-prontos' && qualidadeSelect.value) {
-                outputImagem.value = promptsProntos[qualidadeSelect.value];
-                gerarBtnImagem.textContent = 'Copiar Prompt Selecionado';
-            } else {
-                outputImagem.value = "Seu prompt aparecerá aqui...";
-                gerarBtnImagem.textContent = 'Gerar Prompt de Imagem';
-            }
+            outputImagem.value = "Seu prompt aparecerá aqui...";
         });
     }
 
-    if(gerarBtnImagem) {
+    if (gerarBtnImagem) {
         gerarBtnImagem.addEventListener('click', () => {
             const estilo = estiloSelect.value;
             if (estilo === 'prompts-prontos') {
-                outputImagem.select();
-                document.execCommand('copy');
-                gerarBtnImagem.textContent = 'Copiado!';
-                setTimeout(() => { gerarBtnImagem.textContent = 'Copiar Prompt Selecionado'; }, 2000);
+                const promptSelecionado = qualidadeSelect.value;
+                if (promptSelecionado && promptsProntos[promptSelecionado]) {
+                    outputImagem.value = promptsProntos[promptSelecionado];
+                } else {
+                    outputImagem.value = "Por favor, selecione um prompt pronto da lista.";
+                }
             } else {
                 const descricao = descricaoInput.value.trim();
                 const qualidade = qualidadeSelect.value;
-                if (descricao) {
-                    outputImagem.value = promptsPorEstilo[estilo] ? promptsPorEstilo[estilo](descricao, qualidade) : "Estilo não encontrado.";
+                if (descricao && promptsPorEstilo[estilo]) {
+                    outputImagem.value = promptsPorEstilo[estilo](descricao, qualidade);
                 } else {
-                    outputImagem.value = "Por favor, descreva a cena desejada.";
+                    outputImagem.value = "Por favor, descreva a cena e selecione um estilo.";
                 }
             }
         });
     }
-
-    if(copiarBtnImagem) {
+    
+    if (copiarBtnImagem) {
         copiarBtnImagem.addEventListener('click', () => {
             outputImagem.select();
             document.execCommand('copy');
             copiarBtnImagem.textContent = 'Copiado!';
             setTimeout(() => { copiarBtnImagem.textContent = 'Copiar'; }, 2000);
         });
-    }
-
-    // --- ABA 3: PROMPTS DE VÍDEOS (Lógica migrada de videos.js) ---
-    // Adicione IDs ao seu HTML para esta parte funcionar:
-    // <select id="vid-type">, <select id="vid-tone">, <button onclick="generateVideoPrompt()">, <textarea id="vid-result">
-    window.generateVideoPrompt = function() {
-        const type = document.getElementById('vid-type').value;
-        const tone = document.getElementById('vid-tone').value;
-        const prompt = `VEO 3 MASTER PROMPT v4.0\nCreate a ${type.toLowerCase()} video with a ${tone.toLowerCase()} tone.\nRequirements:\n- Cinematic transitions\n- Professional pacing\n- Engaging visuals\n- Narrative depth.`;
-        document.getElementById('vid-result').innerText = prompt;
-    }
-
-    // --- ABA 4: FERRAMENTAS DE IA (Lógica migrada de ia.js) ---
-    // Adicione IDs ao seu HTML:
-    // <select id="ai-tool">, <textarea id="ai-input">, <button onclick="runAITool()">, <p id="ai-result">
-    window.runAITool = function() {
-        const tool = document.getElementById('ai-tool').value;
-        const text = document.getElementById('ai-input').value;
-        let result = "";
-        if (tool === "Summarizer") {
-            result = "Summary: " + text.split(" ").slice(0, 20).join(" ") + "...";
-        } else if (tool === "Translator") {
-            result = "[Translated to English] " + text;
-        } else if (tool === "Creative Rewriter") {
-            result = "Creative rewrite: " + text.replace(/\bAI\b/gi, "Artificial Intelligence (AI)").replace("world","world in transformation");
-        }
-        document.getElementById('ai-result').innerText = result;
     }
 });
