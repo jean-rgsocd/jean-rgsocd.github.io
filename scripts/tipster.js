@@ -34,19 +34,20 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!res.ok) throw new Error('Falha ao buscar países');
             const data = await res.json();
             countrySelect.innerHTML = '<option value="">Selecione País</option>';
-            data.forEach(c => countrySelect.add(new Option(c.name, c.code)));
+            // <-- CORREÇÃO PRINCIPAL AQUI: O valor da opção agora é o NOME do país
+            data.forEach(c => countrySelect.add(new Option(c.name, c.name))); 
         } catch (err) {
             resetSelect(countrySelect, err.message);
         }
     };
 
     const loadLeagues = async () => {
-        const countryCode = countrySelect.value;
-        if (!countryCode) return;
+        const countryName = countrySelect.value; // Agora pega o NOME do país
+        if (!countryName) return;
         leagueSelect.innerHTML = '<option value="">Carregando...</option>';
         leagueSelect.disabled = false;
         try {
-            const res = await fetch(`${TIPSTER_BASE_URL}/ligas/football/${countryCode}`);
+            const res = await fetch(`${TIPSTER_BASE_URL}/ligas/football/${countryName}`); // Envia o NOME
             if (!res.ok) throw new Error('Falha ao buscar ligas');
             const data = await res.json();
             leagueSelect.innerHTML = '<option value="">Selecione Liga</option>';
@@ -81,7 +82,8 @@ document.addEventListener('DOMContentLoaded', function () {
             resetSelect(gameSelect, err.message);
         }
     };
-
+    
+    // O resto do arquivo permanece o mesmo
     const fetchAnalysis = async (gameId, status) => {
         if (!gameId) { resultsDiv.classList.add('hidden'); return; }
         resultsDiv.classList.remove('hidden');
@@ -120,13 +122,15 @@ document.addEventListener('DOMContentLoaded', function () {
             countryGroup.classList.add('flex');
             leagueGroup.classList.remove('hidden');
             leagueGroup.classList.add('flex');
+            gameGroup.classList.remove('lg:col-span-2');
+            gameGroup.classList.add('lg:col-span-1');
             loadCountries();
         } else if (sport === 'basketball') {
-            gameGroup.classList.remove('lg:col-span-2');
-            loadGames('basketball', 12); // NBA
+            gameGroup.classList.add('lg:col-span-2');
+            loadGames('basketball', 12); 
         } else if (sport === 'american-football') {
-            gameGroup.classList.remove('lg:col-span-2');
-            loadGames('american-football', 16); // NFL
+            gameGroup.classList.add('lg:col-span-2');
+            loadGames('american-football', 16); 
         }
     });
 
