@@ -104,10 +104,123 @@
         </section>
 
         <section id="competencias" class="py-24">
-            </section>
+            <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Painel de Competências</h2>
+            <p class="text-center text-slate-400 mb-12 max-w-3xl mx-auto">Uma visão interativa das minhas habilidades na intersecção entre gestão, segurança e inovação.</p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="relative w-full max-w-md mx-auto h-80 md:h-96">
+                    <canvas id="skillsChart"></canvas>
+                </div>
+                <div>
+                    <div class="mb-4 border-b border-slate-700">
+                        <nav class="-mb-px flex space-x-6 overflow-x-auto" aria-label="Tabs">
+                            <button data-tab="cybersecurity" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-cyan-300 border-cyan-300">Cybersecurity</button>
+                            <button data-tab="gestao" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Gestão</button>
+                            <button data-tab="tech" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Tecnologias</button>
+                            <button data-tab="ia" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">IA</button>
+                            <button data-tab="juridico" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-500">Jurídico</button>
+                        </nav>
+                    </div>
+                    <div class="tab-content" id="cybersecurity-content">
+                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Ethical Hacking & Cyber Defense</h3>
+                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li>Análise de Segurança e Mitigação de Riscos (XSS, CSRF, SQL Injection).</li>
+                            <li>Avaliação de Resiliência de Sistemas via Pentesting.</li>
+                            <li>Automação para Defesa Cibernética com Linux e Scripting.</li>
+                            <li>Arquitetura de Segurança de Aplicações Web e APIs.</li>
+                            <li>Resposta a incidentes e forense digital.</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content hidden" id="gestao-content">
+                       <h3 class="font-bold text-lg mb-3 text-cyan-300">Gestão de Projetos de TI</h3>
+                       <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li>Planejamento Estratégico: Definição de escopo, cronograma e viabilidade.</li>
+                            <li>Metodologias: Aplicação de frameworks Ágeis (Scrum) e tradicionais (PMBOK).</li>
+                            <li>Gerenciamento de Riscos e Qualidade: Análise de riscos e garantia de entregas (QA).</li>
+                            <li>Gestão de Recursos: Alocação de orçamento, equipes e controle de custos.</li>
+                            <li>Liderança e Comunicação: Condução de equipes e gestão de stakeholders.</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content hidden" id="tech-content">
+                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Infraestrutura e Desenvolvimento</h3>
+                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li><strong>Desenvolvimento:</strong> HTML, CSS, JavaScript, PHP, SQL.</li>
+                            <li><strong>Sistemas Operacionais:</strong> Gerenciamento de ambientes Windows e Linux.</li>
+                            <li><strong>Redes:</strong> Configuração e análise de protocolos TCP/IP.</li>
+                            <li><strong>Cloud:</strong> Fundamentos de AWS e Azure.</li>
+                            <li><strong>Ferramentas de Segurança:</strong> Burp Suite, Nmap, Wireshark, Metasploit.</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content hidden" id="ia-content">
+                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Inteligência Artificial e Dados</h3>
+                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li>Machine Learning: Modelos de classificação, regressão e clusterização.</li>
+                            <li>Deep Learning: Construção e treinamento de redes neurais para tarefas complexas.</li>
+                            <li>Processamento de Linguagem Natural (NLP) para análise de texto.</li>
+                            <li>Visão Computacional para reconhecimento de padrões em imagens.</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content hidden" id="juridico-content">
+                        <h3 class="font-bold text-lg mb-3 text-cyan-300">Serviços Jurídicos, Cartorários e Notariais</h3>
+                        <ul class="space-y-2 text-slate-400 list-disc list-inside">
+                            <li>Gestão e organização de documentos legais e processos judiciais.</li>
+                            <li>Conhecimento das rotinas de cartórios de notas, protestos e registro de imóveis.</li>
+                            <li>Elaboração de relatórios e suporte administrativo para escritórios e departamentos jurídicos.</li>
+                            <li>Base para automação de tarefas e implementação de tecnologia no setor (Legal Tech).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <section id="jornada" class="py-24">
-            </section>
+            <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Jornada Profissional e Acadêmica</h2>
+            <p class="text-center text-slate-400 mb-16 max-w-3xl mx-auto">Uma visão organizada da minha experiência e formação, narrando minha transição e evolução na área de tecnologia.</p>
+            <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+                
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">MBA em Cybersecurity</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Foco em arquitetura de sistemas seguros, defesa contra ameaças digitais e gestão de riscos para proteger ativos de informação críticos.</p>
+                </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">MBA em Gestão de Projetos em TI</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Especialização no planejamento e execução de projetos, aplicando metodologias ágeis e tradicionais para garantir entregas eficientes.</p>
+                </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2025 – Cursando</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Tecnólogo em Inteligência Artificial</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Desenvolvimento de soluções com machine learning e modelos preditivos para automação e análise de dados complexos.</p>
+                </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Set/2025</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Ethical Hacking</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Simulação de ataques cibernéticos para identificar e corrigir vulnerabilidades, fortalecendo a segurança de forma proativa.</p>
+                </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jun/2023 – Jun/2025</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Tecnólogo em Serviços Jurídicos</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Base de conhecimento legal e regulatório, fundamental para a conformidade (compliance) em projetos de tecnologia.</p>
+                </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2020 – Atual</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Analista Esportivo</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Condução de análises de prognósticos e estatísticas para desenvolver modelos preditivos.</p>
+                </div>
+
+                <div class="jornada-card bg-slate-800/50 p-6 rounded-lg border border-slate-700 hover:border-cyan-400 transition-all duration-300 md:col-span-2">
+                    <p class="text-sm text-cyan-300 font-semibold font-mono">Jan/2018 – Dez/2020</p>
+                    <h3 class="font-bold text-xl text-slate-100 mt-1">Gerente Operacional</h3>
+                    <p class="mt-2 text-slate-400 text-sm">Gestão da operação, otimizando fluxos de trabalho e liderando a equipe.</p>
+                </div>
+            </div>
+        </section>
 
         <section id="projetos" class="py-24">
             <div class="max-w-4xl mx-auto">
@@ -115,35 +228,107 @@
                     <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Projetos Destacados</h2>
                     <p class="text-center text-slate-400 mb-12 max-w-3xl mx-auto">Uma amostra do meu trabalho, demonstrando a aplicação prática das minhas competências.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400">
-                           </div>
-                        <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400">
-                             </div>
-                        <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400">
+                        <div id="portfolio-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
+                            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Portf%C3%B3lio+Interativo" alt="Imagem do Projeto Portfólio Interativo" class="w-full h-auto object-cover border-b border-slate-700">
+                            <div class="p-8">
+                                <h3 class="font-bold text-xl mb-2 text-slate-100">Portfólio Interativo Pessoal</h3>
+                                <p class="text-slate-400 mb-6">Desenvolvi este portfólio para apresentar minhas competências e jornada de forma moderna e visualmente atraente.</p>
+                                <div class="mb-6">
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span>
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">TailwindCSS</span>
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
+                                </div>
+                                <a href="https://jean-rgsocd.github.io" target="_blank" rel="noopener noreferrer" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Ver Projeto</a>
                             </div>
-                        <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400">
-                           </div>
-                        <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400">
-                           </div>
-                        <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-not-allowed">
-                           </div>
+                        </div>
+
+                        <div id="prompts-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
+                            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Gerador+de+Prompts" alt="Imagem do projeto Gerador de Prompts" class="w-full h-auto object-cover border-b border-slate-700">
+                            <div class="p-8">
+                                <h3 class="font-bold text-xl mb-2 text-slate-100">Gerador de Prompts Interativo</h3>
+                                <p class="text-slate-400 mb-6">Ferramenta para otimizar prompts para diferentes IAs, como ChatGPT e geradores de imagens e vídeos.</p>
+                                <div class="mb-6">
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span>
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">TailwindCSS</span>
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
+                                </div>
+                                <button id="showPromptsButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Ver Projeto</button>
+                            </div>
+                        </div>
+
+                        <div id="scanner-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
+                            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Analisador+de+Seguran%C3%A7a+Web" alt="Imagem do projeto Analisador de Segurança Web" class="w-full h-auto object-cover border-b border-slate-700">
+                            <div class="p-8">
+                                <h3 class="font-bold text-xl mb-2 text-slate-100">Analisador de Segurança Web</h3>
+                                <p class="text-slate-400 mb-6">Ferramenta de demonstração que simula uma análise de segurança profissional e identifica vulnerabilidades.</p>
+                                <div class="mb-6">
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">HTML</span>
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Ethical Hacking</span>
+                                </div>
+                                <button id="showScannerButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Ver Projeto</button>
+                            </div>
+                        </div>
+
+                        <div id="betting-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-pointer">
+                            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Tipster+IA" alt="Imagem do projeto Tipster IA" class="w-full h-auto object-cover border-b border-slate-700">
+                            <div class="p-8">
+                                <h3 class="font-bold text-xl mb-2 text-slate-100">Tipster IA</h3>
+                                <p class="text-slate-400 mb-6">Uma engine de análise esportiva que utiliza uma API para processar estatísticas, odds de mercado e dados H2H, gerando insights e sugestões de apostas de forma autônoma.</p>
+                                <div class="mb-6">
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Python</span>
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">FastAPI</span>
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">API-Sports</span>
+                                </div>
+                                <button id="showBettingButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Ver Projeto</button>
+                            </div>
+                        </div>
+
+                        <div id="radar-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-not-allowed">
+                            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Radar+IA" alt="Imagem do Radar IA" class="w-full h-auto object-cover border-b border-slate-700">
+                            <div class="p-8">
+                                <h3 class="font-bold text-xl mb-2 text-slate-100">Radar IA</h3>
+                                <p class="text-slate-400 mb-6">Uma engine de monitoramento esportivo que coleta dados em tempo real, ainda em desenvolvimento.</p>
+                                <div class="mb-6">
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Python</span>
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">FastAPI</span>
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
+                                </div>
+                                <button class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors cursor-not-allowed">Em andamento</button>
+                            </div>
+                        </div>
+
+                        <div id="opta-project-card" class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400 cursor-not-allowed">
+                            <img src="https://placehold.co/800x400/0d1117/00e6e6?text=OPTA+IA" alt="Imagem do OPTA IA" class="w-full h-auto object-cover border-b border-slate-700">
+                            <div class="p-8">
+                                <h3 class="font-bold text-xl mb-2 text-slate-100">OPTA IA</h3>
+                                <p class="text-slate-400 mb-6">Uma engine de análise avançada baseada em estatísticas OPTA, ainda em desenvolvimento.</p>
+                                <div class="mb-6">
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">Python</span>
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">FastAPI</span>
+                                    <span class="font-mono inline-block bg-cyan-900/50 text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">JavaScript</span>
+                                </div>
+                                <button class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors cursor-not-allowed">Em andamento</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </div> 
                 
-                <div id="analisador-seguranca-web" class="hidden py-12">
+                 <div id="analisador-seguranca-web" class="hidden py-12">
                      </div>
-                <div id="analisador-apostas" class="hidden py-12">
+                 <div id="analisador-apostas" class="hidden py-12">
                      </div>
-                <div id="prompt-generator-section" class="hidden py-12">
-                    </div>
-                <div id="radar-ia-section" class="hidden py-12">
+                 <div id="prompt-generator-section" class="hidden py-12">
+                     </div>
+                 <div id="radar-ia-section" class="hidden py-12">
                     <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 rounded-lg shadow-lg border border-slate-700">
                         <div class="flex justify-between items-center mb-6">
                             <h3 class="font-bold text-xl text-slate-100">Radar IA</h3>
                             <button id="hideRadarButton" class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Retornar</button>
                         </div>
                         <p class="text-slate-400 mb-6">Esta seção integrará o projeto Radar IA para monitoramento e análise de estatísticas de jogos em tempo real.</p>
-                        </div>
+                    </div>
                 </div>
             </div>
         </section>
