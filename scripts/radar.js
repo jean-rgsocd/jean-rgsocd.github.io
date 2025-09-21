@@ -229,44 +229,53 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function fetchAndRender(gameId) {
-    if (!gameId) return;
-    try {
-      const r = await fetch(`${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`);
-      if (!r.ok) throw new Error("Erro ao buscar stats");
-      const data = await r.json();
-      latestData = data;
+  if (!gameId) return;
+  try {
+    const r = await fetch(`${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`);
+    if (!r.ok) throw new Error("Erro ao buscar stats");
+    const data = await r.json();
+    latestData = data;
 
-      const fixture = data.fixture || {};
-      const teams = data.teams || {};
-      const home = teams.home || {};
-      const away = teams.away || {};
+    const fixture = data.fixture || {};
+    const teams = data.teams || {};
+    const home = teams.home || {};
+    const away = teams.away || {};
 
-      homeTeamEl.textContent = home.name || "Time Casa";
-      awayTeamEl.textContent = away.name || "Time Fora";
+    homeTeamEl.textContent = home.name || "Time Casa";
+    awayTeamEl.textContent = away.name || "Time Fora";
 
-      const goals = data.score || fixture.goals || {};
-      const h = (data.score && data.score.home != null) ? data.score.home : (goals.home != null ? goals.home : "-");
-      const a = (data.score && data.score.away != null) ? data.score.away : (goals.away != null ? goals.away : "-");
-      scoreEl.textContent = `${h} - ${a}`;
+    const goals = data.score || fixture.goals || {};
+    const h = (data.score && data.score.home != null) ? data.score.home : (goals.home != null ? goals.home : "-");
+    const a = (data.score && data.score.away != null) ? data.score.away : (goals.away != null ? goals.away : "-");
+    scoreEl.textContent = `${h} - ${a}`;
 
-      const elapsed = (data.status && data.status.elapsed) || (fixture && fixture.status && fixture.status.elapsed) || null;
-      minuteEl.textContent = elapsed ? `${elapsed}'` : "-";
+    const elapsed = (data.status && data.status.elapsed) || (fixture && fixture.status && fixture.status.elapsed) || null;
+    minuteEl.textContent = elapsed ? `${elapsed}'` : "-";
 
-      if (data.estimated_extra) {
-        stoppageBox && stoppageBox.classList.remove("hidden");
-        stoppageVal && (stoppageVal.textContent = data.estimated_extra);
-      } else {
-        stoppageBox && stoppageBox.classList.add("hidden");
-      }
-
-      setStatsPanel(data.statistics || {}, currentPeriod);
-      renderEvents(data.events || []);
-      dashboard && dashboard.classList.remove("hidden");
-    } catch (err) {
-      console.error("fetchAndRender error", err);
-      dashboard && dashboard.classList.add("hidden");
+    if (data.estimated_extra) {
+      stoppageBox && stoppageBox.classList.remove("hidden");
+      stoppageVal && (stoppageVal.textContent = data.estimated_extra);
+    } else {
+      stoppageBox && stoppageBox.classList.add("hidden");
     }
+
+    // >>> AQUI entra a lógica nova <<<
+    const shortStatus = (data.status && data.status.short) || (fixture && fixture.status && fixture.status.short);
+    if (currentPeriod === "second" && shortStatus !== "2H") {
+      // limpa stats do 2º tempo até começar o 2T
+      setStatsPanel({}, "second");
+    } else {
+      setStatsPanel(data.statistics || {}, currentPeriod);
+    }
+
+    renderEvents(data.events || []);
+    dashboard && dashboard.classList.remove("hidden");
+  } catch (err) {
+    console.error("fetchAndRender error", err);
+    dashboard && dashboard.classList.add("hidden");
   }
+}
+
 
   // handlers
   gameSelect && gameSelect.addEventListener("change", (ev) => {
@@ -307,3 +316,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.1 });
   obs.observe(radarSection);
 });
+
