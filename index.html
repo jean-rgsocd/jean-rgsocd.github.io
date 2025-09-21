@@ -311,46 +311,50 @@
                  </div>
                  
                  <div id="analisador-apostas" class="hidden py-12">
-                     <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 md:p-8 rounded-lg shadow-lg border border-slate-700">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="font-bold text-2xl text-slate-100">Tipster IA - Análise Esportiva</h3>
-                            <button id="hideBettingButton" class="whitespace-nowrap bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Retornar</button>
-                        </div>
-                        <p class="text-slate-400 mb-8">Selecione o esporte, a liga e o jogo para receber uma análise baseada em dados e estatísticas processadas pela minha API de backend.</p>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                            <div class="flex flex-col space-y-2">
-                                <label for="sport-select" class="text-sm font-medium text-slate-400">Esporte</label>
-                                <select id="sport-select" class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                                    <option value="">Selecione</option>
-                                    <option value="football">Futebol</option>
-                                    <option value="basketball">Basquete (NBA)</option>
-                                    <option value="american-football">Futebol Americano (NFL)</option>
-                                </select>
-                            </div>
-                            <div id="country-selector-group" class="form-group flex flex-col space-y-2">
-    <label for="country-select" class="text-sm font-medium text-slate-400">País</label>
-    <select id="country-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
-        <option value="">Selecione</option>
-    </select>
-</div>                          
-                            <div id="league-selector-group" class="flex flex-col space-y-2">
-                                <label for="league-select" class="text-sm font-medium text-slate-400">Liga</label>
-                                <select id="league-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
-                                    <option value="">Selecione um Esporte</option>
-                                </select>
-                            </div>
-                            <div class="flex flex-col space-y-2">
-                                <label for="game-select" class="text-sm font-medium text-slate-400">Jogo</label>
-                                <select id="game-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
-                                    <option value="">Selecione</option>
-                                </select>
-                            </div>
-                        </div>
+    <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 md:p-8 rounded-lg shadow-lg border border-slate-700">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="font-bold text-2xl text-slate-100">Tipster IA - Análise Esportiva</h3>
+            <button id="hideBettingButton" class="whitespace-nowrap bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Retornar</button>
+        </div>
+        <p class="text-slate-400 mb-8">Selecione o esporte, o país (para futebol) e a liga para receber uma análise baseada em dados e estatísticas processadas pela minha API de backend.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="tipster-selectors">
+            
+            <div class="form-group flex flex-col space-y-2">
+                <label for="sport-select" class="text-sm font-medium text-slate-400">Esporte</label>
+                <select id="sport-select" class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    <option value="">Selecione</option>
+                    <option value="football">Futebol</option>
+                    <option value="basketball">Basquete (NBA)</option>
+                    <option value="american-football">Futebol Americano (NFL)</option>
+                </select>
+            </div>
 
-                        <div id="bettingResults" class="hidden mt-8 space-y-4"></div>
-                    </div>
-                 </div>
+            <div id="country-selector-group" class="form-group flex-col space-y-2 hidden">
+                <label for="country-select" class="text-sm font-medium text-slate-400">País</label>
+                <select id="country-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+            
+            <div id="league-selector-group" class="form-group flex-col space-y-2 hidden">
+                <label for="league-select" class="text-sm font-medium text-slate-400">Liga</label>
+                <select id="league-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+            
+            <div id="game-selector-group" class="form-group flex-col space-y-2 hidden lg:col-span-2">
+                <label for="game-select" class="text-sm font-medium text-slate-400">Jogo</label>
+                <select id="game-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="bettingResults" class="hidden mt-8 space-y-4"></div>
+    </div>
+</div>
                  
                  <div id="prompt-generator-section" class="hidden py-12">
                     <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 md:p-8 rounded-lg shadow-lg border border-slate-700">
