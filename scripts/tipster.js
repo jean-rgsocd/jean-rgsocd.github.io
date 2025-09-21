@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const tipsterSection = document.getElementById('analisador-apostas');
     if (!tipsterSection) return;
 
+    // Seletores de elementos da UI
     const sportSelect = tipsterSection.querySelector('#sport-select');
     const countryGroup = tipsterSection.querySelector('#country-selector-group');
     const leagueGroup = tipsterSection.querySelector('#league-selector-group');
@@ -9,10 +10,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const countrySelect = tipsterSection.querySelector('#country-select');
     const leagueSelect = tipsterSection.querySelector('#league-select');
     const gameSelect = tipsterSection.querySelector('#game-select');
-    const resultsDiv = tipsterSection.querySelector('#bettingResults');
     
+    // URL do backend do Tipster
     const TIPSTER_BASE_URL = 'https://analisador-apostas.onrender.com';
 
+    // Funções de utilidade
     const resetSelect = (selectElement, message) => {
         selectElement.innerHTML = `<option value="">${message}</option>`;
         selectElement.disabled = true;
@@ -22,11 +24,12 @@ document.addEventListener('DOMContentLoaded', function () {
         countryGroup.classList.add('hidden');
         leagueGroup.classList.add('hidden');
         gameGroup.classList.add('hidden');
-        resultsDiv.classList.add('hidden');
     };
 
+    // Funções de carregamento de dados
     const loadCountries = async () => {
-        resetSelect(countrySelect, 'Carregando países...');
+        resetSelect(countrySelect, 'Carregando...');
+        countryGroup.classList.remove('hidden');
         try {
             const response = await fetch(`${TIPSTER_BASE_URL}/paises/football`);
             if (!response.ok) throw new Error('Falha ao buscar países');
@@ -37,12 +40,12 @@ document.addEventListener('DOMContentLoaded', function () {
             countrySelect.disabled = false;
         } catch (error) {
             resetSelect(countrySelect, 'Erro ao carregar');
-            console.error(error);
         }
     };
 
     const loadLeagues = async (countryCode) => {
-        resetSelect(leagueSelect, 'Carregando ligas...');
+        resetSelect(leagueSelect, 'Carregando...');
+        leagueGroup.classList.remove('hidden');
         try {
             const response = await fetch(`${TIPSTER_BASE_URL}/ligas/football?country_code=${countryCode}`);
             if (!response.ok) throw new Error('Falha ao buscar ligas');
@@ -57,12 +60,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } catch (error) {
             resetSelect(leagueSelect, 'Erro ao carregar');
-            console.error(error);
         }
     };
     
     const loadGames = async (sport, leagueId = null) => {
         resetSelect(gameSelect, 'Carregando jogos...');
+        gameGroup.classList.remove('hidden');
+        
         let url = `${TIPSTER_BASE_URL}/partidas/${sport}`;
         if (leagueId) {
             url += `?league_id=${leagueId}`;
@@ -70,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
         try {
             const response = await fetch(url);
-            if (!response.ok) throw new Error('Falha ao buscar jogos');
+            if (!response.ok) throw new Error(`Falha ao buscar jogos (${response.status})`);
             const games = await response.json();
             
             gameSelect.innerHTML = '<option value="">Selecione o Jogo</option>';
@@ -100,15 +104,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!sport) return;
 
-        // REESTRUTURAÇÃO DO FLUXO
         if (sport === 'football') {
-            countryGroup.classList.remove('hidden');
-            leagueGroup.classList.remove('hidden');
-            gameGroup.classList.remove('hidden');
             loadCountries();
         } else if (sport === 'basketball' || sport === 'american-football') {
-            gameGroup.classList.remove('hidden');
-            loadGames(sport); // Chama os jogos diretamente
+            loadGames(sport);
         }
     });
 
@@ -127,11 +126,5 @@ document.addEventListener('DOMContentLoaded', function () {
         if (leagueId) {
             loadGames('football', leagueId);
         }
-    });
-    
-    gameSelect.addEventListener('change', () => {
-        resultsDiv.classList.remove('hidden');
-        const gameText = gameSelect.options[gameSelect.selectedIndex].text.split(' (')[0];
-        resultsDiv.innerHTML = `<p class="text-slate-400 text-center">Análise para ${gameText} não implementada.</p>`;
     });
 });
