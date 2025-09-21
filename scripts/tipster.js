@@ -1,12 +1,12 @@
 // scripts/tipster.js
-// CORRIGIDO E REESCRITO
+// Versão COMPLETA E CORRIGIDA
 
 document.addEventListener('DOMContentLoaded', function () {
     const sportSelect = document.getElementById('sport-select');
     if (!sportSelect) return;
 
     const leagueSelectorGroup = document.getElementById('league-selector-group');
-    const countrySelectorGroup = document.getElementById('country-selector-group'); // Mantido para esconder/mostrar
+    const countrySelectorGroup = document.getElementById('country-selector-group'); 
     const leagueSelect = document.getElementById('league-select');
     const gameSelect = document.getElementById('game-select');
     const bettingResultsDiv = document.getElementById('bettingResults');
@@ -103,19 +103,18 @@ document.addEventListener('DOMContentLoaded', function () {
         bettingResultsDiv.classList.add('hidden');
         resetAndDisable(gameSelect, 'Selecione um Jogo');
 
-        // Esconde o seletor de país, pois não será mais usado
         if(countrySelectorGroup) countrySelectorGroup.style.display = 'none';
 
         if (sport === 'football') {
             leagueSelectorGroup.style.display = 'block';
             resetAndDisable(leagueSelect, 'Selecione uma Liga');
             loadLeagues('football');
-        } else if (sport === 'basketball') { // NBA
+        } else if (sport === 'basketball') { 
             leagueSelectorGroup.style.display = 'none';
-            loadGames('basketball', 12); // ID da NBA é 12
-        } else if (sport === 'american-football') { // NFL
+            loadGames('basketball', 12); 
+        } else if (sport === 'american-football') {
             leagueSelectorGroup.style.display = 'none';
-            loadGames('american-football', 16); // ID da NFL é 16
+            loadGames('american-football', 16); 
         } else {
             leagueSelectorGroup.style.display = 'block';
             resetAndDisable(leagueSelect, 'Selecione um esporte');
