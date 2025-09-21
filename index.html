@@ -96,7 +96,26 @@
     </div>
 
     <!-- Containers dos Projetos -->
-    <div id="tipster-container" class="hidden mt-10 card"></div>
+    <div id="tipster-app" class="space-y-4">
+  <select id="sportSelect" class="p-2 rounded bg-slate-800 text-white w-full">
+    <option value="">Selecione um esporte</option>
+    <option value="football">Futebol</option>
+    <option value="nba">NBA</option>
+    <option value="nfl">NFL</option>
+  </select>
+
+  <div id="leagueSelectorGroup" style="display:none;">
+    <select id="leagueSelect" class="p-2 rounded bg-slate-800 text-white w-full">
+      <option value="">Selecione uma liga</option>
+    </select>
+  </div>
+
+  <select id="gameSelect" class="p-2 rounded bg-slate-800 text-white w-full" disabled>
+    <option value="">Selecione um jogo</option>
+  </select>
+
+  <div id="bettingResults" class="hidden mt-4"></div>
+</div>
     <div id="radar-container" class="hidden mt-10 card"></div>
   </section>
 
