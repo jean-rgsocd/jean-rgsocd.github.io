@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const awayTeamEl   = document.getElementById("away-team-name");
   const eventsEl     = document.getElementById("radar-events");
   const stoppageBox  = document.getElementById("stoppage-time-prediction");
-  const stoppageVal  = document.getElementById("stoppage-time-value");
 
   const statPossEl   = document.getElementById("stat-possession");
   const statShotsEl  = document.getElementById("stat-shots");
@@ -21,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const statFoulsEl  = document.getElementById("stat-fouls");
   const statYellowEl = document.getElementById("stat-yellow-cards");
   const statRedEl    = document.getElementById("stat-red-cards");
-  const statDangerEl = document.getElementById("stat-dangerous-attacks"); // NOVO
+  const statDangerEl = document.getElementById("stat-dangerous-attacks"); // ataques perigosos
 
   let currentGameId = null;
   let updateInterval = null;
@@ -101,12 +100,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const foulsCandidates      = ["fouls","foul"];
   const yellowCandidates     = ["yellow_cards","yellow cards","yellow"];
   const redCandidates        = ["red_cards","red cards","red"];
-  const dangerCandidates     = ["dangerous_attacks","dangerous attacks","attacks dangerous"]; // NOVO
+  const dangerCandidates     = ["dangerous_attacks","dangerous attacks","attacks dangerous","attacks"]; // incl. attacks simples
 
   function setStatsPanel(statsObj = {}) {
     if (!statsObj || !statsObj.home || !statsObj.away) {
       [statPossEl, statShotsEl, statCornersEl, statFoulsEl, statYellowEl, statRedEl, statDangerEl]
-        .forEach(el => el && (el.textContent = "-"));
+        .forEach(el => el && (el.textContent = "- / -"));
       return;
     }
 
@@ -144,7 +143,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ----------------------
-  // carregar ligas
   async function loadLeagues() {
     leagueSelect.disabled = true;
     leagueSelect.innerHTML = `<option>Carregando ligas...</option>`;
@@ -159,7 +157,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // carregar jogos
   async function loadGames(leagueId = null) {
     gameSelect.disabled = true;
     gameSelect.innerHTML = `<option>Carregando jogos ao vivo...</option>`;
@@ -182,9 +179,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ----------------------
   async function fetchStats(gameId) {
-    let url = `${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`;
+    const url = `${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`;
     const r = await fetch(url);
     if (!r.ok) throw new Error("Erro ao buscar stats");
     return await r.json();
@@ -219,8 +215,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ----------------------
-  // eventos
   gameSelect?.addEventListener("change", (ev) => {
     const id = ev.target.value;
     clearInterval(updateInterval);
@@ -239,7 +233,6 @@ document.addEventListener("DOMContentLoaded", () => {
     loadGames(lid);
   });
 
-  // ----------------------
   const obs = new IntersectionObserver(entries => {
     if (entries[0].isIntersecting) {
       loadLeagues();
