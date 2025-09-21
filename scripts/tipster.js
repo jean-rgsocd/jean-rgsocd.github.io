@@ -1,5 +1,4 @@
-// tipster.js - frontend para Tipster IA (Futebol, NBA, NFL)
-// Todos os esportes: ao vivo + hoje + 2 dias
+// tipster.js - frontend Tipster otimizado (cache local, usa /futebol, /nba, /nfl)
 document.addEventListener('DOMContentLoaded', function () {
     const tipsterSection = document.getElementById('analisador-apostas');
     if (!tipsterSection) return;
@@ -14,6 +13,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const TIPSTER_BASE_URL = 'https://analisador-apostas.onrender.com';
 
+    // caches locais
+    let footballGames = null;
+    let nbaGames = null;
+    let nflGames = null;
+
     // esconder selects inicialmente
     if (countryGroup) countryGroup.classList.add('hidden');
     if (leagueGroup) leagueGroup.classList.add('hidden');
@@ -24,127 +28,122 @@ document.addEventListener('DOMContentLoaded', function () {
         selectEl.disabled = true;
     };
 
-    // ao mudar o esporte
     sportSelect.addEventListener('change', async () => {
         const sport = sportSelect.value;
-
-        reset(countrySelect, 'Selecione um país');
-        reset(leagueSelect, 'Selecione uma liga');
+        reset(countrySelect, 'Escolha um país');
+        reset(leagueSelect, 'Escolha uma liga');
         reset(gameSelect, 'Selecione um jogo');
         countryGroup.classList.add('hidden');
         leagueGroup.classList.add('hidden');
         gameGroup.classList.add('hidden');
 
         if (sport === 'football') {
-            // Futebol → fluxo: país -> liga -> jogo
+            // carregar jogos (cache)
             countryGroup.classList.remove('hidden');
-            try {
-                const resp = await fetch(`${TIPSTER_BASE_URL}/futebol`);
-                const games = await resp.json();
-
-                // montar lista única de países a partir dos jogos
-                const countries = [...new Set(games.map(g => g.league?.country).filter(Boolean))];
-                countrySelect.innerHTML = `<option value="">Escolha um país</option>`;
-                countries.forEach(c => countrySelect.add(new Option(c, c)));
-                countrySelect.disabled = false;
-            } catch (err) {
-                countrySelect.innerHTML = `<option value="">Erro ao carregar países</option>`;
+            countrySelect.innerHTML = `<option>Carregando...</option>`;
+            if (!footballGames) {
+                try {
+                    const resp = await fetch(`${TIPSTER_BASE_URL}/futebol`);
+                    footballGames = await resp.json();
+                } catch (err) {
+                    countrySelect.innerHTML = `<option>Erro ao carregar</option>`;
+                    console.error(err);
+                    return;
+                }
             }
+            // extrair países das ligas
+            const countries = Array.from(new Set(footballGames.map(g => (g.league && g.league.country) || null).filter(Boolean))).sort();
+            countrySelect.innerHTML = `<option value="">Escolha um país</option>`;
+            countries.forEach(c => countrySelect.add(new Option(c, c)));
+            countrySelect.disabled = false;
         } else if (sport === 'nba') {
-            // NBA → jogos diretos
             gameGroup.classList.remove('hidden');
-            try {
-                const resp = await fetch(`${TIPSTER_BASE_URL}/nba`);
-                const games = await resp.json();
-                gameSelect.innerHTML = `<option value="">Selecione um jogo</option>`;
-                games.forEach(g => {
-                    const home = g.teams?.home?.name || "Home";
-                    const away = g.teams?.away?.name || "Away";
-                    const date = g.date ? new Date(g.date).toLocaleString() : "-";
-                    const label = `${home} vs ${away} - ${date} ${g.type === "live" ? "(AO VIVO)" : ""}`;
-                    gameSelect.add(new Option(label, g.game_id));
-                });
-                gameSelect.disabled = false;
-            } catch (err) {
-                gameSelect.innerHTML = `<option value="">Erro ao carregar jogos NBA</option>`;
+            gameSelect.innerHTML = `<option>Carregando jogos...</option>`;
+            if (!nbaGames) {
+                try {
+                    const resp = await fetch(`${TIPSTER_BASE_URL}/nba`);
+                    nbaGames = await resp.json();
+                } catch (err) {
+                    gameSelect.innerHTML = `<option>Erro ao carregar jogos NBA</option>`;
+                    console.error(err);
+                    return;
+                }
             }
+            gameSelect.innerHTML = `<option value="">Selecione um jogo</option>`;
+            nbaGames.forEach(g => {
+                const home = g.teams?.home?.name || g.teams?.home?.teamName || "Home";
+                const away = g.teams?.away?.name || g.teams?.away?.teamName || "Away";
+                const date = g.date ? new Date(g.date).toLocaleString() : "-";
+                gameSelect.add(new Option(`${home} vs ${away} - ${date} ${g.type === "live" ? "(AO VIVO)" : ""}`, g.game_id));
+            });
+            gameSelect.disabled = false;
         } else if (sport === 'nfl') {
-            // NFL → jogos diretos
             gameGroup.classList.remove('hidden');
-            try {
-                const resp = await fetch(`${TIPSTER_BASE_URL}/nfl`);
-                const games = await resp.json();
-                gameSelect.innerHTML = `<option value="">Selecione um jogo</option>`;
-                games.forEach(g => {
-                    const home = g.teams?.home?.name || "Home";
-                    const away = g.teams?.away?.name || "Away";
-                    const date = g.date ? new Date(g.date).toLocaleString() : "-";
-                    const label = `${home} vs ${away} - ${date} ${g.type === "live" ? "(AO VIVO)" : ""}`;
-                    gameSelect.add(new Option(label, g.game_id));
-                });
-                gameSelect.disabled = false;
-            } catch (err) {
-                gameSelect.innerHTML = `<option value="">Erro ao carregar jogos NFL</option>`;
+            gameSelect.innerHTML = `<option>Carregando jogos...</option>`;
+            if (!nflGames) {
+                try {
+                    const resp = await fetch(`${TIPSTER_BASE_URL}/nfl`);
+                    nflGames = await resp.json();
+                } catch (err) {
+                    gameSelect.innerHTML = `<option>Erro ao carregar jogos NFL</option>`;
+                    console.error(err);
+                    return;
+                }
             }
+            gameSelect.innerHTML = `<option value="">Selecione um jogo</option>`;
+            nflGames.forEach(g => {
+                const home = g.teams?.home?.name || "Home";
+                const away = g.teams?.away?.name || "Away";
+                const date = g.date ? new Date(g.date).toLocaleString() : "-";
+                gameSelect.add(new Option(`${home} vs ${away} - ${date} ${g.type === "live" ? "(AO VIVO)" : ""}`, g.game_id));
+            });
+            gameSelect.disabled = false;
         }
     });
 
-    // ao escolher país → carregar ligas
-    countrySelect.addEventListener('change', async () => {
+    // país -> ligas
+    countrySelect.addEventListener('change', () => {
         const country = countrySelect.value;
-        reset(leagueSelect, 'Selecione uma liga');
+        reset(leagueSelect, 'Escolha uma liga');
         reset(gameSelect, 'Selecione um jogo');
         leagueGroup.classList.add('hidden');
         gameGroup.classList.add('hidden');
-
         if (!country) return;
+
+        // filtrar leagues no cache footballGames
+        const leagueMap = new Map();
+        footballGames.filter(g => g.league && g.league.country === country).forEach(g => {
+            const l = g.league;
+            if (l && l.id) leagueMap.set(l.id, l);
+        });
+        const leagues = Array.from(leagueMap.values());
         leagueGroup.classList.remove('hidden');
-
-        try {
-            const resp = await fetch(`${TIPSTER_BASE_URL}/futebol`);
-            const games = await resp.json();
-            const leagues = [...new Map(
-                games.filter(g => g.league?.country === country)
-                     .map(g => [g.league?.id, g.league])
-            ).values()];
-
-            leagueSelect.innerHTML = `<option value="">Escolha uma liga</option>`;
-            leagues.forEach(l => leagueSelect.add(new Option(l.name, l.id)));
-            leagueSelect.disabled = false;
-        } catch (err) {
-            leagueSelect.innerHTML = `<option value="">Erro ao carregar ligas</option>`;
-        }
+        leagueSelect.innerHTML = `<option value="">Escolha uma liga</option>`;
+        leagues.forEach(l => leagueSelect.add(new Option(`${l.name} (${l.season || ''})`, l.id)));
+        leagueSelect.disabled = false;
     });
 
-    // ao escolher liga → carregar jogos
-    leagueSelect.addEventListener('change', async () => {
+    // liga -> jogos
+    leagueSelect.addEventListener('change', () => {
         const leagueId = leagueSelect.value;
         reset(gameSelect, 'Selecione um jogo');
         gameGroup.classList.add('hidden');
-
         if (!leagueId) return;
+
+        const filtered = footballGames.filter(g => g.league && String(g.league.id) === String(leagueId));
         gameGroup.classList.remove('hidden');
-
-        try {
-            const resp = await fetch(`${TIPSTER_BASE_URL}/futebol`);
-            const games = await resp.json();
-            const filtered = games.filter(g => g.league?.id == leagueId);
-
-            if (filtered.length === 0) {
-                gameSelect.innerHTML = `<option value="">Nenhum jogo encontrado</option>`;
-            } else {
-                gameSelect.innerHTML = `<option value="">Selecione um jogo</option>`;
-                filtered.forEach(g => {
-                    const home = g.teams?.home?.name || "Home";
-                    const away = g.teams?.away?.name || "Away";
-                    const date = g.date ? new Date(g.date).toLocaleString() : "-";
-                    const label = `${home} vs ${away} - ${date} ${g.type === "live" ? "(AO VIVO)" : ""}`;
-                    gameSelect.add(new Option(label, g.game_id));
-                });
-                gameSelect.disabled = false;
-            }
-        } catch (err) {
-            gameSelect.innerHTML = `<option value="">Erro ao carregar jogos</option>`;
+        if (!filtered.length) {
+            gameSelect.innerHTML = `<option value="">Nenhum jogo encontrado</option>`;
+            return;
         }
+        gameSelect.innerHTML = `<option value="">Selecione um jogo</option>`;
+        filtered.forEach(g => {
+            const home = g.teams?.home?.name || "Home";
+            const away = g.teams?.away?.name || "Away";
+            const date = g.date ? new Date(g.date).toLocaleString() : "-";
+            gameSelect.add(new Option(`${home} vs ${away} - ${date} ${g.type === "live" ? "(AO VIVO)" : ""}`, g.game_id));
+        });
+        gameSelect.disabled = false;
     });
+
 });
