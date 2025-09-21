@@ -27,7 +27,6 @@ Este repositório contém o **frontend** (site em GitHub Pages) que integra os p
 ├── radar.js → integra com radar_ia.py
 └── navegacao.js → controla abrir/fechar projetos no site
 ---
-
 ## ⚙️ Arquitetura
 🌐 Usuário (Navegador)
 │
