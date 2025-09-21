@@ -1,5 +1,3 @@
-// scripts/tipster.js
-
 document.addEventListener('DOMContentLoaded', function () {
     const tipsterSportSelect = document.getElementById('sport-select');
     if (!tipsterSportSelect) return;
