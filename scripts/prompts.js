@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
         "O Descanso do Monstro da Floresta": "Utilize a imagem fornecida como referência principal. Um monstro gigante e gentil, feito de pedra e musgo, dormindo pacificamente em uma clareira na floresta. Pequenos animais da floresta (esquilos, pássaros) estão dormindo em cima dele. A luz do sol passa por entre as árvores, criando um efeito de luz e sombra (dappled light). Cena calma e adorável. --ar 16:9 --v 6.0",
         "Metrópole Ecológica Solarpunk": "Utilize a imagem fornecida como referência principal. Visão de uma fazenda vertical integrada a um arranha-céu moderno em uma cidade 'solarpunk'. A arquitetura é branca e limpa, com muita vegetação crescendo pelas paredes. Vias suspensas com veículos públicos solares passam entre os prédios. Céu azul e limpo, atmosfera otimista. --ar 9:16 --v 6.0",
         "O Mago e Sua Sombra Monstruosa": "Utilize a imagem fornecida como referência principal. Retrato de fantasia sombria de um mago poderoso, com olhos brilhando com energia. Sua sombra projetada na parede atrás dele não é a sua, mas sim a de uma criatura monstruosa e ameaçadora que imita seus movimentos. Iluminação dramática de baixo para cima. --ar 3:4 --v 6.0",
-        "Solidão Azul em Marte": "Utilize a imagem fornecida como referência principal. Cena cinematográfica de um astronauta solitário sentado na beira de uma cratera em Marte, observando o pôr do sol azul marciano. A Terra é visível no céu como um pequeno ponto brilhante. A paisagem é vasta, vermelha e desolada, criando um sentimento de solidão e admiração. --ar 16:9 --v 6.0"
+        "Solidão Azul em Marte": "Utilize a imagem fornecida como referência principal. Cena cinematográfica de um astronauta solitário sentado na beira de uma cratera em Marte, observando o pôr do sol azul marciano. A Terra é visível no céu como um pequeno ponto brilhante. A paisagem é vasta, vermelha e desolada, criando um sentimento de solidão e admiração. --ar 16:9 --v 6.0",
     };
             
     if (estiloSelect) {
@@ -193,3 +193,4 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
