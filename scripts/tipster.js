@@ -18,14 +18,16 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const hideAllSelectors = () => {
-        [countryGroup, leagueGroup, gameGroup].forEach(group => {
-            group.classList.add('hidden');
-            group.classList.remove('flex');
-        });
+        countryGroup.classList.add('hidden');
+        countryGroup.classList.remove('flex');
+        leagueGroup.classList.add('hidden');
+        leagueGroup.classList.remove('flex');
+        gameGroup.classList.add('hidden');
+        gameGroup.classList.remove('flex');
     };
 
     const loadCountries = async () => {
-        resetSelect(countrySelect, 'Carregando...');
+        countrySelect.innerHTML = '<option value="">Carregando...</option>';
         countrySelect.disabled = false;
         try {
             const res = await fetch(`${TIPSTER_BASE_URL}/paises/football`);
@@ -39,34 +41,16 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const loadLeagues = async () => {
-        const sport = sportSelect.value;
-        let url;
-
-        if (sport === "football") {
-            const countryCode = countrySelect.value;
-            if (!countryCode) return;
-            url = `${TIPSTER_BASE_URL}/ligas/football/${countryCode}`;
-        } else if (sport === "basketball") {
-            url = `${TIPSTER_BASE_URL}/ligas/basketball`;
-        } else if (sport === "american-football") {
-            url = `${TIPSTER_BASE_URL}/ligas/american-football`;
-        } else {
-            return;
-        }
-
-        resetSelect(leagueSelect, 'Carregando...');
+        const countryCode = countrySelect.value;
+        if (!countryCode) return;
+        leagueSelect.innerHTML = '<option value="">Carregando...</option>';
         leagueSelect.disabled = false;
-
         try {
-            const res = await fetch(url);
+            const res = await fetch(`${TIPSTER_BASE_URL}/ligas/football/${countryCode}`);
             if (!res.ok) throw new Error('Falha ao buscar ligas');
             const data = await res.json();
             leagueSelect.innerHTML = '<option value="">Selecione Liga</option>';
             data.forEach(l => leagueSelect.add(new Option(l.name, l.id)));
-
-            if (sport !== "football" && data.length > 0) {
-                loadGames(sport, data[0].id);
-            }
         } catch (err) {
             resetSelect(leagueSelect, err.message);
         }
@@ -74,7 +58,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const loadGames = async (sport, leagueId) => {
         if (!sport || !leagueId) return;
-        resetSelect(gameSelect, 'Carregando...');
+        gameSelect.innerHTML = '<option value="">Carregando...</option>';
+        gameSelect.disabled = false;
         gameGroup.classList.remove('hidden');
         gameGroup.classList.add('flex');
         try {
@@ -86,12 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado</option>';
             } else {
                 data.forEach(g => {
-                    const date = new Date(g.time).toLocaleString('pt-BR', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
+                    const date = new Date(g.time).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
                     const opt = new Option(`${g.home} vs ${g.away} (${date})`, g.game_id);
                     opt.dataset.status = g.status;
                     gameSelect.add(opt);
@@ -102,56 +82,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    const fetchAnalysis = async (gameId, status) => {
-        if (!gameId) {
-            resultsDiv.classList.add('hidden');
-            return;
-        }
-        resultsDiv.classList.remove('hidden');
-        resultsDiv.innerHTML = `<p class="text-slate-400 text-center">Analisando... 🧠</p>`;
-        const sport = sportSelect.value;
-        const isLive = ['LIVE', '1H', 'HT', '2H'].includes(status);
-        const endpoint = isLive ? 'analisar-ao-vivo' : 'analisar-pre-jogo';
-
-        try {
-            const res = await fetch(`${TIPSTER_BASE_URL}/${endpoint}?game_id=${gameId}&sport=${sport}`);
-            if (!res.ok) throw new Error('Servidor de análise indisponível.');
-            const tips = await res.json();
-            const gameText = gameSelect.options[gameSelect.selectedIndex].text.split(' (')[0];
-            
-            let html = `<h3 class="font-bold text-xl text-cyan-300 mb-2">Análise para: ${gameText}</h3>`;
-            if (isLive) {
-                html += `<span class="inline-block bg-red-600 text-white text-xs font-bold px-2 py-1 rounded mb-4">AO VIVO 🔴</span>`;
-            }
-
-            if (tips.length === 0 || (tips[0] && tips[0].confidence === 0)) {
-                html += `<div class="p-4 border rounded-lg border-slate-700 bg-slate-900">
-                            <p class="text-slate-400">${tips[0]?.justification || 'Sem dicas de alta confiança.'}</p>
-                         </div>`;
-            } else {
-                tips.forEach(tip => {
-                    html += `<div class="p-4 border rounded-lg border-slate-700 bg-slate-900 space-y-2 mb-4">
-                        <p class="text-slate-300"><strong class="text-cyan-400">Mercado:</strong> ${tip.market}</p>
-                        <p class="text-slate-300"><strong class="text-cyan-400">Sugestão:</strong> ${tip.suggestion}</p>
-                        <p class="text-slate-400 mt-2"><i>${tip.justification}</i></p>
-                        <div class="w-full bg-slate-700 rounded-full h-2.5 mt-3">
-                            <div class="bg-cyan-500 h-2.5 rounded-full" style="width: ${tip.confidence}%"></div>
-                        </div>
-                        <p class="text-xs text-slate-500 text-right mt-1">Confiança: ${tip.confidence}%</p>
-                    </div>`;
-                });
-            }
-            resultsDiv.innerHTML = html;
-        } catch (err) {
-            resultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-red-500/50 bg-red-900/50 text-red-300">
-                                        <strong>Erro:</strong> ${err.message}
-                                    </div>`;
-        }
-    };
-
-    // EVENTOS
     sportSelect.addEventListener('change', () => {
         const sport = sportSelect.value;
+        resultsDiv.innerHTML = '';
         resultsDiv.classList.add('hidden');
         hideAllSelectors();
         resetSelect(gameSelect, '...');
@@ -163,20 +96,28 @@ document.addEventListener('DOMContentLoaded', function () {
             countryGroup.classList.add('flex');
             leagueGroup.classList.remove('hidden');
             leagueGroup.classList.add('flex');
-            gameGroup.classList.remove('lg:col-span-2');
-            loadCountries();
-        } else if (sport === 'basketball' || sport === 'american-football') {
-            leagueGroup.classList.remove('hidden');
-            leagueGroup.classList.add('flex');
             gameGroup.classList.add('lg:col-span-2');
-            loadLeagues();
+            loadCountries();
+        } else if (sport === 'basketball') {
+            gameGroup.classList.add('lg:col-span-2');
+            loadGames('basketball', 12);
+        } else if (sport === 'american-football') {
+            gameGroup.classList.add('lg:col-span-2');
+            loadGames('american-football', 16);
         }
     });
 
     countrySelect.addEventListener('change', loadLeagues);
     leagueSelect.addEventListener('change', () => loadGames(sportSelect.value, leagueSelect.value));
+    
+    // O evento de selecionar um jogo agora só mostra uma mensagem simples
     gameSelect.addEventListener('change', () => {
-        const opt = gameSelect.options[gameSelect.selectedIndex];
-        if (opt && opt.value) fetchAnalysis(opt.value, opt.dataset.status);
+        const gameId = gameSelect.value;
+        if (gameId) {
+            resultsDiv.classList.remove('hidden');
+            resultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-slate-700 bg-slate-900"><p class="text-slate-400">Jogo selecionado. A funcionalidade de análise será reativada em breve.</p></div>`;
+        } else {
+            resultsDiv.classList.add('hidden');
+        }
     });
 });
