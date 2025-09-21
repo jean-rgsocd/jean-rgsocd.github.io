@@ -427,97 +427,129 @@
                             </div>
                         </div>
 
-                        <div id="content-videos" class="tab-content hidden">
-                            <p class="text-slate-400 mb-4">Selecione o tipo de vídeo e o tom desejado para gerar um prompt para IAs de vídeo como a VEO do Google.</p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                <select id="vid-type" class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                                    <option value="Cinematic">Cinemático</option>
-                                    <option value="Aerial">Aéreo</option>
-                                    <option value="Time-lapse">Time-lapse</option>
-                                    <option value="Black and White">Preto e Branco</option>
-                                </select>
-                                <select id="vid-tone" class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                                    <option value="Dramatic">Dramático</option>
-                                    <option value="Joyful">Alegre</option>
-                                    <option value="Mysterious">Misterioso</option>
-                                    <option value="Epic">Épico</option>
-                                </select>
-                            </div>
-                            <textarea id="vid-result" rows="8" class="w-full bg-slate-900 border border-slate-700 rounded-md p-4 text-slate-400 font-mono text-sm" readonly>Seu prompt de vídeo aparecerá aqui...</textarea>
-                            <div class="mt-4">
-                                <button onclick="generateVideoPrompt()" class="bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Gerar Prompt de Vídeo</button>
-                            </div>
-                        </div>
+                        <h2 class="text-2xl font-bold text-slate-100 mb-6">Prompts de Vídeos (VEO3) para Conteúdo Viral</h2>
+<p class="text-slate-400 mb-8">
+    Aqui você pode copiar prompts complexos e detalhados para gerar vídeos com IA, otimizados para plataformas como o TikTok e Instagram Reels.
+</p>
+<div class="mb-10 p-6 bg-slate-900 border border-slate-700 rounded-lg">
+    <h3 class="text-xl font-bold text-slate-100 mb-4">1º Opção: Prompt Mestre</h3>
+    <p class="text-sm text-slate-400 mb-4">
+        Este é um prompt altamente detalhado e técnico, ideal para quem precisa de controle preciso sobre a criação do vídeo.
+    </p>
+    <textarea class="font-mono w-full p-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="12" readonly>
+VEO 3 – PROMPT MESTRE V4.0 (EDIÇÃO CONSTÂNCIA OTIMIZADA)
+(Baseado em técnicas de roteiro e engenharia de IA avançada)
+---
+### OBJETIVO PRINCIPAL E PÚBLICO-ALVO
+• **Meta da Marca**: [ex: “Aumentar reconhecimento da marca e gerar desejo imediato de compra”]
+• **Gatilhos Emocionais do Espectador**: [ex: “Curiosidade (60%) + Autoridade (40%)”]
+---
+### DURAÇÃO E RITMO
+• **Duração Exata**: 8.0s
+• **Ritmo**: [ex: Gancho (0–3s), Mensagem (3–6s), Chamada para Ação (6–8s)]
+(e mais detalhes...)</textarea>
+</div>
+<div class="mb-10 p-6 bg-slate-900 border border-slate-700 rounded-lg">
+    <h3 class="text-xl font-bold text-slate-100 mb-4">2º Opção: Prompt Definitivo (Flow)</h3>
+    <p class="text-sm text-slate-400 mb-4">
+        Este prompt serve como um "guia em etapas" para criar um influencer de IA e gerar vídeos virais.
+    </p>
+    <textarea class="font-mono w-full p-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="12" readonly>
+PROMPT DEFINITIVO — INFLUENCER IA + VÍDEOS VIRAIS COM VEO 3
+---
+PARTE 1 – CRIAÇÃO DA INFLUENCER IA
+Qual será o nome da influencer?
+Qual tom de pele?
+...
+PARTE 2 – PRODUÇÃO DE VÍDEOS COM VEO 3
+Qual o tema central?
+Qual o tom da fala?
+(e mais detalhes...)</textarea>
+</div>
+<div class="mb-10 p-6 bg-slate-900 border border-slate-700 rounded-lg">
+    <h3 class="text-xl font-bold text-slate-100 mb-4">3º Opção: Storytelling e Narrativa</h3>
+    <p class="text-sm text-slate-400 mb-4">
+        Este prompt foca em criar uma história envolvente, com uma clara progressão emocional e narrativa.
+    </p>
+    <textarea class="font-mono w-full p-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none resize-none text-slate-300" rows="12" readonly>
+VEO 3 - PROMPT DE STORYTELLING
+---
+### ARCO EMOCIONAL E NARRATIVA
+• **Cena de Abertura (0-2s)**: [ex: "Eu em uma situação frustrante ou problema"]
+• **Ponto de Virada (2-5s)**: [ex: "Apresento uma solução ou produto que resolve o problema"]
+• **Resolução (5-8s)**: [ex: "Mostro a minha vida após a solução, com alegria e facilidade"]
+(e mais detalhes...)</textarea>
+</div>
                         
-                        <div id="content-ferramentas" class="tab-content hidden">
-                            <p class="text-slate-400 mb-4">Use pequenas ferramentas de IA para tarefas rápidas de texto.</p>
-                             <div class="mb-4">
-                                <select id="ai-tool" class="w-full md:w-1/2 bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                                    <option value="Summarizer">Resumidor</option>
-                                    <option value="Translator">Tradutor (Simulado)</option>
-                                    <option value="Creative Rewriter">Reescritor Criativo</option>
-                                </select>
-                            </div>
-                            <textarea id="ai-input" placeholder="Cole seu texto aqui..." rows="6" class="w-full bg-slate-900 border border-slate-700 rounded-md p-4 text-slate-400 font-mono text-sm"></textarea>
-                            <div class="mt-4">
-                                <button onclick="runAITool()" class="bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Executar Ferramenta</button>
-                            </div>
-                            <p id="ai-result" class="mt-4 p-4 bg-slate-900 border border-slate-700 rounded-md text-slate-300 min-h-[50px]"></p>
-                        </div>
-                    </div>
-                 </div>
+                        <h2 class="text-2xl font-bold text-slate-100 mb-6">Compilado de Ferramentas de IA</h2>
+<p class="text-slate-400 mb-8">
+    <span class="block">Explore e acesse rapidamente uma lista de ferramentas de Inteligência Artificial organizadas por categoria.</span>
+    <span class="block">Cada seção inclui uma breve explicação 💡 do que você pode fazer com essas IAs.</span>
+</p>
+<section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">🤖 GPTs do Mestre & Favoritos</h3>
+    <p class="text-slate-400 mb-4"><span class="block">💡 Coleção de GPTs personalizados e favoritos prontos para usar no ChatGPT.</span><span class="block">👉 Use para: resumos, geração de prompts, negociação, criação de nomes e muito mais.</span></p>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <a href="https://chat.openai.com/g/g-rqznWjaOb-mestre-dos-problemas" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2"><span>Mestre dos Problemas</span></a>
+        <a href="https://chatgpt.com/g/g-c5pUqdlbh-mestre-da-negociacao" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2"><span>Mestre da Negociação</span></a>
+        <a href="https://chatgpt.com/g/g-VCOghF5W0-mestre-das-atleticas" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2"><span>Mestre das Atléticas</span></a>
+        <a href="https://chatgpt.com/g/g-py9gZteQS-mestre-do-pdf" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2"><span>Mestre do PDF</span></a>
+        <a href="https://chatgpt.com/g/g-B3J6o3xG4-mestre-do-stable-difusion" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2"><span>Mestre do Stable Diffusion</span></a>
+        <a href="https://chatgpt.com/g/g-ir4PylxGT-mestre-gpt" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2"><span>Mestre Criador de GPTs</span></a>
+        <a href="https://chatgpt.com/g/g-FN7GJjqX1-mestre-dos-prompts-de-imagem" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2"><span>Mestres dos Prompts</span></a>
+    </div>
+</section>
+<section class="mb-8">
+    <h3 class="flex items-center text-xl font-semibold mb-4 text-cyan-300">💡 Ideias / Chatbots</h3>
+    <p class="text-slate-400 mb-4"><span class="block">💡 Chatbots e assistentes para brainstorm, suporte e pesquisas rápidas.</span><span class="block">👉 Use para: responder clientes, gerar ideias e criar fluxos conversacionais.</span></p>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <a href="https://chat.openai.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2"><span>ChatGPT</span></a>
+        <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2"><span>Gemini</span></a>
+        <a href="https://claude.ai/" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2"><span>Claude</span></a>
+        <a href="https://www.perplexity.ai" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2"><span>Perplexity</span></a>
+        <a href="https://www.bing.com/chat" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2"><span>Bing Chat</span></a>
+        <a href="https://huggingface.co" target="_blank" rel="noopener noreferrer" class="bg-slate-900 p-3 rounded border border-slate-700 hover:border-cyan-400 hover:bg-slate-800 transition flex items-center justify-center space-x-2"><span>Hugging Face</span></a>
+    </div>
+</section>
                  
-                 <div id="radar-ia-section" class="hidden py-12">
-                    <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 md:p-8 rounded-lg shadow-lg border border-slate-700">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="font-bold text-2xl text-slate-100">Radar IA - Monitoramento Ao Vivo</h3>
-                            <button id="hideRadarButton" class="whitespace-nowrap bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Retornar</button>
-                        </div>
-                        <p class="text-slate-400 mb-8">Acompanhe as estatísticas e o índice de pressão de jogos de futebol que estão acontecendo em tempo real. Os dados são atualizados periodicamente.</p>
-                        
-                        <div class="mb-6">
-                            <label for="radar-game-select" class="text-sm font-medium text-slate-400">Selecione um Jogo Ao Vivo</label>
-                            <select id="radar-game-select" class="w-full mt-2 bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                                <option value="">Carregando jogos ao vivo...</option>
-                            </select>
-                        </div>
-
-                        <div id="radar-dashboard" class="space-y-6">
-                            <div class="text-center">
-                                <p class="text-4xl font-bold text-slate-100" id="radar-score">-</p>
-                                <p class="text-lg text-cyan-400" id="radar-minute">-</p>
-                            </div>
-
-                            <div class="grid grid-cols-3 gap-4 text-center">
-                                <div>
-                                    <p class="text-sm text-slate-400">Posse</p>
-                                    <p class="text-lg font-semibold"><span id="home-possession">-</span>% / <span id="away-possession">-</span>%</p>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-slate-400">Finalizações</p>
-                                    <p class="text-lg font-semibold"><span id="home-shots">-</span> / <span id="away-shots">-</span></p>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-slate-400">Escanteios</p>
-                                    <p class="text-lg font-semibold"><span id="home-corners">-</span> / <span id="away-corners">-</span></p>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="text-sm font-medium text-slate-400">Índice de Pressão (Últimos 10 min)</label>
-                                <div class="w-full bg-slate-700 rounded-full h-4 mt-2">
-                                    <div id="pressure-bar" class="bg-cyan-500 h-4 rounded-full transition-all duration-500" style="width: 50%"></div>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <h4 class="font-bold text-slate-200 mb-2">Eventos Recentes</h4>
-                                <ul id="radar-events" class="text-sm text-slate-400 space-y-1 h-32 overflow-y-auto p-2 bg-slate-900 rounded-md">
-                                    <li>Nenhum evento recente</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                 <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 md:p-8 rounded-lg shadow-lg border border-slate-700">
+    <div class="flex justify-between items-center mb-6">
+        <h3 class="font-bold text-2xl text-slate-100">Radar IA - Monitoramento Ao Vivo</h3>
+        <button id="hideRadarButton" class="whitespace-nowrap bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Retornar</button>
+    </div>
+    <p class="text-slate-400 mb-8">Acompanhe as estatísticas e o índice de pressão de jogos de futebol que estão acontecendo em tempo real. Os dados são atualizados periodicamente.</p>
+    <div class="mb-6">
+        <label for="radar-game-select" class="text-sm font-medium text-slate-400">Selecione um Jogo Ao Vivo</label>
+        <select id="radar-game-select" class="w-full mt-2 bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+            <option value="">Carregando jogos ao vivo...</option>
+        </select>
+    </div>
+    <div id="radar-dashboard" class="hidden space-y-6">
+        <div class="flex justify-between items-center bg-slate-900 p-4 rounded-lg">
+            <div class="text-left w-1/3"><p class="font-bold text-lg md:text-xl" id="home-team-name">Time Casa</p></div>
+            <div class="text-center w-1/3"><p class="text-4xl font-bold text-slate-100" id="radar-score">-</p><p class="text-lg text-cyan-400" id="radar-minute">-</p></div>
+            <div class="text-right w-1/3"><p class="font-bold text-lg md:text-xl" id="away-team-name">Time Fora</p></div>
+        </div>
+        <div class="flex justify-center space-x-2 p-1 bg-slate-900 rounded-lg">
+            <button data-period="firstHalf" class="period-btn w-full py-2 text-sm font-semibold rounded-md transition-colors">1º Tempo</button>
+            <button data-period="secondHalf" class="period-btn w-full py-2 text-sm font-semibold rounded-md transition-colors">2º Tempo</button>
+            <button data-period="fullGame" class="period-btn w-full py-2 text-sm font-semibold rounded-md transition-colors bg-cyan-600 text-white">Jogo Completo</button>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div class="bg-slate-900 p-3 rounded-md"><p class="text-sm text-slate-400">Posse</p><p class="text-lg font-semibold" id="stat-possession">-</p></div>
+            <div class="bg-slate-900 p-3 rounded-md"><p class="text-sm text-slate-400">Finalizações (no gol)</p><p class="text-lg font-semibold" id="stat-shots">-</p></div>
+            <div class="bg-slate-900 p-3 rounded-md"><p class="text-sm text-slate-400">Escanteios</p><p class="text-lg font-semibold" id="stat-corners">-</p></div>
+            <div class="bg-slate-900 p-3 rounded-md"><p class="text-sm text-slate-400">Faltas</p><p class="text-lg font-semibold" id="stat-fouls">-</p></div>
+            <div class="bg-slate-900 p-3 rounded-md col-span-2"><p class="text-sm text-slate-400">Cartões Amarelos</p><p class="text-lg font-semibold" id="stat-yellow-cards">-</p></div>
+            <div class="bg-slate-900 p-3 rounded-md col-span-2"><p class="text-sm text-slate-400">Cartões Vermelhos</p><p class="text-lg font-semibold" id="stat-red-cards">-</p></div>
+        </div>
+        <div id="stoppage-time-prediction" class="hidden text-center bg-yellow-900/50 border border-yellow-500 text-yellow-300 p-3 rounded-md"><p class="font-semibold">Estimativa de Acréscimos: <span id="stoppage-time-value"></span> minutos</p></div>
+        <div>
+            <h4 class="font-bold text-slate-200 mb-2">Eventos Recentes</h4>
+            <ul id="radar-events" class="text-sm text-slate-400 space-y-1 h-40 overflow-y-auto p-2 bg-slate-900 rounded-md"><li>Nenhum evento recente</li></ul>
+        </div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
