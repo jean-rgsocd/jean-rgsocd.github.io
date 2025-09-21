@@ -42,7 +42,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return null;
   }
   function getVal(sideObj, candidates) {
-    return pickStat(sideObj, candidates) ?? "-";
+    const val = pickStat(sideObj, candidates);
+    return val !== null && val !== undefined ? val : "N/D"; // 👈 agora mostra N/D se não vier
   }
 
   function iconFor(cat = "") {
@@ -100,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const foulsCandidates      = ["fouls","foul"];
   const yellowCandidates     = ["yellow_cards","yellow cards","yellow"];
   const redCandidates        = ["red_cards","red cards","red"];
-  const offsidesCandidates   = ["offsides","offside"]; // NOVO
+  const offsidesCandidates   = ["offsides","offside"]; // 👈 só impedimentos agora
 
   function setStatsPanel(statsObj = {}) {
     if (!statsObj || !statsObj.home || !statsObj.away) {
