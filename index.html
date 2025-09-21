@@ -1,127 +1,308 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jean Carlos - Portfólio</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-900 text-gray-100">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jean · Tipster IA · Radar IA · Portfolio</title>
+  <!-- favicon (adicione seu favicon no caminho correto) -->
+  <link rel="icon" href="favicon.ico" />
 
-  <!-- Header -->
-  <header class="bg-gray-800 shadow-lg">
-    <div class="max-w-6xl mx-auto flex items-center justify-between p-4">
-      <div class="flex items-center space-x-4">
-        <img src="perfil.jpg" alt="Foto de Perfil" class="w-16 h-16 rounded-full border-2 border-cyan-400">
-        <h1 class="text-2xl font-bold text-cyan-300">Jean Carlos</h1>
+  <!-- Tailwind / seu CSS aqui -->
+  <!-- Se você usa Tailwind via CDN (apenas para dev). Em produção, prefira build. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Pequenas customizações para deixar bonito sem quebrar layout */
+    body { background: #0b1220; color: #c9d1d9; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+    .card { background: #071023; border: 1px solid #152033; border-radius: 12px; padding: 1rem; }
+    .hidden { display: none !important; }
+    .btn { background: linear-gradient(90deg,#0ea5a8,#06b6d4); color: #021018; padding: .5rem .9rem; border-radius: .6rem; font-weight:700; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- ========== HEADER ========== -->
+  <header class="p-6 flex items-center justify-between border-b border-slate-800">
+    <div class="flex items-center gap-4">
+      <img src="assets/images/perfil.jpg" alt="Perfil" class="w-14 h-14 rounded-full object-cover border-2 border-slate-700" />
+      <div>
+        <h1 class="text-2xl font-bold text-cyan-300">Jean — Tecnologia & IA</h1>
+        <p id="typed-headline" class="text-slate-300 text-sm mt-1">Profissional de Tecnologia e Segurança Cibernética</p>
       </div>
-      <nav class="space-x-6 hidden md:flex">
-        <a href="#sobre" class="hover:text-cyan-300">Sobre</a>
-        <a href="#competencias" class="hover:text-cyan-300">Competências</a>
-        <a href="#projetos" class="hover:text-cyan-300">Projetos</a>
-        <a href="#tipster" class="hover:text-cyan-300">Tipster IA</a>
-        <a href="#radar" class="hover:text-cyan-300">Radar IA</a>
-        <a href="#contato" class="hover:text-cyan-300">Contato</a>
-      </nav>
     </div>
+
+    <nav>
+      <ul class="flex gap-4 items-center text-slate-300">
+        <li><a href="#sobre" class="hover:text-cyan-300">Sobre</a></li>
+        <li><a href="#competencias" class="hover:text-cyan-300">Competências</a></li>
+        <li><a href="#projetos" class="hover:text-cyan-300">Projetos</a></li>
+        <li><a href="#ferramentas" class="hover:text-cyan-300">Ferramentas</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <!-- Seção Sobre -->
-  <section id="sobre" class="max-w-6xl mx-auto py-16 px-4">
-    <h2 class="text-3xl font-bold text-cyan-300 mb-6">Sobre Mim</h2>
-    <p class="text-gray-300 leading-relaxed">
-      Sou Jean Carlos, desenvolvedor apaixonado por tecnologia e soluções baseadas em IA. 
-      Tenho experiência em projetos que unem inovação, análise de dados e interfaces modernas para entregar resultados reais.
-    </p>
-  </section>
+  <main class="p-8 max-w-6xl mx-auto space-y-8">
 
-  <!-- Seção Competências -->
-  <section id="competencias" class="bg-gray-800 py-16 px-4">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold text-cyan-300 mb-6">Competências</h2>
-      <ul class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <li class="bg-gray-900 p-4 rounded-lg shadow">JavaScript / Node.js</li>
-        <li class="bg-gray-900 p-4 rounded-lg shadow">Python / FastAPI</li>
-        <li class="bg-gray-900 p-4 rounded-lg shadow">APIs e Integrações</li>
-        <li class="bg-gray-900 p-4 rounded-lg shadow">TailwindCSS</li>
-        <li class="bg-gray-900 p-4 rounded-lg shadow">Banco de Dados SQL/NoSQL</li>
-        <li class="bg-gray-900 p-4 rounded-lg shadow">Machine Learning</li>
-      </ul>
-    </div>
-  </section>
+    <!-- ========== SOBRE ========== -->
+    <section id="sobre" class="card">
+      <h2 class="text-xl font-bold text-cyan-300">Sobre</h2>
+      <p class="mt-2 text-slate-300">Sou desenvolvedor e especialista em segurança com foco em aplicações, automação e modelos de IA para esportes e análise.</p>
+    </section>
 
-  <!-- Seção Projetos -->
-  <section id="projetos" class="max-w-6xl mx-auto py-16 px-4">
-    <h2 class="text-3xl font-bold text-cyan-300 mb-6">Projetos</h2>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h3 class="text-xl font-bold text-cyan-200 mb-2">Tipster IA</h3>
-        <p class="text-gray-300">
-          Plataforma inteligente de análise pré-jogo em Futebol, NBA e NFL com integração API-Sports.
-        </p>
+    <!-- ========== COMPETÊNCIAS ========== -->
+    <section id="competencias" class="card">
+      <h2 class="text-xl font-bold text-cyan-300">Competências</h2>
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-4 border rounded border-slate-800">
+          <h3 class="font-semibold text-slate-100">Desenvolvimento</h3>
+          <p class="text-slate-300 text-sm mt-2">Python, FastAPI, JS, React, infra</p>
+        </div>
+        <div class="p-4 border rounded border-slate-800">
+          <h3 class="font-semibold text-slate-100">Segurança</h3>
+          <p class="text-slate-300 text-sm mt-2">Pentest, avaliações, mitigação</p>
+        </div>
+        <div class="p-4 border rounded border-slate-800">
+          <h3 class="font-semibold text-slate-100">IA & Dados</h3>
+          <p class="text-slate-300 text-sm mt-2">Modelagem, análise de odds, visualizações</p>
+        </div>
       </div>
-      <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h3 class="text-xl font-bold text-cyan-200 mb-2">Radar IA</h3>
-        <p class="text-gray-300">
-          Sistema de estatísticas ao vivo e cálculo do Índice de Pressão para acompanhar jogos em tempo real.
-        </p>
+    </section>
+
+    <!-- ========== FERRAMENTAS (Placeholder) ========== -->
+    <section id="ferramentas" class="card">
+      <h2 class="text-xl font-bold text-cyan-300">Ferramentas</h2>
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <h4 class="font-semibold text-slate-100">Analisador de Segurança Web</h4>
+          <p class="text-slate-300">Ferramenta para análise automatizada de endpoints e vulnerabilidades.</p>
+          <button class="btn mt-3" onclick="openModal('modal-scanner')">Abrir</button>
+        </div>
+        <div>
+          <h4 class="font-semibold text-slate-100">Opta IA (em andamento)</h4>
+          <p class="text-slate-300">Projeto em progresso para ingestão e análise Opta.</p>
+          <button class="btn mt-3" onclick="openModal('modal-opta')">Ver progresso</button>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Seção Tipster IA -->
-  <section id="tipster" class="bg-gray-800 py-16 px-4">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold text-cyan-300 mb-6">Tipster IA</h2>
-
-      <div class="grid md:grid-cols-3 gap-4 mb-6">
-        <select id="sportSelect" class="p-2 rounded bg-gray-900 border border-gray-700">
-          <option value="">Selecione um esporte</option>
-          <option value="football">Futebol</option>
-          <option value="nba">NBA</option>
-          <option value="nfl">NFL</option>
-        </select>
-
-        <div id="leagueSelectorGroup">
-          <select id="leagueSelect" class="p-2 rounded bg-gray-900 border border-gray-700">
-            <option value="">Selecione uma liga</option>
-          </select>
+    <!-- ========== PROJETOS ========== -->
+    <section id="projetos" class="card">
+      <h2 class="text-xl font-bold text-cyan-300">Projetos</h2>
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-4 border rounded border-slate-800">
+          <h3 class="font-semibold text-slate-100">Portfólio Interativo</h3>
+          <p class="text-slate-300 mt-2">Interface interativa com modais e demos.</p>
+          <button class="btn mt-3" onclick="openModal('modal-portfolio')">Ver projeto</button>
         </div>
 
-        <select id="gameSelect" class="p-2 rounded bg-gray-900 border border-gray-700">
-          <option value="">Selecione um jogo</option>
-        </select>
+        <div class="p-4 border rounded border-slate-800">
+          <h3 class="font-semibold text-slate-100">Gerador de Prompts</h3>
+          <p class="text-slate-300 mt-2">Criação rápida e organizada de prompts para geração de imagens e textos.</p>
+          <button class="btn mt-3" onclick="openModal('modal-prompts')">Gerador</button>
+        </div>
+
+        <div class="p-4 border rounded border-slate-800">
+          <h3 class="font-semibold text-slate-100">Tipster IA</h3>
+          <p class="text-slate-300 mt-2">Análises pré-jogo e ao vivo (Futebol / NBA / NFL).</p>
+          <button class="btn mt-3" onclick="openModal('modal-tipster')">Abrir Tipster</button>
+        </div>
+
+        <div class="p-4 border rounded border-slate-800">
+          <h3 class="font-semibold text-slate-100">Radar IA</h3>
+          <p class="text-slate-300 mt-2">Mapa/Índice de pressão ao vivo (só jogos realmente AO VIVO).</p>
+          <button class="btn mt-3" onclick="openModal('modal-radar')">Abrir Radar</button>
+        </div>
       </div>
+    </section>
 
-      <div id="bettingResults" class="hidden"></div>
+    <!-- ========== MODAIS DOS PROJETOS (SIMPLES) ========== -->
+    <div id="modal-tipster" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
+      <div class="bg-[#071023] w-full max-w-4xl rounded-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-cyan-300 font-bold">Tipster IA</h3>
+          <button class="text-slate-300" onclick="closeModal('modal-tipster')">Fechar</button>
+        </div>
+
+        <!-- Tipster content: selects and results -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-slate-300 mb-1">Esporte</label>
+            <select id="sportSelect" class="w-full p-2 rounded bg-slate-900 border border-slate-700">
+              <option value="">Selecione o esporte</option>
+              <option value="football">Futebol</option>
+              <option value="nba">NBA</option>
+              <option value="nfl">NFL</option>
+            </select>
+          </div>
+
+          <div id="leagueSelectorGroup" class="hidden">
+            <label class="block text-slate-300 mb-1">Liga</label>
+            <select id="leagueSelect" class="w-full p-2 rounded bg-slate-900 border border-slate-700">
+              <option value="">Selecione uma liga</option>
+            </select>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-slate-300 mb-1">Jogo</label>
+            <select id="gameSelect" class="w-full p-2 rounded bg-slate-900 border border-slate-700">
+              <option value="">Selecione um jogo</option>
+            </select>
+          </div>
+
+          <div id="bettingResults" class="md:col-span-2 hidden"></div>
+        </div>
+
+      </div>
     </div>
-  </section>
 
-  <!-- Seção Radar IA -->
-  <section id="radar" class="max-w-6xl mx-auto py-16 px-4">
-    <h2 class="text-3xl font-bold text-cyan-300 mb-6">Radar IA</h2>
-    <p class="text-gray-300">Aqui vão os dados ao vivo e o índice de pressão dos jogos em tempo real.</p>
-    <!-- Dá pra integrar o radar.js aqui -->
-  </section>
+    <div id="modal-radar" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
+      <div class="bg-[#071023] w-full max-w-4xl rounded-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-cyan-300 font-bold">Radar IA - Jogos ao Vivo</h3>
+          <button class="text-slate-300" onclick="closeModal('modal-radar')">Fechar</button>
+        </div>
 
-  <!-- Seção Contato -->
-  <section id="contato" class="bg-gray-800 py-16 px-4">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold text-cyan-300 mb-6">Contato</h2>
-      <p class="text-gray-300 mb-4">Entre em contato comigo para colaborações ou oportunidades:</p>
-      <p class="text-gray-400">Email: <a href="mailto:jean@email.com" class="text-cyan-400">jean@email.com</a></p>
-      <p class="text-gray-400">LinkedIn: <a href="https://linkedin.com/in/jean" class="text-cyan-400">linkedin.com/in/jean</a></p>
-      <p class="text-gray-400">GitHub: <a href="https://github.com/jean-rgsocd" class="text-cyan-400">github.com/jean-rgsocd</a></p>
+        <!-- Radar content -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-slate-300 mb-1">Jogo ao vivo</label>
+            <select id="radar-game-select" class="w-full p-2 rounded bg-slate-900 border border-slate-700">
+              <option value="">Carregando jogos ao vivo...</option>
+            </select>
+
+            <div class="mt-4 card">
+              <p class="text-slate-300"><strong>Placar:</strong> <span id="radar-score">-</span></p>
+              <p class="text-slate-300"><strong>Minuto:</strong> <span id="radar-minute">-</span></p>
+              <div class="mt-2">
+                <p class="text-slate-300"><strong>Posse</strong> <span id="home-possession">-</span>% / <span id="away-possession">-</span>%</p>
+                <p class="text-slate-300"><strong>Chutes</strong> <span id="home-shots">-</span> / <span id="away-shots">-</span></p>
+                <p class="text-slate-300"><strong>Escanteios</strong> <span id="home-corners">-</span> / <span id="away-corners">-</span></p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="text-slate-200 font-semibold mb-2">Índice de Pressão</h4>
+            <div class="w-full bg-slate-800 h-4 rounded overflow-hidden">
+              <div id="pressure-bar" class="h-4 bg-cyan-500" style="width:50%"></div>
+            </div>
+            <ul id="radar-events" class="mt-3 text-slate-300 list-disc pl-5">
+              <li>Nenhum evento</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-center py-6 border-t border-gray-700">
-    <p class="text-gray-500">&copy; 2025 Jean Carlos - Todos os direitos reservados.</p>
+    <!-- Modal prompts (simples) -->
+    <div id="modal-prompts" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
+      <div class="bg-[#071023] w-full max-w-2xl rounded-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-cyan-300 font-bold">Gerador de Prompts</h3>
+          <button class="text-slate-300" onclick="closeModal('modal-prompts')">Fechar</button>
+        </div>
+        <div>
+          <label class="block text-slate-300">Categoria</label>
+          <select id="categoria-profissao" class="w-full p-2 rounded bg-slate-900 border border-slate-700">
+            <option value="">Escolha...</option>
+          </select>
+
+          <label class="block text-slate-300 mt-3">Profissão / Prompt</label>
+          <select id="profissao" class="w-full p-2 rounded bg-slate-900 border border-slate-700">
+            <option value="">Selecione</option>
+          </select>
+
+          <textarea id="prompt-profissao-output" class="w-full mt-3 p-3 rounded bg-slate-900 border border-slate-700 h-36"></textarea>
+          <div class="flex gap-2 mt-3">
+            <button id="gerar-prompt-profissao" class="btn">Gerar</button>
+            <button id="copiar-prompt-profissao" class="btn">Copiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- modal portfolio / scanner / opta placeholders -->
+    <div id="modal-portfolio" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
+      <div class="bg-[#071023] w-full max-w-3xl rounded-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-cyan-300 font-bold">Portfólio Interativo</h3>
+          <button class="text-slate-300" onclick="closeModal('modal-portfolio')">Fechar</button>
+        </div>
+        <p class="text-slate-300">Conteúdo do portfólio...</p>
+      </div>
+    </div>
+
+    <div id="modal-scanner" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
+      <div class="bg-[#071023] w-full max-w-3xl rounded-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-cyan-300 font-bold">Analisador de Segurança Web</h3>
+          <button class="text-slate-300" onclick="closeModal('modal-scanner')">Fechar</button>
+        </div>
+        <p class="text-slate-300">Ferramenta de scanner...</p>
+      </div>
+    </div>
+
+    <div id="modal-opta" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
+      <div class="bg-[#071023] w-full max-w-3xl rounded-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-cyan-300 font-bold">Opta IA (em andamento)</h3>
+          <button class="text-slate-300" onclick="closeModal('modal-opta')">Fechar</button>
+        </div>
+        <p class="text-slate-300">Progresso e integração futura...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="p-6 text-center text-slate-400">
+    © Jean — Projetos & IA
   </footer>
 
-  <!-- Scripts -->
-  <script src="tipster.js"></script>
-  <script src="radar.js"></script>
+  <!-- ========== SCRIPTS - coloque seus .js dentro da pasta scripts/ ========== -->
+  <!-- IMPORTANTE: carregar scripts no final para evitar erros "Cannot read property addEventListener of null" -->
+  <script>
+    /* Funções simples de abrir/fechar modal - usadas pelos botões */
+    window.openModal = function (id) {
+      const modal = document.getElementById(id);
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      modal.style.display = 'flex';
+      modal.style.alignItems = 'center';
+      modal.style.justifyContent = 'center';
+    };
+    window.closeModal = function (id) {
+      const modal = document.getElementById(id);
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      modal.style.display = '';
+    };
+  </script>
+
+  <!-- navigation.js should manage typed headline, menu toggles, tabs and other UI bits -->
+  <script src="scripts/navigation.js" defer></script>
+
+  <!-- Tipster script (assegure que TIPSTER_API na sua versão do tipster.js esteja correto) -->
+  <script src="scripts/tipster.js" defer></script>
+
+  <!-- Radar script (carrega jogos ao vivo e stats) -->
+  <script src="scripts/radar.js" defer></script>
+
+  <!-- Prompts generator -->
+  <script src="scripts/prompts.js" defer></script>
+
+  <!-- imagens.js (se você usa para carrossel/galeria) -->
+  <script src="scripts/imagens.js" defer></script>
+
+  <!-- fallback: se algum script não carregou, mensagens no console -->
+  <script>
+    window.addEventListener('error', (ev) => {
+      // Log básico para ajudar debug quando quiser
+      console.warn('Script error detected:', ev.message, ev.filename, ev.lineno);
+    });
+  </script>
 </body>
 </html>
