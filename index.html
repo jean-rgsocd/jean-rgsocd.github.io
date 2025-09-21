@@ -1,308 +1,168 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jean · Tipster IA · Radar IA · Portfolio</title>
-  <!-- favicon (adicione seu favicon no caminho correto) -->
-  <link rel="icon" href="favicon.ico" />
-
-  <!-- Tailwind / seu CSS aqui -->
-  <!-- Se você usa Tailwind via CDN (apenas para dev). Em produção, prefira build. -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jean Carlos - Portfólio</title>
+  <link rel="icon" href="assets/images/perfil.jpg" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <style>
-    /* Pequenas customizações para deixar bonito sem quebrar layout */
-    body { background: #0b1220; color: #c9d1d9; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-    .card { background: #071023; border: 1px solid #152033; border-radius: 12px; padding: 1rem; }
-    .hidden { display: none !important; }
-    .btn { background: linear-gradient(90deg,#0ea5a8,#06b6d4); color: #021018; padding: .5rem .9rem; border-radius: .6rem; font-weight:700; }
+    body { background-color: #030712; color: #e2e8f0; }
+    .btn { @apply px-3 py-2 bg-cyan-500 text-slate-900 rounded-md font-medium hover:bg-cyan-400; }
+    .modal { display: none; }
+    .modal.flex { display: flex; }
   </style>
 </head>
-<body class="min-h-screen">
+<body class="font-sans">
 
-  <!-- ========== HEADER ========== -->
-  <header class="p-6 flex items-center justify-between border-b border-slate-800">
-    <div class="flex items-center gap-4">
-      <img src="assets/images/perfil.jpg" alt="Perfil" class="w-14 h-14 rounded-full object-cover border-2 border-slate-700" />
-      <div>
-        <h1 class="text-2xl font-bold text-cyan-300">Jean — Tecnologia & IA</h1>
-        <p id="typed-headline" class="text-slate-300 text-sm mt-1">Profissional de Tecnologia e Segurança Cibernética</p>
-      </div>
+  <!-- Header -->
+  <header class="p-6 flex justify-between items-center border-b border-slate-800">
+    <div class="flex items-center gap-3">
+      <img src="assets/images/perfil.jpg" alt="Foto de perfil" class="w-12 h-12 rounded-full border-2 border-cyan-400" />
+      <h1 class="text-2xl font-bold text-cyan-300">Jean Carlos</h1>
     </div>
-
-    <nav>
-      <ul class="flex gap-4 items-center text-slate-300">
-        <li><a href="#sobre" class="hover:text-cyan-300">Sobre</a></li>
-        <li><a href="#competencias" class="hover:text-cyan-300">Competências</a></li>
-        <li><a href="#projetos" class="hover:text-cyan-300">Projetos</a></li>
-        <li><a href="#ferramentas" class="hover:text-cyan-300">Ferramentas</a></li>
-      </ul>
+    <nav class="space-x-4">
+      <a href="#sobre" class="hover:text-cyan-400">Sobre</a>
+      <a href="#competencias" class="hover:text-cyan-400">Competências</a>
+      <a href="#projetos" class="hover:text-cyan-400">Projetos</a>
+      <a href="#ferramentas" class="hover:text-cyan-400">Ferramentas</a>
     </nav>
   </header>
 
-  <main class="p-8 max-w-6xl mx-auto space-y-8">
+  <!-- Sobre -->
+  <section id="sobre" class="p-6 max-w-3xl mx-auto">
+    <h2 class="text-xl font-bold text-cyan-400 mb-2">Sobre mim</h2>
+    <p class="text-slate-300 leading-relaxed">
+      Sou desenvolvedor focado em <span class="text-cyan-400">IA aplicada</span>, automações e segurança cibernética.
+      Experiência com <strong>Python</strong>, <strong>FastAPI</strong>, <strong>APIs</strong> e integrações complexas.
+    </p>
+  </section>
 
-    <!-- ========== SOBRE ========== -->
-    <section id="sobre" class="card">
-      <h2 class="text-xl font-bold text-cyan-300">Sobre</h2>
-      <p class="mt-2 text-slate-300">Sou desenvolvedor e especialista em segurança com foco em aplicações, automação e modelos de IA para esportes e análise.</p>
-    </section>
+  <!-- Competências -->
+  <section id="competencias" class="p-6 max-w-4xl mx-auto">
+    <h2 class="text-xl font-bold text-cyan-400 mb-4">Competências</h2>
+    <ul class="grid grid-cols-2 md:grid-cols-3 gap-3 text-slate-300">
+      <li>Python & FastAPI</li>
+      <li>APIs REST / Webhooks</li>
+      <li>Integrações de IA</li>
+      <li>Segurança Web</li>
+      <li>Banco de Dados</li>
+      <li>Frontend (Tailwind, JS)</li>
+    </ul>
+  </section>
 
-    <!-- ========== COMPETÊNCIAS ========== -->
-    <section id="competencias" class="card">
-      <h2 class="text-xl font-bold text-cyan-300">Competências</h2>
-      <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="p-4 border rounded border-slate-800">
-          <h3 class="font-semibold text-slate-100">Desenvolvimento</h3>
-          <p class="text-slate-300 text-sm mt-2">Python, FastAPI, JS, React, infra</p>
-        </div>
-        <div class="p-4 border rounded border-slate-800">
-          <h3 class="font-semibold text-slate-100">Segurança</h3>
-          <p class="text-slate-300 text-sm mt-2">Pentest, avaliações, mitigação</p>
-        </div>
-        <div class="p-4 border rounded border-slate-800">
-          <h3 class="font-semibold text-slate-100">IA & Dados</h3>
-          <p class="text-slate-300 text-sm mt-2">Modelagem, análise de odds, visualizações</p>
-        </div>
+  <!-- Projetos -->
+  <section id="projetos" class="p-6 max-w-5xl mx-auto">
+    <h2 class="text-xl font-bold text-cyan-400 mb-4">Projetos</h2>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="bg-[#071023] p-4 rounded-lg border border-slate-700">
+        <h4 class="font-semibold text-slate-100">Portfólio Interativo</h4>
+        <p class="text-slate-300 text-sm mt-1">Site pessoal com design responsivo e integração de ferramentas.</p>
       </div>
-    </section>
-
-    <!-- ========== FERRAMENTAS (Placeholder) ========== -->
-    <section id="ferramentas" class="card">
-      <h2 class="text-xl font-bold text-cyan-300">Ferramentas</h2>
-      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <h4 class="font-semibold text-slate-100">Analisador de Segurança Web</h4>
-          <p class="text-slate-300">Ferramenta para análise automatizada de endpoints e vulnerabilidades.</p>
-          <button class="btn mt-3" onclick="openModal('modal-scanner')">Abrir</button>
-        </div>
-        <div>
-          <h4 class="font-semibold text-slate-100">Opta IA (em andamento)</h4>
-          <p class="text-slate-300">Projeto em progresso para ingestão e análise Opta.</p>
-          <button class="btn mt-3" onclick="openModal('modal-opta')">Ver progresso</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========== PROJETOS ========== -->
-    <section id="projetos" class="card">
-      <h2 class="text-xl font-bold text-cyan-300">Projetos</h2>
-      <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="p-4 border rounded border-slate-800">
-          <h3 class="font-semibold text-slate-100">Portfólio Interativo</h3>
-          <p class="text-slate-300 mt-2">Interface interativa com modais e demos.</p>
-          <button class="btn mt-3" onclick="openModal('modal-portfolio')">Ver projeto</button>
-        </div>
-
-        <div class="p-4 border rounded border-slate-800">
-          <h3 class="font-semibold text-slate-100">Gerador de Prompts</h3>
-          <p class="text-slate-300 mt-2">Criação rápida e organizada de prompts para geração de imagens e textos.</p>
-          <button class="btn mt-3" onclick="openModal('modal-prompts')">Gerador</button>
-        </div>
-
-        <div class="p-4 border rounded border-slate-800">
-          <h3 class="font-semibold text-slate-100">Tipster IA</h3>
-          <p class="text-slate-300 mt-2">Análises pré-jogo e ao vivo (Futebol / NBA / NFL).</p>
-          <button class="btn mt-3" onclick="openModal('modal-tipster')">Abrir Tipster</button>
-        </div>
-
-        <div class="p-4 border rounded border-slate-800">
-          <h3 class="font-semibold text-slate-100">Radar IA</h3>
-          <p class="text-slate-300 mt-2">Mapa/Índice de pressão ao vivo (só jogos realmente AO VIVO).</p>
-          <button class="btn mt-3" onclick="openModal('modal-radar')">Abrir Radar</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========== MODAIS DOS PROJETOS (SIMPLES) ========== -->
-    <div id="modal-tipster" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
-      <div class="bg-[#071023] w-full max-w-4xl rounded-lg p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-cyan-300 font-bold">Tipster IA</h3>
-          <button class="text-slate-300" onclick="closeModal('modal-tipster')">Fechar</button>
-        </div>
-
-        <!-- Tipster content: selects and results -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-slate-300 mb-1">Esporte</label>
-            <select id="sportSelect" class="w-full p-2 rounded bg-slate-900 border border-slate-700">
-              <option value="">Selecione o esporte</option>
-              <option value="football">Futebol</option>
-              <option value="nba">NBA</option>
-              <option value="nfl">NFL</option>
-            </select>
-          </div>
-
-          <div id="leagueSelectorGroup" class="hidden">
-            <label class="block text-slate-300 mb-1">Liga</label>
-            <select id="leagueSelect" class="w-full p-2 rounded bg-slate-900 border border-slate-700">
-              <option value="">Selecione uma liga</option>
-            </select>
-          </div>
-
-          <div class="md:col-span-2">
-            <label class="block text-slate-300 mb-1">Jogo</label>
-            <select id="gameSelect" class="w-full p-2 rounded bg-slate-900 border border-slate-700">
-              <option value="">Selecione um jogo</option>
-            </select>
-          </div>
-
-          <div id="bettingResults" class="md:col-span-2 hidden"></div>
-        </div>
-
+      <div class="bg-[#071023] p-4 rounded-lg border border-slate-700">
+        <h4 class="font-semibold text-slate-100">Opta IA (em andamento)</h4>
+        <p class="text-slate-300 text-sm mt-1">Integração de dados esportivos com inteligência artificial.</p>
       </div>
     </div>
+  </section>
 
-    <div id="modal-radar" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
-      <div class="bg-[#071023] w-full max-w-4xl rounded-lg p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-cyan-300 font-bold">Radar IA - Jogos ao Vivo</h3>
-          <button class="text-slate-300" onclick="closeModal('modal-radar')">Fechar</button>
-        </div>
+  <!-- Ferramentas -->
+  <section id="ferramentas" class="p-6 max-w-6xl mx-auto">
+    <h2 class="text-xl font-bold text-cyan-400 mb-4">Ferramentas</h2>
+    <div class="grid md:grid-cols-3 gap-4">
 
-        <!-- Radar content -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-slate-300 mb-1">Jogo ao vivo</label>
-            <select id="radar-game-select" class="w-full p-2 rounded bg-slate-900 border border-slate-700">
-              <option value="">Carregando jogos ao vivo...</option>
-            </select>
-
-            <div class="mt-4 card">
-              <p class="text-slate-300"><strong>Placar:</strong> <span id="radar-score">-</span></p>
-              <p class="text-slate-300"><strong>Minuto:</strong> <span id="radar-minute">-</span></p>
-              <div class="mt-2">
-                <p class="text-slate-300"><strong>Posse</strong> <span id="home-possession">-</span>% / <span id="away-possession">-</span>%</p>
-                <p class="text-slate-300"><strong>Chutes</strong> <span id="home-shots">-</span> / <span id="away-shots">-</span></p>
-                <p class="text-slate-300"><strong>Escanteios</strong> <span id="home-corners">-</span> / <span id="away-corners">-</span></p>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h4 class="text-slate-200 font-semibold mb-2">Índice de Pressão</h4>
-            <div class="w-full bg-slate-800 h-4 rounded overflow-hidden">
-              <div id="pressure-bar" class="h-4 bg-cyan-500" style="width:50%"></div>
-            </div>
-            <ul id="radar-events" class="mt-3 text-slate-300 list-disc pl-5">
-              <li>Nenhum evento</li>
-            </ul>
-          </div>
-        </div>
-
+      <!-- Tipster -->
+      <div class="bg-[#071023] p-4 rounded-lg border border-slate-700">
+        <h4 class="font-semibold text-slate-100">Tipster IA</h4>
+        <p class="text-slate-300 text-sm mt-1">Análises pré-jogo para Futebol, NBA e NFL.</p>
+        <button class="btn mt-3" onclick="openModal('modal-tipster')">Abrir</button>
       </div>
-    </div>
 
-    <!-- Modal prompts (simples) -->
-    <div id="modal-prompts" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
-      <div class="bg-[#071023] w-full max-w-2xl rounded-lg p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-cyan-300 font-bold">Gerador de Prompts</h3>
-          <button class="text-slate-300" onclick="closeModal('modal-prompts')">Fechar</button>
-        </div>
-        <div>
-          <label class="block text-slate-300">Categoria</label>
-          <select id="categoria-profissao" class="w-full p-2 rounded bg-slate-900 border border-slate-700">
-            <option value="">Escolha...</option>
-          </select>
-
-          <label class="block text-slate-300 mt-3">Profissão / Prompt</label>
-          <select id="profissao" class="w-full p-2 rounded bg-slate-900 border border-slate-700">
-            <option value="">Selecione</option>
-          </select>
-
-          <textarea id="prompt-profissao-output" class="w-full mt-3 p-3 rounded bg-slate-900 border border-slate-700 h-36"></textarea>
-          <div class="flex gap-2 mt-3">
-            <button id="gerar-prompt-profissao" class="btn">Gerar</button>
-            <button id="copiar-prompt-profissao" class="btn">Copiar</button>
-          </div>
-        </div>
+      <!-- Radar -->
+      <div class="bg-[#071023] p-4 rounded-lg border border-slate-700">
+        <h4 class="font-semibold text-slate-100">Radar IA</h4>
+        <p class="text-slate-300 text-sm mt-1">Monitoramento ao vivo de jogos e índice de pressão.</p>
+        <button class="btn mt-3" onclick="openModal('modal-radar')">Abrir</button>
       </div>
-    </div>
 
-    <!-- modal portfolio / scanner / opta placeholders -->
-    <div id="modal-portfolio" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
-      <div class="bg-[#071023] w-full max-w-3xl rounded-lg p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-cyan-300 font-bold">Portfólio Interativo</h3>
-          <button class="text-slate-300" onclick="closeModal('modal-portfolio')">Fechar</button>
-        </div>
-        <p class="text-slate-300">Conteúdo do portfólio...</p>
+      <!-- Gerador de Prompts -->
+      <div class="bg-[#071023] p-4 rounded-lg border border-slate-700">
+        <h4 class="font-semibold text-slate-100">Gerador de Prompts</h4>
+        <p class="text-slate-300 text-sm mt-1">Sugestões otimizadas para imagens, vídeos e IA.</p>
+        <button class="btn mt-3" onclick="openModal('modal-prompts')">Abrir</button>
       </div>
-    </div>
 
-    <div id="modal-scanner" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
-      <div class="bg-[#071023] w-full max-w-3xl rounded-lg p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-cyan-300 font-bold">Analisador de Segurança Web</h3>
-          <button class="text-slate-300" onclick="closeModal('modal-scanner')">Fechar</button>
-        </div>
-        <p class="text-slate-300">Ferramenta de scanner...</p>
+      <!-- Analisador de Segurança Web -->
+      <div class="bg-[#071023] p-4 rounded-lg border border-slate-700">
+        <h4 class="font-semibold text-slate-100">Analisador de Segurança Web</h4>
+        <p class="text-slate-300 text-sm mt-1">Ferramenta demonstrativa para testar URLs e possíveis falhas básicas.</p>
+        <button class="btn mt-3" onclick="openModal('modal-scanner')">Abrir</button>
       </div>
+
     </div>
+  </section>
 
-    <div id="modal-opta" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
-      <div class="bg-[#071023] w-full max-w-3xl rounded-lg p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-cyan-300 font-bold">Opta IA (em andamento)</h3>
-          <button class="text-slate-300" onclick="closeModal('modal-opta')">Fechar</button>
-        </div>
-        <p class="text-slate-300">Progresso e integração futura...</p>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- ========== FOOTER ========== -->
-  <footer class="p-6 text-center text-slate-400">
-    © Jean — Projetos & IA
+  <!-- Footer -->
+  <footer class="p-6 text-center text-slate-500 border-t border-slate-800">
+    © 2025 Jean Carlos — Todos os direitos reservados
   </footer>
 
-  <!-- ========== SCRIPTS - coloque seus .js dentro da pasta scripts/ ========== -->
-  <!-- IMPORTANTE: carregar scripts no final para evitar erros "Cannot read property addEventListener of null" -->
+  <!-- Modals existentes -->
+  <div id="modal-tipster" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
+    <div class="bg-[#071023] w-full max-w-3xl rounded-lg p-6">
+      <h3 class="text-cyan-300 font-bold mb-2">Tipster IA</h3>
+      <div id="tipster-content"></div>
+    </div>
+  </div>
+
+  <div id="modal-radar" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
+    <div class="bg-[#071023] w-full max-w-3xl rounded-lg p-6">
+      <h3 class="text-cyan-300 font-bold mb-2">Radar IA</h3>
+      <div id="radar-content"></div>
+    </div>
+  </div>
+
+  <div id="modal-prompts" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
+    <div class="bg-[#071023] w-full max-w-3xl rounded-lg p-6">
+      <h3 class="text-cyan-300 font-bold mb-2">Gerador de Prompts</h3>
+      <div id="prompts-content"></div>
+    </div>
+  </div>
+
+  <!-- Modal Scanner -->
+  <div id="modal-scanner" class="modal hidden fixed inset-0 z-50 items-center justify-center bg-black/60 p-6">
+    <div class="bg-[#071023] w-full max-w-2xl rounded-lg p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-cyan-300 font-bold">Analisador de Segurança Web</h3>
+        <button class="text-slate-300" onclick="closeModal('modal-scanner')">Fechar ✕</button>
+      </div>
+
+      <label for="scanner-url" class="text-slate-300">Digite a URL do site:</label>
+      <input id="scanner-url" type="text" placeholder="https://exemplo.com"
+        class="w-full mt-2 p-2 rounded bg-slate-900 border border-slate-700 text-slate-200" />
+
+      <button id="scanner-run" class="mt-3 px-4 py-2 bg-cyan-500 text-slate-900 rounded font-semibold">Analisar</button>
+
+      <div id="scanner-results" class="mt-4 text-slate-300 text-sm space-y-2"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="scripts/navigation.js"></script>
+  <script src="scripts/tipster.js"></script>
+  <script src="scripts/radar.js"></script>
+  <script src="scripts/prompts.js"></script>
+  <script src="scripts/imagens.js"></script>
+  <script src="scripts/scanner.js"></script>
   <script>
-    /* Funções simples de abrir/fechar modal - usadas pelos botões */
-    window.openModal = function (id) {
-      const modal = document.getElementById(id);
-      if (!modal) return;
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      modal.style.display = 'flex';
-      modal.style.alignItems = 'center';
-      modal.style.justifyContent = 'center';
-    };
-    window.closeModal = function (id) {
-      const modal = document.getElementById(id);
-      if (!modal) return;
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-      modal.style.display = '';
-    };
-  </script>
-
-  <!-- navigation.js should manage typed headline, menu toggles, tabs and other UI bits -->
-  <script src="scripts/navigation.js" defer></script>
-
-  <!-- Tipster script (assegure que TIPSTER_API na sua versão do tipster.js esteja correto) -->
-  <script src="scripts/tipster.js" defer></script>
-
-  <!-- Radar script (carrega jogos ao vivo e stats) -->
-  <script src="scripts/radar.js" defer></script>
-
-  <!-- Prompts generator -->
-  <script src="scripts/prompts.js" defer></script>
-
-  <!-- imagens.js (se você usa para carrossel/galeria) -->
-  <script src="scripts/imagens.js" defer></script>
-
-  <!-- fallback: se algum script não carregou, mensagens no console -->
-  <script>
-    window.addEventListener('error', (ev) => {
-      // Log básico para ajudar debug quando quiser
-      console.warn('Script error detected:', ev.message, ev.filename, ev.lineno);
-    });
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (el) { el.classList.remove('hidden'); el.classList.add('flex'); }
+    }
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) { el.classList.add('hidden'); el.classList.remove('flex'); }
+    }
   </script>
 </body>
 </html>
