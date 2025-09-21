@@ -1,4 +1,4 @@
-// radar.js - Radar IA (liga -> jogo ao vivo -> estatísticas + eventos)
+// radar.js - Radar IA atualizado (liga -> jogo, eventos invertidos, ícones, estimated_extra)
 document.addEventListener("DOMContentLoaded", function () {
     const radarSection = document.getElementById("radar-ia-section");
     if (!radarSection) return;
@@ -14,33 +14,30 @@ document.addEventListener("DOMContentLoaded", function () {
     const eventsEl = document.getElementById("radar-events");
     const stoppageBox = document.getElementById("stoppage-time-prediction");
     const stoppageVal = document.getElementById("stoppage-time-value");
-
-    const tab1 = document.getElementById("tab-1t");
-    const tab2 = document.getElementById("tab-2t");
-    const tabFull = document.getElementById("tab-full");
+    const periodButtons = document.querySelectorAll(".period-btn");
 
     let interval = null;
     let currentGameId = null;
-    let currentPeriod = "full";
+    let currentPeriod = "fullGame";
 
-    // -------- Carregar Ligas --------
     const loadLeagues = async () => {
+        if (!leagueSelect) return;
         leagueSelect.disabled = true;
         leagueSelect.innerHTML = `<option>Carregando ligas...</option>`;
         try {
             const resp = await fetch(`${RADAR_API}/ligas`);
             const leagues = await resp.json();
             leagueSelect.innerHTML = `<option value="">Escolha uma liga</option>`;
-            leagues.forEach(l => leagueSelect.add(new Option(`${l.name} - ${l.country}`, l.id)));
+            leagues.forEach(l => leagueSelect.add(new Option(`${l.name} - ${l.country || ''}`, l.id)));
             leagueSelect.disabled = false;
         } catch (err) {
-            leagueSelect.innerHTML = `<option value="">Erro ao carregar ligas</option>`;
             console.error(err);
+            leagueSelect.innerHTML = `<option value="">Erro ao carregar ligas</option>`;
         }
     };
 
-    // -------- Carregar Jogos --------
     const loadGames = async (leagueId) => {
+        if (!gameSelect) return;
         gameSelect.disabled = true;
         gameSelect.innerHTML = `<option>Carregando jogos...</option>`;
         try {
@@ -54,19 +51,34 @@ document.addEventListener("DOMContentLoaded", function () {
             games.forEach(g => gameSelect.add(new Option(g.title, g.game_id)));
             gameSelect.disabled = false;
         } catch (err) {
-            gameSelect.innerHTML = `<option value="">Erro ao carregar jogos</option>`;
             console.error(err);
+            gameSelect.innerHTML = `<option value="">Erro ao carregar jogos</option>`;
         }
     };
 
-    // -------- Renderizar Estatísticas e Eventos --------
+    const iconForCategory = (cat) => {
+        const c = (cat || "").toLowerCase();
+        if (c.includes("goal")) return "⚽";
+        if (c.includes("yellow")) return "🟨";
+        if (c.includes("red")) return "🟥";
+        if (c.includes("sub") || c.includes("substitution")) return "🔁";
+        if (c.includes("shot") || c.includes("target") || c.includes("on target")) return "🎯";
+        if (c.includes("corner")) return "� flag" /* fallback, replaced below */;
+        if (c.includes("foul")) return "🛑";
+        if (c.includes("injury") || c.includes("interruption")) return "⛑️";
+        return "•";
+    };
+
+    // fallback for corner icon
+    const cornerIcon = "🚩";
+
     const renderStats = (data) => {
         homeTeamEl.textContent = data.teams?.home?.name || "Time Casa";
         awayTeamEl.textContent = data.teams?.away?.name || "Time Fora";
         scoreEl.textContent = `${data.goals?.home ?? 0} - ${data.goals?.away ?? 0}`;
         minuteEl.textContent = data.fixture?.status?.elapsed ? `${data.fixture.status.elapsed}'` : "-";
 
-        // Acréscimos
+        // stoppage time
         if (data.estimated_extra) {
             stoppageBox.classList.remove("hidden");
             stoppageVal.textContent = data.estimated_extra;
@@ -74,42 +86,52 @@ document.addEventListener("DOMContentLoaded", function () {
             stoppageBox.classList.add("hidden");
         }
 
-        // Eventos
-        eventsEl.innerHTML = "";
-        const events = data.events || [];
-        if (events.length > 0) {
-            events.forEach(e => {
-                const li = document.createElement("li");
-                li.className = "truncate py-1 flex items-center gap-2";
-
-                const timeLabel = e.display_time || (e.raw?.time?.elapsed ? `${e.raw.time.elapsed}'` : "-");
-
-                // Ícones por tipo
-                let icon = "⚪";
-                const type = (e.type || "").toLowerCase();
-                const detail = (e.detail || "").toLowerCase();
-                if (type.includes("goal")) icon = "⚽";
-                else if (detail.includes("yellow")) icon = "🟨";
-                else if (detail.includes("red")) icon = "🟥";
-                else if (type.includes("substitution")) icon = "🔄";
-                else if (type.includes("shot")) icon = "🎯";
-                else if (type.includes("foul")) icon = "🛑";
-                else if (type.includes("corner")) icon = "🚩";
-
-                const player = (e.player) ? ` — ${e.player}` : "";
-                const team = (e.team) ? ` (${e.team})` : "";
-
-                li.innerHTML = `<span class="font-semibold">${timeLabel}</span> ${icon} ${e.type || ""} ${e.detail || ""}${player}${team}`;
-                eventsEl.appendChild(li);
-            });
-        } else {
-            eventsEl.innerHTML = "<li>Nenhum evento recente.</li>";
+        // mostrar estatísticas resumidas (se houver)
+        // seu HTML já tem elementos com ids: stat-possession, stat-shots, stat-corners, stat-fouls, stat-yellow-cards, stat-red-cards
+        const stats = data.statistics || {};
+        try {
+            const home = stats.home || {};
+            const away = stats.away || {};
+            const setIfExist = (id, val) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.textContent = val !== undefined && val !== null ? val : "-";
+            };
+            // tentar extrair valores comuns
+            setIfExist("stat-possession", (home.possession || "-") + (away.possession ? ` / ${away.possession}` : ""));
+            setIfExist("stat-shots", (home.shots_on_goal || home.shots || "-") + (away.shots_on_goal ? ` / ${away.shots_on_goal}` : ""));
+            setIfExist("stat-corners", (home.corner || home.corners || "-") + (away.corner ? ` / ${away.corner}` : ""));
+            setIfExist("stat-fouls", (home.fouls || "-") + (away.fouls ? ` / ${away.fouls}` : ""));
+            setIfExist("stat-yellow-cards", (home.yellow_cards || home.yellowcard || "-") + (away.yellow_cards ? ` / ${away.yellow_cards}` : ""));
+            setIfExist("stat-red-cards", (home.red_cards || home.redcard || "-") + (away.red_cards ? ` / ${away.red_cards}` : ""));
+        } catch (e) {
+            console.warn("Erro ao renderizar estatísticas:", e);
         }
 
+        // events (já ordenados no backend: mais recentes primeiro)
+        eventsEl.innerHTML = "";
+        const evs = data.events || [];
+        if (evs.length === 0) {
+            eventsEl.innerHTML = "<li>Nenhum evento recente</li>";
+        } else {
+            evs.forEach(ev => {
+                const li = document.createElement("li");
+                li.className = "flex items-start gap-2 py-1";
+                const icon = ev.category && ev.category.toLowerCase().includes("corner") ? cornerIcon : iconForCategory(ev.category);
+                const time = ev.display_time || (ev.raw && ev.raw.time && ev.raw.time.elapsed ? `${ev.raw.time.elapsed}'` : "-");
+                const player = ev.player ? ` — ${ev.player}` : "";
+                const team = ev.team ? ` (${ev.team})` : "";
+                li.innerHTML = `<span class="font-semibold">${time}</span>
+                                <span class="ml-2">${icon}</span>
+                                <div class="ml-2 text-sm text-slate-300">${ev.type || ""} ${ev.detail ? ` — ${ev.detail}` : ""}${player}${team}</div>`;
+                eventsEl.appendChild(li);
+            });
+        }
+
+        // mostrar painel
         dashboard.classList.remove("hidden");
     };
 
-    // -------- Buscar Stats --------
     const fetchGame = async (gameId) => {
         try {
             const resp = await fetch(`${RADAR_API}/stats-aovivo/${gameId}`);
@@ -123,9 +145,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
-    // -------- Eventos de UI --------
-    gameSelect.addEventListener('change', () => {
-        const id = gameSelect.value;
+    // UI events
+    leagueSelect && leagueSelect.addEventListener("change", (e) => {
+        const lid = e.target.value;
+        if (!lid) return;
+        loadGames(lid);
+    });
+
+    gameSelect && gameSelect.addEventListener("change", (e) => {
+        const id = e.target.value;
         clearInterval(interval);
         if (!id) {
             dashboard.classList.add("hidden");
@@ -133,26 +161,25 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         currentGameId = id;
         fetchGame(currentGameId);
-        interval = setInterval(() => fetchGame(currentGameId), 45000);
+        interval = setInterval(() => fetchGame(currentGameId), 35000);
     });
 
-    leagueSelect.addEventListener('change', () => {
-        const lid = leagueSelect.value;
-        if (!lid) return;
-        loadGames(lid);
+    periodButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            // toggling visual active class
+            periodButtons.forEach(b => b.classList.remove("bg-cyan-600","text-white"));
+            btn.classList.add("bg-cyan-600","text-white");
+            currentPeriod = btn.dataset.period;
+            // currently backend returns stats aggregated; if we expand to period-specific, we would re-render here
+        });
     });
 
-    tab1 && tab1.addEventListener('click', () => { currentPeriod = "1t"; });
-    tab2 && tab2.addEventListener('click', () => { currentPeriod = "2t"; });
-    tabFull && tabFull.addEventListener('click', () => { currentPeriod = "full"; });
-
-    // -------- Inicialização --------
-    const observer = new IntersectionObserver((entries) => {
+    // load leagues when section appears
+    const obs = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
             loadLeagues();
-            observer.disconnect();
+            obs.disconnect();
         }
     }, { threshold: 0.1 });
-
-    observer.observe(radarSection);
+    obs.observe(radarSection);
 });
