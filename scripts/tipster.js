@@ -2,14 +2,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const tipsterSection = document.getElementById('analisador-apostas');
     if (!tipsterSection) return;
 
-    const sportSelect = tipsterSection.querySelector('#sport-select');
-    const countryGroup = tipsterSection.querySelector('#country-selector-group');
-    const leagueGroup = tipsterSection.querySelector('#league-selector-group');
-    const gameGroup = tipsterSection.querySelector('#game-selector-group');
-    const countrySelect = tipsterSection.querySelector('#country-select');
-    const leagueSelect = tipsterSection.querySelector('#league-select');
-    const gameSelect = tipsterSection.querySelector('#game-select');
-    const resultsDiv = tipsterSection.querySelector('#bettingResults');
+    // Seleciona os elementos pelo ID, já que a estrutura agora é mais simples
+    const sportSelect = document.getElementById('sport-select'); 
+    const gameSelect = document.getElementById('game-select');
+    const resultsDiv = document.getElementById('bettingResults');
     const TIPSTER_BASE_URL = 'https://analisador-apostas.onrender.com';
 
     const resetSelect = (el, msg) => {
@@ -17,107 +13,80 @@ document.addEventListener('DOMContentLoaded', function () {
         el.disabled = true;
     };
 
-    const hideAllSelectors = () => {
-        countryGroup.classList.add('hidden');
-        countryGroup.classList.remove('flex');
-        leagueGroup.classList.add('hidden');
-        leagueGroup.classList.remove('flex');
-        gameGroup.classList.add('hidden');
-        gameGroup.classList.remove('flex');
-    };
-
-    const loadCountries = async () => {
-        countrySelect.innerHTML = '<option value="">Carregando...</option>';
-        countrySelect.disabled = false;
+    // 1. CARREGAR ESPORTES
+    const loadSports = async () => {
+        resetSelect(sportSelect, 'Carregando Esportes...');
+        sportSelect.disabled = false;
         try {
-            const res = await fetch(`${TIPSTER_BASE_URL}/paises/football`);
-            if (!res.ok) throw new Error('Falha ao buscar países');
+            const res = await fetch(`${TIPSTER_BASE_URL}/sports`);
+            if (!res.ok) throw new Error('Falha ao buscar esportes');
             const data = await res.json();
-            countrySelect.innerHTML = '<option value="">Selecione País</option>';
-            data.forEach(c => countrySelect.add(new Option(c.name, c.code)));
+            sportSelect.innerHTML = '<option value="">Selecione um Esporte</option>';
+            data.forEach(sport => {
+                sportSelect.add(new Option(sport.title, sport.key));
+            });
         } catch (err) {
-            resetSelect(countrySelect, err.message);
+            resetSelect(sportSelect, err.message);
         }
     };
 
-    const loadLeagues = async () => {
-        const countryCode = countrySelect.value;
-        if (!countryCode) return;
-        leagueSelect.innerHTML = '<option value="">Carregando...</option>';
-        leagueSelect.disabled = false;
-        try {
-            const res = await fetch(`${TIPSTER_BASE_URL}/ligas/football/${countryCode}`);
-            if (!res.ok) throw new Error('Falha ao buscar ligas');
-            const data = await res.json();
-            leagueSelect.innerHTML = '<option value="">Selecione Liga</option>';
-            data.forEach(l => leagueSelect.add(new Option(l.name, l.id)));
-        } catch (err) {
-            resetSelect(leagueSelect, err.message);
+    // 2. CARREGAR JOGOS QUANDO UM ESPORTE É SELECIONADO
+    sportSelect.addEventListener('change', async () => {
+        const sportKey = sportSelect.value;
+        resultsDiv.classList.add('hidden');
+        if (!sportKey) {
+            resetSelect(gameSelect, 'Selecione um esporte');
+            return;
         }
-    };
 
-    const loadGames = async (sport, leagueId) => {
-        if (!sport || !leagueId) return;
-        gameSelect.innerHTML = '<option value="">Carregando...</option>';
+        resetSelect(gameSelect, 'Carregando jogos...');
         gameSelect.disabled = false;
-        gameGroup.classList.remove('hidden');
-        gameGroup.classList.add('flex');
         try {
-            const res = await fetch(`${TIPSTER_BASE_URL}/partidas/${sport}/${leagueId}`);
-            if (!res.ok) throw new Error('Falha ao buscar jogos.');
-            const data = await res.json();
-            gameSelect.innerHTML = '<option value="">Selecione Jogo</option>';
-            if (data.length === 0) {
+            const res = await fetch(`${TIPSTER_BASE_URL}/upcoming-games/${sportKey}`);
+            if (!res.ok) throw new Error('Falha ao buscar jogos');
+            const games = await res.json();
+            
+            // Salva os dados dos jogos para não precisar buscar de novo
+            gameSelect.gamesData = games; 
+
+            gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
+            if (games.length === 0) {
                 gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado</option>';
             } else {
-                data.forEach(g => {
-                    const date = new Date(g.time).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-                    const opt = new Option(`${g.home} vs ${g.away} (${date})`, g.game_id);
-                    opt.dataset.status = g.status;
+                games.forEach(game => {
+                    const date = new Date(game.commence_time).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+                    const opt = new Option(`${game.home_team} vs ${game.away_team} (${date})`, game.id);
                     gameSelect.add(opt);
                 });
             }
         } catch (err) {
             resetSelect(gameSelect, err.message);
         }
-    };
-
-    sportSelect.addEventListener('change', () => {
-        const sport = sportSelect.value;
-        resultsDiv.innerHTML = '';
-        resultsDiv.classList.add('hidden');
-        hideAllSelectors();
-        resetSelect(gameSelect, '...');
-        resetSelect(leagueSelect, '...');
-        resetSelect(countrySelect, '...');
-
-        if (sport === 'football') {
-            countryGroup.classList.remove('hidden');
-            countryGroup.classList.add('flex');
-            leagueGroup.classList.remove('hidden');
-            leagueGroup.classList.add('flex');
-            gameGroup.classList.add('lg:col-span-2');
-            loadCountries();
-        } else if (sport === 'basketball') {
-            gameGroup.classList.add('lg:col-span-2');
-            loadGames('basketball', 12);
-        } else if (sport === 'american-football') {
-            gameGroup.classList.add('lg:col-span-2');
-            loadGames('american-football', 16);
-        }
     });
 
-    countrySelect.addEventListener('change', loadLeagues);
-    leagueSelect.addEventListener('change', () => loadGames(sportSelect.value, leagueSelect.value));
-    
-    // O evento de selecionar um jogo agora só mostra uma mensagem simples
+    // 3. MOSTRAR ODDS QUANDO UM JOGO É SELECIONADO
     gameSelect.addEventListener('change', () => {
         const gameId = gameSelect.value;
-        if (gameId) {
-            resultsDiv.classList.remove('hidden');
-            resultsDiv.innerHTML = `<div class="p-4 border rounded-lg border-slate-700 bg-slate-900"><p class="text-slate-400">Jogo selecionado. A funcionalidade de análise será reativada em breve.</p></div>`;
-        } else {
+        if (!gameId || !gameSelect.gamesData) {
             resultsDiv.classList.add('hidden');
+            return;
         }
+
+        const selectedGame = gameSelect.gamesData.find(g => g.id === gameId);
+        if (!selectedGame) return;
+
+        resultsDiv.classList.remove('hidden');
+        let html = `<h3 class="font-bold text-xl text-cyan-300 mb-4">Odds para: ${selectedGame.home_team} vs ${selectedGame.away_team}</h3>`;
+        
+        html += '<div class="p-4 border rounded-lg border-slate-700 bg-slate-900 space-y-2">';
+        for (const team in selectedGame.odds) {
+            html += `<p class="text-slate-300 flex justify-between"><span>${team}:</span> <span class="font-bold text-cyan-400">${selectedGame.odds[team]}</span></p>`;
+        }
+        html += '</div>';
+        
+        resultsDiv.innerHTML = html;
     });
+
+    // Inicia o processo carregando os esportes
+    loadSports();
 });
