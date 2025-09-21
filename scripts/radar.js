@@ -1,9 +1,9 @@
-// radar.js - Radar IA atualizado (liga -> jogo, eventos invertidos, ícones, estimated_extra)
-document.addEventListener("DOMContentLoaded", function () {
+// radar.js - Radar IA frontend (exibir mais campos, 1T/2T, eventos em ordem decrescente)
+document.addEventListener("DOMContentLoaded", () => {
     const radarSection = document.getElementById("radar-ia-section");
     if (!radarSection) return;
 
-    const RADAR_API = "https://radar-ia-backend.onrender.com";
+    const RADAR_API = "https://radar-ia-backend.onrender.com"; // ajuste se precisar
     const leagueSelect = document.getElementById("radar-league-select");
     const gameSelect = document.getElementById("radar-game-select");
     const dashboard = document.getElementById("radar-dashboard");
@@ -12,174 +12,164 @@ document.addEventListener("DOMContentLoaded", function () {
     const homeTeamEl = document.getElementById("home-team-name");
     const awayTeamEl = document.getElementById("away-team-name");
     const eventsEl = document.getElementById("radar-events");
-    const stoppageBox = document.getElementById("stoppage-time-prediction");
-    const stoppageVal = document.getElementById("stoppage-time-value");
-    const periodButtons = document.querySelectorAll(".period-btn");
+    const statElements = {
+        possession: document.getElementById("stat-possession"),
+        shots: document.getElementById("stat-shots"),
+        corners: document.getElementById("stat-corners"),
+        fouls: document.getElementById("stat-fouls"),
+        yellow: document.getElementById("stat-yellow-cards"),
+        red: document.getElementById("stat-red-cards")
+    };
+    const tabs = document.querySelectorAll(".period-btn");
 
-    let interval = null;
     let currentGameId = null;
-    let currentPeriod = "fullGame";
+    let interval = null;
+    let currentPeriod = "full"; // "firstHalf", "secondHalf", "full"
 
-    const loadLeagues = async () => {
-        if (!leagueSelect) return;
-        leagueSelect.disabled = true;
-        leagueSelect.innerHTML = `<option>Carregando ligas...</option>`;
-        try {
-            const resp = await fetch(`${RADAR_API}/ligas`);
-            const leagues = await resp.json();
-            leagueSelect.innerHTML = `<option value="">Escolha uma liga</option>`;
-            leagues.forEach(l => leagueSelect.add(new Option(`${l.name} - ${l.country || ''}`, l.id)));
-            leagueSelect.disabled = false;
-        } catch (err) {
-            console.error(err);
-            leagueSelect.innerHTML = `<option value="">Erro ao carregar ligas</option>`;
+    function formatTimeLabel(ev) {
+        // prefer e.display_time, else build from ev.time.elapsed and ev.time.extra
+        if (!ev) return "-";
+        if (ev.display_time) return ev.display_time;
+        const t = ev.time || {};
+        const elapsed = t.elapsed;
+        const extra = t.extra;
+        if (elapsed == null) return "-";
+        if (extra != null) {
+            // try show minutes'seconds if available (some APIs include extra seconds)
+            return `${elapsed}' ${extra}"`;
         }
-    };
+        return `${elapsed}'`;
+    }
 
-    const loadGames = async (leagueId) => {
-        if (!gameSelect) return;
-        gameSelect.disabled = true;
-        gameSelect.innerHTML = `<option>Carregando jogos...</option>`;
-        try {
-            const resp = await fetch(`${RADAR_API}/jogos-aovivo?league=${leagueId}`);
-            const games = await resp.json();
-            if (!games || games.length === 0) {
-                gameSelect.innerHTML = `<option value="">Nenhum jogo ao vivo</option>`;
-                return;
-            }
-            gameSelect.innerHTML = `<option value="">Selecione um jogo</option>`;
-            games.forEach(g => gameSelect.add(new Option(g.title, g.game_id)));
-            gameSelect.disabled = false;
-        } catch (err) {
-            console.error(err);
-            gameSelect.innerHTML = `<option value="">Erro ao carregar jogos</option>`;
+    function mapEventCategory(ev) {
+        const type = (ev.type||"").toLowerCase();
+        const detail = (ev.detail||"").toLowerCase();
+        if (type.includes("goal") || detail.includes("goal")) return "Goal";
+        if (type.includes("card") || detail.includes("yellow") || detail.includes("red")) {
+            if (detail.includes("red")) return "Red Card";
+            return "Yellow Card";
         }
-    };
-
-    const iconForCategory = (cat) => {
-        const c = (cat || "").toLowerCase();
-        if (c.includes("goal")) return "⚽";
-        if (c.includes("yellow")) return "🟨";
-        if (c.includes("red")) return "🟥";
-        if (c.includes("sub") || c.includes("substitution")) return "🔁";
-        if (c.includes("shot") || c.includes("target") || c.includes("on target")) return "🎯";
-        if (c.includes("corner")) return "� flag" /* fallback, replaced below */;
-        if (c.includes("foul")) return "🛑";
-        if (c.includes("injury") || c.includes("interruption")) return "⛑️";
-        return "•";
-    };
-
-    // fallback for corner icon
-    const cornerIcon = "🚩";
-
-    const renderStats = (data) => {
-        homeTeamEl.textContent = data.teams?.home?.name || "Time Casa";
-        awayTeamEl.textContent = data.teams?.away?.name || "Time Fora";
-        scoreEl.textContent = `${data.goals?.home ?? 0} - ${data.goals?.away ?? 0}`;
-        minuteEl.textContent = data.fixture?.status?.elapsed ? `${data.fixture.status.elapsed}'` : "-";
-
-        // stoppage time
-        if (data.estimated_extra) {
-            stoppageBox.classList.remove("hidden");
-            stoppageVal.textContent = data.estimated_extra;
-        } else {
-            stoppageBox.classList.add("hidden");
+        if (type.includes("subst") || detail.includes("substitution")) return "Substitution";
+        if (type.includes("var") || detail.includes("var")) return "VAR";
+        if (detail.includes("corner") || type.includes("corner")) return "Corner";
+        if (detail.includes("offside") || type.includes("offside")) return "Offside";
+        if (detail.includes("foul") || type.includes("foul")) return "Foul";
+        if (detail.includes("shot") || type.includes("shot")) {
+            if (detail.includes("on target") || detail.includes("goal")) return "Shot on Target";
+            return "Shot";
         }
+        // fallback
+        return ev.type || ev.detail || "Evento";
+    }
 
-        // mostrar estatísticas resumidas (se houver)
-        // seu HTML já tem elementos com ids: stat-possession, stat-shots, stat-corners, stat-fouls, stat-yellow-cards, stat-red-cards
-        const stats = data.statistics || {};
-        try {
-            const home = stats.home || {};
-            const away = stats.away || {};
-            const setIfExist = (id, val) => {
-                const el = document.getElementById(id);
-                if (!el) return;
-                el.textContent = val !== undefined && val !== null ? val : "-";
-            };
-            // tentar extrair valores comuns
-            setIfExist("stat-possession", (home.possession || "-") + (away.possession ? ` / ${away.possession}` : ""));
-            setIfExist("stat-shots", (home.shots_on_goal || home.shots || "-") + (away.shots_on_goal ? ` / ${away.shots_on_goal}` : ""));
-            setIfExist("stat-corners", (home.corner || home.corners || "-") + (away.corner ? ` / ${away.corner}` : ""));
-            setIfExist("stat-fouls", (home.fouls || "-") + (away.fouls ? ` / ${away.fouls}` : ""));
-            setIfExist("stat-yellow-cards", (home.yellow_cards || home.yellowcard || "-") + (away.yellow_cards ? ` / ${away.yellow_cards}` : ""));
-            setIfExist("stat-red-cards", (home.red_cards || home.redcard || "-") + (away.red_cards ? ` / ${away.red_cards}` : ""));
-        } catch (e) {
-            console.warn("Erro ao renderizar estatísticas:", e);
-        }
-
-        // events (já ordenados no backend: mais recentes primeiro)
+    function renderEvents(events) {
         eventsEl.innerHTML = "";
-        const evs = data.events || [];
-        if (evs.length === 0) {
+        if (!events || events.length === 0) {
             eventsEl.innerHTML = "<li>Nenhum evento recente</li>";
-        } else {
-            evs.forEach(ev => {
-                const li = document.createElement("li");
-                li.className = "flex items-start gap-2 py-1";
-                const icon = ev.category && ev.category.toLowerCase().includes("corner") ? cornerIcon : iconForCategory(ev.category);
-                const time = ev.display_time || (ev.raw && ev.raw.time && ev.raw.time.elapsed ? `${ev.raw.time.elapsed}'` : "-");
-                const player = ev.player ? ` — ${ev.player}` : "";
-                const team = ev.team ? ` (${ev.team})` : "";
-                li.innerHTML = `<span class="font-semibold">${time}</span>
-                                <span class="ml-2">${icon}</span>
-                                <div class="ml-2 text-sm text-slate-300">${ev.type || ""} ${ev.detail ? ` — ${ev.detail}` : ""}${player}${team}</div>`;
-                eventsEl.appendChild(li);
-            });
+            return;
         }
+        // events are expected sorted DESC by backend; ensure that
+        events.forEach(ev => {
+            const li = document.createElement("li");
+            li.className = "truncate py-1 flex items-start gap-2";
+            const timeLabel = formatTimeLabel(ev);
+            const cat = mapEventCategory(ev);
+            const teamName = (ev.team && ev.team.name) ? ` — ${ev.team.name}` : "";
+            const playerName = (ev.player && ev.player.name) ? ` — ${ev.player.name}` : "";
+            li.innerHTML = `<span class="font-semibold mr-2 text-slate-200">${timeLabel}</span>
+                            <span class="text-sm text-cyan-300 mr-2">${cat}</span>
+                            <span class="text-xs text-slate-400">${ev.detail || ev.type || ''}${playerName}${teamName}</span>`;
+            eventsEl.appendChild(li);
+        });
+    }
 
-        // mostrar painel
-        dashboard.classList.remove("hidden");
-    };
+    function setStatsPanel(statsObj, periodKey = "full") {
+        // statsObj: { full: {home:{...}, away:{...}}, firstHalf_derived: {...}, secondHalf_derived: {...} }
+        if (!statsObj) {
+            Object.values(statElements).forEach(el => el.textContent = "-");
+            return;
+        }
+        const home = statsObj.full && statsObj.full.home ? statsObj.full.home : {};
+        const away = statsObj.full && statsObj.full.away ? statsObj.full.away : {};
+        let srcHome = home, srcAway = away;
+        if (periodKey === "firstHalf" && statsObj.firstHalf_derived) {
+            srcHome = statsObj.firstHalf_derived.home || {};
+            srcAway = statsObj.firstHalf_derived.away || {};
+        } else if (periodKey === "secondHalf" && statsObj.secondHalf_derived) {
+            srcHome = statsObj.secondHalf_derived.home || {};
+            srcAway = statsObj.secondHalf_derived.away || {};
+        }
+        // Possession may be in "possession" as percentage string or int
+        const parsePoss = v => {
+            if (v == null) return "-";
+            if (typeof v === "string" && v.indexOf("%")!==-1) return v;
+            return `${v}%`;
+        };
+        statElements.possession.textContent = (parsePoss(srcHome.possession) || "-");
+        statElements.shots.textContent = `${srcHome.total_shots ?? "-"} / ${srcAway.total_shots ?? "-"}`;
+        statElements.corners.textContent = `${srcHome.corners ?? "-"} / ${srcAway.corners ?? "-"}`;
+        statElements.fouls.textContent = `${srcHome.fouls ?? "-"} / ${srcAway.fouls ?? "-"}`;
+        statElements.yellow.textContent = `${srcHome.yellow_cards ?? srcHome.yellow ?? "-"} / ${srcAway.yellow_cards ?? srcAway.yellow ?? "-"}`;
+        statElements.red.textContent = `${srcHome.red_cards ?? srcHome.red ?? "-"} / ${srcAway.red_cards ?? srcAway.red ?? "-"}`;
+    }
 
-    const fetchGame = async (gameId) => {
+    async function fetchAndRender(gameId) {
         try {
-            const resp = await fetch(`${RADAR_API}/stats-aovivo/${gameId}`);
-            if (!resp.ok) throw new Error("Erro ao buscar stats");
+            const resp = await fetch(`${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`);
+            if (!resp.ok) throw new Error("Erro ao buscar dados");
             const data = await resp.json();
-            renderStats(data);
+            // header info
+            const fixture = data.fixture || {};
+            const team = data.teams || {};
+            const home = team.home || {};
+            const away = team.away || {};
+            homeTeamEl.textContent = home.name || "Time Casa";
+            awayTeamEl.textContent = away.name || "Time Fora";
+            // score
+            const goals = data.score || data.fixture?.goals || {};
+            const h = (goals.home!=null)?goals.home: (data.fixture?.score?.fulltime?.home ?? "-");
+            const a = (goals.away!=null)?goals.away: (data.fixture?.score?.fulltime?.away ?? "-");
+            scoreEl.textContent = `${h} - ${a}`;
+            // minute
+            const status = data.status || {};
+            const elapsed = status.elapsed || (fixture?.status?.elapsed);
+            minuteEl.textContent = elapsed ? `${elapsed}'` : "-";
+            // stats
+            setStatsPanel(data.statistics, currentPeriod === "firstHalf" ? "firstHalf" : (currentPeriod === "secondHalf" ? "secondHalf" : "full"));
+            // events (already sorted desc in backend)
+            renderEvents(data.events || []);
+            dashboard.classList.remove("hidden");
         } catch (err) {
-            console.error("Erro ao carregar estatísticas:", err);
+            console.error("Radar fetch error", err);
             dashboard.classList.add("hidden");
-            clearInterval(interval);
         }
-    };
+    }
 
-    // UI events
-    leagueSelect && leagueSelect.addEventListener("change", (e) => {
-        const lid = e.target.value;
-        if (!lid) return;
-        loadGames(lid);
-    });
-
+    // handle selects: when a game selected start polling
     gameSelect && gameSelect.addEventListener("change", (e) => {
         const id = e.target.value;
         clearInterval(interval);
-        if (!id) {
-            dashboard.classList.add("hidden");
-            return;
-        }
+        if (!id) { dashboard.classList.add("hidden"); return; }
         currentGameId = id;
-        fetchGame(currentGameId);
-        interval = setInterval(() => fetchGame(currentGameId), 35000);
+        fetchAndRender(currentGameId);
+        // events updated often; docs recommend frequent updates - use 15s-30s (be careful with rate limit)
+        interval = setInterval(() => fetchAndRender(currentGameId), 15000);
     });
 
-    periodButtons.forEach(btn => {
+    // tab buttons
+    tabs.forEach(btn => {
         btn.addEventListener("click", () => {
-            // toggling visual active class
-            periodButtons.forEach(b => b.classList.remove("bg-cyan-600","text-white"));
+            tabs.forEach(b => b.classList.remove("bg-cyan-600","text-white"));
             btn.classList.add("bg-cyan-600","text-white");
-            currentPeriod = btn.dataset.period;
-            // currently backend returns stats aggregated; if we expand to period-specific, we would re-render here
+            const p = btn.getAttribute("data-period");
+            if (p === "firstHalf") currentPeriod = "firstHalf";
+            else if (p === "secondHalf") currentPeriod = "secondHalf";
+            else currentPeriod = "full";
+            // re-render using last-fetched data by calling once
+            if (currentGameId) fetchAndRender(currentGameId);
         });
     });
 
-    // load leagues when section appears
-    const obs = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-            loadLeagues();
-            obs.disconnect();
-        }
-    }, { threshold: 0.1 });
-    obs.observe(radarSection);
+    // observer to lazy-load leagues/games if you want (existing logic)
+    // if you previously had code to load leagues/games, keep it; else we rely on server to fill gameSelect
 });
