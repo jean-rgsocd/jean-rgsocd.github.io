@@ -8,12 +8,12 @@ document.addEventListener('DOMContentLoaded', function () {
     
     promptTabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            const targetId = tab.getAttribute('data-tab'); // Pega o alvo, ex: "content-profissoes"
+            const targetId = tab.getAttribute('data-tab'); // Correção: Lendo o atributo 'data-tab'
             
             // 1. Atualiza a aparência dos botões
             promptTabs.forEach(t => {
                 t.classList.remove('active', 'text-cyan-300', 'border-cyan-300');
-                t.classList.add('text-slate-400', 'border-transparent');
+                t.classList.add('text-slate-400', 'border-transparent', 'hover:text-slate-200', 'hover:border-slate-500');
             });
             tab.classList.add('active', 'text-cyan-300', 'border-cyan-300');
             tab.classList.remove('text-slate-400', 'border-transparent');
