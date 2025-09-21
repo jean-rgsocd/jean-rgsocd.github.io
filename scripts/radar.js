@@ -110,13 +110,33 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     const home = statsObj.home || {};
-    const away = statsObj.away || {};
-    statPossEl.textContent   = `${getVal(home, possessionCandidates)} / ${getVal(away, possessionCandidates)}`;
-    statShotsEl.textContent  = `${getVal(home, totalShotsCandidates)} (${getVal(home, onTargetCandidates)}) / ${getVal(away, totalShotsCandidates)} (${getVal(away, onTargetCandidates)})`;
-    statCornersEl.textContent= `${getVal(home, cornersCandidates)} / ${getVal(away, cornersCandidates)}`;
-    statFoulsEl.textContent  = `${getVal(home, foulsCandidates)} / ${getVal(away, foulsCandidates)}`;
-    statYellowEl.textContent = `${getVal(home, yellowCandidates)} / ${getVal(away, yellowCandidates)}`;
-    statRedEl.textContent    = `${getVal(home, redCandidates)} / ${getVal(away, redCandidates)}`;
+const away = statsObj.away || {};
+
+statPossEl.textContent =
+  `${getVal(home, possessionCandidates)} / ${getVal(away, possessionCandidates)}`;
+
+statShotsEl.textContent =
+  `${getVal(home, totalShotsCandidates)} ` +
+  `(${getVal(home, onTargetCandidates)} no gol / ` +
+  `${getVal(home, ["shots_off_goal","shots off goal"])} fora / ` +
+  `${getVal(home, ["shots_blocked","blocked shots"])} bloqueadas)` +
+  ` / ` +
+  `${getVal(away, totalShotsCandidates)} ` +
+  `(${getVal(away, onTargetCandidates)} no gol / ` +
+  `${getVal(away, ["shots_off_goal","shots off goal"])} fora / ` +
+  `${getVal(away, ["shots_blocked","blocked shots"])} bloqueadas)`;
+
+statCornersEl.textContent =
+  `${getVal(home, cornersCandidates)} / ${getVal(away, cornersCandidates)}`;
+
+statFoulsEl.textContent =
+  `${getVal(home, foulsCandidates)} / ${getVal(away, foulsCandidates)}`;
+
+statYellowEl.textContent =
+  `${getVal(home, yellowCandidates)} / ${getVal(away, yellowCandidates)}`;
+
+statRedEl.textContent =
+  `${getVal(home, redCandidates)} / ${getVal(away, redCandidates)}`;
   }
 
   // ----------------------
@@ -243,5 +263,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.1 });
   obs.observe(radarSection);
 });
+
 
 
