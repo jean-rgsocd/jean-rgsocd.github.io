@@ -159,12 +159,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ----------------------
-  async function fetchStats(gameId) {
-    const url = `${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`;
-    const r = await fetch(url);
-    if (!r.ok) throw new Error("Erro ao buscar stats");
-    return await r.json();
+  async function fetchStats(gameId, half = false) {
+  let url = `${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`;
+  if (half) {
+    url += "&half=true"; // API-Sports: só estatísticas do intervalo
   }
+  const r = await fetch(url);
+  if (!r.ok) throw new Error("Erro ao buscar stats");
+  return await r.json();
+}
 
   async function fetchAndRender(gameId) {
   if (!gameId) return;
@@ -240,4 +243,5 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.1 });
   obs.observe(radarSection);
 });
+
 
