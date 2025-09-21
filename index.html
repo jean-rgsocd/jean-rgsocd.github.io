@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 <head>
     <meta charset="UTF-8">
@@ -319,37 +319,41 @@
         <p class="text-slate-400 mb-8">Selecione o esporte, o país (para futebol) e a liga para receber uma análise baseada em dados e estatísticas processadas pela minha API de backend.</p>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="tipster-selectors">
-            
-            <div class="form-group flex flex-col space-y-2">
-                <label for="sport-select" class="text-sm font-medium text-slate-400">Esporte</label>
-                <select id="sport-select" class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                    <option value="">Selecione</option>
-                    <option value="football">Futebol</option>
-                    <option value="basketball">Basquete (NBA)</option>
-                    <option value="american-football">Futebol Americano (NFL)</option>
-                </select>
-            </div>
+            <!-- Seleção de Esporte -->
+<div class="mb-4">
+  <label for="sport-select" class="block text-slate-200 mb-1">Escolha o Esporte:</label>
+  <select id="sport-select" class="w-full p-2 rounded bg-slate-700 text-slate-100">
+    <option value="">Selecione...</option>
+    <option value="football">Futebol</option>
+    <option value="nba">NBA</option>
+    <option value="nfl">NFL</option>
+  </select>
+</div>
 
-            <div id="country-selector-group" class="form-group flex-col space-y-2 hidden">
-                <label for="country-select" class="text-sm font-medium text-slate-400">País</label>
-                <select id="country-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
-                    <option value="">Selecione</option>
-                </select>
-            </div>
-            
-            <div id="league-selector-group" class="form-group flex-col space-y-2 hidden">
-                <label for="league-select" class="text-sm font-medium text-slate-400">Liga</label>
-                <select id="league-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
-                    <option value="">Selecione</option>
-                </select>
-            </div>
-            
-            <div id="game-selector-group" class="form-group flex-col space-y-2 hidden lg:col-span-2">
-                <label for="game-select" class="text-sm font-medium text-slate-400">Jogo</label>
-                <select id="game-select" disabled class="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50">
-                    <option value="">Selecione</option>
-                </select>
-            </div>
+<!-- Seleção de País (só aparece para Futebol) -->
+<div id="country-selector-group" class="mb-4 hidden">
+  <label for="country-select" class="block text-slate-200 mb-1">Escolha o País:</label>
+  <select id="country-select" class="w-full p-2 rounded bg-slate-700 text-slate-100">
+    <option value="">Selecione um país</option>
+  </select>
+</div>
+
+<!-- Seleção de Liga (só aparece para Futebol) -->
+<div id="league-selector-group" class="mb-4 hidden">
+  <label for="league-select" class="block text-slate-200 mb-1">Escolha a Liga:</label>
+  <select id="league-select" class="w-full p-2 rounded bg-slate-700 text-slate-100">
+    <option value="">Selecione uma liga</option>
+  </select>
+</div>
+
+<!-- Seleção de Jogo (Futebol/NBA/NFL) -->
+<div id="game-selector-group" class="mb-4 hidden">
+  <label for="game-select" class="block text-slate-200 mb-1">Escolha o Jogo:</label>
+  <select id="game-select" class="w-full p-2 rounded bg-slate-700 text-slate-100">
+    <option value="">Selecione um jogo</option>
+  </select>
+</div>
+
         </div>
 
         <div id="bettingResults" class="hidden mt-8 space-y-4"></div>
@@ -1374,6 +1378,12 @@ Este prompt serve para gerar vídeos com uma narrativa clara e emocional, usando
             </div>
             <p class="text-slate-400 mb-8">Acompanhe as estatísticas e o índice de pressão de jogos de futebol que estão acontecendo em tempo real. Os dados são atualizados periodicamente.</p>
             <div class="mb-6">
+                <label for="radar-league-select" class="text-sm font-medium text-slate-400">Selecione uma Liga</label>
+                <select id="radar-league-select" class="w-full mt-2 bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    <option value="">Carregando ligas...</option>
+                 </select>
+            </div>
+                <div class="mb-6">
                 <label for="radar-game-select" class="text-sm font-medium text-slate-400">Selecione um Jogo Ao Vivo</label>
                 <select id="radar-game-select" class="w-full mt-2 bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     <option value="">Carregando jogos ao vivo...</option>
