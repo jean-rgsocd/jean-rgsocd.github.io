@@ -34,21 +34,19 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!res.ok) throw new Error('Falha ao buscar países');
             const data = await res.json();
             countrySelect.innerHTML = '<option value="">Selecione País</option>';
-            // <-- MUDANÇA CRUCIAL AQUI: O valor da opção agora é o NOME do país
-            data.forEach(c => countrySelect.add(new Option(c.name, c.name)));
+            data.forEach(c => countrySelect.add(new Option(c.name, c.code))); // Valor é o CÓDIGO
         } catch (err) {
             resetSelect(countrySelect, err.message);
         }
     };
 
     const loadLeagues = async () => {
-        const countryName = countrySelect.value; // Agora pega o NOME do país (ex: "Brazil")
-        if (!countryName) return;
+        const countryCode = countrySelect.value; // Pega o CÓDIGO (ex: "BR")
+        if (!countryCode) return;
         leagueSelect.innerHTML = '<option value="">Carregando...</option>';
         leagueSelect.disabled = false;
         try {
-            // Envia o NOME do país para o backend
-            const res = await fetch(`${TIPSTER_BASE_URL}/ligas/football/${countryName}`);
+            const res = await fetch(`${TIPSTER_BASE_URL}/ligas/football/${countryCode}`); // Envia o CÓDIGO
             if (!res.ok) throw new Error('Falha ao buscar ligas');
             const data = await res.json();
             leagueSelect.innerHTML = '<option value="">Selecione Liga</option>';
