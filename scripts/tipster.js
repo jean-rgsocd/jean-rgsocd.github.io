@@ -21,10 +21,9 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     
     const loadGames = async (sport) => {
-        resetSelect(gameSelect, 'Buscando jogos (Hoje + Próximos dias)...');
+        resetSelect(gameSelect, 'Buscando jogos (Hoje + Próximos 5 dias)...');
         gameGroup.classList.remove('hidden');
         
-        // Mapeia o valor do select para a rota correta no backend
         const sportEndpoints = {
             'football': 'futebol',
             'basketball': 'nba',
@@ -44,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
             gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
             if (games.length === 0) {
-                gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado</option>';
+                gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado nos próximos dias</option>';
             } else {
                 games.forEach(g => {
                     gameSelect.add(new Option(g.text, g.game_id));
