@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
     async function loadLeagues(country) {
         try {
             const r = await fetch(`${TIPSTER_BASE_URL}/leagues?country=${encodeURIComponent(country)}`);
-            const r = await fetch(`${TIPSTER_BASE_URL}/ligas`);
             const data = await r.json();
             leagueSelect.innerHTML = `<option value="">Escolha uma liga</option>`;
             data.forEach(l => leagueSelect.add(new Option(l.name, l.id)));
@@ -193,4 +192,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+
 
