@@ -4,23 +4,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const radarSection = document.getElementById("radar-ia-section");
   if (!radarSection) return;
 
-  const leagueSelect = document.getElementById("radar-league-select");
-  const gameSelect   = document.getElementById("radar-game-select");
-  const dashboard    = document.getElementById("radar-dashboard");
-  const scoreEl      = document.getElementById("radar-score");
-  const minuteEl     = document.getElementById("radar-minute");
-  const homeTeamEl   = document.getElementById("home-team-name");
-  const awayTeamEl   = document.getElementById("away-team-name");
-  const eventsEl     = document.getElementById("radar-events");
-  const stoppageBox  = document.getElementById("stoppage-time-prediction");
+  const leagueSelect   = document.getElementById("radar-league-select");
+  const gameSelect     = document.getElementById("radar-game-select");
+  const dashboard      = document.getElementById("radar-dashboard");
+  const scoreEl        = document.getElementById("radar-score");
+  const minuteEl       = document.getElementById("radar-minute");
+  const homeTeamEl     = document.getElementById("home-team-name");
+  const awayTeamEl     = document.getElementById("away-team-name");
+  const eventsEl       = document.getElementById("radar-events");
+  const stoppageBox    = document.getElementById("stoppage-time-prediction");
 
-  const statPossEl   = document.getElementById("stat-possession");
-  const statShotsEl  = document.getElementById("stat-shots");
-  const statCornersEl= document.getElementById("stat-corners");
-  const statFoulsEl  = document.getElementById("stat-fouls");
-  const statYellowEl = document.getElementById("stat-yellow-cards");
-  const statRedEl    = document.getElementById("stat-red-cards");
-  const statOffsidesEl = document.getElementById("stat-offsides"); // NOVO: impedimentos
+  const statPossEl     = document.getElementById("stat-possession");
+  const statShotsEl    = document.getElementById("stat-shots");
+  const statCornersEl  = document.getElementById("stat-corners");
+  const statFoulsEl    = document.getElementById("stat-fouls");
+  const statYellowEl   = document.getElementById("stat-yellow-cards");
+  const statRedEl      = document.getElementById("stat-red-cards");
+  const statOffsidesEl = document.getElementById("stat-offsides"); // impedimentos
 
   let currentGameId = null;
   let updateInterval = null;
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   function getVal(sideObj, candidates) {
     const val = pickStat(sideObj, candidates);
-    return val !== null && val !== undefined ? val : "N/D"; // 👈 agora mostra N/D se não vier
+    return val !== null && val !== undefined ? val : "N/D"; // mostra N/D se não vier
   }
 
   function iconFor(cat = "") {
@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (c.includes("sub")) return "🔁";
     if (c.includes("corner")) return "🚩";
     if (c.includes("foul")) return "🛑";
+    if (c.includes("offside")) return "🏳️"; // NOVO: ícone para impedimento
     return "•";
   }
 
@@ -101,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const foulsCandidates      = ["fouls","foul"];
   const yellowCandidates     = ["yellow_cards","yellow cards","yellow"];
   const redCandidates        = ["red_cards","red cards","red"];
-  const offsidesCandidates   = ["offsides","offside"]; // 👈 só impedimentos agora
+  const offsidesCandidates   = ["offsides","offside"]; // impedimentos
 
   function setStatsPanel(statsObj = {}) {
     if (!statsObj || !statsObj.home || !statsObj.away) {
