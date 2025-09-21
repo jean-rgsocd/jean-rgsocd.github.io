@@ -7,11 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const gameGroup = tipsterSection.querySelector('#game-selector-group');
     const gameSelect = tipsterSection.querySelector('#game-select');
     
-    // Oculta os seletores de país e liga que não são mais necessários
+    // Oculta permanentemente os seletores de país e liga
     const countryGroup = tipsterSection.querySelector('#country-selector-group');
     const leagueGroup = tipsterSection.querySelector('#league-selector-group');
-    countryGroup.classList.add('hidden');
-    leagueGroup.classList.add('hidden');
+    if(countryGroup) countryGroup.classList.add('hidden');
+    if(leagueGroup) leagueGroup.classList.add('hidden');
     
     const TIPSTER_BASE_URL = 'https://analisador-apostas.onrender.com';
 
@@ -21,22 +21,33 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     
     const loadGames = async (sport) => {
-        resetSelect(gameSelect, 'Carregando jogos (Hoje + 5 dias)...');
+        resetSelect(gameSelect, 'Buscando jogos (Hoje + Próximos dias)...');
         gameGroup.classList.remove('hidden');
         
+        // Mapeia o valor do select para a rota correta no backend
+        const sportEndpoints = {
+            'football': 'futebol',
+            'basketball': 'nba',
+            'american-football': 'nfl'
+        };
+
+        const endpoint = sportEndpoints[sport];
+        if (!endpoint) {
+            resetSelect(gameSelect, 'Esporte inválido');
+            return;
+        }
+
         try {
-            const response = await fetch(`${TIPSTER_BASE_URL}/jogos-agendados/${sport}`);
+            const response = await fetch(`${TIPSTER_BASE_URL}/${endpoint}`);
             if (!response.ok) throw new Error(`Falha ao buscar jogos (${response.status})`);
             const games = await response.json();
             
-            gameSelect.innerHTML = '<option value="">Selecione o Jogo</option>';
+            gameSelect.innerHTML = '<option value="">Selecione um Jogo</option>';
             if (games.length === 0) {
-                gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado nos próximos dias</option>';
+                gameSelect.innerHTML = '<option value="">Nenhum jogo encontrado</option>';
             } else {
                 games.forEach(g => {
-                    const date = new Date(g.time).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-                    const optionText = `${g.home} vs ${g.away} (${date})`;
-                    gameSelect.add(new Option(optionText, g.game_id));
+                    gameSelect.add(new Option(g.text, g.game_id));
                 });
                 gameSelect.disabled = false;
             }
@@ -50,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
     sportSelect.addEventListener('change', () => {
         const sport = sportSelect.value;
         gameGroup.classList.add('hidden');
-        resetSelect(gameSelect, '...');
+        resetSelect(gameSelect, 'Aguardando seleção...');
 
         if (sport) {
             loadGames(sport);
