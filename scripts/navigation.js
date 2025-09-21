@@ -1,5 +1,5 @@
 // scripts/navigation.js
-// CORRIGIDO
+// Versão COMPLETA E CORRIGIDA
 
 document.addEventListener('DOMContentLoaded', function () {
     const projectListContainer = document.getElementById('project-list-container');
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
             section: document.getElementById('analisador-apostas'),
             anchor: '#analisador-apostas'
         },
-        'radar': { // <-- SEÇÃO DESCOMENTADA
+        'radar': {
             showBtn: document.getElementById('showRadarButton'),
             hideBtn: document.getElementById('hideRadarButton'),
             section: document.getElementById('radar-ia-section'),
