@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
     const TIPSTER_BASE_URL = "https://analisador-apostas.onrender.com"; // <--- substitua pelo seu backend
-    const TIPSTER_BASE_URL = "https://radar-ia-backend.onrender.com"; // usa o radar_ia.py
     const container = document.getElementById('analisador-apostas');
     if (!container) return;
 
@@ -41,7 +40,6 @@ document.addEventListener('DOMContentLoaded', function () {
     hide(leagueGroup); hide(gameGroup); hide(resultBox);
 
     async function loadLeagues(country) {
-    async function loadLeagues() {
         try {
             const r = await fetch(`${TIPSTER_BASE_URL}/leagues?country=${encodeURIComponent(country)}`);
             const r = await fetch(`${TIPSTER_BASE_URL}/ligas`);
@@ -57,8 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function loadGames(sport, leagueId) {
-    async function loadGames(leagueId) {
-        try {
+          try {
             resetSelect(gameSelect, 'Carregando jogos...');
             show(gameGroup);
             let url = `${TIPSTER_BASE_URL}/games?sport=${encodeURIComponent(sport)}`;
@@ -90,7 +87,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function analyzeGame(sport, gameId) {
-    async function analyzeGame(gameId, sport = "football") {
         resultBox.innerHTML = `<div class="p-3 bg-slate-900/40 border border-slate-700 rounded-md text-slate-200">Carregando análise...</div>`;
         show(resultBox);
         try {
@@ -197,3 +193,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+
