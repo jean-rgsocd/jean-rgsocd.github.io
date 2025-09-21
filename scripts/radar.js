@@ -1,4 +1,4 @@
-// radar.js - radar ao vivo com seleção por liga -> jogo e perídos clicáveis
+// radar.js - exibição de eventos (mais recentes primeiro) com minuto/seg e categoria
 document.addEventListener("DOMContentLoaded", function () {
     const radarSection = document.getElementById("radar-ia-section");
     if (!radarSection) return;
@@ -18,9 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let interval = null;
     let currentGameId = null;
-    let currentPeriod = "full"; // "1t", "2t", "full"
+    let currentPeriod = "full";
 
-    // carregar ligas ao abrir a seção
     const loadLeagues = async () => {
         leagueSelect.disabled = true;
         leagueSelect.innerHTML = `<option>Carregando ligas...</option>`;
@@ -32,10 +31,10 @@ document.addEventListener("DOMContentLoaded", function () {
             leagueSelect.disabled = false;
         } catch (err) {
             leagueSelect.innerHTML = `<option value="">Erro ao carregar ligas</option>`;
+            console.error(err);
         }
     };
 
-    // carregar jogos da liga selecionada (ao vivo)
     const loadGames = async (leagueId) => {
         gameSelect.disabled = true;
         gameSelect.innerHTML = `<option>Carregando jogos...</option>`;
@@ -51,24 +50,35 @@ document.addEventListener("DOMContentLoaded", function () {
             gameSelect.disabled = false;
         } catch (err) {
             gameSelect.innerHTML = `<option value="">Erro ao carregar jogos</option>`;
+            console.error(err);
         }
     };
 
     const renderStats = (data) => {
-        homeTeamEl.textContent = data.teams?.home?.name || "Home";
-        awayTeamEl.textContent = data.teams?.away?.name || "Away";
+        homeTeamEl.textContent = data.teams?.home?.name || "Time Casa";
+        awayTeamEl.textContent = data.teams?.away?.name || "Time Fora";
         scoreEl.textContent = `${data.goals?.home ?? 0} - ${data.goals?.away ?? 0}`;
         minuteEl.textContent = data.fixture?.status?.elapsed ? `${data.fixture.status.elapsed}'` : "-";
 
-        // eventos
+        // eventos: já vêm do backend em ordem decrescente (mais recentes primeiro)
         eventsEl.innerHTML = "";
-        if (data.events && data.events.length > 0) {
-            data.events.forEach(e => {
+        const events = data.events || [];
+        if (events.length > 0) {
+            // criar lista mostrando display_time (min/seg) e categoria
+            events.forEach(e => {
                 const li = document.createElement("li");
-                li.className = "truncate";
-                const timeLabel = e.time?.elapsed ? `${e.time.elapsed}'` : '';
-                const extraSec = e.time?.second ? `:${e.time.second}` : '';
-                li.textContent = `${timeLabel}${extraSec} - ${e.type} (${e.detail}) - ${e.player?.name || ''}`;
+                li.className = "truncate py-1";
+
+                // use display_time se existir, senao fallback para time.elapsed
+                const timeLabel = e.display_time || (e.time?.elapsed ? `${e.time.elapsed}'` : "-");
+                const category = e.category || (e.type || e.detail || "Evento");
+                const detail = e.detail ? ` — ${e.detail}` : "";
+                const player = (e.player && e.player.name) ? ` por ${e.player.name}` : "";
+
+                // exemplo: 80'23" — Shot on Target — Chute no alvo por E. Haaland
+                li.innerHTML = `<span class="font-semibold mr-2">${timeLabel}</span>
+                                <span class="text-sm event-cat mr-2">${category}</span>
+                                <span class="text-xs text-muted">${detail}${player}</span>`;
                 eventsEl.appendChild(li);
             });
         } else {
@@ -81,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const fetchGame = async (gameId) => {
         try {
             const resp = await fetch(`${RADAR_API}/stats-aovivo/${gameId}`);
-            if (!resp.ok) throw new Error("Erro stats");
+            if (!resp.ok) throw new Error("Erro ao buscar stats");
             const data = await resp.json();
             renderStats(data);
         } catch (err) {
@@ -100,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         currentGameId = id;
         fetchGame(currentGameId);
-        interval = setInterval(() => fetchGame(currentGameId), 45000); // atualiza a cada 45s
+        interval = setInterval(() => fetchGame(currentGameId), 45000);
     });
 
     leagueSelect.addEventListener('change', () => {
@@ -109,18 +119,10 @@ document.addEventListener("DOMContentLoaded", function () {
         loadGames(lid);
     });
 
-    tab1 && tab1.addEventListener('click', () => {
-        currentPeriod = "1t";
-        // atualmente backend retorna estatísticas por período em "statistics" se disponível
-    });
-    tab2 && tab2.addEventListener('click', () => {
-        currentPeriod = "2t";
-    });
-    tabFull && tabFull.addEventListener('click', () => {
-        currentPeriod = "full";
-    });
+    tab1 && tab1.addEventListener('click', () => { currentPeriod = "1t"; });
+    tab2 && tab2.addEventListener('click', () => { currentPeriod = "2t"; });
+    tabFull && tabFull.addEventListener('click', () => { currentPeriod = "full"; });
 
-    // observer para carregar ligas quando a seção ficar visível
     const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
             loadLeagues();
