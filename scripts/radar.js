@@ -1,4 +1,4 @@
-// radar.js - atualizado para separar 1ºT, 2ºT e jogo completo
+// radar.js - versão Half-Time / Full-Time
 document.addEventListener("DOMContentLoaded", () => {
   const RADAR_API = "https://radar-ia-backend.onrender.com";
   const radarSection = document.getElementById("radar-ia-section");
@@ -24,18 +24,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const statRedEl    = document.getElementById("stat-red-cards");
 
   let currentGameId = null;
-  let currentPeriod = "full"; // "full", "first", "second"
+  let currentPeriod = "full"; // "half" ou "full"
   let updateInterval = null;
   let latestData = null;
-  let firstHalfStats = null; // snapshot do 1º tempo
+  let halfTimeStats = null; // snapshot congelado do HT
 
+  // ----------------------
   // utils
   function mapKeysLower(obj = {}) {
     const m = {};
     Object.keys(obj || {}).forEach(k => { m[k.toLowerCase()] = obj[k]; });
     return m;
   }
-
   function pickStat(sideObj, candidates = []) {
     if (!sideObj) return null;
     const m = mapKeysLower(sideObj);
@@ -44,6 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (m[key] !== undefined && m[key] !== null) return m[key];
     }
     return null;
+  }
+  function getVal(sideObj, candidates) {
+    return pickStat(sideObj, candidates) ?? "-";
   }
 
   function iconFor(cat = "") {
@@ -54,7 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (c.includes("yellow")) return "🟨";
     if (c.includes("red")) return "🟥";
     if (c.includes("sub")) return "🔁";
-    if (c.includes("shot") || c.includes("on target")) return "🎯";
     if (c.includes("corner")) return "🚩";
     if (c.includes("foul")) return "🛑";
     return "•";
@@ -91,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // ----------------------
   // candidatos
   const possessionCandidates = ["possession","ball possession","ball possession%","possession%","possession %"];
   const totalShotsCandidates = ["total_shots","total shots","totalshots","total shots"];
@@ -100,68 +103,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const yellowCandidates     = ["yellow_cards","yellow cards","yellow card","yellow"];
   const redCandidates        = ["red_cards","red cards","red card","red"];
 
-  function getValWithFallback(sideObj, candidates) {
-    return pickStat(sideObj, candidates) ?? "-";
-  }
-
   function setStatsPanel(statsObj = {}) {
     if (!statsObj || !statsObj.home || !statsObj.away) {
       [statPossEl, statShotsEl, statCornersEl, statFoulsEl, statYellowEl, statRedEl]
         .forEach(el => el && (el.textContent = "-"));
       return;
     }
-
     const home = statsObj.home || {};
     const away = statsObj.away || {};
-
-    const hPoss = getValWithFallback(home, possessionCandidates);
-    const aPoss = getValWithFallback(away, possessionCandidates);
-    statPossEl.textContent = `${hPoss} / ${aPoss}`;
-
-    const hTotal = getValWithFallback(home, totalShotsCandidates);
-    const aTotal = getValWithFallback(away, totalShotsCandidates);
-    const hOn = getValWithFallback(home, onTargetCandidates);
-    const aOn = getValWithFallback(away, onTargetCandidates);
-    statShotsEl.textContent = `${hTotal} (${hOn}) / ${aTotal} (${aOn})`;
-
-    const hCorners = getValWithFallback(home, cornersCandidates);
-    const aCorners = getValWithFallback(away, cornersCandidates);
-    statCornersEl.textContent = `${hCorners} / ${aCorners}`;
-
-    const hFouls = getValWithFallback(home, foulsCandidates);
-    const aFouls = getValWithFallback(away, foulsCandidates);
-    statFoulsEl.textContent = `${hFouls} / ${aFouls}`;
-
-    const hY = getValWithFallback(home, yellowCandidates);
-    const aY = getValWithFallback(away, yellowCandidates);
-    statYellowEl.textContent = `${hY} / ${aY}`;
-
-    const hR = getValWithFallback(home, redCandidates);
-    const aR = getValWithFallback(away, redCandidates);
-    statRedEl.textContent = `${hR} / ${aR}`;
+    statPossEl.textContent   = `${getVal(home, possessionCandidates)} / ${getVal(away, possessionCandidates)}`;
+    statShotsEl.textContent  = `${getVal(home, totalShotsCandidates)} (${getVal(home, onTargetCandidates)}) / ${getVal(away, totalShotsCandidates)} (${getVal(away, onTargetCandidates)})`;
+    statCornersEl.textContent= `${getVal(home, cornersCandidates)} / ${getVal(away, cornersCandidates)}`;
+    statFoulsEl.textContent  = `${getVal(home, foulsCandidates)} / ${getVal(away, foulsCandidates)}`;
+    statYellowEl.textContent = `${getVal(home, yellowCandidates)} / ${getVal(away, yellowCandidates)}`;
+    statRedEl.textContent    = `${getVal(home, redCandidates)} / ${getVal(away, redCandidates)}`;
   }
 
-  function computeSecondHalf(fullStats, firstStats) {
-    const result = { home: {}, away: {} };
-    for (const side of ["home", "away"]) {
-      const full = fullStats[side] || {};
-      const first = firstStats[side] || {};
-      const out = {};
-      for (const key in full) {
-        const f = Number(full[key] || 0);
-        const h1 = Number(first[key] || 0);
-        if (!isNaN(f) && !isNaN(h1)) {
-          out[key] = f - h1;
-        }
-      }
-      result[side] = out;
-    }
-    return result;
-  }
-
+  // ----------------------
   // carregar ligas
   async function loadLeagues() {
-    if (!leagueSelect) return;
     leagueSelect.disabled = true;
     leagueSelect.innerHTML = `<option>Carregando ligas...</option>`;
     try {
@@ -172,13 +132,11 @@ document.addEventListener("DOMContentLoaded", () => {
       leagueSelect.disabled = false;
     } catch (err) {
       leagueSelect.innerHTML = `<option value="">Erro ao carregar ligas</option>`;
-      console.error("loadLeagues error", err);
     }
   }
 
   // carregar jogos
   async function loadGames(leagueId = null) {
-    if (!gameSelect) return;
     gameSelect.disabled = true;
     gameSelect.innerHTML = `<option>Carregando jogos ao vivo...</option>`;
     try {
@@ -196,12 +154,12 @@ document.addEventListener("DOMContentLoaded", () => {
       data.forEach(g => gameSelect.add(new Option(g.title, g.game_id)));
       gameSelect.disabled = false;
     } catch (err) {
-      console.error("loadGames", err);
       gameSelect.innerHTML = `<option value="">Erro ao carregar jogos</option>`;
     }
   }
 
-  async function fetchStatsByPeriod(gameId) {
+  // ----------------------
+  async function fetchStats(gameId) {
     const url = `${RADAR_API}/stats-aovivo/${encodeURIComponent(gameId)}?sport=football`;
     const r = await fetch(url);
     if (!r.ok) throw new Error("Erro ao buscar stats");
@@ -209,68 +167,47 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function fetchAndRender(gameId) {
-    if (!gameId) return;
-    try {
-      const data = await fetchStatsByPeriod(gameId);
-      latestData = data;
+  if (!gameId) return;
+  try {
+    // half ou full conforme aba selecionada
+    const isHalf = (currentPeriod === "half");
+    const data = await fetchStats(gameId, isHalf);
+    latestData = data;
 
-      const fixture = data.fixture || {};
-      const teams = data.teams || {};
-      const home = teams.home || {};
-      const away = teams.away || {};
+    const fixture = data.fixture || {};
+    const teams = data.teams || {};
+    homeTeamEl.textContent = teams.home?.name || "Time Casa";
+    awayTeamEl.textContent = teams.away?.name || "Time Fora";
 
-      homeTeamEl.textContent = home.name || "Time Casa";
-      awayTeamEl.textContent = away.name || "Time Fora";
+    scoreEl.textContent = `${data.score?.home ?? fixture.goals?.home ?? "-"} - ${data.score?.away ?? fixture.goals?.away ?? "-"}`;
+    minuteEl.textContent = data.status?.elapsed ? `${data.status.elapsed}'` : "-";
 
-      const goals = data.score || fixture.goals || {};
-      const h = (data.score && data.score.home != null) ? data.score.home : (goals.home ?? "-");
-      const a = (data.score && data.score.away != null) ? data.score.away : (goals.away ?? "-");
-      scoreEl.textContent = `${h} - ${a}`;
-
-      const elapsed = (data.status && data.status.elapsed) || (fixture.status && fixture.status.elapsed) || null;
-      minuteEl.textContent = elapsed ? `${elapsed}'` : "-";
-
-      if (data.estimated_extra) {
-        stoppageBox?.classList.remove("hidden");
-        stoppageVal.textContent = data.estimated_extra;
-      } else {
-        stoppageBox?.classList.add("hidden");
-      }
-
-      const fullStats = data.statistics || {};
-
-      // salva snapshot do 1º tempo no intervalo
-      if (data.status?.short === "HT" && !firstHalfStats) {
-        firstHalfStats = JSON.parse(JSON.stringify(fullStats));
-      }
-
-      if (currentPeriod === "first") {
-        setStatsPanel(firstHalfStats || fullStats);
-      } else if (currentPeriod === "second") {
-        if (firstHalfStats) {
-          const second = computeSecondHalf(fullStats, firstHalfStats);
-          setStatsPanel(second);
-        } else {
-          setStatsPanel({});
-        }
-      } else {
-        setStatsPanel(fullStats);
-      }
-
-      renderEvents(data.events || []);
-      dashboard?.classList.remove("hidden");
-    } catch (err) {
-      console.error("fetchAndRender error", err);
-      dashboard?.classList.add("hidden");
+    if (data.estimated_extra) {
+      stoppageBox.classList.remove("hidden");
+      stoppageVal.textContent = data.estimated_extra;
+    } else {
+      stoppageBox.classList.add("hidden");
     }
-  }
 
+    // ✅ aqui já vem filtrado (half ou full) da API
+    const stats = data.statistics || {};
+    setStatsPanel(stats);
+
+    renderEvents(data.events || []);
+    dashboard?.classList.remove("hidden");
+  } catch (err) {
+    console.error("fetchAndRender error", err);
+    dashboard?.classList.add("hidden");
+  }
+}
+
+  // ----------------------
   // eventos
   gameSelect?.addEventListener("change", (ev) => {
     const id = ev.target.value;
     clearInterval(updateInterval);
     if (!id) {
-      dashboard?.classList.add("hidden");
+      dashboard.classList.add("hidden");
       return;
     }
     currentGameId = id;
@@ -289,13 +226,12 @@ document.addEventListener("DOMContentLoaded", () => {
       tabs.forEach(b => b.classList.remove("bg-cyan-600", "text-white"));
       btn.classList.add("bg-cyan-600", "text-white");
       const p = btn.dataset.period;
-      if (p === "firstHalf") currentPeriod = "first";
-      else if (p === "secondHalf") currentPeriod = "second";
-      else currentPeriod = "full";
+      currentPeriod = (p === "half") ? "half" : "full";
       if (currentGameId) fetchAndRender(currentGameId);
     });
   });
 
+  // ----------------------
   const obs = new IntersectionObserver(entries => {
     if (entries[0].isIntersecting) {
       loadLeagues();
