@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     // URL base do seu backend onde o opta.py está rodando.
-    const OPTA_BASE_URL = "https://analisador-apostas.onrender.com";
+    const OPTA_BASE_URL = "https://opta-ia-backend.onrender.com";
 
     const container = document.getElementById("opta-ia");
     if (!container) {
