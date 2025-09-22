@@ -84,6 +84,30 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // 🔹 tradutor de mercados (opcional pra ficar mais bonito no front)
+    function formatMarketName(market) {
+        const map = {
+            moneyline: "Resultado Final",
+            dnb: "Empate Anula (DNB)",
+            double_chance: "Dupla Chance",
+            over_1_5: "Mais/Menos 1.5 Gols",
+            over_2_5: "Mais/Menos 2.5 Gols",
+            over_3_5: "Mais/Menos 3.5 Gols",
+            over_2_5_ht: "Mais/Menos HT",
+            btts: "Ambas Marcam",
+            asian_handicap_home: "Handicap Asiático Casa",
+            asian_handicap_away: "Handicap Asiático Fora",
+            handicap_european: "Handicap Europeu",
+            ht_ft: "Intervalo/Final",
+            corners_ft_over: "Escanteios FT",
+            corners_ft_under: "Escanteios FT",
+            corners_ht_over: "Escanteios HT",
+            corners_asian_ft: "Escanteios Handicap",
+            cards_over: "Cartões"
+        };
+        return map[market] || market.replace(/_/g, " ");
+    }
+
     async function analyzeGame(gameId) {
         resultBox.innerHTML = `<div class="p-3 bg-slate-900/40 border border-slate-700 rounded-md text-slate-200">Buscando análise e as melhores odds...</div>`;
         show(resultBox);
@@ -108,8 +132,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="space-y-2">`;
                 j.top3.forEach(p => {
                     const conf = p.confidence || 0;
-                    const marketName = (p.market || "").replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                    html += `<div class="p-3 bg-green-700 rounded-md">
+                    const marketName = formatMarketName(p.market || "");
+                    const cls = conf >= 0.7 ? "bg-green-700" : (conf >= 0.5 ? "bg-amber-600" : "bg-slate-700");
+                    html += `<div class="p-3 ${cls} rounded-md">
                         <div class="flex justify-between items-center">
                             <div class="font-semibold">${marketName}</div>
                             <div class="font-bold text-lg">${p.recommendation}</div>
@@ -127,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             j.predictions.forEach(p => {
                 const conf = p.confidence || 0;
-                const marketName = (p.market || "").replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                const marketName = formatMarketName(p.market || "");
                 const cls = conf >= 0.7 ? "bg-green-600" : (conf >= 0.5 ? "bg-amber-600" : "bg-slate-700");
                 
                 let oddsHtml = '';
