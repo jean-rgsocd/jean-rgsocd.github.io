@@ -265,6 +265,19 @@
                             </div>
                         </div>
 
+                        <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-indigo-500">
+  <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Opta+IA" alt="Imagem do projeto Opta IA" class="w-full h-auto object-cover border-b border-slate-700">
+  <div class="p-8">
+    <h3 class="font-bold text-xl mb-2 text-slate-100">Opta IA</h3>
+    <p class="text-slate-300 mb-6">
+      Ferramenta de análise avançada inspirada nos relatórios da Opta Sports.  
+      Explore estatísticas detalhadas de desempenho por país, liga, times e jogadores.
+    </p>
+    <button class="inline-block bg-cyan-500 text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-cyan-400 transition-colors">Ver Ferramenta</button>
+  </div>
+</div>
+
+                        
                         <div class="bg-slate-800/50 rounded-lg shadow-lg overflow-hidden border border-slate-700 transform hover:-translate-y-2 transition-transform duration-300 hover:border-cyan-400">
                             <img src="https://placehold.co/800x400/0d1117/00e6e6?text=Radar+IA" alt="Imagem do Radar IA" class="w-full h-auto object-cover border-b border-slate-700">
                             <div class="p-8">
@@ -354,6 +367,59 @@
     <div id="tipster-analysis-result" class="hidden mt-8 p-4 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-300">
       <!-- Aqui entra a análise automática do Tipster IA -->
     </div>
+  </div>
+</div>
+<!-- Opta IA -->
+<div id="opta-ia" class="hidden py-12">
+  <div class="max-w-4xl mx-auto bg-slate-800/50 p-6 md:p-8 rounded-lg shadow-lg border border-slate-700">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="font-bold text-2xl text-slate-100">Opta IA</h3>
+      <button onclick="document.getElementById('opta-ia').classList.add('hidden')" 
+              class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg">Retornar</button>
+    </div>
+    <p class="text-slate-300 mb-4">
+      Análise avançada de equipes e jogadores, inspirada nos relatórios da Opta Sports.  
+      Explore estatísticas detalhadas de desempenho por país, liga, times e jogadores.
+    </p>
+
+    <!-- Seletores -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-6" id="opta-selectors">
+      
+      <!-- País -->
+      <div id="opta-country-selector-group" class="mb-4">
+        <label for="opta-country-select" class="block text-slate-200 mb-1">Escolha o País:</label>
+        <select id="opta-country-select" class="w-full p-2 rounded bg-slate-900/60 border border-slate-700 text-slate-200">
+          <option value="">Selecione um país</option>
+        </select>
+      </div>
+
+      <!-- Liga -->
+      <div id="opta-league-selector-group" class="mb-4 hidden">
+        <label for="opta-league-select" class="block text-slate-200 mb-1">Escolha a Liga:</label>
+        <select id="opta-league-select" class="w-full p-2 rounded bg-slate-900/60 border border-slate-700 text-slate-200">
+          <option value="">Selecione uma liga</option>
+        </select>
+      </div>
+
+      <!-- Time -->
+      <div id="opta-team-selector-group" class="mb-4 hidden">
+        <label for="opta-team-select" class="block text-slate-200 mb-1">Escolha o Time:</label>
+        <select id="opta-team-select" class="w-full p-2 rounded bg-slate-900/60 border border-slate-700 text-slate-200">
+          <option value="">Selecione um time</option>
+        </select>
+      </div>
+
+      <!-- Jogador -->
+      <div id="opta-player-selector-group" class="mb-4 hidden">
+        <label for="opta-player-select" class="block text-slate-200 mb-1">Escolha o Jogador:</label>
+        <select id="opta-player-select" class="w-full p-2 rounded bg-slate-900/60 border border-slate-700 text-slate-200">
+          <option value="">Selecione um jogador</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Resultado da análise -->
+    <div id="opta-analysis-result" class="hidden"></div>
   </div>
 </div>
 
