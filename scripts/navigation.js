@@ -4,6 +4,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const projectListContainer = document.getElementById('project-list-container');
     
+    // Objeto que mapeia todas as ferramentas interativas do portfólio
     const projectViews = {
         'scanner': {
             showBtn: document.getElementById('showScannerButton'),
@@ -28,21 +29,43 @@ document.addEventListener('DOMContentLoaded', function () {
             hideBtn: document.getElementById('hideRadarButton'),
             section: document.getElementById('radar-ia-section'),
             anchor: '#radar-ia-section'
+        },
+        // --- ADIÇÃO PARA O OPTA IA ---
+        // Adicionamos a nova ferramenta aqui, seguindo o mesmo padrão
+        'opta': {
+            showBtn: document.getElementById('showOptaButton'),
+            hideBtn: document.getElementById('hideOptaButton'),
+            section: document.getElementById('opta-ia'),
+            anchor: '#opta-ia'
         }
+        // -----------------------------
     };
 
+    // Função genérica para MOSTRAR uma seção de ferramenta
     function showSection(view) {
         if (projectListContainer) projectListContainer.classList.add('hidden');
         if (view.section) view.section.classList.remove('hidden');
-        window.location.hash = view.anchor;
+        
+        // Leva o usuário para o topo da seção da ferramenta
+        const targetElement = document.querySelector(view.anchor);
+        if(targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
     }
 
+    // Função genérica para ESCONDER a seção e voltar para a lista
     function hideSection(view) {
         if (view.section) view.section.classList.add('hidden');
         if (projectListContainer) projectListContainer.classList.remove('hidden');
-        window.location.hash = 'projetos';
+        
+        // Leva o usuário de volta para a seção de projetos
+        const targetElement = document.getElementById('projetos');
+        if(targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
     }
 
+    // Loop que adiciona os eventos de clique para todas as ferramentas
     for (const key in projectViews) {
         const view = projectViews[key];
         if (view.showBtn) {
