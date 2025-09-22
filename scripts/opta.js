@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Função principal que busca e exibe a análise do jogador
     async function analyzePlayer(playerId) {
-        resultBox.innerHTML = `<div class="p-4 bg-slate-900/50 border border-slate-700 rounded-lg text-center text-slate-300">🔍 Analisando dados do jogador...</div>`;
+        resultBox.innerHTML = `<div class="p-4 bg-slate-900/50 border border-slate-700 rounded-lg text-center text-slate-300">🔍 Analisando dados e buscando odds para o próximo jogo...</div>`;
         show(resultBox);
         try {
             const data = await fetchData(`/opta/analyze?player_id=${playerId}`);
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // Monta o HTML do resultado com todas as estatísticas e recomendações
+            // Monta o HTML do resultado
             let html = `
                 <div class="p-4 bg-slate-900/50 border border-slate-700 rounded-lg">
                     <div class="flex items-center mb-4">
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         `).join('')}
                     </div>
 
-                    <h5 class="font-semibold text-cyan-300 mb-3 mt-6">🎯 Recomendações de Aposta (Tipster)</h5>
+                    <h5 class="font-semibold text-cyan-300 mb-3 mt-6">🎯 Recomendações de Aposta (Próximo Jogo)</h5>
                     <div class="space-y-2">
                         ${data.recommendations.length > 0 ? data.recommendations.map(rec => {
                             const confidence = rec.confidence || 0;
@@ -146,18 +146,27 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (confidence >= 0.75) bgColor = 'bg-green-600/70';
                             else if (confidence >= 0.5) bgColor = 'bg-yellow-600/70';
 
+                            // --- ADIÇÃO PARA MOSTRAR AS ODDS ---
+                            let oddsHtml = '';
+                            if (rec.best_odd && rec.bookmaker) {
+                                oddsHtml = `<div class="mt-2 pt-2 border-t border-slate-500/50 text-xs text-white">
+                                    Melhor Odd: <span class="font-bold text-lg">${rec.best_odd}</span> na <span class="font-semibold">${rec.bookmaker}</span>
+                                </div>`;
+                            }
+                            // ------------------------------------
+
                             return `
                             <div class="p-3 ${bgColor} rounded-md border border-slate-600">
                                 <div class="flex justify-between items-center">
                                     <span class="font-semibold text-slate-100">${rec.market}</span>
-                                    <span class="font-bold text-white text-lg">${rec.recommendation}</span>
+                                    <span class="font-bold text-white text-lg">${rec.recommendation} ${rec.line || ''}</span>
                                 </div>
                                 <div class="text-xs text-slate-200 mt-1">
                                     Confiança: <strong>${Math.round(confidence * 100)}%</strong> — ${rec.reason}
                                 </div>
-                            </div>
+                                ${oddsHtml} </div>
                             `
-                        }).join('') : `<p class="text-slate-400 text-sm p-3 bg-slate-800 rounded-md">Nenhuma recomendação forte encontrada com base nas estatísticas atuais.</p>`}
+                        }).join('') : `<p class="text-slate-400 text-sm p-3 bg-slate-800 rounded-md">Nenhuma recomendação forte encontrada.</p>`}
                     </div>
                 </div>
             `;
