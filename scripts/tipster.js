@@ -99,30 +99,52 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let html = `<div class="p-4 bg-slate-900/40 border border-slate-700 rounded-md text-slate-200">
                 <h4 class="font-bold mb-2">Tipster IA — Recomendações</h4>
-                <p class="text-sm text-slate-300 mb-3">Jogo: ${j.summary?.home_team || ''} vs ${j.summary?.away_team || ''}</p>
-                <div class="space-y-3">`;
+                <p class="text-sm text-slate-300 mb-3">Jogo: ${j.summary?.home_team || ''} vs ${j.summary?.away_team || ''}</p>`;
+
+            // 🔹 Top 3 em destaque
+            if (j.top3 && j.top3.length > 0) {
+                html += `<div class="mb-4">
+                    <h5 class="font-semibold text-lg mb-2 text-green-400">🎯 TOP 3 PICKS</h5>
+                    <div class="space-y-2">`;
+                j.top3.forEach(p => {
+                    const conf = p.confidence || 0;
+                    const marketName = (p.market || "").replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    html += `<div class="p-3 bg-green-700 rounded-md">
+                        <div class="flex justify-between items-center">
+                            <div class="font-semibold">${marketName}</div>
+                            <div class="font-bold text-lg">${p.recommendation}</div>
+                        </div>
+                        <div class="text-xs mt-1">Confiança: ${Math.round(conf*100)}%</div>
+                        ${p.best_odd && p.bookmaker ? `<div class="mt-1 text-xs">Odd: <b>${p.best_odd}</b> (${p.bookmaker})</div>` : ""}
+                    </div>`;
+                });
+                html += `</div></div>`;
+            }
+
+            // 🔹 Lista completa
+            html += `<h5 class="font-semibold text-lg mb-2 text-slate-300">Todas as Recomendações</h5>
+                     <div class="space-y-3">`;
 
             j.predictions.forEach(p => {
                 const conf = p.confidence || 0;
                 const marketName = (p.market || "").replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                 const cls = conf >= 0.7 ? "bg-green-600" : (conf >= 0.5 ? "bg-amber-600" : "bg-slate-700");
                 
-                // --- ADIÇÃO PARA MOSTRAR AS ODDS ---
                 let oddsHtml = '';
                 if (p.best_odd && p.bookmaker) {
                     oddsHtml = `<div class="mt-2 pt-2 border-t border-slate-500/50 text-xs text-white">
                         Melhor Odd: <span class="font-bold text-lg">${p.best_odd}</span> na <span class="font-semibold">${p.bookmaker}</span>
                     </div>`;
                 }
-                // ------------------------------------
 
                 html += `<div class="p-3 ${cls} rounded-md">
                     <div class="flex justify-between items-center">
                         <div class="font-semibold">${marketName}</div>
                         <div class="font-bold text-lg">${p.recommendation}</div>
                     </div>
-                    <div class="text-xs text-slate-200 mt-1">Confiança: ${Math.round(conf*100)}%</div>
-                    ${oddsHtml} </div>`;
+                    <div class="text-xs mt-1">Confiança: ${Math.round(conf*100)}%</div>
+                    ${oddsHtml}
+                </div>`;
             });
 
             html += `</div></div>`;
@@ -159,6 +181,6 @@ document.addEventListener('DOMContentLoaded', function () {
         await analyzeGame(gid);
     });
 
-    // 🚀 já inicia carregando países (futebol é fixo)
+    // 🚀 já inicia carregando países
     loadCountries();
 });
