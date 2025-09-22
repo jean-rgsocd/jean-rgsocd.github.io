@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data.forEach(g => {
                 const home = g.teams?.home?.name || "Home";
                 const away = g.teams?.away?.name || "Away";
-                const date = g.date ? new Date(g.date).toLocaleString() : "-";
+                const date = g.date ? new Date(g.date).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }) : "-";
                 const live = g.type === "live" ? " (AO VIVO)" : "";
                 gameSelect.add(new Option(`${home} vs ${away} - ${date}${live}`, g.game_id));
             });
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function analyzeGame(gameId) {
-        resultBox.innerHTML = `<div class="p-3 bg-slate-900/40 border border-slate-700 rounded-md text-slate-200">Carregando análise...</div>`;
+        resultBox.innerHTML = `<div class="p-3 bg-slate-900/40 border border-slate-700 rounded-md text-slate-200">Buscando análise e as melhores odds...</div>`;
         show(resultBox);
         try {
             const r = await fetch(`${TIPSTER_BASE_URL}/analyze?game_id=${encodeURIComponent(gameId)}`);
@@ -104,14 +104,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
             j.predictions.forEach(p => {
                 const conf = p.confidence || 0;
+                const marketName = (p.market || "").replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                 const cls = conf >= 0.7 ? "bg-green-600" : (conf >= 0.5 ? "bg-amber-600" : "bg-slate-700");
+                
+                // --- ADIÇÃO PARA MOSTRAR AS ODDS ---
+                let oddsHtml = '';
+                if (p.best_odd && p.bookmaker) {
+                    oddsHtml = `<div class="mt-2 pt-2 border-t border-slate-500/50 text-xs text-white">
+                        Melhor Odd: <span class="font-bold text-lg">${p.best_odd}</span> na <span class="font-semibold">${p.bookmaker}</span>
+                    </div>`;
+                }
+                // ------------------------------------
+
                 html += `<div class="p-3 ${cls} rounded-md">
                     <div class="flex justify-between items-center">
-                        <div class="font-semibold">${p.market}</div>
-                        <div class="font-bold">${p.recommendation}</div>
+                        <div class="font-semibold">${marketName}</div>
+                        <div class="font-bold text-lg">${p.recommendation}</div>
                     </div>
-                    <div class="text-xs text-slate-200 mt-1">Confiança: ${Math.round(conf*100)}% — ${p.reason || ''}</div>
-                </div>`;
+                    <div class="text-xs text-slate-200 mt-1">Confiança: ${Math.round(conf*100)}%</div>
+                    ${oddsHtml} </div>`;
             });
 
             html += `</div></div>`;
