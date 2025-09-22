@@ -12,8 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const gameSelect = document.getElementById('game-select');
     const resultBox = document.getElementById('tipster-analysis-result');
 
-    let cachedFootball = null;
-
     const hide = el => el && el.classList.add('hidden');
     const show = el => el && el.classList.remove('hidden');
     const resetSelect = (sel, text) => { 
@@ -60,20 +58,24 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             resetSelect(gameSelect, 'Carregando jogos...');
             show(gameGroup);
-            let url = `${TIPSTER_BASE_URL}/jogos-aovivo`;
-            if (leagueId) url += `?league=${encodeURIComponent(leagueId)}`;
+
+            let url = `${TIPSTER_BASE_URL}/games?sport=${sport}`;
+            if (leagueId) url += `&league=${encodeURIComponent(leagueId)}`;
+
             const r = await fetch(url);
             const data = await r.json();
+
             if (!data || data.length === 0) {
-                gameSelect.innerHTML = `<option value="">Nenhum jogo ao vivo</option>`;
+                gameSelect.innerHTML = `<option value="">Nenhum jogo encontrado</option>`;
                 return;
             }
+
             gameSelect.innerHTML = `<option value="">Selecione um jogo</option>`;
             data.forEach(g => {
                 const home = g.teams?.home?.name || "Home";
                 const away = g.teams?.away?.name || "Away";
-                const date = g.fixture?.date ? new Date(g.fixture.date).toLocaleString() : "-";
-                const live = (g.status?.short === "1H" || g.status?.short === "2H") ? " (AO VIVO)" : "";
+                const date = g.date ? new Date(g.date).toLocaleString() : "-";
+                const live = g.type === "live" ? " (AO VIVO)" : "";
                 gameSelect.add(new Option(`${home} vs ${away} - ${date}${live}`, g.game_id));
             });
             gameSelect.disabled = false;
@@ -87,8 +89,8 @@ document.addEventListener('DOMContentLoaded', function () {
         resultBox.innerHTML = `<div class="p-3 bg-slate-900/40 border border-slate-700 rounded-md text-slate-200">Carregando análise...</div>`;
         show(resultBox);
         try {
-            const r = await fetch(`${TIPSTER_BASE_URL}/stats-aovivo/${encodeURIComponent(gameId)}?sport=${sport}`);
-            if (!r.ok) throw new Error("Erro ao carregar stats");
+            const r = await fetch(`${TIPSTER_BASE_URL}/analyze?game_id=${encodeURIComponent(gameId)}&sport=${sport}`);
+            if (!r.ok) throw new Error("Erro ao carregar análise");
             const j = await r.json();
 
             if (!j || !j.predictions) {
@@ -98,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let html = `<div class="p-4 bg-slate-900/40 border border-slate-700 rounded-md text-slate-200">
                 <h4 class="font-bold mb-2">Tipster IA — Recomendações</h4>
-                <p class="text-sm text-slate-300 mb-3">Jogo: ${j.teams?.home?.name || ''} vs ${j.teams?.away?.name || ''}</p>
+                <p class="text-sm text-slate-300 mb-3">Jogo: ${j.summary?.home_team || j.summary?.home || ''} vs ${j.summary?.away_team || j.summary?.away || ''}</p>
                 <div class="space-y-3">`;
 
             j.predictions.forEach(p => {
@@ -112,29 +114,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="text-xs text-slate-200 mt-1">Confiança: ${Math.round(conf*100)}% — ${p.reason || ''}</div>
                 </div>`;
             });
-
-            if (j.statistics) {
-                html += `<div class="p-3 bg-slate-800 rounded-md">
-                    <div class="font-semibold mb-1">Estatísticas</div>
-                    <pre class="text-xs">${JSON.stringify(j.statistics, null, 2)}</pre>
-                </div>`;
-            }
-
-            if (j.events && j.events.length) {
-                html += `<div class="p-3 bg-slate-800 rounded-md">
-                    <div class="font-semibold mb-1">Eventos Recentes</div>
-                    <ul class="text-xs space-y-1">`;
-                j.events.slice(0, 10).forEach(ev => {
-                    html += `<li>${ev.display_time} — ${ev.category} ${ev.player ? `(${ev.player})` : ""}</li>`;
-                });
-                html += `</ul></div>`;
-            }
-
-            if (j.estimated_extra) {
-                html += `<div class="p-3 bg-amber-600/30 rounded-md">
-                    <span class="font-semibold">Estimativa de acréscimo:</span> ${j.estimated_extra} min
-                </div>`;
-            }
 
             html += `</div></div>`;
             resultBox.innerHTML = html;
