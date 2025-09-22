@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const container = document.getElementById('analisador-apostas');
     if (!container) return;
 
-    const sportSelect = document.getElementById('sport-select');
     const countryGroup = document.getElementById('country-selector-group');
     const countrySelect = document.getElementById('country-select');
     const leagueGroup = document.getElementById('league-selector-group');
@@ -54,13 +53,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    async function loadGames(sport, leagueId) {
+    async function loadGames(leagueId) {
         try {
             resetSelect(gameSelect, 'Carregando jogos...');
             show(gameGroup);
 
-            let url = `${TIPSTER_BASE_URL}/games?sport=${sport}`;
-            if (leagueId) url += `&league=${encodeURIComponent(leagueId)}`;
+            let url = `${TIPSTER_BASE_URL}/games`;
+            if (leagueId) url += `?league=${encodeURIComponent(leagueId)}`;
 
             const r = await fetch(url);
             const data = await r.json();
@@ -85,11 +84,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    async function analyzeGame(sport, gameId) {
+    async function analyzeGame(gameId) {
         resultBox.innerHTML = `<div class="p-3 bg-slate-900/40 border border-slate-700 rounded-md text-slate-200">Carregando análise...</div>`;
         show(resultBox);
         try {
-            const r = await fetch(`${TIPSTER_BASE_URL}/analyze?game_id=${encodeURIComponent(gameId)}&sport=${sport}`);
+            const r = await fetch(`${TIPSTER_BASE_URL}/analyze?game_id=${encodeURIComponent(gameId)}`);
             if (!r.ok) throw new Error("Erro ao carregar análise");
             const j = await r.json();
 
@@ -100,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let html = `<div class="p-4 bg-slate-900/40 border border-slate-700 rounded-md text-slate-200">
                 <h4 class="font-bold mb-2">Tipster IA — Recomendações</h4>
-                <p class="text-sm text-slate-300 mb-3">Jogo: ${j.summary?.home_team || j.summary?.home || ''} vs ${j.summary?.away_team || j.summary?.away || ''}</p>
+                <p class="text-sm text-slate-300 mb-3">Jogo: ${j.summary?.home_team || ''} vs ${j.summary?.away_team || ''}</p>
                 <div class="space-y-3">`;
 
             j.predictions.forEach(p => {
@@ -126,20 +125,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // events
-    sportSelect.addEventListener('change', async () => {
-        const sport = sportSelect.value;
-        resetSelect(countrySelect, 'Selecione um país'); 
-        resetSelect(leagueSelect, 'Selecione uma liga'); 
-        resetSelect(gameSelect, 'Selecione um jogo');
-        hide(countryGroup); hide(leagueGroup); hide(gameGroup); hide(resultBox);
-
-        if (sport === 'football') {
-            await loadCountries();
-        } else if (sport === 'nba' || sport === 'nfl') {
-            await loadGames(sport);
-        }
-    });
-
     countrySelect.addEventListener('change', async () => {
         const country = countrySelect.value;
         resetSelect(leagueSelect, 'Selecione uma liga'); 
@@ -154,14 +139,15 @@ document.addEventListener('DOMContentLoaded', function () {
         resetSelect(gameSelect, 'Selecione um jogo'); 
         hide(gameGroup); hide(resultBox);
         if (!lid) return;
-        await loadGames('football', lid);
+        await loadGames(lid);
     });
 
     gameSelect.addEventListener('change', async () => {
         const gid = gameSelect.value; 
-        const sport = sportSelect.value || 'football';
         if (!gid) { hide(resultBox); return; }
-        await analyzeGame(sport, gid);
+        await analyzeGame(gid);
     });
 
+    // 🚀 já inicia carregando países (futebol é fixo)
+    loadCountries();
 });
